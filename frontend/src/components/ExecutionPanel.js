@@ -3,7 +3,7 @@ import { Play, Pause, Square, Clock, CheckCircle, XCircle, AlertCircle } from 'l
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const ExecutionPanel = ({ workflowId, onClose }) => {
+const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
   const [instances, setInstances] = useState([]);
   const [selectedInstance, setSelectedInstance] = useState(null);
   const [loading, setLoading] = useState(true);
