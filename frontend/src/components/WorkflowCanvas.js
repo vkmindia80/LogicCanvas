@@ -12,8 +12,11 @@ import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
 import NodePalette from './NodePalette';
 import NodeEditor from './NodeEditor';
+import ExecutionPanel from './ExecutionPanel';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play } from 'lucide-react';
+import { Save, Eye, Play, Layers } from 'lucide-react';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 const nodeTypes = {
   start: CustomNode,
