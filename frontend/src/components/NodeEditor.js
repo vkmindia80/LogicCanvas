@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Trash2 } from 'lucide-react';
 import { NODE_CONFIGS } from '../utils/nodeTypes';
+import ExpressionEditor from './ExpressionEditor';
 
 const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
   const [label, setLabel] = useState(node?.data?.label || '');
   const [description, setDescription] = useState(node?.data?.description || '');
+  const [condition, setCondition] = useState(node?.data?.condition || '');
+  const [actionType, setActionType] = useState(node?.data?.actionType || 'http');
+  const [actionUrl, setActionUrl] = useState(node?.data?.url || '');
+  const [actionMethod, setActionMethod] = useState(node?.data?.method || 'GET');
 
   useEffect(() => {
     if (node) {
