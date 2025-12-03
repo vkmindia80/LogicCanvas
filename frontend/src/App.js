@@ -12,10 +12,6 @@ function App() {
   const [currentWorkflow, setCurrentWorkflow] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkHealth();
-  }, []);
-
   const checkHealth = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/health`);
@@ -26,6 +22,10 @@ function App() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    checkHealth();
+  }, []);
 
   const handleCreateNew = () => {
     const newWorkflow = {
