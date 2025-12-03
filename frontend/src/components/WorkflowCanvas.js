@@ -291,7 +291,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
       </div>
 
       {/* Right Sidebar - Node Editor */}
-      {selectedNode && !showExecutionPanel && (
+      {selectedNode && !showExecutionPanel && !showTriggerConfig && (
         <div className="w-80 bg-slate-100 border-l border-slate-200 p-4 overflow-y-auto">
           <NodeEditor
             node={selectedNode}
@@ -307,7 +307,25 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
         <ExecutionPanel
           workflowId={workflow.id}
           onClose={() => setShowExecutionPanel(false)}
+          onInstanceStart={(instanceId) => setActiveInstance(instanceId)}
         />
+      )}
+
+      {/* Trigger Config Panel */}
+      {showTriggerConfig && workflow?.id && (
+        <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-gray-200 flex flex-col z-50 overflow-y-auto p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-gray-800">Workflow Triggers</h2>
+            <button
+              onClick={() => setShowTriggerConfig(false)}
+              className="text-gray-500 hover:text-gray-700"
+              data-testid="close-trigger-panel"
+            >
+              ✕
+            </button>
+          </div>
+          <TriggerConfig workflowId={workflow.id} />
+        </div>
       )}
     </div>
   );
