@@ -21,9 +21,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
 
     switch (condition) {
       case 'equals':
-        return actualValue == expectedValue;
+        return actualValue === expectedValue || actualValue == expectedValue; // eslint-disable-line eqeqeq
       case 'not_equals':
-        return actualValue != expectedValue;
+        return actualValue !== expectedValue && actualValue != expectedValue; // eslint-disable-line eqeqeq
       case 'contains':
         return actualValue && actualValue.toString().includes(expectedValue);
       case 'not_empty':
