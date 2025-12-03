@@ -34,6 +34,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(workflow?.edges || []);
   const [selectedNode, setSelectedNode] = useState(null);
   const [workflowName, setWorkflowName] = useState(workflow?.name || 'Untitled Workflow');
+  const [showExecutionPanel, setShowExecutionPanel] = useState(false);
   const reactFlowWrapper = useRef(null);
   const nodeIdCounter = useRef(1);
 
