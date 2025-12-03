@@ -368,6 +368,332 @@ async def get_audit_logs(entity_type: Optional[str] = None, entity_id: Optional[
     logs = list(audit_logs_collection.find(query, {"_id": 0}).sort("timestamp", -1).limit(100))
     return {"logs": logs, "count": len(logs)}
 
+# ========== PHASE 4: EXECUTION ENGINE ENDPOINTS ==========
+
+# Workflow Instance Endpoints
+@app.get("/api/workflow-instances")
+async def get_workflow_instances(workflow_id: Optional[str] = None, status: Optional[str] = None):
+    query = {}
+    if workflow_id:
+        query["workflow_id"] = workflow_id
+    if status:
+        query["status"] = status
+    
+    instances = list(workflow_instances_collection.find(query, {"_id": 0}).sort("started_at", -1).limit(50))
+    return {"instances": instances, "count": len(instances)}
+
+@app.get("/api/workflow-instances/{instance_id}")
+async def get_workflow_instance(instance_id: str):
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    return instance
+
+# Execution Control Endpoints
+@app.post("/api/workflows/{workflow_id}/execute")
+async def execute_workflow(workflow_id: str, input_data: Optional[Dict[str, Any]] = None):
+    """Start workflow execution manually"""
+    try:
+        instance_id = execution_engine.start_execution(workflow_id, triggered_by="manual", input_data=input_data or {})
+        return {"message": "Workflow execution started", "instance_id": instance_id}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/workflow-instances/{instance_id}/pause")
+async def pause_execution(instance_id: str):
+    """Pause workflow execution"""
+    execution_engine.pause_execution(instance_id)
+    return {"message": "Workflow execution paused"}
+
+@app.post("/api/workflow-instances/{instance_id}/resume")
+async def resume_execution_endpoint(instance_id: str):
+    """Resume paused workflow execution"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    if instance.get("status") == "paused":
+        workflow_instances_collection.update_one(
+            {"id": instance_id},
+            {"$set": {"status": "running", "updated_at": datetime.utcnow().isoformat()}}
+        )
+        return {"message": "Workflow execution resumed"}
+    else:
+        raise HTTPException(status_code=400, detail="Workflow is not paused")
+
+@app.post("/api/workflow-instances/{instance_id}/cancel")
+async def cancel_execution_endpoint(instance_id: str):
+    """Cancel workflow execution"""
+    execution_engine.cancel_execution(instance_id)
+    return {"message": "Workflow execution cancelled"}
+
+# Task Completion (resumes workflow)
+@app.post("/api/tasks/{task_id}/complete")
+async def complete_task(task_id: str, result_data: Optional[Dict[str, Any]] = None):
+    """Complete a task and resume workflow"""
+    task = tasks_collection.find_one({"id": task_id}, {"_id": 0})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    # Update task status
+    tasks_collection.update_one(
+        {"id": task_id},
+        {"$set": {"status": "completed", "updated_at": datetime.utcnow().isoformat()}}
+    )
+    
+    # Resume workflow execution
+    execution_engine.resume_execution(
+        task["workflow_instance_id"],
+        task["node_id"],
+        result_data or {}
+    )
+    
+    return {"message": "Task completed and workflow resumed"}
+
+# Approval Actions (resumes workflow)
+@app.post("/api/approvals/{approval_id}/decide")
+async def decide_approval(approval_id: str, decision: str, comment: Optional[str] = None, decided_by: Optional[str] = None):
+    """Make approval decision and resume workflow"""
+    approval = approvals_collection.find_one({"id": approval_id}, {"_id": 0})
+    if not approval:
+        raise HTTPException(status_code=404, detail="Approval not found")
+    
+    if decision not in ["approved", "rejected", "changes_requested"]:
+        raise HTTPException(status_code=400, detail="Invalid decision")
+    
+    # Record decision
+    decision_entry = {
+        "decided_by": decided_by or "user",
+        "decision": decision,
+        "comment": comment,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+    
+    approvals_collection.update_one(
+        {"id": approval_id},
+        {
+            "$push": {"decisions": decision_entry},
+            "$set": {"status": decision, "updated_at": datetime.utcnow().isoformat()}
+        }
+    )
+    
+    # Resume workflow execution
+    execution_engine.resume_execution(
+        approval["workflow_instance_id"],
+        approval["node_id"],
+        {"approval_decision": decision, "comment": comment}
+    )
+    
+    return {"message": "Approval decision recorded and workflow resumed"}
+
+# Form Submission with Workflow Resume
+@app.post("/api/forms/{form_id}/submit-workflow")
+async def submit_form_workflow(form_id: str, instance_id: str, node_id: str, submission: Dict[str, Any]):
+    """Submit form as part of workflow and resume execution"""
+    form = forms_collection.find_one({"id": form_id})
+    if not form:
+        raise HTTPException(status_code=404, detail="Form not found")
+    
+    submission_id = str(uuid.uuid4())
+    submission_data = {
+        "id": submission_id,
+        "form_id": form_id,
+        "workflow_instance_id": instance_id,
+        "node_id": node_id,
+        "data": submission,
+        "submitted_at": datetime.utcnow().isoformat()
+    }
+    
+    form_submissions_collection.insert_one(submission_data)
+    
+    # Resume workflow execution
+    execution_engine.resume_execution(instance_id, node_id, {"form_data": submission})
+    
+    return {"message": "Form submitted and workflow resumed", "submission_id": submission_id}
+
+# Trigger Configuration
+class TriggerConfig(BaseModel):
+    workflow_id: str
+    trigger_type: str  # manual, scheduled, webhook
+    config: Dict[str, Any] = {}
+
+@app.post("/api/triggers")
+async def create_trigger(trigger: TriggerConfig):
+    """Create a workflow trigger"""
+    trigger_id = str(uuid.uuid4())
+    
+    if trigger.trigger_type == "scheduled":
+        # Setup cron schedule
+        cron_expression = trigger.config.get("cron", "0 0 * * *")  # Default: daily at midnight
+        
+        def scheduled_execution():
+            execution_engine.start_execution(trigger.workflow_id, triggered_by="scheduled")
+        
+        try:
+            scheduler.add_job(
+                scheduled_execution,
+                CronTrigger.from_crontab(cron_expression),
+                id=trigger_id,
+                name=f"trigger_{trigger.workflow_id}"
+            )
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Invalid cron expression: {str(e)}")
+    
+    elif trigger.trigger_type == "webhook":
+        # Generate webhook token
+        webhook_token = str(uuid.uuid4())
+        webhook_registry[webhook_token] = trigger.workflow_id
+        trigger.config["webhook_token"] = webhook_token
+        trigger.config["webhook_url"] = f"/api/webhooks/{webhook_token}"
+    
+    # Store trigger configuration
+    trigger_data = {
+        "id": trigger_id,
+        "workflow_id": trigger.workflow_id,
+        "trigger_type": trigger.trigger_type,
+        "config": trigger.config,
+        "active": True,
+        "created_at": datetime.utcnow().isoformat()
+    }
+    
+    db['triggers'].insert_one(trigger_data)
+    
+    return {"message": "Trigger created", "trigger_id": trigger_id, "config": trigger.config}
+
+@app.get("/api/triggers")
+async def get_triggers(workflow_id: Optional[str] = None):
+    """Get all triggers"""
+    query = {}
+    if workflow_id:
+        query["workflow_id"] = workflow_id
+    
+    triggers = list(db['triggers'].find(query, {"_id": 0}))
+    return {"triggers": triggers, "count": len(triggers)}
+
+@app.delete("/api/triggers/{trigger_id}")
+async def delete_trigger(trigger_id: str):
+    """Delete a trigger"""
+    trigger = db['triggers'].find_one({"id": trigger_id}, {"_id": 0})
+    if not trigger:
+        raise HTTPException(status_code=404, detail="Trigger not found")
+    
+    # Remove scheduled job if exists
+    if trigger["trigger_type"] == "scheduled":
+        try:
+            scheduler.remove_job(trigger_id)
+        except:
+            pass
+    
+    # Remove webhook if exists
+    if trigger["trigger_type"] == "webhook":
+        webhook_token = trigger["config"].get("webhook_token")
+        if webhook_token and webhook_token in webhook_registry:
+            del webhook_registry[webhook_token]
+    
+    db['triggers'].delete_one({"id": trigger_id})
+    return {"message": "Trigger deleted"}
+
+# Webhook Endpoint
+@app.post("/api/webhooks/{webhook_token}")
+async def webhook_trigger(webhook_token: str, payload: Dict[str, Any] = None):
+    """Receive webhook and trigger workflow"""
+    workflow_id = webhook_registry.get(webhook_token)
+    if not workflow_id:
+        raise HTTPException(status_code=404, detail="Invalid webhook token")
+    
+    try:
+        instance_id = execution_engine.start_execution(
+            workflow_id,
+            triggered_by="webhook",
+            input_data={"webhook_payload": payload or {}}
+        )
+        return {"message": "Workflow triggered", "instance_id": instance_id}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Expression Evaluator Test Endpoint
+@app.post("/api/expressions/evaluate")
+async def evaluate_expression(expression: str, variables: Dict[str, Any] = None):
+    """Test expression evaluation"""
+    evaluator = ExpressionEvaluator()
+    result = evaluator.evaluate(expression, variables or {})
+    return {"expression": expression, "result": result}
+
+# Auto-layout Algorithm Endpoint
+@app.post("/api/workflows/{workflow_id}/auto-layout")
+async def auto_layout_workflow(workflow_id: str):
+    """Apply auto-layout algorithm to workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    nodes = workflow.get("nodes", [])
+    edges = workflow.get("edges", [])
+    
+    # Simple hierarchical layout
+    positioned_nodes = _apply_hierarchical_layout(nodes, edges)
+    
+    # Update workflow
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {"$set": {"nodes": positioned_nodes, "updated_at": datetime.utcnow().isoformat()}}
+    )
+    
+    return {"message": "Auto-layout applied", "nodes": positioned_nodes}
+
+def _apply_hierarchical_layout(nodes: List[Dict], edges: List[Dict]) -> List[Dict]:
+    """Apply simple hierarchical layout"""
+    # Build graph structure
+    graph = {node["id"]: [] for node in nodes}
+    in_degree = {node["id"]: 0 for node in nodes}
+    
+    for edge in edges:
+        graph[edge["source"]].append(edge["target"])
+        in_degree[edge["target"]] = in_degree.get(edge["target"], 0) + 1
+    
+    # Find start nodes (in_degree == 0)
+    levels = []
+    current_level = [node_id for node_id, degree in in_degree.items() if degree == 0]
+    visited = set()
+    
+    while current_level:
+        levels.append(current_level)
+        next_level = []
+        for node_id in current_level:
+            visited.add(node_id)
+            for child in graph.get(node_id, []):
+                if child not in visited and child not in next_level:
+                    # Check if all parents are visited
+                    parents_visited = all(
+                        edge["source"] in visited
+                        for edge in edges
+                        if edge["target"] == child
+                    )
+                    if parents_visited:
+                        next_level.append(child)
+        current_level = next_level
+    
+    # Position nodes
+    positioned = []
+    y_offset = 100
+    y_spacing = 150
+    
+    for level_idx, level in enumerate(levels):
+        x_spacing = 200
+        x_offset = 100
+        
+        for node_idx, node_id in enumerate(level):
+            node = next((n for n in nodes if n["id"] == node_id), None)
+            if node:
+                node["position"] = {
+                    "x": x_offset + (node_idx * x_spacing),
+                    "y": y_offset + (level_idx * y_spacing)
+                }
+                positioned.append(node)
+    
+    return positioned
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
