@@ -346,30 +346,35 @@ Building a fully-featured, enterprise-grade Visual Workflow Builder with:
 
 ## 🎯 **RECOMMENDED NEXT STEPS**
 
-### **IMMEDIATE PRIORITY: Phase 3 - Form System & Builder**
+### **IMMEDIATE PRIORITY: Phase 4 - Advanced Workflow Features**
 
 This is the logical next step because:
-1. Backend API for forms already exists
-2. Workflow nodes can reference forms
-3. Critical for workflow execution
-4. Foundation for data collection
+1. Foundation & Canvas & Forms are complete
+2. Now need execution capabilities
+3. Enable workflows to actually run
+4. Foundation for real-world usage
 
 **Estimated Effort:** 2-3 hours
 
 **Key Deliverables:**
-1. Visual form builder interface with drag-and-drop
-2. Implement 15+ field types (text, number, date, dropdown, checkbox, radio, file upload, etc.)
-3. Validation engine (required, min/max, regex patterns)
-4. Conditional field visibility logic
-5. Form library with search/filter
-6. Link forms to workflow nodes
-7. Form preview and testing
+1. Workflow execution engine (process workflow instances)
+2. Conditional routing logic (decision nodes)
+3. Trigger system:
+   - Manual workflow start
+   - Scheduled triggers (cron)
+   - Webhook/API triggers
+4. Parallel gateway execution
+5. Merge gateway logic
+6. System action nodes (API calls, webhooks, scripts)
+7. Expression editor with workflow variables
+8. Auto-layout algorithms
+9. Workflow instance state management
+10. Live execution visualization
 
-**After Phase 3 Completion:**
-- Phase 4: Build execution engine and triggers
-- Phase 5: Create task inbox and approval queues
-- Phase 6: Add analytics and notifications
-- Phase 7: Polish and production-ready features
+**After Phase 4 Completion:**
+- Phase 5: Task inbox and approval management
+- Phase 6: Analytics dashboard and notifications
+- Phase 7: Final polish, RBAC, import/export
 
 ---
 
