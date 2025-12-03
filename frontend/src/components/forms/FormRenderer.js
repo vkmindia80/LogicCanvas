@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Star, X, Plus, Trash2 } from 'lucide-react';
+import { Star, Plus, Trash2 } from 'lucide-react';
 
 const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = false }) => {
   const [localData, setLocalData] = useState(formData);
-  const [signatureData, setSignatureData] = useState({});
   const canvasRefs = useRef({});
 
   const handleFieldChange = (fieldId, value) => {
