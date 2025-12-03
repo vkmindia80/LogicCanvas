@@ -239,6 +239,14 @@ async def update_form(form_id: str, form: Form):
     forms_collection.replace_one({"id": form_id}, form_dict)
     return {"message": "Form updated successfully"}
 
+@app.delete("/api/forms/{form_id}")
+async def delete_form(form_id: str):
+    result = forms_collection.delete_one({"id": form_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Form not found")
+    
+    return {"message": "Form deleted successfully"}
+
 # Task Endpoints
 @app.get("/api/tasks")
 async def get_tasks(assigned_to: Optional[str] = None, status: Optional[str] = None):
