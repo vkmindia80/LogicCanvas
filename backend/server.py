@@ -36,6 +36,16 @@ approvals_collection = db['approvals']
 notifications_collection = db['notifications']
 audit_logs_collection = db['audit_logs']
 
+# Initialize Execution Engine
+execution_engine = WorkflowExecutionEngine(db)
+
+# Initialize Scheduler
+scheduler = BackgroundScheduler()
+scheduler.start()
+
+# Webhook registry for workflow triggers
+webhook_registry = {}  # workflow_id -> webhook_token
+
 # Pydantic Models
 class WorkflowNode(BaseModel):
     id: str
