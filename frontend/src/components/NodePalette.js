@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   PlayCircle, CheckSquare, GitBranch, ClipboardCheck, 
-  FileText, StopCircle, Split, Merge, Plus 
+  FileText, StopCircle, Split, Merge, Plus, Zap 
 } from 'lucide-react';
 import { NODE_TYPES, NODE_CONFIGS } from '../utils/nodeTypes';
 
@@ -13,7 +13,8 @@ const iconMap = {
   'file-text': FileText,
   'stop-circle': StopCircle,
   'split': Split,
-  'merge': Merge
+  'merge': Merge,
+  'zap': Zap
 };
 
 const NodePalette = ({ onAddNode }) => {
