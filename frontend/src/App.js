@@ -125,7 +125,7 @@ function App() {
     <WorkflowProvider>
       <div className="min-h-screen bg-slate-50">
         {/* Header */}
-        {currentView === 'list' && (
+        {(currentView === 'workflows' || currentView === 'forms') && (
           <header className="bg-white border-b border-slate-200 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center h-16">
@@ -138,6 +138,40 @@ function App() {
                     <p className="text-xs text-slate-500">Visual Workflow Builder</p>
                   </div>
                 </div>
+
+                {/* Navigation Tabs */}
+                <nav className="flex space-x-1 bg-slate-100 rounded-lg p-1">
+                  <button
+                    onClick={() => {
+                      setActiveTab('workflows');
+                      setCurrentView('workflows');
+                    }}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                      activeTab === 'workflows'
+                        ? 'bg-white text-primary-600 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                    data-testid="tab-workflows"
+                  >
+                    <Workflow className="w-4 h-4" />
+                    <span>Workflows</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab('forms');
+                      setCurrentView('forms');
+                    }}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                      activeTab === 'forms'
+                        ? 'bg-white text-primary-600 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                    data-testid="tab-forms"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>Forms</span>
+                  </button>
+                </nav>
               </div>
             </div>
           </header>
@@ -145,12 +179,21 @@ function App() {
 
         {/* Main Content */}
         <main>
-          {currentView === 'list' ? (
+          {currentView === 'workflows' && (
             <WorkflowList 
               onSelectWorkflow={handleSelectWorkflow}
               onCreateNew={handleCreateNew}
             />
-          ) : (
+          )}
+          
+          {currentView === 'forms' && (
+            <FormList 
+              onSelectForm={handleSelectForm}
+              onCreateNew={handleCreateNewForm}
+            />
+          )}
+          
+          {currentView === 'canvas' && (
             <div className="relative">
               {/* Back Button */}
               <button
@@ -169,6 +212,13 @@ function App() {
                 onSave={handleSaveWorkflow}
               />
             </div>
+          )}
+
+          {currentView === 'form-builder' && (
+            <FormBuilder 
+              form={currentForm}
+              onBack={handleBackToForms}
+            />
           )}
         </main>
       </div>
