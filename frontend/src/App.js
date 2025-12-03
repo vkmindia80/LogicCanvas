@@ -83,8 +83,31 @@ function App() {
   };
 
   const handleBackToList = () => {
-    setCurrentView('list');
+    setCurrentView('workflows');
     setCurrentWorkflow(null);
+  };
+
+  const handleCreateNewForm = () => {
+    const newForm = {
+      id: null,
+      name: 'Untitled Form',
+      description: '',
+      fields: [],
+      version: 1,
+      tags: []
+    };
+    setCurrentForm(newForm);
+    setCurrentView('form-builder');
+  };
+
+  const handleSelectForm = (form) => {
+    setCurrentForm(form);
+    setCurrentView('form-builder');
+  };
+
+  const handleBackToForms = () => {
+    setCurrentView('forms');
+    setCurrentForm(null);
   };
 
   if (loading) {
