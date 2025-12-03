@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { 
   PlayCircle, CheckSquare, GitBranch, ClipboardCheck, 
-  FileText, StopCircle, Split, Merge 
+  FileText, StopCircle, Split, Merge, Zap, Clock, CheckCircle, AlertCircle
 } from 'lucide-react';
 import { NODE_TYPES, NODE_CONFIGS } from '../../utils/nodeTypes';
 
@@ -14,12 +14,22 @@ const iconMap = {
   'file-text': FileText,
   'stop-circle': StopCircle,
   'split': Split,
-  'merge': Merge
+  'merge': Merge,
+  'zap': Zap
 };
 
 const CustomNode = ({ data, selected }) => {
   const config = NODE_CONFIGS[data.type];
   const IconComponent = iconMap[config.icon];
+  
+  // Execution state from data (if provided)
+  const executionState = data.executionState; // 'running', 'completed', 'waiting', 'failed'
+
+  // Determine if node is actively executing
+  const isExecuting = executionState === 'running';
+  const isCompleted = executionState === 'completed';
+  const isWaiting = executionState === 'waiting';
+  const isFailed = executionState === 'failed';
 
   return (
     <div
@@ -29,9 +39,39 @@ const CustomNode = ({ data, selected }) => {
         ${config.color} ${config.borderColor}
         hover:shadow-lg cursor-pointer
         min-w-[150px]
+        ${isExecuting ? 'ring-2 ring-blue-400 ring-offset-2 animate-pulse' : ''}
+        ${isCompleted ? 'ring-2 ring-green-400 ring-offset-2' : ''}
+        ${isWaiting ? 'ring-2 ring-orange-400 ring-offset-2' : ''}
+        ${isFailed ? 'ring-2 ring-red-400 ring-offset-2' : ''}
       `}
       data-testid={`node-${data.type}`}
     >
+      {/* Execution State Indicator */}
+      {executionState && (
+        <div className="absolute -top-2 -right-2 z-10">
+          {isExecuting && (
+            <div className="bg-blue-500 rounded-full p-1 shadow-lg animate-pulse">
+              <Clock className="w-4 h-4 text-white" />
+            </div>
+          )}
+          {isCompleted && (
+            <div className="bg-green-500 rounded-full p-1 shadow-lg">
+              <CheckCircle className="w-4 h-4 text-white" />
+            </div>
+          )}
+          {isWaiting && (
+            <div className="bg-orange-500 rounded-full p-1 shadow-lg animate-pulse">
+              <AlertCircle className="w-4 h-4 text-white" />
+            </div>
+          )}
+          {isFailed && (
+            <div className="bg-red-500 rounded-full p-1 shadow-lg">
+              <AlertCircle className="w-4 h-4 text-white" />
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Input Handle - not for start node */}
       {data.type !== NODE_TYPES.START && (
         <Handle
