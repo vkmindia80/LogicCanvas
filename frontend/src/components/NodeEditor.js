@@ -15,6 +15,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     if (node) {
       setLabel(node.data?.label || '');
       setDescription(node.data?.description || '');
+      setCondition(node.data?.condition || '');
+      setActionType(node.data?.actionType || 'http');
+      setActionUrl(node.data?.url || '');
+      setActionMethod(node.data?.method || 'GET');
     }
   }, [node]);
 
