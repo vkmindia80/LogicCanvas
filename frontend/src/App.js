@@ -7,7 +7,6 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'
 function App() {
   const [healthStatus, setHealthStatus] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentView, setCurrentView] = useState('home'); // home, workflows, tasks, approvals
 
   useEffect(() => {
     checkHealth();
