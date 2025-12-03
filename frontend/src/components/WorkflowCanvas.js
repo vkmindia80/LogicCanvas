@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -13,8 +13,9 @@ import CustomNode from './nodes/CustomNode';
 import NodePalette from './NodePalette';
 import NodeEditor from './NodeEditor';
 import ExecutionPanel from './ExecutionPanel';
+import TriggerConfig from './TriggerConfig';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play, Layers } from 'lucide-react';
+import { Save, Eye, Play, Layers, Zap } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -26,7 +27,8 @@ const nodeTypes = {
   form: CustomNode,
   end: CustomNode,
   parallel: CustomNode,
-  merge: CustomNode
+  merge: CustomNode,
+  action: CustomNode
 };
 
 const WorkflowCanvas = ({ workflow, onSave }) => {
