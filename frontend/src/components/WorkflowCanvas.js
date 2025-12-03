@@ -151,6 +151,15 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
 
           <div className="flex items-center space-x-2">
             <button
+              onClick={handleAutoLayout}
+              className="flex items-center space-x-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
+              data-testid="auto-layout-btn"
+              title="Auto-layout nodes"
+            >
+              <Layers className="w-4 h-4" />
+              <span>Auto-Layout</span>
+            </button>
+            <button
               onClick={handleSave}
               className="flex items-center space-x-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
               data-testid="workflow-save-btn"
@@ -159,18 +168,12 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
               <span>Save</span>
             </button>
             <button
-              className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
-              data-testid="workflow-preview-btn"
-            >
-              <Eye className="w-4 h-4" />
-              <span>Preview</span>
-            </button>
-            <button
+              onClick={() => setShowExecutionPanel(!showExecutionPanel)}
               className="flex items-center space-x-2 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
               data-testid="workflow-run-btn"
             >
               <Play className="w-4 h-4" />
-              <span>Run</span>
+              <span>Execute</span>
             </button>
           </div>
         </div>
