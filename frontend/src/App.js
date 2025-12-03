@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Activity, CheckCircle, Server } from 'lucide-react';
+import { Activity } from 'lucide-react';
+import { WorkflowProvider } from './contexts/WorkflowContext';
+import WorkflowList from './components/WorkflowList';
+import WorkflowCanvas from './components/WorkflowCanvas';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 function App() {
-  const [healthStatus, setHealthStatus] = useState(null);
+  const [currentView, setCurrentView] = useState('list'); // 'list' or 'canvas'
+  const [currentWorkflow, setCurrentWorkflow] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,14 +19,68 @@ function App() {
   const checkHealth = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/health`);
-      const data = await response.json();
-      setHealthStatus(data);
+      await response.json();
       setLoading(false);
     } catch (error) {
       console.error('Health check failed:', error);
-      setHealthStatus({ status: 'error', message: error.message });
       setLoading(false);
     }
+  };
+
+  const handleCreateNew = () => {
+    const newWorkflow = {
+      id: null,
+      name: 'Untitled Workflow',
+      description: '',
+      nodes: [],
+      edges: [],
+      status: 'draft',
+      version: 1,
+      tags: []
+    };
+    setCurrentWorkflow(newWorkflow);
+    setCurrentView('canvas');
+  };
+
+  const handleSelectWorkflow = (workflow) => {
+    setCurrentWorkflow(workflow);
+    setCurrentView('canvas');
+  };
+
+  const handleSaveWorkflow = async (workflowData) => {
+    try {
+      const method = workflowData.id ? 'PUT' : 'POST';
+      const url = workflowData.id 
+        ? `${BACKEND_URL}/api/workflows/${workflowData.id}`
+        : `${BACKEND_URL}/api/workflows`;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(workflowData)
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        alert('Workflow saved successfully!');
+        if (!workflowData.id && result.id) {
+          setCurrentWorkflow({ ...workflowData, id: result.id });
+        }
+      } else {
+        alert('Failed to save workflow');
+      }
+    } catch (error) {
+      console.error('Failed to save workflow:', error);
+      alert('Failed to save workflow');
+    }
+  };
+
+  const handleBackToList = () => {
+    setCurrentView('list');
+    setCurrentWorkflow(null);
   };
 
   return (
