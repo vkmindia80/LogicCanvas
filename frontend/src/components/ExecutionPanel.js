@@ -42,6 +42,11 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
         body: JSON.stringify({})
       });
       const data = await response.json();
+      
+      if (data.instance_id && onInstanceStart) {
+        onInstanceStart(data.instance_id);
+      }
+      
       alert(data.message);
       loadInstances();
     } catch (error) {
