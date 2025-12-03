@@ -104,6 +104,26 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
     await onSave(workflowData);
   }, [workflow, workflowName, nodes, edges, onSave]);
 
+  const handleAutoLayout = useCallback(async () => {
+    if (!workflow?.id) {
+      alert('Please save the workflow first');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workflows/${workflow.id}/auto-layout`, {
+        method: 'POST'
+      });
+      const data = await response.json();
+      if (data.nodes) {
+        setNodes(data.nodes);
+        alert('Auto-layout applied');
+      }
+    } catch (error) {
+      alert('Failed to apply auto-layout: ' + error.message);
+    }
+  }, [workflow, setNodes]);
+
   return (
     <div className="flex h-screen bg-slate-50">
       {/* Left Sidebar - Node Palette */}
