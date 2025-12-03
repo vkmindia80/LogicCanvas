@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Activity } from 'lucide-react';
+import { Activity, FileText, Workflow } from 'lucide-react';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import WorkflowList from './components/WorkflowList';
 import WorkflowCanvas from './components/WorkflowCanvas';
+import FormList from './components/forms/FormList';
+import FormBuilder from './components/forms/FormBuilder';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 function App() {
-  const [currentView, setCurrentView] = useState('list'); // 'list' or 'canvas'
+  const [currentView, setCurrentView] = useState('workflows'); // 'workflows', 'canvas', 'forms', 'form-builder'
   const [currentWorkflow, setCurrentWorkflow] = useState(null);
+  const [currentForm, setCurrentForm] = useState(null);
+  const [activeTab, setActiveTab] = useState('workflows');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
