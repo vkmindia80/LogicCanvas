@@ -221,7 +221,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
       </div>
 
       {/* Right Sidebar - Node Editor */}
-      {selectedNode && (
+      {selectedNode && !showExecutionPanel && (
         <div className="w-80 bg-slate-100 border-l border-slate-200 p-4 overflow-y-auto">
           <NodeEditor
             node={selectedNode}
@@ -230,6 +230,14 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
             onClose={() => setSelectedNode(null)}
           />
         </div>
+      )}
+
+      {/* Execution Panel */}
+      {showExecutionPanel && workflow?.id && (
+        <ExecutionPanel
+          workflowId={workflow.id}
+          onClose={() => setShowExecutionPanel(false)}
+        />
       )}
     </div>
   );
