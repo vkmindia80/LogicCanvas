@@ -252,14 +252,14 @@ Building a fully-featured, enterprise-grade Visual Workflow Builder with:
 
 ## 🔥 **CURRENT FOCUS**
 
-**Next Milestone:** Phase 1 - Project Foundation & Setup
+**Current Milestone:** Phase 2 - Core Workflow Canvas
 
 **Immediate Tasks:**
-1. Create project structure
-2. Setup backend with FastAPI
-3. Setup frontend with React
-4. Configure MongoDB connection
-5. Install all dependencies
+1. ✅ Phase 1 Complete - Foundation established
+2. Next: Implement React Flow canvas
+3. Create 8 node types with drag-and-drop
+4. Add connector routing
+5. Build node editing panel
 
 ---
 
@@ -271,8 +271,10 @@ Building a fully-featured, enterprise-grade Visual Workflow Builder with:
 - Mobile-responsive design for task/approval screens
 - Color-coded node types for visual clarity
 - Comprehensive validation at every layer
+- UUID-based IDs (avoiding MongoDB ObjectID for JSON serialization)
+- All backend routes prefixed with '/api' for Kubernetes ingress
 
 ---
 
-**Last Updated:** Phase 0 - Roadmap Created
-**Next Update:** After Phase 1 Completion
+**Last Updated:** Phase 1 Complete - Foundation Established
+**Next Update:** After Phase 2 Completion
