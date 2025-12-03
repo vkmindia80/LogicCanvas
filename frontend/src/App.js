@@ -12,19 +12,18 @@ function App() {
   const [currentWorkflow, setCurrentWorkflow] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const checkHealth = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/health`);
-      await response.json();
-      setLoading(false);
-    } catch (error) {
-      console.error('Health check failed:', error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const checkHealth = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/health`);
+        await response.json();
+        setLoading(false);
+      } catch (error) {
+        console.error('Health check failed:', error);
+        setLoading(false);
+      }
+    };
+
     checkHealth();
   }, []);
 
