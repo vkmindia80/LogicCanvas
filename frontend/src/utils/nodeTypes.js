@@ -6,7 +6,8 @@ export const NODE_TYPES = {
   FORM: 'form',
   END: 'end',
   PARALLEL: 'parallel',
-  MERGE: 'merge'
+  MERGE: 'merge',
+  ACTION: 'action'
 };
 
 export const NODE_CONFIGS = {
@@ -65,6 +66,13 @@ export const NODE_CONFIGS = {
     borderColor: 'border-teal-600',
     icon: 'merge',
     description: 'Merge parallel paths'
+  },
+  [NODE_TYPES.ACTION]: {
+    label: 'Action',
+    color: 'bg-pink-500',
+    borderColor: 'border-pink-600',
+    icon: 'zap',
+    description: 'Execute HTTP call, webhook, or script'
   }
 };
 
@@ -74,6 +82,7 @@ export const createNodeData = (type, label = '') => {
     label: label || config.label,
     type: type,
     description: '',
-    config: {}
+    config: {},
+    executionState: null // For live execution visualization
   };
 };
