@@ -11,6 +11,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew }) => {
 
   useEffect(() => {
     loadWorkflows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const loadWorkflows = async () => {
