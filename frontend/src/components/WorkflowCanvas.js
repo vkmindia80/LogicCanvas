@@ -208,6 +208,16 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
 
           <div className="flex items-center space-x-2">
             <button
+              onClick={() => setShowTriggerConfig(!showTriggerConfig)}
+              className="flex items-center space-x-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
+              data-testid="trigger-config-btn"
+              title="Configure triggers"
+              disabled={!workflow?.id}
+            >
+              <Zap className="w-4 h-4" />
+              <span>Triggers</span>
+            </button>
+            <button
               onClick={handleAutoLayout}
               className="flex items-center space-x-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
               data-testid="auto-layout-btn"
@@ -225,7 +235,10 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
               <span>Save</span>
             </button>
             <button
-              onClick={() => setShowExecutionPanel(!showExecutionPanel)}
+              onClick={() => {
+                setShowExecutionPanel(!showExecutionPanel);
+                setShowTriggerConfig(false);
+              }}
               className="flex items-center space-x-2 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
               data-testid="workflow-run-btn"
             >
