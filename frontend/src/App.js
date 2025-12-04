@@ -204,6 +204,44 @@ function App() {
                     <span>Forms</span>
                   </button>
                 </nav>
+
+                {/* Quick Actions */}
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setShowTaskInbox(true)}
+                    className="relative flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    data-testid="open-task-inbox-btn"
+                  >
+                    <CheckSquare className="w-5 h-5" />
+                    <span className="hidden sm:inline">Tasks</span>
+                    {taskCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">
+                        {taskCount > 9 ? '9+' : taskCount}
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setShowApprovalQueue(true)}
+                    className="relative flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                    data-testid="open-approval-queue-btn"
+                  >
+                    <ClipboardCheck className="w-5 h-5" />
+                    <span className="hidden sm:inline">Approvals</span>
+                    {approvalCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 text-white text-xs rounded-full flex items-center justify-center">
+                        {approvalCount > 9 ? '9+' : approvalCount}
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setShowAuditTrail(true)}
+                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                    data-testid="open-audit-trail-btn"
+                  >
+                    <History className="w-5 h-5" />
+                    <span className="hidden sm:inline">Audit</span>
+                  </button>
+                </div>
               </div>
             </div>
           </header>
