@@ -184,6 +184,11 @@ function App() {
             <WorkflowList 
               onSelectWorkflow={handleSelectWorkflow}
               onCreateNew={handleCreateNew}
+              onLoadRecruitingSample={() => {
+                const template = getRecruitingWorkflowTemplate();
+                setCurrentWorkflow(template);
+                setCurrentView('canvas');
+              }}
             />
           )}
           
