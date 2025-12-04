@@ -93,14 +93,40 @@ const CustomNode = ({ data, selected }) => {
         </div>
       </div>
 
-      {/* Output Handle - not for end node */}
+      {/* Output Handles - not for end node */}
       {data.type !== NODE_TYPES.END && (
-        <Handle
-          type="source"
-          position={Position.Bottom}
-          className="w-3 h-3 !bg-white border-2 border-gray-400"
-          data-testid="node-handle-output"
-        />
+        <>
+          {/* Default single output for most nodes */}
+          {!NODE_CONFIGS[data.type]?.outputHandles && (
+            <Handle
+              type="source"
+              position={Position.Bottom}
+              className="w-3 h-3 !bg-white border-2 border-gray-400"
+              data-testid="node-handle-output"
+            />
+          )}
+
+          {/* Multiple named outputs for special nodes (e.g., Decision, Parallel) */}
+          {NODE_CONFIGS[data.type]?.outputHandles && (
+            <div className="absolute -bottom-3 left-0 right-0 flex justify-around text-[10px] text-white/90">
+              {NODE_CONFIGS[data.type].outputHandles.map((handle) => (
+                <div key={handle.id} className="flex flex-col items-center">
+                  <Handle
+                    id={handle.id}
+                    type="source"
+                    position={Position.Bottom}
+                    style={{ left: handle.id === 'yes' ? '30%' : handle.id === 'no' ? '70%' : undefined }}
+                    className="w-3 h-3 !bg-white border-2 border-gray-400"
+                    data-testid={`node-handle-output-${handle.id}`}
+                  />
+                  <span className="mt-1 bg-black/30 px-1 py-0.5 rounded-full">
+                    {handle.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
