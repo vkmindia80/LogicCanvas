@@ -99,7 +99,7 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
           <li>Variables: ${'{'}variable_name{'}'}</li>
           <li>Comparisons: ==, !=, {'>'}, {'<'}, {'>='}, {'<='}</li>
           <li>Logic: and, or, not</li>
-          <li>Examples: ${'{'}amount{'}'} {'>'} 1000, ${'{'}status{'}'} == "approved"</li>
+          <li>Examples: ${'{'}amount{'}'} {'>'} 1000, ${'{'}status{'}'} == {'"approved"'}</li>
         </ul>
       </div>
     </div>
