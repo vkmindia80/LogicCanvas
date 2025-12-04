@@ -214,17 +214,75 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
           <>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Assigned To
+                Assignment Strategy
               </label>
-              <input
-                type="text"
-                value={assignedTo}
-                onChange={(e) => setAssignedTo(e.target.value)}
+              <select
+                value={assignmentStrategy}
+                onChange={(e) => setAssignmentStrategy(e.target.value)}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                placeholder="user@example.com"
-                data-testid="task-assigned-to"
-              />
+                data-testid="task-assignment-strategy"
+              >
+                <option value="direct">Direct Assignment</option>
+                <option value="role">Role/Group Based</option>
+                <option value="round_robin">Round Robin</option>
+                <option value="load_balanced">Load Balanced</option>
+              </select>
+              <p className="mt-1 text-xs text-slate-500">
+                {assignmentStrategy === 'direct' && 'Assign to a specific user'}
+                {assignmentStrategy === 'role' && 'Assign to first available user in role'}
+                {assignmentStrategy === 'round_robin' && 'Rotate assignments evenly among role members'}
+                {assignmentStrategy === 'load_balanced' && 'Assign to user with lowest workload'}
+              </p>
             </div>
+            
+            {assignmentStrategy === 'direct' ? (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Assign To
+                </label>
+                <select
+                  value={assignedTo}
+                  onChange={(e) => setAssignedTo(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  data-testid="task-assigned-to"
+                >
+                  <option value="">-- Select User --</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.email}>
+                      {user.name} ({user.email})
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-slate-500">Or enter email manually:</p>
+                <input
+                  type="text"
+                  value={assignedTo}
+                  onChange={(e) => setAssignedTo(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="user@example.com"
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Select Role
+                </label>
+                <select
+                  value={assignmentRole}
+                  onChange={(e) => setAssignmentRole(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  data-testid="task-assignment-role"
+                >
+                  <option value="">-- Select Role --</option>
+                  {roles.map((role) => (
+                    <option key={role.id} value={role.name}>
+                      {role.name} ({role.members?.length || 0} members)
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Priority
@@ -240,6 +298,24 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
                 <option value="high">High</option>
                 <option value="urgent">Urgent</option>
               </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                SLA - Due In (hours)
+              </label>
+              <input
+                type="number"
+                value={dueInHours}
+                onChange={(e) => setDueInHours(e.target.value)}
+                min="1"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="24"
+                data-testid="task-due-hours"
+              />
+              <p className="mt-1 text-xs text-slate-500">
+                Task will be auto-escalated if not completed within this time
+              </p>
             </div>
           </>
         )}
