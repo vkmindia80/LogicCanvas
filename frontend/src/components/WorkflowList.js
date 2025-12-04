@@ -97,14 +97,24 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
             </div>
 
             {/* Create Button */}
-            <button
-              onClick={onCreateNew}
-              className="flex items-center space-x-2 bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors shadow-sm"
-              data-testid="create-workflow-btn"
-            >
-              <Plus className="w-5 h-5" />
-              <span className="font-medium">Create Workflow</span>
-            </button>
+            <div className="flex space-x-2">
+              <button
+                onClick={onCreateNew}
+                className="flex items-center space-x-2 bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors shadow-sm"
+                data-testid="create-workflow-btn"
+              >
+                <Plus className="w-5 h-5" />
+                <span className="font-medium">Create Workflow</span>
+              </button>
+              <button
+                onClick={onLoadRecruitingSample}
+                className="flex items-center space-x-2 bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors shadow-sm text-sm"
+                data-testid="load-recruiting-sample-btn"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Load Recruiting Template</span>
+              </button>
+            </div>
           </div>
         </div>
 
