@@ -457,8 +457,16 @@ async def get_task_comments(task_id: str):
     return {"comments": comments}
 
 @app.post("/api/tasks/{task_id}/comments")
-async def add_task_comment(task_id: str, content: str, author: str = "current_user"):
+async def add_task_comment(task_id: str, data: Dict[str, Any] = None):
     """Add a comment to a task"""
+    if data is None:
+        data = {}
+    content = data.get("content", "")
+    author = data.get("author", "current_user")
+    
+    if not content:
+        raise HTTPException(status_code=400, detail="content is required")
+    
     task = tasks_collection.find_one({"id": task_id})
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
