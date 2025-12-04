@@ -450,6 +450,74 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
           <TriggerConfig workflowId={workflow.id} />
         </div>
       )}
+
+      {/* Validation Results Panel */}
+      {validationRan && validationResults && (
+        <div className="fixed bottom-4 right-4 w-96 bg-white shadow-2xl border border-gray-200 rounded-lg z-50 max-h-80 overflow-y-auto">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800">Validation Results</h3>
+            <button
+              onClick={() => {
+                setValidationResults(null);
+                setValidationRan(false);
+              }}
+              className="text-gray-500 hover:text-gray-700"
+              data-testid="close-validation-panel"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="p-4">
+            {validationResults.length === 0 ? (
+              <div className="flex items-center space-x-2 text-green-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Workflow validation passed! No issues found.</span>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {validationResults.map((issue, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-start space-x-2 p-3 rounded-lg ${
+                      issue.type === 'error' 
+                        ? 'bg-red-50 border border-red-200' 
+                        : 'bg-yellow-50 border border-yellow-200'
+                    }`}
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full mt-2 ${
+                        issue.type === 'error' ? 'bg-red-500' : 'bg-yellow-500'
+                      }`}
+                    ></div>
+                    <div className="flex-1">
+                      <p className={`text-sm ${
+                        issue.type === 'error' ? 'text-red-800' : 'text-yellow-800'
+                      }`}>
+                        {issue.message}
+                      </p>
+                      {issue.nodeId && (
+                        <button
+                          onClick={() => {
+                            const node = nodes.find(n => n.id === issue.nodeId);
+                            if (node) {
+                              setSelectedNode(node);
+                              setValidationResults(null);
+                              setValidationRan(false);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-800 mt-1"
+                        >
+                          Go to node
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
