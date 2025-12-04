@@ -97,7 +97,7 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
         <div className="font-medium mb-1">Expression Syntax:</div>
         <ul className="list-disc list-inside space-y-0.5">
           <li>Variables: ${'{'}variable_name{'}'}</li>
-          <li>Comparisons: ==, !=, >, <, >=, <=</li>
+          <li>Comparisons: ==, !=, {'>'}, {'<'}, >=, {'<='}</li>
           <li>Logic: and, or, not</li>
           <li>Examples: ${'{'}amount{'}'} > 1000, ${'{'}status{'}'} == "approved"</li>
         </ul>
