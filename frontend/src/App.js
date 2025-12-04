@@ -9,6 +9,7 @@ import FormBuilder from './components/forms/FormBuilder';
 import TaskInbox from './components/TaskInbox';
 import ApprovalQueue from './components/ApprovalQueue';
 import AuditTrail from './components/AuditTrail';
+import NotificationsPanel from './components/NotificationsPanel';
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
@@ -22,8 +23,10 @@ function App() {
   const [showTaskInbox, setShowTaskInbox] = useState(false);
   const [showApprovalQueue, setShowApprovalQueue] = useState(false);
   const [showAuditTrail, setShowAuditTrail] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [approvalCount, setApprovalCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
     const checkHealth = async () => {
