@@ -59,6 +59,9 @@ class WorkflowEdge(BaseModel):
     target: str
     label: Optional[str] = None
     condition: Optional[str] = None
+    # Optional handle IDs from React Flow for multi-connector nodes (e.g., decision yes/no)
+    sourceHandle: Optional[str] = None
+    targetHandle: Optional[str] = None
 
 class Workflow(BaseModel):
     id: Optional[str] = None
