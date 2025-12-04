@@ -104,7 +104,8 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
         animated: true,
         style: { stroke: '#94a3b8', strokeWidth: 2 },
         markerEnd: {
-          type: 'arrowclosed'
+          type: MarkerType.ArrowClosed,
+          color: '#64748b'
         }
       };
       setEdges((eds) => addEdge(newEdge, eds));
