@@ -108,18 +108,21 @@ const CustomNode = ({ data, selected }) => {
 
           {/* Multiple named outputs for special nodes (e.g., Decision, Parallel) */}
           {NODE_CONFIGS[data.type]?.outputHandles && (
-            <div className="absolute -bottom-3 left-0 right-0 flex justify-around text-[10px] text-white/90">
-              {NODE_CONFIGS[data.type].outputHandles.map((handle) => (
-                <div key={handle.id} className="flex flex-col items-center">
+            <div className="absolute -bottom-3 left-0 right-0 text-[10px] text-white/90">
+              {NODE_CONFIGS[data.type].outputHandles.map((handle, index) => (
+                <div
+                  key={handle.id}
+                  className="absolute flex flex-col items-center"
+                  style={{ left: `${((index + 1) * 100) / (NODE_CONFIGS[data.type].outputHandles.length + 1)}%`, transform: 'translateX(-50%)' }}
+                >
                   <Handle
                     id={handle.id}
                     type="source"
                     position={Position.Bottom}
-                    style={{ left: handle.id === 'yes' ? '30%' : handle.id === 'no' ? '70%' : undefined }}
                     className="w-3 h-3 !bg-white border-2 border-gray-400"
                     data-testid={`node-handle-output-${handle.id}`}
                   />
-                  <span className="mt-1 bg-black/30 px-1 py-0.5 rounded-full">
+                  <span className="mt-1 bg-black/30 px-1 py-0.5 rounded-full whitespace-nowrap">
                     {handle.label}
                   </span>
                 </div>
