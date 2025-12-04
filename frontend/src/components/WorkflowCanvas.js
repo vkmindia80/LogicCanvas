@@ -43,6 +43,34 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
   const reactFlowWrapper = useRef(null);
   const nodeIdCounter = useRef(1);
 
+  const updateNodeStates = (instance) => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        const nodeState = instance.node_states?.[node.id];
+        const isCurrent = instance.current_node_id === node.id;
+        
+        let executionState = null;
+        if (isCurrent) {
+          executionState = 'running';
+        } else if (nodeState === 'completed') {
+          executionState = 'completed';
+        } else if (nodeState === 'waiting') {
+          executionState = 'waiting';
+        } else if (nodeState === 'failed') {
+          executionState = 'failed';
+        }
+
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            executionState
+          }
+        };
+      })
+    );
+  };
+
   // Poll for active instance execution state
   useEffect(() => {
     if (!workflow?.id || !activeInstance) return;
@@ -68,7 +96,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
     return () => clearInterval(interval);
   }, [workflow?.id, activeInstance]);
 
-  const updateNodeStates = (instance) => {
+
     setNodes((nds) =>
       nds.map((node) => {
         const nodeState = instance.node_states?.[node.id];
