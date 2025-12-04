@@ -10,11 +10,16 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
   const [description, setDescription] = useState(node?.data?.description || '');
   const [condition, setCondition] = useState(node?.data?.condition || '');
   const [assignedTo, setAssignedTo] = useState(node?.data?.assignedTo || '');
+  const [assignmentStrategy, setAssignmentStrategy] = useState(node?.data?.assignmentStrategy || 'direct');
+  const [assignmentRole, setAssignmentRole] = useState(node?.data?.assignmentRole || '');
   const [priority, setPriority] = useState(node?.data?.priority || 'medium');
+  const [dueInHours, setDueInHours] = useState(node?.data?.dueInHours || 24);
   const [approvers, setApprovers] = useState(node?.data?.approvers?.join(', ') || '');
   const [approvalType, setApprovalType] = useState(node?.data?.approvalType || 'single');
   const [formId, setFormId] = useState(node?.data?.formId || '');
   const [forms, setForms] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [users, setUsers] = useState([]);
   
   // Action node states
   const [actionType, setActionType] = useState(node?.data?.actionType || 'http');
@@ -32,7 +37,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
       setDescription(node.data?.description || '');
       setCondition(node.data?.condition || '');
       setAssignedTo(node.data?.assignedTo || '');
+      setAssignmentStrategy(node.data?.assignmentStrategy || 'direct');
+      setAssignmentRole(node.data?.assignmentRole || '');
       setPriority(node.data?.priority || 'medium');
+      setDueInHours(node.data?.dueInHours || 24);
       setApprovers(node.data?.approvers?.join(', ') || '');
       setApprovalType(node.data?.approvalType || 'single');
       setFormId(node.data?.formId || '');
@@ -51,6 +59,9 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     if (node?.data?.type === NODE_TYPES.FORM) {
       loadForms();
     }
+    if (node?.data?.type === NODE_TYPES.TASK) {
+      loadRolesAndUsers();
+    }
   }, [node]);
 
   const loadForms = async () => {
@@ -60,6 +71,21 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
       setForms(data.forms || []);
     } catch (error) {
       console.error('Failed to load forms:', error);
+    }
+  };
+
+  const loadRolesAndUsers = async () => {
+    try {
+      const [rolesRes, usersRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/roles`),
+        fetch(`${BACKEND_URL}/api/users`)
+      ]);
+      const rolesData = await rolesRes.json();
+      const usersData = await usersRes.json();
+      setRoles(rolesData.roles || []);
+      setUsers(usersData.users || []);
+    } catch (error) {
+      console.error('Failed to load roles/users:', error);
     }
   };
 
