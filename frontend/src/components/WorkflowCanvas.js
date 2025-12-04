@@ -86,6 +86,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
         if (instance) {
           updateNodeStates(instance);
           
+        
           // Stop polling if instance is no longer running
           if (!['running', 'waiting'].includes(instance.status)) {
             setActiveInstance(null);
@@ -97,7 +98,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
     }, 2000); // Poll every 2 seconds
 
     return () => clearInterval(interval);
-  }, [workflow?.id, activeInstance]);
+  }, [workflow?.id, activeInstance, updateNodeStates]);
 
   const onConnect = useCallback(
     (params) => {
