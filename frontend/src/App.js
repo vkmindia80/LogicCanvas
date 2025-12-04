@@ -326,6 +326,11 @@ function App() {
           <ApprovalQueue onClose={() => setShowApprovalQueue(false)} />
         )}
 
+        {/* Notifications Panel Modal */}
+        {showNotifications && (
+          <NotificationsPanel onClose={() => setShowNotifications(false)} />
+        )}
+
         {/* Audit Trail Modal */}
         {showAuditTrail && (
           <AuditTrail onClose={() => setShowAuditTrail(false)} />
