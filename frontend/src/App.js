@@ -237,6 +237,19 @@ function App() {
                     )}
                   </button>
                   <button
+                    onClick={() => setShowNotifications(true)}
+                    className="relative flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                    data-testid="open-notifications-btn"
+                  >
+                    <Bell className="w-5 h-5" />
+                    <span className="hidden sm:inline">Alerts</span>
+                    {notificationCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-500 text-white text-xs rounded-full flex items-center justify-center">
+                        {notificationCount > 9 ? '9+' : notificationCount}
+                      </span>
+                    )}
+                  </button>
+                  <button
                     onClick={() => setShowAuditTrail(true)}
                     className="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
                     data-testid="open-audit-trail-btn"
