@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History } from 'lucide-react';
+import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell } from 'lucide-react';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import WorkflowList from './components/WorkflowList';
 import WorkflowCanvas from './components/WorkflowCanvas';
@@ -19,6 +19,11 @@ function App() {
   const [currentForm, setCurrentForm] = useState(null);
   const [activeTab, setActiveTab] = useState('workflows');
   const [loading, setLoading] = useState(true);
+  const [showTaskInbox, setShowTaskInbox] = useState(false);
+  const [showApprovalQueue, setShowApprovalQueue] = useState(false);
+  const [showAuditTrail, setShowAuditTrail] = useState(false);
+  const [taskCount, setTaskCount] = useState(0);
+  const [approvalCount, setApprovalCount] = useState(0);
 
   useEffect(() => {
     const checkHealth = async () => {
