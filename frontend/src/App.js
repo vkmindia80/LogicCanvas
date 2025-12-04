@@ -43,18 +43,21 @@ function App() {
     checkHealth();
   }, []);
 
-  // Load badge counts for tasks and approvals
+  // Load badge counts for tasks, approvals, and notifications
   useEffect(() => {
     const loadCounts = async () => {
       try {
-        const [tasksRes, approvalsRes] = await Promise.all([
+        const [tasksRes, approvalsRes, notificationsRes] = await Promise.all([
           fetch(`${BACKEND_URL}/api/tasks?status=pending`),
-          fetch(`${BACKEND_URL}/api/approvals?status=pending`)
+          fetch(`${BACKEND_URL}/api/approvals?status=pending`),
+          fetch(`${BACKEND_URL}/api/notifications?unread_only=true`)
         ]);
         const tasksData = await tasksRes.json();
         const approvalsData = await approvalsRes.json();
+        const notificationsData = await notificationsRes.json();
         setTaskCount(tasksData.count || 0);
         setApprovalCount(approvalsData.count || 0);
+        setNotificationCount(notificationsData.count || 0);
       } catch (error) {
         console.error('Failed to load counts:', error);
       }
