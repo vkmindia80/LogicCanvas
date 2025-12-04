@@ -3,7 +3,7 @@ import { Plus, Search, Edit, Trash2, Play, FileText } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const WorkflowList = ({ onSelectWorkflow, onCreateNew }) => {
+const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample }) => {
   const [workflows, setWorkflows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
