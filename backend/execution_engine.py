@@ -338,23 +338,61 @@ class WorkflowExecutionEngine:
             self._update_instance_status(instance_id, "failed", result.get("error"))
     
     def _get_next_nodes(self, current_node: Dict[str, Any], workflow: Dict[str, Any], route: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Get next nodes based on edges"""
-        next_nodes = []
-        
+        """Get next nodes based on edges.
+
+        Supports:
+        - Multi-connector decision nodes via `edge.sourceHandle` (e.g., 'yes' / 'no')
+        - Backwards compatibility with label-based routing for existing workflows
+        - Fan-out for parallel gateways (all outgoing edges)
+        """
+        next_nodes: List[Dict[str, Any]] = []
+        current_node_id = current_node.get("id")
+        node_type = current_node.get("type")
+
+        # Normalize decision route to a logical branch name
+        desired_handle: Optional[str] = None
+        if node_type == "decision" and route is not None:
+            route_str = str(route).lower()
+            is_true_branch = route_str in ["true", "1", "yes"]
+            desired_handle = "yes" if is_true_branch else "no"
+
         for edge in workflow.get("edges", []):
-            if edge["source"] == current_node["id"]:
-                # Check if route matches (for decision nodes)
-                if route:
-                    edge_label = edge.get("label", "").lower()
-                    if route.lower() not in edge_label:
+            if edge.get("source") != current_node_id:
+                continue
+
+            # For decision nodes, use sourceHandle first, then fall back to label matching
+            if node_type == "decision" and desired_handle is not None:
+                edge_handle = edge.get("sourceHandle") or edge.get("source_handle")
+
+                if edge_handle:
+                    # Explicit handle-based routing (recommended for new workflows)
+                    if edge_handle != desired_handle:
                         continue
-                
-                # Find target node
-                for node in workflow.get("nodes", []):
-                    if node["id"] == edge["target"]:
-                        next_nodes.append(node)
-                        break
-        
+                else:
+                    # Backwards compatibility: fall back to label-based routing
+                    edge_label = (edge.get("label") or "").lower()
+                    if desired_handle == "yes":
+                        # Treat yes/true/approve/shortlist as positive branch
+                        if not any(k in edge_label for k in ["yes", "true", "approve", "approved", "shortlist", "accept"]):
+                            continue
+                    else:
+                        # Treat no/false/reject/decline as negative branch
+                        if not any(k in edge_label for k in ["no", "false", "reject", "rejected", "decline", "fail"]):
+                            continue
+
+            # For non-decision nodes, we currently ignore `route` and simply
+            # follow all outgoing edges (e.g., parallel fan-out).
+
+            # Find target node
+            target_id = edge.get("target")
+            if not target_id:
+                continue
+
+            for node in workflow.get("nodes", []):
+                if node.get("id") == target_id:
+                    next_nodes.append(node)
+                    break
+
         return next_nodes
     
     def _update_instance_status(self, instance_id: str, status: str, error: Optional[str] = None):
