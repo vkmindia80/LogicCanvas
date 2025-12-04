@@ -54,27 +54,80 @@ class NodeExecutor:
         return {"status": "completed", "output": {"started": True}}
     
     def execute_task_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute task node - creates a task and waits"""
+        """Execute task node - creates a task with assignment strategy and SLA"""
         task_data = node.get("data", {})
         
         task_id = str(uuid.uuid4())
+        now = datetime.utcnow()
+        
+        # Calculate due date based on SLA hours
+        due_in_hours = task_data.get("dueInHours", 24)
+        due_date = (now + timedelta(hours=due_in_hours)).isoformat()
+        
+        # Determine assignee based on strategy
+        assignment_strategy = task_data.get("assignmentStrategy", "direct")
+        assigned_to = task_data.get("assignedTo")
+        assignment_role = task_data.get("assignmentRole")
+        
+        # For non-direct strategies, we'll assign when the task is created
+        # The actual assignment will be done via the API endpoint
+        
         task = {
             "id": task_id,
             "workflow_instance_id": self.instance_id,
             "node_id": node["id"],
             "title": task_data.get("label", "Task"),
             "description": task_data.get("description", ""),
-            "assigned_to": task_data.get("assignedTo"),
+            "assigned_to": assigned_to if assignment_strategy == "direct" else None,
+            "assignment_strategy": assignment_strategy,
+            "assignment_role": assignment_role,
             "priority": task_data.get("priority", "medium"),
             "status": "pending",
-            "created_at": datetime.utcnow().isoformat(),
-            "updated_at": datetime.utcnow().isoformat()
+            "due_date": due_date,
+            "sla_hours": due_in_hours,
+            "created_at": now.isoformat(),
+            "updated_at": now.isoformat()
         }
         
         self.db['tasks'].insert_one(task)
         
+        # If using role-based assignment, auto-assign now
+        if assignment_strategy != "direct" and assignment_role:
+            self._auto_assign_task(task_id, assignment_strategy, assignment_role)
+        
         # Return waiting status - execution will resume when task is completed
         return {"status": "waiting", "waiting_for": "task", "task_id": task_id}
+    
+    def _auto_assign_task(self, task_id: str, strategy: str, role: str):
+        """Auto-assign task based on strategy"""
+        role_doc = self.db['roles'].find_one({"name": role})
+        if not role_doc or not role_doc.get("members"):
+            return
+        
+        members = role_doc["members"]
+        assignee = None
+        
+        if strategy == "role":
+            # First available in role
+            assignee = members[0]
+        
+        elif strategy == "round_robin":
+            # Simple round-robin using task count
+            task_count = self.db['tasks'].count_documents({})
+            assignee = members[task_count % len(members)]
+        
+        elif strategy == "load_balanced":
+            # Get user with lowest workload
+            users = list(self.db['users'].find({"email": {"$in": members}}).sort("workload", 1))
+            if users:
+                assignee = users[0]["email"]
+                self.db['users'].update_one({"email": assignee}, {"$inc": {"workload": 1}})
+        
+        if assignee:
+            self.db['tasks'].update_one(
+                {"id": task_id},
+                {"$set": {"assigned_to": assignee, "assigned_at": datetime.utcnow().isoformat()}}
+            )
     
     def execute_decision_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute decision node - evaluate condition"""
