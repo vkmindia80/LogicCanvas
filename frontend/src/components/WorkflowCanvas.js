@@ -41,6 +41,8 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
   const [showTriggerConfig, setShowTriggerConfig] = useState(false);
   const [activeInstance, setActiveInstance] = useState(null);
+  const [validationResults, setValidationResults] = useState(null);
+  const [validationRan, setValidationRan] = useState(false);
   const reactFlowWrapper = useRef(null);
   const nodeIdCounter = useRef(1);
 
@@ -187,6 +189,106 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
       alert('Failed to apply auto-layout: ' + error.message);
     }
   }, [workflow, setNodes]);
+
+  const handleValidate = useCallback(() => {
+    const issues = [];
+
+    if (!nodes || nodes.length === 0) {
+      issues.push({ type: 'error', message: 'Workflow has no nodes configured.' });
+    } else {
+      const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+      const edgesBySource = new Map();
+      const edgesByTarget = new Map();
+
+      edges.forEach((edge) => {
+        if (!edgesBySource.has(edge.source)) edgesBySource.set(edge.source, []);
+        edgesBySource.get(edge.source).push(edge);
+
+        if (!edgesByTarget.has(edge.target)) edgesByTarget.set(edge.target, []);
+        edgesByTarget.get(edge.target).push(edge);
+      });
+
+      const startNodes = nodes.filter((n) => n.type === 'start');
+      const endNodes = nodes.filter((n) => n.type === 'end');
+
+      if (startNodes.length === 0) {
+        issues.push({ type: 'error', message: 'No Start node found. Add a Start node to begin the workflow.' });
+      }
+      if (endNodes.length === 0) {
+        issues.push({ type: 'warning', message: 'No End node found. Add at least one End node to properly terminate the workflow.' });
+      }
+
+      // Nodes with no outgoing edges (excluding End nodes)
+      nodes.forEach((node) => {
+        const outgoing = edgesBySource.get(node.id) || [];
+        if (outgoing.length === 0 && node.type !== 'end') {
+          issues.push({
+            type: 'warning',
+            message: `Node "${node.data?.label || node.id}" has no outgoing connections.`,
+            nodeId: node.id
+          });
+        }
+      });
+
+      // Decision nodes: ensure Yes/No branches
+      nodes
+        .filter((n) => n.type === 'decision')
+        .forEach((node) => {
+          const outgoing = edgesBySource.get(node.id) || [];
+          const handles = new Set(
+            outgoing
+              .map((e) => e.sourceHandle || e.source_handle || '')
+              .filter((id) => !!id)
+          );
+
+          if (!handles.has('yes')) {
+            issues.push({
+              type: 'warning',
+              message: `Decision node "${node.data?.label || node.id}" is missing a 'Yes' branch.`,
+              nodeId: node.id
+            });
+          }
+          if (!handles.has('no')) {
+            issues.push({
+              type: 'warning',
+              message: `Decision node "${node.data?.label || node.id}" is missing a 'No' branch.`,
+              nodeId: node.id
+            });
+          }
+        });
+
+      // Unreachable nodes (from first Start node)
+      if (startNodes.length > 0) {
+        const startId = startNodes[0].id;
+        const visited = new Set([startId]);
+        const queue = [startId];
+
+        while (queue.length > 0) {
+          const current = queue.shift();
+          const outgoing = edgesBySource.get(current) || [];
+          outgoing.forEach((edge) => {
+            if (!visited.has(edge.target)) {
+              visited.add(edge.target);
+              queue.push(edge.target);
+            }
+          });
+        }
+
+        nodes.forEach((node) => {
+          if (!visited.has(node.id)) {
+            issues.push({
+              type: 'warning',
+              message: `Node "${node.data?.label || node.id}" is unreachable from the Start node.`,
+              nodeId: node.id
+            });
+          }
+        });
+      }
+    }
+
+    setValidationResults(issues);
+    setValidationRan(true);
+  }, [nodes, edges]);
 
   return (
     <div className="flex h-screen bg-slate-50">
