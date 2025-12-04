@@ -102,6 +102,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
       const newEdge = {
         ...params,
         id: `edge-${Date.now()}`,
+        type: 'deletable',
         animated: true,
         style: { stroke: '#94a3b8', strokeWidth: 2 },
         markerEnd: {
