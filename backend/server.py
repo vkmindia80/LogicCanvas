@@ -303,6 +303,216 @@ async def update_task(task_id: str, task: Task):
     tasks_collection.replace_one({"id": task_id}, task_dict)
     return {"message": "Task updated successfully"}
 
+# ========== PHASE 5: TASK MANAGEMENT ENDPOINTS ==========
+
+@app.get("/api/tasks/{task_id}")
+async def get_task(task_id: str):
+    """Get single task by ID"""
+    task = tasks_collection.find_one({"id": task_id}, {"_id": 0})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+@app.post("/api/tasks/{task_id}/reassign")
+async def reassign_task(task_id: str, new_assignee: str):
+    """Reassign task to a different user"""
+    task = tasks_collection.find_one({"id": task_id})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    old_assignee = task.get("assigned_to")
+    now = datetime.utcnow().isoformat()
+    
+    tasks_collection.update_one(
+        {"id": task_id},
+        {"$set": {
+            "assigned_to": new_assignee,
+            "updated_at": now,
+            "reassignment_history": task.get("reassignment_history", []) + [{
+                "from": old_assignee,
+                "to": new_assignee,
+                "timestamp": now
+            }]
+        }}
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "task",
+        "entity_id": task_id,
+        "action": "reassigned",
+        "user": "current_user",
+        "details": {"from": old_assignee, "to": new_assignee},
+        "timestamp": now
+    })
+    
+    return {"message": "Task reassigned successfully"}
+
+@app.post("/api/tasks/{task_id}/delegate")
+async def delegate_task(task_id: str, delegate_to: str):
+    """Delegate task to another user"""
+    task = tasks_collection.find_one({"id": task_id})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    original_assignee = task.get("assigned_to")
+    now = datetime.utcnow().isoformat()
+    
+    tasks_collection.update_one(
+        {"id": task_id},
+        {"$set": {
+            "delegated_to": delegate_to,
+            "delegated_by": original_assignee,
+            "delegation_date": now,
+            "updated_at": now
+        }}
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "task",
+        "entity_id": task_id,
+        "action": "delegated",
+        "user": original_assignee,
+        "details": {"delegated_to": delegate_to},
+        "timestamp": now
+    })
+    
+    return {"message": "Task delegated successfully"}
+
+@app.post("/api/tasks/{task_id}/escalate")
+async def escalate_task(task_id: str, reason: str = ""):
+    """Escalate task to higher priority/manager"""
+    task = tasks_collection.find_one({"id": task_id})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    now = datetime.utcnow().isoformat()
+    new_priority = "urgent" if task.get("priority") == "high" else "high"
+    
+    tasks_collection.update_one(
+        {"id": task_id},
+        {"$set": {
+            "priority": new_priority,
+            "escalated": True,
+            "escalation_reason": reason,
+            "escalated_at": now,
+            "updated_at": now
+        }}
+    )
+    
+    # Create notification for escalation
+    notifications_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "type": "escalation",
+        "entity_type": "task",
+        "entity_id": task_id,
+        "title": f"Task Escalated: {task.get('title')}",
+        "message": reason or "Task has been escalated",
+        "priority": "high",
+        "read": False,
+        "created_at": now
+    })
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "task",
+        "entity_id": task_id,
+        "action": "escalated",
+        "user": "current_user",
+        "details": {"reason": reason, "new_priority": new_priority},
+        "timestamp": now
+    })
+    
+    return {"message": "Task escalated successfully"}
+
+# Task Comments
+@app.get("/api/tasks/{task_id}/comments")
+async def get_task_comments(task_id: str):
+    """Get comments for a task"""
+    task = tasks_collection.find_one({"id": task_id})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    comments = task.get("comments", [])
+    return {"comments": comments}
+
+@app.post("/api/tasks/{task_id}/comments")
+async def add_task_comment(task_id: str, content: str, author: str = "current_user"):
+    """Add a comment to a task"""
+    task = tasks_collection.find_one({"id": task_id})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    now = datetime.utcnow().isoformat()
+    comment = {
+        "id": str(uuid.uuid4()),
+        "content": content,
+        "author": author,
+        "created_at": now,
+        "mentions": _extract_mentions(content)
+    }
+    
+    tasks_collection.update_one(
+        {"id": task_id},
+        {"$push": {"comments": comment}}
+    )
+    
+    # Create notifications for mentioned users
+    for mention in comment["mentions"]:
+        notifications_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "type": "mention",
+            "entity_type": "task",
+            "entity_id": task_id,
+            "recipient": mention,
+            "title": f"You were mentioned in a comment",
+            "message": f"{author} mentioned you in task: {task.get('title')}",
+            "read": False,
+            "created_at": now
+        })
+    
+    return {"message": "Comment added successfully", "comment": comment}
+
+def _extract_mentions(text: str) -> List[str]:
+    """Extract @mentions from text"""
+    import re
+    mentions = re.findall(r'@(\w+)', text)
+    return list(set(mentions))
+
+# SLA Tracking
+@app.get("/api/tasks/sla/overdue")
+async def get_overdue_tasks():
+    """Get tasks that are past their due date"""
+    now = datetime.utcnow().isoformat()
+    overdue_tasks = list(tasks_collection.find(
+        {
+            "due_date": {"$lt": now},
+            "status": {"$nin": ["completed", "cancelled"]}
+        },
+        {"_id": 0}
+    ))
+    return {"tasks": overdue_tasks, "count": len(overdue_tasks)}
+
+@app.get("/api/tasks/sla/at-risk")
+async def get_at_risk_tasks():
+    """Get tasks due within 24 hours"""
+    now = datetime.utcnow()
+    tomorrow = (now + timedelta(hours=24)).isoformat()
+    now_iso = now.isoformat()
+    
+    at_risk_tasks = list(tasks_collection.find(
+        {
+            "due_date": {"$gte": now_iso, "$lte": tomorrow},
+            "status": {"$nin": ["completed", "cancelled"]}
+        },
+        {"_id": 0}
+    ))
+    return {"tasks": at_risk_tasks, "count": len(at_risk_tasks)}
+
 # Approval Endpoints
 @app.get("/api/approvals")
 async def get_approvals(status: Optional[str] = None):
