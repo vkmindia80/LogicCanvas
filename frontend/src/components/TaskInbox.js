@@ -3,7 +3,7 @@ import {
   CheckSquare, Clock, AlertCircle, User, Calendar, Flag,
   ChevronRight, RefreshCw, Search, Filter, MessageSquare,
   ArrowRight, UserPlus, AlertTriangle, CheckCircle, XCircle,
-  MoreVertical, Send
+  MoreVertical, Send, Users, Zap, Timer, TrendingUp
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
@@ -12,12 +12,18 @@ const TaskInbox = ({ onClose }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [filter, setFilter] = useState('all'); // all, pending, in_progress, completed
+  const [filter, setFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showReassign, setShowReassign] = useState(false);
   const [reassignTo, setReassignTo] = useState('');
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [overdueCount, setOverdueCount] = useState(0);
+  const [atRiskCount, setAtRiskCount] = useState(0);
+  const [stats, setStats] = useState({ pending: 0, inProgress: 0, completed: 0 });
 
   const loadTasks = useCallback(async () => {
     setLoading(true);
@@ -28,7 +34,15 @@ const TaskInbox = ({ onClose }) => {
       }
       const response = await fetch(url);
       const data = await response.json();
-      setTasks(data.tasks || []);
+      const taskList = data.tasks || [];
+      setTasks(taskList);
+      
+      // Calculate stats
+      setStats({
+        pending: taskList.filter(t => t.status === 'pending').length,
+        inProgress: taskList.filter(t => t.status === 'in_progress').length,
+        completed: taskList.filter(t => t.status === 'completed').length
+      });
     } catch (error) {
       console.error('Failed to load tasks:', error);
     } finally {
@@ -36,10 +50,44 @@ const TaskInbox = ({ onClose }) => {
     }
   }, [filter]);
 
+  const loadUsersAndRoles = async () => {
+    try {
+      const [usersRes, rolesRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/users`),
+        fetch(`${BACKEND_URL}/api/roles`)
+      ]);
+      const usersData = await usersRes.json();
+      const rolesData = await rolesRes.json();
+      setUsers(usersData.users || []);
+      setRoles(rolesData.roles || []);
+    } catch (error) {
+      console.error('Failed to load users/roles:', error);
+    }
+  };
+
+  const loadSlaMetrics = async () => {
+    try {
+      const [overdueRes, atRiskRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/tasks/sla/overdue`),
+        fetch(`${BACKEND_URL}/api/tasks/sla/at-risk`)
+      ]);
+      const overdueData = await overdueRes.json();
+      const atRiskData = await atRiskRes.json();
+      setOverdueCount(overdueData.count || 0);
+      setAtRiskCount(atRiskData.count || 0);
+    } catch (error) {
+      console.error('Failed to load SLA metrics:', error);
+    }
+  };
+
   useEffect(() => {
     loadTasks();
-    // Poll for updates every 10 seconds
-    const interval = setInterval(loadTasks, 10000);
+    loadUsersAndRoles();
+    loadSlaMetrics();
+    const interval = setInterval(() => {
+      loadTasks();
+      loadSlaMetrics();
+    }, 10000);
     return () => clearInterval(interval);
   }, [loadTasks]);
 
@@ -78,7 +126,7 @@ const TaskInbox = ({ onClose }) => {
 
   const handleReassign = async (taskId) => {
     if (!reassignTo.trim()) {
-      alert('Please enter a user to reassign to');
+      alert('Please select a user to reassign to');
       return;
     }
     try {
@@ -95,8 +143,7 @@ const TaskInbox = ({ onClose }) => {
     }
   };
 
-  const handleDelegate = async (taskId) => {
-    const delegateTo = prompt('Enter email to delegate to:');
+  const handleDelegate = async (taskId, delegateTo) => {
     if (!delegateTo) return;
     try {
       await fetch(`${BACKEND_URL}/api/tasks/${taskId}/delegate`, {
@@ -110,8 +157,7 @@ const TaskInbox = ({ onClose }) => {
     }
   };
 
-  const handleEscalate = async (taskId) => {
-    const reason = prompt('Enter escalation reason:');
+  const handleEscalate = async (taskId, reason) => {
     if (!reason) return;
     try {
       await fetch(`${BACKEND_URL}/api/tasks/${taskId}/escalate`, {
@@ -120,6 +166,7 @@ const TaskInbox = ({ onClose }) => {
         body: JSON.stringify({ reason: reason.trim() })
       });
       loadTasks();
+      loadSlaMetrics();
     } catch (error) {
       alert('Failed to escalate task: ' + error.message);
     }
@@ -145,7 +192,7 @@ const TaskInbox = ({ onClose }) => {
       low: 'bg-slate-100 text-slate-700 border-slate-300',
       medium: 'bg-blue-100 text-blue-700 border-blue-300',
       high: 'bg-orange-100 text-orange-700 border-orange-300',
-      urgent: 'bg-red-100 text-red-700 border-red-300'
+      urgent: 'bg-red-100 text-red-700 border-red-300 animate-pulse'
     };
     return colors[priority] || colors.medium;
   };
@@ -160,10 +207,12 @@ const TaskInbox = ({ onClose }) => {
     return colors[status] || colors.pending;
   };
 
-  const filteredTasks = tasks.filter(task =>
-    task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (task.description && task.description.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredTasks = tasks.filter(task => {
+    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (task.description && task.description.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesPriority = priorityFilter === 'all' || task.priority === priorityFilter;
+    return matchesSearch && matchesPriority;
+  });
 
   const getSlaStatus = (task) => {
     if (!task.due_date) return null;
@@ -171,10 +220,24 @@ const TaskInbox = ({ onClose }) => {
     const now = new Date();
     const diffHours = (dueDate - now) / (1000 * 60 * 60);
     
-    if (diffHours < 0) return { status: 'overdue', color: 'text-red-500', label: 'Overdue' };
-    if (diffHours < 2) return { status: 'critical', color: 'text-orange-500', label: 'Due soon' };
-    if (diffHours < 24) return { status: 'warning', color: 'text-yellow-500', label: 'Due today' };
-    return { status: 'ok', color: 'text-green-500', label: 'On track' };
+    if (diffHours < 0) return { status: 'overdue', color: 'text-red-500 bg-red-50', label: 'Overdue', icon: AlertTriangle };
+    if (diffHours < 2) return { status: 'critical', color: 'text-orange-500 bg-orange-50', label: 'Critical', icon: AlertCircle };
+    if (diffHours < 24) return { status: 'warning', color: 'text-yellow-600 bg-yellow-50', label: 'Due Soon', icon: Clock };
+    return { status: 'ok', color: 'text-green-500 bg-green-50', label: 'On Track', icon: CheckCircle };
+  };
+
+  const formatTimeRemaining = (dueDate) => {
+    if (!dueDate) return '';
+    const due = new Date(dueDate);
+    const now = new Date();
+    const diffMs = due - now;
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (diffMs < 0) return 'Overdue';
+    if (diffHours > 24) return `${Math.floor(diffHours / 24)}d ${diffHours % 24}h`;
+    if (diffHours > 0) return `${diffHours}h ${diffMins}m`;
+    return `${diffMins}m`;
   };
 
   return (
@@ -191,7 +254,7 @@ const TaskInbox = ({ onClose }) => {
           </div>
           <div className="flex items-center space-x-4">
             <button
-              onClick={loadTasks}
+              onClick={() => { loadTasks(); loadSlaMetrics(); }}
               className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
               data-testid="refresh-tasks-btn"
             >
@@ -205,6 +268,40 @@ const TaskInbox = ({ onClose }) => {
             >
               Close
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <span className="text-sm text-gray-600">Pending: <strong>{stats.pending}</strong></span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+              <span className="text-sm text-gray-600">In Progress: <strong>{stats.inProgress}</strong></span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+              <span className="text-sm text-gray-600">Completed: <strong>{stats.completed}</strong></span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            {overdueCount > 0 && (
+              <div className="flex items-center space-x-2 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                <AlertTriangle className="w-4 h-4" />
+                <span>{overdueCount} Overdue</span>
+              </div>
+            )}
+            {atRiskCount > 0 && (
+              <div className="flex items-center space-x-2 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
+                <Timer className="w-4 h-4" />
+                <span>{atRiskCount} At Risk</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -226,24 +323,32 @@ const TaskInbox = ({ onClose }) => {
                   data-testid="task-search-input"
                 />
               </div>
+            </div>
+            <div className="flex items-center space-x-3">
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                 data-testid="task-filter-select"
               >
-                <option value="all">All Tasks</option>
+                <option value="all">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="in_progress">In Progress</option>
                 <option value="completed">Completed</option>
               </select>
-            </div>
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <span>{filteredTasks.length} tasks</span>
-              <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4" />
-                <span>Filter by priority</span>
-              </div>
+              <select
+                value={priorityFilter}
+                onChange={(e) => setPriorityFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                data-testid="task-priority-filter"
+              >
+                <option value="all">All Priorities</option>
+                <option value="urgent">Urgent</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+              <span className="text-sm text-gray-500">{filteredTasks.length} tasks</span>
             </div>
           </div>
 
@@ -262,6 +367,7 @@ const TaskInbox = ({ onClose }) => {
             ) : (
               filteredTasks.map((task) => {
                 const slaStatus = getSlaStatus(task);
+                const SlaIcon = slaStatus?.icon || Clock;
                 return (
                   <div
                     key={task.id}
@@ -270,11 +376,18 @@ const TaskInbox = ({ onClose }) => {
                       selectedTask?.id === task.id
                         ? 'border-blue-500 ring-2 ring-blue-200'
                         : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    } ${task.escalated ? 'border-l-4 border-l-red-500' : ''}`}
                     data-testid={`task-item-${task.id}`}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900">{task.title}</h3>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-semibold text-gray-900">{task.title}</h3>
+                          {task.escalated && (
+                            <span className="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded">Escalated</span>
+                          )}
+                        </div>
+                      </div>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(task.priority)}`}>
                         {task.priority}
                       </span>
@@ -288,14 +401,14 @@ const TaskInbox = ({ onClose }) => {
                         {task.assigned_to && (
                           <span className="flex items-center">
                             <User className="w-3 h-3 mr-1" />
-                            {task.assigned_to}
+                            {task.assigned_to.split('@')[0]}
                           </span>
                         )}
                       </div>
                       {slaStatus && (
-                        <span className={`flex items-center ${slaStatus.color}`}>
-                          <Clock className="w-3 h-3 mr-1" />
-                          {slaStatus.label}
+                        <span className={`flex items-center px-2 py-1 rounded-full ${slaStatus.color}`}>
+                          <SlaIcon className="w-3 h-3 mr-1" />
+                          {formatTimeRemaining(task.due_date)}
                         </span>
                       )}
                     </div>
@@ -313,9 +426,9 @@ const TaskInbox = ({ onClose }) => {
               {/* Task Header */}
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-1">{selectedTask.title}</h2>
-                    <div className="flex items-center space-x-3">
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedTask.title}</h2>
+                    <div className="flex items-center space-x-3 flex-wrap gap-y-2">
                       <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(selectedTask.status)}`}>
                         {selectedTask.status?.replace('_', ' ')}
                       </span>
@@ -323,6 +436,12 @@ const TaskInbox = ({ onClose }) => {
                         <Flag className="w-3 h-3 inline mr-1" />
                         {selectedTask.priority}
                       </span>
+                      {selectedTask.escalated && (
+                        <span className="px-3 py-1 text-sm rounded-full bg-red-100 text-red-700">
+                          <AlertTriangle className="w-3 h-3 inline mr-1" />
+                          Escalated
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="relative">
@@ -334,17 +453,33 @@ const TaskInbox = ({ onClose }) => {
                       <MoreVertical className="w-5 h-5 text-gray-500" />
                     </button>
                     {showReassign && (
-                      <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg border border-gray-200 py-2 w-48 z-10">
+                      <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg border border-gray-200 py-2 w-56 z-10">
+                        <div className="px-3 py-2 border-b border-gray-100">
+                          <p className="text-xs text-gray-500 font-medium mb-2">Reassign to:</p>
+                          <select
+                            value={reassignTo}
+                            onChange={(e) => setReassignTo(e.target.value)}
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+                            data-testid="reassign-user-select"
+                          >
+                            <option value="">Select user...</option>
+                            {users.map(u => (
+                              <option key={u.id} value={u.email}>{u.name}</option>
+                            ))}
+                          </select>
+                          <button
+                            onClick={() => handleReassign(selectedTask.id)}
+                            disabled={!reassignTo}
+                            className="w-full mt-2 px-2 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                          >
+                            Reassign
+                          </button>
+                        </div>
                         <button
-                          onClick={() => handleReassign(selectedTask.id)}
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center space-x-2"
-                          data-testid="reassign-task-btn"
-                        >
-                          <UserPlus className="w-4 h-4" />
-                          <span>Reassign</span>
-                        </button>
-                        <button
-                          onClick={() => handleDelegate(selectedTask.id)}
+                          onClick={() => {
+                            const delegateTo = prompt('Enter email to delegate to:');
+                            if (delegateTo) handleDelegate(selectedTask.id, delegateTo);
+                          }}
                           className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center space-x-2"
                           data-testid="delegate-task-btn"
                         >
@@ -352,7 +487,10 @@ const TaskInbox = ({ onClose }) => {
                           <span>Delegate</span>
                         </button>
                         <button
-                          onClick={() => handleEscalate(selectedTask.id)}
+                          onClick={() => {
+                            const reason = prompt('Enter escalation reason:');
+                            if (reason) handleEscalate(selectedTask.id, reason);
+                          }}
                           className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-orange-600 flex items-center space-x-2"
                           data-testid="escalate-task-btn"
                         >
@@ -364,39 +502,53 @@ const TaskInbox = ({ onClose }) => {
                   </div>
                 </div>
 
-                {/* Reassign Input */}
-                {showReassign && (
-                  <div className="flex items-center space-x-2 mb-4 p-3 bg-blue-50 rounded-lg">
-                    <input
-                      type="text"
-                      value={reassignTo}
-                      onChange={(e) => setReassignTo(e.target.value)}
-                      placeholder="Enter email to reassign to..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                      data-testid="reassign-input"
-                    />
-                    <button
-                      onClick={() => handleReassign(selectedTask.id)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                    >
-                      Reassign
-                    </button>
-                  </div>
-                )}
-
-                {/* Task Info */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                {/* Task Info Grid */}
+                <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center space-x-2 text-gray-600">
-                    <User className="w-4 h-4" />
-                    <span>Assigned to: {selectedTask.assigned_to || 'Unassigned'}</span>
+                    <User className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-500">Assigned:</span>
+                    <span className="font-medium">{selectedTask.assigned_to || 'Unassigned'}</span>
                   </div>
                   {selectedTask.due_date && (
                     <div className="flex items-center space-x-2 text-gray-600">
-                      <Calendar className="w-4 h-4" />
-                      <span>Due: {new Date(selectedTask.due_date).toLocaleDateString()}</span>
+                      <Calendar className="w-4 h-4 text-gray-400" />
+                      <span className="text-gray-500">Due:</span>
+                      <span className="font-medium">{new Date(selectedTask.due_date).toLocaleString()}</span>
+                    </div>
+                  )}
+                  {selectedTask.assignment_strategy && (
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <Users className="w-4 h-4 text-gray-400" />
+                      <span className="text-gray-500">Strategy:</span>
+                      <span className="font-medium capitalize">{selectedTask.assignment_strategy.replace('_', ' ')}</span>
+                    </div>
+                  )}
+                  {selectedTask.sla_hours && (
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <Timer className="w-4 h-4 text-gray-400" />
+                      <span className="text-gray-500">SLA:</span>
+                      <span className="font-medium">{selectedTask.sla_hours} hours</span>
                     </div>
                   )}
                 </div>
+
+                {/* SLA Status */}
+                {selectedTask.due_date && (
+                  <div className="mt-4">
+                    {(() => {
+                      const slaStatus = getSlaStatus(selectedTask);
+                      if (!slaStatus) return null;
+                      const SlaIcon = slaStatus.icon;
+                      return (
+                        <div className={`flex items-center space-x-2 px-4 py-3 rounded-lg ${slaStatus.color}`}>
+                          <SlaIcon className="w-5 h-5" />
+                          <span className="font-medium">{slaStatus.label}</span>
+                          <span className="text-sm">({formatTimeRemaining(selectedTask.due_date)} remaining)</span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
               </div>
 
               {/* Description */}
@@ -420,7 +572,19 @@ const TaskInbox = ({ onClose }) => {
                           {c.created_at ? new Date(c.created_at).toLocaleString() : ''}
                         </span>
                       </div>
-                      <p className="text-gray-600 text-sm">{c.content}</p>
+                      <p className="text-gray-600 text-sm">
+                        {c.content.split(' ').map((word, i) => 
+                          word.startsWith('@') ? 
+                            <span key={i} className="text-blue-600 font-medium">{word} </span> : 
+                            word + ' '
+                        )}
+                      </p>
+                      {c.mentions && c.mentions.length > 0 && (
+                        <div className="mt-2 flex items-center space-x-1 text-xs text-gray-400">
+                          <Users className="w-3 h-3" />
+                          <span>Mentioned: {c.mentions.join(', ')}</span>
+                        </div>
+                      )}
                     </div>
                   ))}
                   {comments.length === 0 && (

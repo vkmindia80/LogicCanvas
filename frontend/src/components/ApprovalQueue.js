@@ -3,7 +3,7 @@ import {
   ClipboardCheck, Clock, CheckCircle, XCircle, AlertCircle,
   User, Calendar, MessageSquare, ChevronRight, RefreshCw,
   Search, Filter, ThumbsUp, ThumbsDown, Edit3, Users,
-  GitBranch, Send
+  GitBranch, Send, ArrowRight, CheckSquare
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
@@ -14,8 +14,8 @@ const ApprovalQueue = ({ onClose }) => {
   const [selectedApproval, setSelectedApproval] = useState(null);
   const [filter, setFilter] = useState('pending');
   const [searchTerm, setSearchTerm] = useState('');
-  const [comment, setComment] = useState('');
   const [decisionComment, setDecisionComment] = useState('');
+  const [stats, setStats] = useState({ pending: 0, approved: 0, rejected: 0 });
 
   const loadApprovals = useCallback(async () => {
     setLoading(true);
@@ -26,7 +26,18 @@ const ApprovalQueue = ({ onClose }) => {
       }
       const response = await fetch(url);
       const data = await response.json();
-      setApprovals(data.approvals || []);
+      const approvalList = data.approvals || [];
+      setApprovals(approvalList);
+      
+      // Load all approvals for stats
+      const allRes = await fetch(`${BACKEND_URL}/api/approvals`);
+      const allData = await allRes.json();
+      const allApprovals = allData.approvals || [];
+      setStats({
+        pending: allApprovals.filter(a => a.status === 'pending').length,
+        approved: allApprovals.filter(a => a.status === 'approved').length,
+        rejected: allApprovals.filter(a => a.status === 'rejected').length
+      });
     } catch (error) {
       console.error('Failed to load approvals:', error);
     } finally {
@@ -55,6 +66,15 @@ const ApprovalQueue = ({ onClose }) => {
         throw new Error('Failed to record decision');
       }
       
+      const result = await response.json();
+      
+      // Show result message
+      if (result.final_status !== 'pending') {
+        alert(`Approval ${result.final_status}! Workflow will ${result.should_resume ? 'continue' : 'wait for more decisions'}.`);
+      } else {
+        alert(`Decision recorded. Waiting for more approvals (${result.votes.approved}/${result.votes.total_required} approved).`);
+      }
+      
       setDecisionComment('');
       loadApprovals();
       setSelectedApproval(null);
@@ -76,9 +96,9 @@ const ApprovalQueue = ({ onClose }) => {
   const getApprovalTypeIcon = (type) => {
     const icons = {
       single: <User className="w-4 h-4" />,
-      sequential: <ChevronRight className="w-4 h-4" />,
+      sequential: <ArrowRight className="w-4 h-4" />,
       parallel: <Users className="w-4 h-4" />,
-      unanimous: <CheckCircle className="w-4 h-4" />,
+      unanimous: <CheckSquare className="w-4 h-4" />,
       majority: <GitBranch className="w-4 h-4" />
     };
     return icons[type] || icons.single;
@@ -95,6 +115,17 @@ const ApprovalQueue = ({ onClose }) => {
     return labels[type] || type;
   };
 
+  const getApprovalTypeDescription = (type) => {
+    const descriptions = {
+      single: 'First decision is final',
+      sequential: 'Approvers must approve in order',
+      parallel: 'All approvers vote simultaneously',
+      unanimous: 'All approvers must approve',
+      majority: 'More than 50% must approve'
+    };
+    return descriptions[type] || '';
+  };
+
   const filteredApprovals = approvals.filter(approval =>
     approval.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (approval.description && approval.description.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -107,6 +138,37 @@ const ApprovalQueue = ({ onClose }) => {
     const rejected = decisions.filter(d => d.decision === 'rejected').length;
     const total = approval.approvers.length;
     return { approved, rejected, total, pending: total - approved - rejected };
+  };
+
+  const renderProgressBar = (progress, approvalType) => {
+    if (!progress) return null;
+    const { approved, rejected, total } = progress;
+    const approvedPercent = (approved / total) * 100;
+    const rejectedPercent = (rejected / total) * 100;
+    
+    return (
+      <div className="mt-3">
+        <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+          <span>Progress: {approved + rejected} / {total} votes</span>
+          <span className="capitalize">{approvalType?.replace('_', ' ')}</span>
+        </div>
+        <div className="h-2 bg-gray-200 rounded-full overflow-hidden flex">
+          <div 
+            className="h-full bg-green-500 transition-all" 
+            style={{ width: `${approvedPercent}%` }}
+          />
+          <div 
+            className="h-full bg-red-500 transition-all" 
+            style={{ width: `${rejectedPercent}%` }}
+          />
+        </div>
+        <div className="flex items-center justify-between mt-1 text-xs">
+          <span className="text-green-600">{approved} approved</span>
+          <span className="text-red-600">{rejected} rejected</span>
+          <span className="text-gray-500">{progress.pending} pending</span>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -137,6 +199,24 @@ const ApprovalQueue = ({ onClose }) => {
             >
               Close
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3">
+        <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+            <span className="text-sm text-gray-600">Pending: <strong>{stats.pending}</strong></span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+            <span className="text-sm text-gray-600">Approved: <strong>{stats.approved}</strong></span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+            <span className="text-sm text-gray-600">Rejected: <strong>{stats.rejected}</strong></span>
           </div>
         </div>
       </div>
@@ -210,20 +290,16 @@ const ApprovalQueue = ({ onClose }) => {
                     </div>
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">{approval.description || 'No description'}</p>
                     
-                    {/* Approval Type & Progress */}
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center space-x-2 text-gray-500">
+                    {/* Approval Type Badge */}
+                    <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+                      <div className="flex items-center space-x-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full">
                         {getApprovalTypeIcon(approval.approval_type)}
                         <span>{getApprovalTypeLabel(approval.approval_type)}</span>
                       </div>
-                      {progress && (
-                        <div className="flex items-center space-x-2">
-                          <span className="text-green-600">{progress.approved} approved</span>
-                          <span className="text-red-600">{progress.rejected} rejected</span>
-                          <span className="text-gray-500">{progress.pending} pending</span>
-                        </div>
-                      )}
                     </div>
+
+                    {/* Progress Bar */}
+                    {renderProgressBar(progress, approval.approval_type)}
 
                     {/* Approvers */}
                     {approval.approvers && approval.approvers.length > 0 && (
@@ -251,16 +327,23 @@ const ApprovalQueue = ({ onClose }) => {
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedApproval.title}</h2>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3 flex-wrap gap-y-2">
                       <span className={`px-3 py-1 text-sm rounded-full border ${getStatusColor(selectedApproval.status)}`}>
                         {selectedApproval.status?.replace('_', ' ')}
                       </span>
-                      <span className="flex items-center text-sm text-gray-600">
+                      <span className="flex items-center text-sm text-gray-600 bg-purple-50 px-3 py-1 rounded-full">
                         {getApprovalTypeIcon(selectedApproval.approval_type)}
                         <span className="ml-1">{getApprovalTypeLabel(selectedApproval.approval_type)}</span>
                       </span>
                     </div>
                   </div>
+                </div>
+
+                {/* Approval Type Description */}
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">
+                    <strong>How it works:</strong> {getApprovalTypeDescription(selectedApproval.approval_type)}
+                  </p>
                 </div>
 
                 {/* Description */}
@@ -269,28 +352,44 @@ const ApprovalQueue = ({ onClose }) => {
                   <p className="text-gray-600">{selectedApproval.description || 'No description provided'}</p>
                 </div>
 
+                {/* Progress Bar */}
+                {renderProgressBar(getDecisionProgress(selectedApproval), selectedApproval.approval_type)}
+
                 {/* Approvers List */}
-                <div>
+                <div className="mt-4">
                   <h3 className="font-semibold text-gray-700 mb-2">Approvers</h3>
                   <div className="space-y-2">
                     {(selectedApproval.approvers || []).map((approver, idx) => {
                       const decision = (selectedApproval.decisions || []).find(d => d.decided_by === approver);
                       return (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                          <div className="flex items-center space-x-2">
-                            <User className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-700">{approver}</span>
+                        <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium ${
+                              decision?.decision === 'approved' ? 'bg-green-500' :
+                              decision?.decision === 'rejected' ? 'bg-red-500' :
+                              'bg-gray-400'
+                            }`}>
+                              {approver.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <span className="text-sm font-medium text-gray-700">{approver}</span>
+                              {decision?.comment && (
+                                <p className="text-xs text-gray-500 mt-0.5">"{decision.comment}"</p>
+                              )}
+                            </div>
                           </div>
                           {decision ? (
-                            <span className={`px-2 py-1 text-xs rounded-full ${
+                            <span className={`px-3 py-1 text-xs rounded-full font-medium ${
                               decision.decision === 'approved' ? 'bg-green-100 text-green-800' :
                               decision.decision === 'rejected' ? 'bg-red-100 text-red-800' :
                               'bg-orange-100 text-orange-800'
                             }`}>
+                              {decision.decision === 'approved' && <CheckCircle className="w-3 h-3 inline mr-1" />}
+                              {decision.decision === 'rejected' && <XCircle className="w-3 h-3 inline mr-1" />}
                               {decision.decision}
                             </span>
                           ) : (
-                            <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">Pending</span>
+                            <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-600">Pending</span>
                           )}
                         </div>
                       );
@@ -364,6 +463,7 @@ const ApprovalQueue = ({ onClose }) => {
                       onClick={() => handleDecision(selectedApproval.id, 'changes_requested')}
                       className="flex items-center justify-center space-x-2 bg-orange-500 text-white px-4 py-3 rounded-lg hover:bg-orange-600 transition-colors"
                       data-testid="request-changes-btn"
+                      title="Request Changes"
                     >
                       <Edit3 className="w-5 h-5" />
                     </button>
