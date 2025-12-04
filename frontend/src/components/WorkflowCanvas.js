@@ -15,6 +15,7 @@ import NodePalette from './NodePalette';
 import NodeEditor from './NodeEditor';
 import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
+import DeletableEdge from './edges/DeletableEdge';
 import { createNodeData } from '../utils/nodeTypes';
 import { Save, Eye, Play, Layers, Zap } from 'lucide-react';
 
