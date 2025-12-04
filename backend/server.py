@@ -652,6 +652,105 @@ async def get_at_risk_tasks():
     ))
     return {"tasks": at_risk_tasks, "count": len(at_risk_tasks)}
 
+# Background SLA Escalation Job
+def check_sla_and_escalate():
+    """Background job to check SLA violations and auto-escalate"""
+    now = datetime.utcnow()
+    now_iso = now.isoformat()
+    
+    # Find overdue tasks that haven't been escalated yet
+    overdue_tasks = tasks_collection.find({
+        "due_date": {"$lt": now_iso},
+        "status": {"$nin": ["completed", "cancelled"]},
+        "auto_escalated": {"$ne": True}
+    })
+    
+    for task in overdue_tasks:
+        # Auto-escalate
+        new_priority = "urgent" if task.get("priority") == "high" else "high"
+        tasks_collection.update_one(
+            {"id": task["id"]},
+            {"$set": {
+                "priority": new_priority,
+                "auto_escalated": True,
+                "escalated": True,
+                "escalation_reason": "Auto-escalated due to SLA breach",
+                "escalated_at": now_iso,
+                "updated_at": now_iso
+            }}
+        )
+        
+        # Create notification
+        notifications_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "type": "sla_breach",
+            "entity_type": "task",
+            "entity_id": task["id"],
+            "recipient": task.get("assigned_to"),
+            "title": f"SLA Breach: {task.get('title')}",
+            "message": f"Task is overdue and has been auto-escalated to {new_priority} priority",
+            "priority": "urgent",
+            "read": False,
+            "created_at": now_iso
+        })
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "task",
+            "entity_id": task["id"],
+            "action": "auto_escalated",
+            "user": "system",
+            "details": {"reason": "SLA breach", "new_priority": new_priority},
+            "timestamp": now_iso
+        })
+
+# Schedule SLA check every 5 minutes
+scheduler.add_job(
+    check_sla_and_escalate,
+    'interval',
+    minutes=5,
+    id='sla_checker',
+    name='SLA Breach Checker'
+)
+
+# Notifications Endpoint
+@app.get("/api/notifications")
+async def get_notifications(recipient: Optional[str] = None, unread_only: bool = False):
+    """Get notifications"""
+    query = {}
+    if recipient:
+        query["recipient"] = recipient
+    if unread_only:
+        query["read"] = False
+    
+    notifications = list(notifications_collection.find(query, {"_id": 0}).sort("created_at", -1).limit(50))
+    return {"notifications": notifications, "count": len(notifications)}
+
+@app.post("/api/notifications/{notification_id}/read")
+async def mark_notification_read(notification_id: str):
+    """Mark notification as read"""
+    result = notifications_collection.update_one(
+        {"id": notification_id},
+        {"$set": {"read": True, "read_at": datetime.utcnow().isoformat()}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return {"message": "Notification marked as read"}
+
+@app.post("/api/notifications/mark-all-read")
+async def mark_all_notifications_read(recipient: Optional[str] = None):
+    """Mark all notifications as read"""
+    query = {"read": False}
+    if recipient:
+        query["recipient"] = recipient
+    
+    result = notifications_collection.update_many(
+        query,
+        {"$set": {"read": True, "read_at": datetime.utcnow().isoformat()}}
+    )
+    return {"message": f"Marked {result.modified_count} notifications as read"}
+
 # Approval Endpoints
 @app.get("/api/approvals")
 async def get_approvals(status: Optional[str] = None):
