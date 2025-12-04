@@ -318,6 +318,15 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
 
           <div className="flex items-center space-x-2">
             <button
+              onClick={handleValidate}
+              className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+              data-testid="validate-workflow-btn"
+              title="Validate workflow"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Validate</span>
+            </button>
+            <button
               onClick={() => setShowTriggerConfig(!showTriggerConfig)}
               className="flex items-center space-x-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
               data-testid="trigger-config-btn"
