@@ -305,6 +305,51 @@ async def update_task(task_id: str, task: Task):
 
 # ========== PHASE 5: TASK MANAGEMENT ENDPOINTS ==========
 
+# User/role registry for assignment strategies
+users_collection = db['users']
+roles_collection = db['roles']
+
+# Initialize sample users and roles if empty
+def init_sample_data():
+    # Sample users for assignment
+    if users_collection.count_documents({}) == 0:
+        sample_users = [
+            {"id": str(uuid.uuid4()), "email": "alice@example.com", "name": "Alice Smith", "role": "manager", "workload": 2},
+            {"id": str(uuid.uuid4()), "email": "bob@example.com", "name": "Bob Johnson", "role": "developer", "workload": 5},
+            {"id": str(uuid.uuid4()), "email": "carol@example.com", "name": "Carol Williams", "role": "developer", "workload": 3},
+            {"id": str(uuid.uuid4()), "email": "david@example.com", "name": "David Brown", "role": "reviewer", "workload": 1},
+            {"id": str(uuid.uuid4()), "email": "eve@example.com", "name": "Eve Davis", "role": "manager", "workload": 4},
+        ]
+        users_collection.insert_many(sample_users)
+    
+    if roles_collection.count_documents({}) == 0:
+        sample_roles = [
+            {"id": str(uuid.uuid4()), "name": "manager", "members": ["alice@example.com", "eve@example.com"]},
+            {"id": str(uuid.uuid4()), "name": "developer", "members": ["bob@example.com", "carol@example.com"]},
+            {"id": str(uuid.uuid4()), "name": "reviewer", "members": ["david@example.com"]},
+        ]
+        roles_collection.insert_many(sample_roles)
+
+init_sample_data()
+
+# Round-robin counter for task assignment
+round_robin_counter = {}
+
+@app.get("/api/users")
+async def get_users(role: Optional[str] = None):
+    """Get all users, optionally filtered by role"""
+    query = {}
+    if role:
+        query["role"] = role
+    users = list(users_collection.find(query, {"_id": 0}))
+    return {"users": users, "count": len(users)}
+
+@app.get("/api/roles")
+async def get_roles():
+    """Get all roles"""
+    roles = list(roles_collection.find({}, {"_id": 0}))
+    return {"roles": roles, "count": len(roles)}
+
 @app.get("/api/tasks/{task_id}")
 async def get_task(task_id: str):
     """Get single task by ID"""
@@ -312,6 +357,76 @@ async def get_task(task_id: str):
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
+
+@app.post("/api/tasks/assign")
+async def assign_task_with_strategy(data: Dict[str, Any]):
+    """Assign task using a specific assignment strategy"""
+    task_id = data.get("task_id")
+    strategy = data.get("strategy", "direct")  # direct, role, round_robin, load_balanced
+    target = data.get("target")  # email for direct, role name for role-based
+    
+    task = tasks_collection.find_one({"id": task_id})
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    assignee = None
+    
+    if strategy == "direct":
+        # Direct assignment to specific user
+        assignee = target
+    
+    elif strategy == "role":
+        # Get first available user in role
+        role = roles_collection.find_one({"name": target})
+        if role and role.get("members"):
+            assignee = role["members"][0]
+    
+    elif strategy == "round_robin":
+        # Round-robin within role
+        role = roles_collection.find_one({"name": target})
+        if role and role.get("members"):
+            members = role["members"]
+            counter_key = f"rr_{target}"
+            current_idx = round_robin_counter.get(counter_key, 0)
+            assignee = members[current_idx % len(members)]
+            round_robin_counter[counter_key] = current_idx + 1
+    
+    elif strategy == "load_balanced":
+        # Assign to user with least workload in role
+        role = roles_collection.find_one({"name": target})
+        if role and role.get("members"):
+            users = list(users_collection.find({"email": {"$in": role["members"]}}).sort("workload", 1))
+            if users:
+                assignee = users[0]["email"]
+                # Increment workload
+                users_collection.update_one({"email": assignee}, {"$inc": {"workload": 1}})
+    
+    if not assignee:
+        raise HTTPException(status_code=400, detail="Could not determine assignee")
+    
+    now = datetime.utcnow().isoformat()
+    tasks_collection.update_one(
+        {"id": task_id},
+        {"$set": {
+            "assigned_to": assignee,
+            "assignment_strategy": strategy,
+            "assigned_at": now,
+            "updated_at": now
+        }}
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "task",
+        "entity_id": task_id,
+        "action": "assigned",
+        "user": "system",
+        "details": {"strategy": strategy, "assignee": assignee},
+        "timestamp": now
+    })
+    
+    return {"message": "Task assigned successfully", "assignee": assignee, "strategy": strategy}
 
 @app.post("/api/tasks/{task_id}/reassign")
 async def reassign_task(task_id: str, data: Dict[str, Any] = None):
