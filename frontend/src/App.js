@@ -296,6 +296,21 @@ function App() {
             />
           )}
         </main>
+
+        {/* Task Inbox Modal */}
+        {showTaskInbox && (
+          <TaskInbox onClose={() => setShowTaskInbox(false)} />
+        )}
+
+        {/* Approval Queue Modal */}
+        {showApprovalQueue && (
+          <ApprovalQueue onClose={() => setShowApprovalQueue(false)} />
+        )}
+
+        {/* Audit Trail Modal */}
+        {showAuditTrail && (
+          <AuditTrail onClose={() => setShowAuditTrail(false)} />
+        )}
       </div>
     </WorkflowProvider>
   );
