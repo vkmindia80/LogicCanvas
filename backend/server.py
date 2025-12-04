@@ -805,7 +805,7 @@ async def complete_task(task_id: str, result_data: Optional[Dict[str, Any]] = No
 # Approval Actions (resumes workflow)
 @app.post("/api/approvals/{approval_id}/decide")
 async def decide_approval(approval_id: str, decision: str, comment: Optional[str] = None, decided_by: Optional[str] = None):
-    """Make approval decision and resume workflow"""
+    """Make approval decision and resume workflow based on approval type"""
     approval = approvals_collection.find_one({"id": approval_id}, {"_id": 0})
     if not approval:
         raise HTTPException(status_code=404, detail="Approval not found")
@@ -813,30 +813,160 @@ async def decide_approval(approval_id: str, decision: str, comment: Optional[str
     if decision not in ["approved", "rejected", "changes_requested"]:
         raise HTTPException(status_code=400, detail="Invalid decision")
     
+    now = datetime.utcnow().isoformat()
+    
     # Record decision
     decision_entry = {
         "decided_by": decided_by or "user",
         "decision": decision,
         "comment": comment,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": now
     }
     
+    # Get current decisions
+    current_decisions = approval.get("decisions", [])
+    current_decisions.append(decision_entry)
+    
+    approval_type = approval.get("approval_type", "single")
+    approvers = approval.get("approvers", [])
+    total_approvers = max(len(approvers), 1)
+    
+    # Evaluate approval status based on type
+    final_status = None
+    should_resume = False
+    
+    if approval_type == "single":
+        # Single approver - first decision is final
+        final_status = decision
+        should_resume = True
+    
+    elif approval_type == "sequential":
+        # Sequential - each approver must approve in order
+        if decision == "rejected":
+            final_status = "rejected"
+            should_resume = True
+        elif decision == "approved":
+            # Check if all approvers have approved
+            approved_count = sum(1 for d in current_decisions if d["decision"] == "approved")
+            if approved_count >= total_approvers:
+                final_status = "approved"
+                should_resume = True
+            else:
+                final_status = "pending"  # Wait for next approver
+                # Create notification for next approver
+                if approved_count < len(approvers):
+                    next_approver = approvers[approved_count]
+                    notifications_collection.insert_one({
+                        "id": str(uuid.uuid4()),
+                        "type": "approval_required",
+                        "entity_type": "approval",
+                        "entity_id": approval_id,
+                        "recipient": next_approver,
+                        "title": f"Approval Required: {approval.get('title')}",
+                        "message": f"You are the next approver in the sequential approval flow",
+                        "read": False,
+                        "created_at": now
+                    })
+    
+    elif approval_type == "parallel":
+        # Parallel - all approvers can vote simultaneously, first rejection fails
+        if decision == "rejected":
+            final_status = "rejected"
+            should_resume = True
+        else:
+            approved_count = sum(1 for d in current_decisions if d["decision"] == "approved")
+            if approved_count >= total_approvers:
+                final_status = "approved"
+                should_resume = True
+            else:
+                final_status = "pending"
+    
+    elif approval_type == "unanimous":
+        # Unanimous - all must approve
+        if decision == "rejected":
+            final_status = "rejected"
+            should_resume = True
+        else:
+            approved_count = sum(1 for d in current_decisions if d["decision"] == "approved")
+            unique_approvers = len(set(d["decided_by"] for d in current_decisions if d["decision"] == "approved"))
+            if unique_approvers >= total_approvers:
+                final_status = "approved"
+                should_resume = True
+            else:
+                final_status = "pending"
+    
+    elif approval_type == "majority":
+        # Majority - more than 50% must approve
+        approved_count = sum(1 for d in current_decisions if d["decision"] == "approved")
+        rejected_count = sum(1 for d in current_decisions if d["decision"] == "rejected")
+        votes_cast = approved_count + rejected_count
+        majority_threshold = total_approvers // 2 + 1
+        
+        if approved_count >= majority_threshold:
+            final_status = "approved"
+            should_resume = True
+        elif rejected_count >= majority_threshold:
+            final_status = "rejected"
+            should_resume = True
+        elif votes_cast >= total_approvers:
+            # All votes cast, majority wins
+            final_status = "approved" if approved_count > rejected_count else "rejected"
+            should_resume = True
+        else:
+            final_status = "pending"
+    
+    else:
+        # Default single approver behavior
+        final_status = decision
+        should_resume = True
+    
+    # Update approval
     approvals_collection.update_one(
         {"id": approval_id},
         {
-            "$push": {"decisions": decision_entry},
-            "$set": {"status": decision, "updated_at": datetime.utcnow().isoformat()}
+            "$set": {
+                "decisions": current_decisions,
+                "status": final_status,
+                "updated_at": now
+            }
         }
     )
     
-    # Resume workflow execution
-    execution_engine.resume_execution(
-        approval["workflow_instance_id"],
-        approval["node_id"],
-        {"approval_decision": decision, "comment": comment}
-    )
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "approval",
+        "entity_id": approval_id,
+        "action": f"decision_{decision}",
+        "user": decided_by or "user",
+        "details": {
+            "decision": decision,
+            "approval_type": approval_type,
+            "final_status": final_status,
+            "comment": comment
+        },
+        "timestamp": now
+    })
     
-    return {"message": "Approval decision recorded and workflow resumed"}
+    # Resume workflow execution if approval is finalized
+    if should_resume and approval.get("workflow_instance_id") and approval.get("node_id"):
+        execution_engine.resume_execution(
+            approval["workflow_instance_id"],
+            approval["node_id"],
+            {"approval_decision": final_status, "comment": comment, "decisions": current_decisions}
+        )
+    
+    return {
+        "message": "Approval decision recorded",
+        "final_status": final_status,
+        "should_resume": should_resume,
+        "approval_type": approval_type,
+        "votes": {
+            "approved": sum(1 for d in current_decisions if d["decision"] == "approved"),
+            "rejected": sum(1 for d in current_decisions if d["decision"] == "rejected"),
+            "total_required": total_approvers
+        }
+    }
 
 # Form Submission with Workflow Resume
 @app.post("/api/forms/{form_id}/submit-workflow")
