@@ -46,7 +46,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
   const reactFlowWrapper = useRef(null);
   const nodeIdCounter = useRef(1);
 
-  const updateNodeStates = (instance) => {
+  const updateNodeStates = useCallback((instance) => {
     setNodes((nds) =>
       nds.map((node) => {
         const nodeState = instance.node_states?.[node.id];
@@ -72,7 +72,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
         };
       })
     );
-  };
+  }, [setNodes]);
 
   // Poll for active instance execution state
   useEffect(() => {
