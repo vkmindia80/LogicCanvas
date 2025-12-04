@@ -314,8 +314,14 @@ async def get_task(task_id: str):
     return task
 
 @app.post("/api/tasks/{task_id}/reassign")
-async def reassign_task(task_id: str, new_assignee: str):
+async def reassign_task(task_id: str, data: Dict[str, Any] = None):
     """Reassign task to a different user"""
+    if data is None:
+        data = {}
+    new_assignee = data.get("new_assignee", "")
+    if not new_assignee:
+        raise HTTPException(status_code=400, detail="new_assignee is required")
+    
     task = tasks_collection.find_one({"id": task_id})
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -350,8 +356,14 @@ async def reassign_task(task_id: str, new_assignee: str):
     return {"message": "Task reassigned successfully"}
 
 @app.post("/api/tasks/{task_id}/delegate")
-async def delegate_task(task_id: str, delegate_to: str):
+async def delegate_task(task_id: str, data: Dict[str, Any] = None):
     """Delegate task to another user"""
+    if data is None:
+        data = {}
+    delegate_to = data.get("delegate_to", "")
+    if not delegate_to:
+        raise HTTPException(status_code=400, detail="delegate_to is required")
+    
     task = tasks_collection.find_one({"id": task_id})
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -383,8 +395,12 @@ async def delegate_task(task_id: str, delegate_to: str):
     return {"message": "Task delegated successfully"}
 
 @app.post("/api/tasks/{task_id}/escalate")
-async def escalate_task(task_id: str, reason: str = ""):
+async def escalate_task(task_id: str, data: Dict[str, Any] = None):
     """Escalate task to higher priority/manager"""
+    if data is None:
+        data = {}
+    reason = data.get("reason", "")
+    
     task = tasks_collection.find_one({"id": task_id})
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
