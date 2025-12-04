@@ -123,7 +123,6 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
       })
     );
   };
-
   const onConnect = useCallback(
     (params) => {
       const newEdge = {
