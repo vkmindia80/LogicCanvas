@@ -101,7 +101,10 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
         ...params,
         id: `edge-${Date.now()}`,
         animated: true,
-        style: { stroke: '#94a3b8', strokeWidth: 2 }
+        style: { stroke: '#94a3b8', strokeWidth: 2 },
+        markerEnd: {
+          type: 'arrowclosed'
+        }
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
