@@ -6,7 +6,8 @@ import ReactFlow, {
   addEdge,
   useNodesState,
   useEdgesState,
-  BackgroundVariant
+  BackgroundVariant,
+  MarkerType
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
