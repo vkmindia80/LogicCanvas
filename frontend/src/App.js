@@ -6,6 +6,7 @@ import WorkflowList from './components/WorkflowList';
 import WorkflowCanvas from './components/WorkflowCanvas';
 import FormList from './components/forms/FormList';
 import FormBuilder from './components/forms/FormBuilder';
+import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
