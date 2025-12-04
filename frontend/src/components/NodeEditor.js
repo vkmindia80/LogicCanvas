@@ -108,7 +108,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     // Task node
     if (node.data.type === NODE_TYPES.TASK) {
       updatedData.assignedTo = assignedTo;
+      updatedData.assignmentStrategy = assignmentStrategy;
+      updatedData.assignmentRole = assignmentRole;
       updatedData.priority = priority;
+      updatedData.dueInHours = parseInt(dueInHours) || 24;
     }
 
     // Approval node
