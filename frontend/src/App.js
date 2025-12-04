@@ -40,6 +40,29 @@ function App() {
     checkHealth();
   }, []);
 
+  // Load badge counts for tasks and approvals
+  useEffect(() => {
+    const loadCounts = async () => {
+      try {
+        const [tasksRes, approvalsRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/api/tasks?status=pending`),
+          fetch(`${BACKEND_URL}/api/approvals?status=pending`)
+        ]);
+        const tasksData = await tasksRes.json();
+        const approvalsData = await approvalsRes.json();
+        setTaskCount(tasksData.count || 0);
+        setApprovalCount(approvalsData.count || 0);
+      } catch (error) {
+        console.error('Failed to load counts:', error);
+      }
+    };
+
+    loadCounts();
+    // Refresh counts every 30 seconds
+    const interval = setInterval(loadCounts, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleCreateNew = () => {
     const newWorkflow = {
       id: null,
