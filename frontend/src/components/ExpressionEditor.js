@@ -63,7 +63,7 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
                 className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded border border-blue-200 hover:bg-blue-100"
                 data-testid={`insert-variable-${varName}`}
               >
-                ${{{varName}}}
+                {'${' + varName + '}'}
               </button>
             ))}
           </div>
