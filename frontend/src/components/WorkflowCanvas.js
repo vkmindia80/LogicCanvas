@@ -267,7 +267,10 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
             snapGrid={[15, 15]}
             defaultEdgeOptions={{
               animated: true,
-              style: { stroke: '#94a3b8', strokeWidth: 2 }
+              style: { stroke: '#94a3b8', strokeWidth: 2 },
+              markerEnd: {
+                type: 'arrowclosed'
+              }
             }}
             data-testid="workflow-canvas"
           >
