@@ -30,7 +30,11 @@ export const NODE_CONFIGS = {
     color: 'bg-yellow-500',
     borderColor: 'border-yellow-600',
     icon: 'git-branch',
-    description: 'Conditional branching'
+    description: 'Conditional branching',
+    outputHandles: [
+      { id: 'yes', label: 'Yes' },
+      { id: 'no', label: 'No' }
+    ]
   },
   [NODE_TYPES.APPROVAL]: {
     label: 'Approval',
@@ -58,7 +62,11 @@ export const NODE_CONFIGS = {
     color: 'bg-orange-500',
     borderColor: 'border-orange-600',
     icon: 'split',
-    description: 'Split into parallel paths'
+    description: 'Split into parallel paths',
+    outputHandles: [
+      { id: 'pathA', label: 'Path A' },
+      { id: 'pathB', label: 'Path B' }
+    ]
   },
   [NODE_TYPES.MERGE]: {
     label: 'Merge Gateway',
