@@ -68,6 +68,13 @@ const AppShell = () => {
     addToast('Logged out', 'info');
   };
 
+  // Sync UI role with logged-in user when present
+  useEffect(() => {
+    if (currentUser?.role) {
+      setCurrentRole(currentUser.role);
+    }
+  }, [currentUser, setCurrentRole]);
+
   useEffect(() => {
     const checkHealth = async () => {
       try {
