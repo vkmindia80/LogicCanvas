@@ -566,6 +566,10 @@ async def get_forms():
 @app.get("/api/forms/{form_id}")
 async def get_form(form_id: str):
     form = forms_collection.find_one({"id": form_id}, {"_id": 0})
+    if not form:
+        raise HTTPException(status_code=404, detail="Form not found")
+    return form
+
 # Ensure indexes for auth & RBAC related collections
 users_collection.create_index("email", unique=True)
 roles_collection.create_index("name", unique=True)
