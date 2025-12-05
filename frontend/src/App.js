@@ -47,6 +47,8 @@ const AppShell = () => {
   const [approvalCount, setApprovalCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [toasts, setToasts] = useState([]);
+  const [showLogin, setShowLogin] = useState(false);
+
 
   const { currentRole, setCurrentRole, can } = useRole();
 
