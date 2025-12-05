@@ -702,6 +702,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                               handleValidationPanelClose();
                             }
                           }}
+                          className="text-xs text-blue-600 hover:text-blue-800 mt-1"
+                          data-testid="validation-go-to-node-btn"
+                        >
+                          Go to node
+                        </button>
+                      )}
       {/* Designer Capabilities Panel */}
       {showCapabilitiesPanel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
