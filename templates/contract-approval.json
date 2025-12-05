@@ -1,0 +1,194 @@
+{
+  "name": "Contract Approval Workflow",
+  "description": "Parallel review by Legal and Finance teams with unanimous approval and e-signature integration",
+  "category": "Legal",
+  "tags": ["legal", "contract", "approval", "template"],
+  "complexity": "medium",
+  "estimatedSetupTime": "10 minutes",
+  "icon": "file-text",
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 300},
+      "data": {
+        "label": "New Contract",
+        "description": "Contract review process starts"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 300},
+      "data": {
+        "label": "Contract Metadata",
+        "description": "Submit contract details",
+        "formId": "contract-form",
+        "formFields": [
+          {"id": "contract_title", "label": "Contract Title", "type": "text", "required": true},
+          {"id": "contract_type", "label": "Contract Type", "type": "dropdown", "options": ["Vendor", "Customer", "Partner", "Employment"], "required": true},
+          {"id": "counterparty", "label": "Counterparty Name", "type": "text", "required": true},
+          {"id": "contract_value", "label": "Contract Value", "type": "number", "required": true},
+          {"id": "currency", "label": "Currency", "type": "dropdown", "options": ["USD", "EUR", "GBP"], "required": true},
+          {"id": "start_date", "label": "Start Date", "type": "date", "required": true},
+          {"id": "end_date", "label": "End Date", "type": "date"},
+          {"id": "auto_renew", "label": "Auto-Renewal", "type": "checkbox"},
+          {"id": "contract_file", "label": "Contract Document", "type": "file", "required": true},
+          {"id": "notes", "label": "Additional Notes", "type": "textarea"}
+        ]
+      }
+    },
+    {
+      "id": "parallel-1",
+      "type": "parallel",
+      "position": {"x": 500, "y": 300},
+      "data": {
+        "label": "Parallel Review",
+        "description": "Legal and Finance review simultaneously"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 700, "y": 200},
+      "data": {
+        "label": "Legal Review",
+        "description": "Legal team reviews contract terms, compliance, and risk",
+        "assignmentStrategy": "role",
+        "assignmentRole": "legal",
+        "priority": "high",
+        "dueInHours": 72
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": {"x": 700, "y": 400},
+      "data": {
+        "label": "Finance Review",
+        "description": "Finance team reviews pricing, payment terms, and budget impact",
+        "assignmentStrategy": "role",
+        "assignmentRole": "finance",
+        "priority": "high",
+        "dueInHours": 72
+      }
+    },
+    {
+      "id": "merge-1",
+      "type": "merge",
+      "position": {"x": 900, "y": 300},
+      "data": {
+        "label": "Combine Reviews",
+        "description": "Wait for both reviews to complete"
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 1100, "y": 300},
+      "data": {
+        "label": "Executive Approval",
+        "description": "All three stakeholders must approve",
+        "approvers": ["legal-head@example.com", "cfo@example.com", "ceo@example.com"],
+        "approvalType": "unanimous"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 1300, "y": 300},
+      "data": {
+        "label": "Approval Decision",
+        "description": "Check if all approved",
+        "condition": "${approval-1.status} == 'approved'"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {"x": 1500, "y": 250},
+      "data": {
+        "label": "Send to E-Signature",
+        "description": "Send contract for electronic signature",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.docusign.com/v2/accounts/YOUR_ACCOUNT/envelopes",
+        "authType": "bearer",
+        "token": "${config.docusign_token}",
+        "body": {
+          "emailSubject": "Please sign: ${form-1.contract_title}",
+          "status": "sent",
+          "documents": [{"documentId": "1", "name": "${form-1.contract_title}"}],
+          "recipients": {
+            "signers": [{"email": "${form-1.counterparty_email}", "name": "${form-1.counterparty}"}]
+          }
+        }
+      }
+    },
+    {
+      "id": "event-1",
+      "type": "event",
+      "position": {"x": 1700, "y": 250},
+      "data": {
+        "label": "Wait for Signature",
+        "description": "Wait for signature completion event",
+        "eventType": "message",
+        "eventAction": "receive",
+        "eventName": "contract_signed",
+        "timeoutHours": 168
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "position": {"x": 1900, "y": 250},
+      "data": {
+        "label": "Store in Repository",
+        "description": "Store signed contract",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.repository.example.com/contracts",
+        "body": {
+          "title": "${form-1.contract_title}",
+          "type": "${form-1.contract_type}",
+          "counterparty": "${form-1.counterparty}",
+          "value": "${form-1.contract_value}",
+          "status": "signed"
+        }
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 2100, "y": 250},
+      "data": {
+        "label": "Contract Complete",
+        "description": "Contract signed and stored"
+      }
+    },
+    {
+      "id": "end-2",
+      "type": "end",
+      "position": {"x": 1300, "y": 450},
+      "data": {
+        "label": "Contract Rejected",
+        "description": "Contract not approved"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "parallel-1"},
+    {"id": "e3", "source": "parallel-1", "target": "task-1"},
+    {"id": "e4", "source": "parallel-1", "target": "task-2"},
+    {"id": "e5", "source": "task-1", "target": "merge-1"},
+    {"id": "e6", "source": "task-2", "target": "merge-1"},
+    {"id": "e7", "source": "merge-1", "target": "approval-1"},
+    {"id": "e8", "source": "approval-1", "target": "decision-1"},
+    {"id": "e9", "source": "decision-1", "target": "action-1", "sourceHandle": "yes", "label": "Approved"},
+    {"id": "e10", "source": "decision-1", "target": "end-2", "sourceHandle": "no", "label": "Rejected"},
+    {"id": "e11", "source": "action-1", "target": "event-1"},
+    {"id": "e12", "source": "event-1", "target": "action-2"},
+    {"id": "e13", "source": "action-2", "target": "end-1"}
+  ]
+}

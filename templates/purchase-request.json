@@ -1,0 +1,173 @@
+{
+  "name": "Purchase Request Workflow",
+  "description": "Comprehensive purchase request with budget check, approval, procurement, and vendor selection subprocess",
+  "category": "Procurement",
+  "tags": ["procurement", "purchase", "approval", "template"],
+  "complexity": "high",
+  "estimatedSetupTime": "12 minutes",
+  "icon": "shopping-cart",
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 300},
+      "data": {
+        "label": "New Purchase Request",
+        "description": "Employee submits purchase request"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 300},
+      "data": {
+        "label": "Purchase Request Form",
+        "description": "Submit purchase details",
+        "formId": "purchase-request-form",
+        "formFields": [
+          {"id": "requester_name", "label": "Requester Name", "type": "text", "required": true},
+          {"id": "requester_email", "label": "Requester Email", "type": "email", "required": true},
+          {"id": "department", "label": "Department", "type": "text", "required": true},
+          {"id": "item_description", "label": "Item Description", "type": "textarea", "required": true},
+          {"id": "quantity", "label": "Quantity", "type": "number", "required": true},
+          {"id": "estimated_cost", "label": "Estimated Cost", "type": "number", "required": true},
+          {"id": "vendor", "label": "Preferred Vendor", "type": "text"},
+          {"id": "new_vendor", "label": "Is this a new vendor?", "type": "checkbox"},
+          {"id": "justification", "label": "Business Justification", "type": "textarea", "required": true},
+          {"id": "budget_code", "label": "Budget Code", "type": "text", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 500, "y": 300},
+      "data": {
+        "label": "Budget Check",
+        "description": "Verify budget availability",
+        "condition": "${form-1.estimated_cost} <= ${budget.available}"
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 700, "y": 250},
+      "data": {
+        "label": "Department Head Approval",
+        "description": "Department head reviews request",
+        "approvers": ["dept-head@example.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "decision-2",
+      "type": "decision",
+      "position": {"x": 900, "y": 250},
+      "data": {
+        "label": "New Vendor?",
+        "description": "Check if vendor selection needed",
+        "condition": "${form-1.new_vendor} == true"
+      }
+    },
+    {
+      "id": "subprocess-1",
+      "type": "subprocess",
+      "position": {"x": 1100, "y": 150},
+      "data": {
+        "label": "Vendor Selection Process",
+        "description": "Run vendor evaluation subprocess",
+        "subprocessWorkflowId": "vendor-selection-workflow",
+        "inputMapping": {
+          "vendor_name": "vendor",
+          "estimated_value": "estimated_cost",
+          "category": "category"
+        },
+        "outputMapping": {
+          "approved_vendor": "vendor_result"
+        }
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 1300, "y": 250},
+      "data": {
+        "label": "Procurement Team",
+        "description": "Procurement creates PO and places order",
+        "assignmentStrategy": "load_balanced",
+        "assignmentRole": "procurement",
+        "priority": "medium",
+        "dueInHours": 48
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {"x": 1500, "y": 250},
+      "data": {
+        "label": "Update ERP System",
+        "description": "Post PO to ERP",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.erp.example.com/purchase-orders",
+        "authType": "bearer",
+        "token": "${config.erp_api_key}",
+        "body": {
+          "requester": "${form-1.requester_email}",
+          "items": [{"description": "${form-1.item_description}", "quantity": "${form-1.quantity}"}],
+          "vendor": "${form-1.vendor}",
+          "total": "${form-1.estimated_cost}",
+          "budget_code": "${form-1.budget_code}"
+        }
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "position": {"x": 1700, "y": 250},
+      "data": {
+        "label": "Notify Requester",
+        "description": "Send confirmation email",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.example.com/send-email",
+        "body": {
+          "to": "${form-1.requester_email}",
+          "subject": "Purchase Request Approved",
+          "body": "Your purchase request has been approved and a PO has been created."
+        }
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1900, "y": 250},
+      "data": {
+        "label": "Purchase Complete",
+        "description": "Purchase request processed"
+      }
+    },
+    {
+      "id": "end-2",
+      "type": "end",
+      "position": {"x": 500, "y": 450},
+      "data": {
+        "label": "Request Denied - Budget",
+        "description": "Insufficient budget"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "target": "approval-1", "sourceHandle": "yes", "label": "Budget OK"},
+    {"id": "e4", "source": "decision-1", "target": "end-2", "sourceHandle": "no", "label": "No Budget"},
+    {"id": "e5", "source": "approval-1", "target": "decision-2"},
+    {"id": "e6", "source": "decision-2", "target": "subprocess-1", "sourceHandle": "yes", "label": "New Vendor"},
+    {"id": "e7", "source": "decision-2", "target": "task-1", "sourceHandle": "no", "label": "Existing Vendor"},
+    {"id": "e8", "source": "subprocess-1", "target": "task-1"},
+    {"id": "e9", "source": "task-1", "target": "action-1"},
+    {"id": "e10", "source": "action-1", "target": "action-2"},
+    {"id": "e11", "source": "action-2", "target": "end-1"}
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "name": "IT Support Ticket Workflow",
+  "description": "IT support ticket with priority triage, SLA tracking, timer-based escalation, and closure approval",
+  "category": "IT Support",
+  "tags": ["it", "support", "helpdesk", "template"],
+  "complexity": "medium",
+  "estimatedSetupTime": "8 minutes",
+  "icon": "headphones",
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 300},
+      "data": {
+        "label": "New Ticket",
+        "description": "IT support ticket submitted"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 300},
+      "data": {
+        "label": "Ticket Submission",
+        "description": "Submit support request",
+        "formId": "support-ticket-form",
+        "formFields": [
+          {"id": "requester_name", "label": "Your Name", "type": "text", "required": true},
+          {"id": "requester_email", "label": "Your Email", "type": "email", "required": true},
+          {"id": "department", "label": "Department", "type": "text", "required": true},
+          {"id": "subject", "label": "Issue Summary", "type": "text", "required": true},
+          {"id": "category", "label": "Category", "type": "dropdown", "options": ["Hardware", "Software", "Network", "Access", "Other"], "required": true},
+          {"id": "description", "label": "Detailed Description", "type": "textarea", "required": true},
+          {"id": "impact", "label": "Business Impact", "type": "dropdown", "options": ["Critical - System Down", "High - Major Feature Broken", "Medium - Workaround Available", "Low - Cosmetic Issue"], "required": true},
+          {"id": "attachments", "label": "Screenshots/Files", "type": "file"}
+        ]
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 500, "y": 300},
+      "data": {
+        "label": "Priority Triage",
+        "description": "Determine priority based on impact",
+        "condition": "${form-1.impact} contains 'Critical' or ${form-1.impact} contains 'High'"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 700, "y": 200},
+      "data": {
+        "label": "Senior Tech - High Priority",
+        "description": "Assign to senior technician",
+        "assignmentStrategy": "load_balanced",
+        "assignmentRole": "senior_tech",
+        "priority": "urgent",
+        "dueInHours": 4
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": {"x": 700, "y": 400},
+      "data": {
+        "label": "Tech Team - Normal Priority",
+        "description": "Assign via round-robin",
+        "assignmentStrategy": "round_robin",
+        "assignmentRole": "tech_team",
+        "priority": "medium",
+        "dueInHours": 24
+      }
+    },
+    {
+      "id": "timer-1",
+      "type": "timer",
+      "position": {"x": 900, "y": 200},
+      "data": {
+        "label": "SLA Timer - 4 Hours",
+        "description": "High priority SLA countdown",
+        "timerType": "timeout",
+        "timeoutHours": 4,
+        "escalationEnabled": true
+      }
+    },
+    {
+      "id": "timer-2",
+      "type": "timer",
+      "position": {"x": 900, "y": 400},
+      "data": {
+        "label": "SLA Timer - 24 Hours",
+        "description": "Normal priority SLA countdown",
+        "timerType": "timeout",
+        "timeoutHours": 24,
+        "escalationEnabled": true
+      }
+    },
+    {
+      "id": "merge-1",
+      "type": "merge",
+      "position": {"x": 1100, "y": 300},
+      "data": {
+        "label": "Work Complete",
+        "description": "Merge priority paths"
+      }
+    },
+    {
+      "id": "form-2",
+      "type": "form",
+      "position": {"x": 1300, "y": 300},
+      "data": {
+        "label": "Resolution Details",
+        "description": "Document resolution",
+        "formId": "resolution-form",
+        "formFields": [
+          {"id": "resolution_summary", "label": "Resolution Summary", "type": "textarea", "required": true},
+          {"id": "time_spent", "label": "Time Spent (hours)", "type": "number", "required": true},
+          {"id": "root_cause", "label": "Root Cause", "type": "text"},
+          {"id": "actions_taken", "label": "Actions Taken", "type": "textarea", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 1500, "y": 300},
+      "data": {
+        "label": "Requester Approval",
+        "description": "Requester confirms resolution",
+        "approvers": ["${form-1.requester_email}"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "decision-2",
+      "type": "decision",
+      "position": {"x": 1700, "y": 300},
+      "data": {
+        "label": "Closure Decision",
+        "description": "Check if approved",
+        "condition": "${approval-1.status} == 'approved'"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {"x": 1900, "y": 250},
+      "data": {
+        "label": "Update Ticket System",
+        "description": "Close ticket in helpdesk",
+        "actionType": "http",
+        "method": "PATCH",
+        "url": "https://api.helpdesk.example.com/tickets/${ticket.id}",
+        "body": {
+          "status": "closed",
+          "resolution": "${form-2.resolution_summary}",
+          "time_spent": "${form-2.time_spent}",
+          "closed_by": "${task.assigned_to}"
+        }
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "position": {"x": 2100, "y": 250},
+      "data": {
+        "label": "Send Satisfaction Survey",
+        "description": "Email customer satisfaction survey",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.example.com/send-email",
+        "body": {
+          "to": "${form-1.requester_email}",
+          "subject": "How was your support experience?",
+          "template": "satisfaction_survey",
+          "ticket_id": "${ticket.id}"
+        }
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 2300, "y": 250},
+      "data": {
+        "label": "Ticket Closed",
+        "description": "Support ticket resolved"
+      }
+    },
+    {
+      "id": "task-3",
+      "type": "task",
+      "position": {"x": 1700, "y": 450},
+      "data": {
+        "label": "Rework Required",
+        "description": "Requester needs additional assistance",
+        "assignmentStrategy": "direct",
+        "assignedTo": "${task-1.assigned_to || task-2.assigned_to}",
+        "priority": "high",
+        "dueInHours": 8
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "target": "task-1", "sourceHandle": "yes", "label": "High Priority"},
+    {"id": "e4", "source": "decision-1", "target": "task-2", "sourceHandle": "no", "label": "Normal Priority"},
+    {"id": "e5", "source": "task-1", "target": "timer-1"},
+    {"id": "e6", "source": "task-2", "target": "timer-2"},
+    {"id": "e7", "source": "timer-1", "target": "merge-1"},
+    {"id": "e8", "source": "timer-2", "target": "merge-1"},
+    {"id": "e9", "source": "merge-1", "target": "form-2"},
+    {"id": "e10", "source": "form-2", "target": "approval-1"},
+    {"id": "e11", "source": "approval-1", "target": "decision-2"},
+    {"id": "e12", "source": "decision-2", "target": "action-1", "sourceHandle": "yes", "label": "Approved"},
+    {"id": "e13", "source": "decision-2", "target": "task-3", "sourceHandle": "no", "label": "Rejected"},
+    {"id": "e14", "source": "action-1", "target": "action-2"},
+    {"id": "e15", "source": "action-2", "target": "end-1"},
+    {"id": "e16", "source": "task-3", "target": "form-2", "label": "Retry"}
+  ]
+}
