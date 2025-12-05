@@ -704,6 +704,103 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                           }}
                           className="text-xs text-blue-600 hover:text-blue-800 mt-1"
                           data-testid="validation-go-to-node-btn"
+      {/* Designer Capabilities Panel */}
+      {showCapabilitiesPanel && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col" data-testid="designer-capabilities-panel">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-900 to-slate-800">
+              <div>
+                <h2 className="text-xl font-bold text-white">Workflow Designer Capabilities</h2>
+                <p className="text-xs text-slate-300">Everything available in this workflow designer</p>
+              </div>
+              <button
+                onClick={() => setShowCapabilitiesPanel(false)}
+                className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5"
+                data-testid="close-designer-capabilities"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                {/* Core Components */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Core Components</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Canvas</span> – build & visualize workflows using the drag-and-drop editor.</li>
+                    <li><span className="font-medium">Nodes</span> – represent tasks, forms, approvals, actions, and gateways.</li>
+                    <li><span className="font-medium">Connectors</span> – define flow and logic paths between nodes.</li>
+                  </ul>
+                </div>
+
+                {/* Logic & Data */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Logic & Data</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Logic Engine</span> – decision nodes with conditional routing via expressions.</li>
+                    <li><span className="font-medium">Branching & Parallelism</span> – decision, parallel and merge gateways.</li>
+                    <li><span className="font-medium">Data Mapping</span> – configure node inputs/outputs and variables in node editor.</li>
+                    <li><span className="font-medium">Variables</span> – workflow instance data carried between nodes.</li>
+                  </ul>
+                </div>
+
+                {/* Integrations & Triggers */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Integrations & Triggers</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Integrations</span> – Action nodes for HTTP calls, webhooks and scripts.</li>
+                    <li><span className="font-medium">Connector Library</span> – categorized node palette for integrations & flow control.</li>
+                    <li><span className="font-medium">Triggers</span> – manual, scheduled & webhook triggers in Trigger Config panel.</li>
+                  </ul>
+                </div>
+
+                {/* Execution & Debugging */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Execution & Debugging</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Simulation</span> – run workflows from the Execution panel.</li>
+                    <li><span className="font-medium">Debugger</span> – live node execution states and per-node history.</li>
+                    <li><span className="font-medium">Run History</span> – workflow instances list with statuses and timelines.</li>
+                  </ul>
+                </div>
+
+                {/* Management & Collaboration */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Management & Collaboration</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Version Control</span> – version history, snapshots & rollback per workflow.</li>
+                    <li><span className="font-medium">Publishing</span> – draft, published, paused and archived workflow statuses.</li>
+                    <li><span className="font-medium">Permissions</span> – role-based access (admin, builder, approver, viewer).</li>
+                    <li><span className="font-medium">Collaboration</span> – shared environment with per-action audit logs.</li>
+                  </ul>
+                </div>
+
+                {/* Monitoring & Audit */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Monitoring & Audit</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Analytics</span> – dashboards for throughput, SLAs, success rates and nodes.</li>
+                    <li><span className="font-medium">KPIs & Dashboards</span> – workflow and user performance charts.</li>
+                    <li><span className="font-medium">Audit Logs</span> – full activity history across workflows, tasks and approvals.</li>
+                  </ul>
+                </div>
+
+                {/* Templates & AI */}
+                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                  <h3 className="font-semibold text-slate-900 mb-2">Templates & AI Tools</h3>
+                  <ul className="space-y-1 text-slate-700 text-xs">
+                    <li><span className="font-medium">Templates</span> – reusable workflow templates from the Template Library.</li>
+                    <li><span className="font-medium">AI Tools</span> – Quick Start Wizard / AI Builder to auto-generate workflows.</li>
+                    <li><span className="font-medium">Subflows</span> – subprocess node type for composing larger orchestrations.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
                         >
                           Go to node
                         </button>
