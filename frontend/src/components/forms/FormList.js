@@ -179,7 +179,11 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
           {filteredForms.map((form) => (
             <div
               key={form.id}
-              onClick={() => onSelectForm(form)}
+              onClick={() => {
+                if (can('manageForms')) {
+                  onSelectForm(form);
+                }
+              }}
               className="bg-white border border-slate-200 rounded-lg p-6 hover:shadow-lg transition-all cursor-pointer group"
               data-testid={`form-card-${form.id}`}
             >
