@@ -7,7 +7,10 @@ export const NODE_TYPES = {
   END: 'end',
   PARALLEL: 'parallel',
   MERGE: 'merge',
-  ACTION: 'action'
+  ACTION: 'action',
+  TIMER: 'timer',
+  SUBPROCESS: 'subprocess',
+  EVENT: 'event'
 };
 
 export const NODE_CONFIGS = {
