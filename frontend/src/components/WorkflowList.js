@@ -535,6 +535,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
             onRollback={() => {
               loadWorkflows();
             }}
+            onNotify={onNotify}
           />
         )}
       </div>
