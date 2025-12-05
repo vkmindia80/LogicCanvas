@@ -10,6 +10,8 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
 
+  const { can } = useRole();
+
   useEffect(() => {
     fetchForms();
   }, []);
