@@ -30,6 +30,26 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
   const [authType, setAuthType] = useState(node?.data?.authType || 'none');
   const [token, setToken] = useState(node?.data?.token || '');
   const [script, setScript] = useState(node?.data?.script || '');
+  
+  // Timer node states
+  const [timerType, setTimerType] = useState(node?.data?.timerType || 'delay');
+  const [delaySeconds, setDelaySeconds] = useState(node?.data?.delaySeconds || 0);
+  const [delayMinutes, setDelayMinutes] = useState(node?.data?.delayMinutes || 0);
+  const [delayHours, setDelayHours] = useState(node?.data?.delayHours || 0);
+  const [scheduledTime, setScheduledTime] = useState(node?.data?.scheduledTime || '');
+  const [timeoutHours, setTimeoutHours] = useState(node?.data?.timeoutHours || 24);
+  
+  // Subprocess node states
+  const [subprocessWorkflowId, setSubprocessWorkflowId] = useState(node?.data?.subprocessWorkflowId || '');
+  const [inputMapping, setInputMapping] = useState(node?.data?.inputMapping ? JSON.stringify(node?.data?.inputMapping, null, 2) : '{}');
+  const [outputMapping, setOutputMapping] = useState(node?.data?.outputMapping ? JSON.stringify(node?.data?.outputMapping, null, 2) : '{}');
+  const [workflows, setWorkflows] = useState([]);
+  
+  // Event node states
+  const [eventType, setEventType] = useState(node?.data?.eventType || 'message');
+  const [eventAction, setEventAction] = useState(node?.data?.eventAction || 'send');
+  const [eventName, setEventName] = useState(node?.data?.eventName || '');
+  const [eventPayload, setEventPayload] = useState(node?.data?.eventPayload ? JSON.stringify(node?.data?.eventPayload, null, 2) : '{}');
 
   useEffect(() => {
     if (node) {
