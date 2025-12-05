@@ -474,3 +474,218 @@ This is the final phase to make the application production-ready:
 **Next Milestone:** Phase 7 - Multi-Workflow Management & Polish
 **Services Status:** ✅ Backend, Frontend, MongoDB, APScheduler all running
 **Analytics Status:** ✅ 11 endpoints operational, Dashboard live
+
+
+---
+
+## 🧭 **Strategic Product Roadmap vs ProcessMaker (12–18 Months)**
+
+This section looks beyond the current engineering phases (1–7) and positions **LogicCanvas** as a
+**general-purpose BPM / workflow platform** that is:
+- **Simpler** to configure and operate than ProcessMaker
+- **More robust** in governance, security, and observability
+- **More advanced** in AI-driven workflows and document automation
+
+The plan is organized into four strategic phases. Timelines are indicative and can overlap.
+
+---
+
+### Phase A – Competitive Parity Core (0–3 Months)
+
+**Goal:** Close remaining gaps with ProcessMaker’s core BPM platform (designer, case management,
+RBAC, lifecycle, integrations) while keeping UX radically simpler.
+
+**Themes:**
+- **Simplicity:** Opinionated defaults, workflow templates, guided wizards
+- **Robustness:** RBAC, lifecycle states, environments, auditability
+- **Advanced:** First-class integration patterns and decisioning
+
+**Key Initiatives:**
+1. **BPMN-Minded Modeling Enhancements**
+   - Add/extend BPMN-aligned elements (events, gateways, subprocesses, timers) where missing.
+   - Provide **starter templates** for common approval flows (HR onboarding, invoice approval,
+     purchase requests, contract approvals) so users rarely start from a blank canvas.
+   - Introduce a **configuration wizard** for new workflows that walks users through:
+     - Triggers (manual / schedule / webhook)
+     - Assignment strategy
+     - SLA targets
+     - Notifications.
+
+2. **RBAC, Tenants & Governance**
+   - Implement a **role-based access control** model:
+     - Roles: `platform_admin`, `workspace_admin`, `builder`, `approver`, `requester`, `viewer`.
+     - Permissions per role for: modeling, publishing, executing, managing users, managing
+       integrations.
+   - Introduce **Workspaces / Tenants**:
+     - Logical isolation of data (workflows, forms, instances, users) per workspace.
+     - Workspace-level settings for branding, SLAs, and integrations.
+   - Add **environment separation**:
+     - Flags for `dev`, `test`, `prod` environments.
+     - Promotion flow for moving a workflow definition from `dev` → `test` → `prod` with
+       approvals.
+
+3. **Lifecycle & Versioning UX**
+   - Build a **workflow lifecycle panel**:
+     - States: Draft → In Review → Published → Paused → Archived.
+     - Audit trail of lifecycle changes and who performed them.
+   - Upgrade existing versioning to a richer UI:
+     - Side-by-side **version comparison** (node diff, property diff, form diff).
+     - One-click **rollback** with justification comment.
+   - Introduce **guardrails**:
+     - Prevent destructive edits on published workflows (force new version creation).
+
+4. **Integration Hub & APIs**
+   - Design and publish a **public REST API spec** (OpenAPI) for:
+     - Case creation, task completion, file uploads, query endpoints.
+   - Create an **Integration Hub** section:
+     - Prebuilt connectors for: Email (SMTP), Slack/Teams, generic REST, webhooks.
+     - Centralized credential management with role-based access.
+   - Simple **API key** management for automation/scripts and service accounts.
+
+5. **Decision Tables & Business Rules (Parity with ProcessMaker Decisioning)**
+   - Introduce **decision table** node(s):
+     - Visual grid for rules (conditions → outcomes) with multiple hit policies.
+     - Versioned tables, reusable across workflows.
+   - Allow workflows to call decision tables as reusable **business rules**.
+
+**Success Criteria (vs ProcessMaker):**
+- A new customer can model, secure, and publish a production workflow 
+  **faster and with fewer concepts** than in ProcessMaker.
+- Admins can safely manage users, workspaces, and environments with clear audit trails.
+
+---
+
+### Phase B – Document Automation & IDP (3–6 Months)
+
+**Goal:** Go beyond ProcessMaker IDP by deeply integrating document intelligence into workflows
+without overwhelming configuration complexity.
+
+**Themes:**
+- **Simplicity:** No-code document pipelines and mappings
+- **Robustness:** Compliance, retention, and traceability
+- **Advanced:** AI-powered OCR, classification, extraction
+
+**Key Initiatives:**
+1. **Document-Centric Workflow Primitives**
+   - Add **Document Intake** nodes:
+     - Sources: direct upload, email inbox, SFTP/watch folder (via connector), API.
+   - Attach **document bundles** to workflow instances (e.g., invoice + PO + contract).
+   - Provide a **document timeline** for each case: when uploaded, viewed, approved, signed.
+
+2. **Intelligent Document Processing (IDP)**
+   - Integrate OCR + layout-aware parsing for PDFs and images.
+   - Provide configurable **document types** (Invoice, ID, Contract, KYC Package, etc.).
+   - For each type, define **extraction schemas** (e.g., invoice number, total amount, tax).
+   - Map extracted fields to **workflow variables** and form fields without custom code.
+
+3. **Document Validation & Exception Handling**
+   - Add **validation rules** on extracted data (e.g., totals match, mandatory fields present).
+   - Route ambiguous/low-confidence extractions to a **human review queue**.
+   - Provide review screens to compare original documents and extracted fields side by side.
+
+4. **Compliance, Security & Retention**
+   - Document-level **access controls** (who can view / download / redact).
+   - **Retention policies** per document type (auto-archive / auto-delete after X time).
+   - Redaction support and **PII tagging** for sensitive data.
+   - End-to-end **document audit trail**.
+
+**Success Criteria (vs ProcessMaker IDP):**
+- A non-technical user can set up a full document-driven approval flow (e.g. invoice-to-pay) 
+  in a single workspace, with extraction and approvals, **in under an hour**.
+- Document review UX feels lighter and more intuitive than typical IDP products.
+
+---
+
+### Phase C – AI-First Workflow Platform (6–12 Months)
+
+**Goal:** Make LogicCanvas feel like an **AI-native process platform**, not just a platform that
+“added AI features”. Clearly surpass ProcessMaker’s AI Genies in guidance and optimization.
+
+**Themes:**
+- **Simplicity:** AI-guided design and configuration
+- **Robustness:** Guardrails, explainability, and human override
+- **Advanced:** Continuous optimization and intelligent routing
+
+**Key Initiatives:**
+1. **AI Co-Pilot for Designers**
+   - "Describe your process in plain language" → generate a first-version workflow:
+     - Nodes, assignments, SLAs, notifications.
+   - AI suggestions inline in the canvas:
+     - “You may want an approval step here.”
+     - “Add SLA check between these two nodes.”
+   - AI-assisted **form generation** from:
+     - Example documents.
+     - Text descriptions (“I need a vendor onboarding form with these fields…”).
+
+2. **AI-Assisted Rules & Decisioning**
+   - Allow AI to propose **decision tables** from historical data and business descriptions.
+   - Natural language editor for rules:
+     - “If invoice amount > 10k, require director approval” → formal rules/decision table.
+   - Test and **simulate rules** with sample data and explainable outputs.
+
+3. **AI in Runtime Execution**
+   - AI-driven **routing recommendations**:
+     - Suggest best approver based on workload, expertise, history.
+   - Intelligent **exception handling**:
+     - Suggest next best actions when tasks are blocked or SLA breaches are imminent.
+   - **Classification and triage** nodes powered by AI (e.g., categorize requests, detect risk).
+
+4. **Auto-Optimization & Insights**
+   - Use historical analytics to recommend:
+     - New SLAs or priority rules.
+     - Parallelization opportunities to reduce cycle time.
+   - “What-if” analysis:
+     - Simulate impact of routing or SLA changes.
+
+**Success Criteria (vs ProcessMaker AI):**
+- Non-technical builders lean on AI suggestions for at least 50% of modeling tasks.
+- The platform can propose **measurable improvements** (e.g., 20% cycle-time reduction) and
+  simulate their effect before rollout.
+
+---
+
+### Phase D – Ecosystem, Extensibility & Enterprise (12+ Months)
+
+**Goal:** Turn LogicCanvas from a standalone app into an extensible, enterprise-ready platform with
+a rich ecosystem and strong governance.
+
+**Themes:**
+- **Simplicity:** Managed marketplace and guided configuration of extensions
+- **Robustness:** Enterprise security, SSO, and compliance
+- **Advanced:** Extensible runtime and cross-organization collaboration
+
+**Key Initiatives:**
+1. **Extension & Template Marketplace**
+   - Pluggable **node types** (custom connectors, domain-specific actions).
+   - Public **template library** for workflows, forms, and decision tables.
+   - Support for private, workspace-specific catalogs.
+
+2. **Enterprise-Grade Security & Governance**
+   - SSO support (SAML / OpenID Connect) and SCIM for user provisioning.
+   - IP allowlists, audit log exports, and fine-grained admin roles.
+   - Data residency and regional deployment strategies.
+
+3. **Environments, Change Management & Release Flow**
+   - Formal **promotion workflows** for moving changes across environments:
+     - Draft changes → review → approval → deployment.
+   - Versioned **configuration snapshots** for rollback (workflows, forms, rules, integrations).
+
+4. **Ecosystem & Partner Integrations**
+   - Deep integrations with major SaaS (HR, Finance, CRM) via certified connectors.
+   - Public **SDKs** / client libraries for common languages.
+
+**Success Criteria:**
+- LogicCanvas is deployable and governable in large enterprises with complex org structures.
+- Third parties can build and distribute extensions without touching core code.
+
+---
+
+## 🧩 Alignment with Existing Phases 1–7
+
+- **Phase 7 – Multi-Workflow Management & Polish** becomes the **launch pad** for Phase A,
+  rounding out workflow management, UX polish, and RBAC fundamentals.
+- The new strategic phases (A–D) **build on top** of the strong core already captured in
+  Phases 1–6: execution engine, form system, analytics, tasks/approvals.
+- This roadmap ensures LogicCanvas is:
+  - A credible **ProcessMaker alternative** short term, and
+  - A clearly more **AI-driven, document-intelligent, and user-friendly** platform long term.
