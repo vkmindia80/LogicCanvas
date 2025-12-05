@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+
+# Caches
+.cache/
+**/.cache/
+
+# Logs
+*.log
+
+# Testing
+coverage/
+*.lcov
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
