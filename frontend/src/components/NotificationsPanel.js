@@ -4,6 +4,9 @@ import {
   AlertTriangle, Clock, User, CheckCircle, MessageSquare,
   Mail, RefreshCw
 } from 'lucide-react';
+import EmptyState from './EmptyState';
+import LoadingSpinner from './LoadingSpinner';
+import { SkeletonList } from './Skeleton';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
