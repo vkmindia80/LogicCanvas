@@ -8,7 +8,7 @@ import {
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const ApprovalQueue = ({ onClose }) => {
+const ApprovalQueue = ({ onClose, onNotify }) => {
   const [approvals, setApprovals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedApproval, setSelectedApproval] = useState(null);
