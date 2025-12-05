@@ -221,8 +221,24 @@ const AppShell = () => {
     );
   }
 
-  // Unauthenticated users see the marketing/landing page and can jump to login.
+  // Unauthenticated users see either the marketing/landing page or the full-screen login page.
+  // We treat this as a simple view switch so the login "feels" like a separate page.
   if (!currentUser || !authToken) {
+    if (showLogin) {
+      return (
+        <>
+          <LoginPage
+            onLoginSuccess={(token, user) => {
+              handleAuthSuccess(token, user);
+              setShowLogin(false);
+            }}
+            onBack={() => setShowLogin(false)}
+          />
+          <ToastContainer toasts={toasts} removeToast={removeToast} />
+        </>
+      );
+    }
+
     return (
       <>
         <LandingPage
@@ -230,12 +246,6 @@ const AppShell = () => {
           onLogout={handleLogout}
           onGetStarted={() => setShowLogin(true)}
         />
-        {showLogin && (
-          <LoginPage
-            onLoginSuccess={handleAuthSuccess}
-            onBack={() => setShowLogin(false)}
-          />
-        )}
         <ToastContainer toasts={toasts} removeToast={removeToast} />
       </>
     );
