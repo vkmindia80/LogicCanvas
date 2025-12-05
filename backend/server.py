@@ -1012,6 +1012,14 @@ def _extract_mentions(text: str) -> List[str]:
 async def get_overdue_tasks():
     """Get tasks that are past their due date"""
     now = datetime.utcnow().isoformat()
+    overdue_tasks = list(tasks_collection.find(
+        {
+            "due_date": {"$lt": now},
+            "status": {"$nin": ["completed", "cancelled"]}
+        },
+        {"_id": 0}
+    ))
+    return {"tasks": overdue_tasks, "count": len(overdue_tasks)}
 
 # ==================== AUTH & RBAC ENDPOINTS ====================
 
