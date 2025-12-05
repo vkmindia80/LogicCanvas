@@ -804,13 +804,6 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
         </div>
       )}
-
-                          className="text-xs text-blue-600 hover:text-blue-800 mt-1"
-                          data-testid="validation-go-to-node-btn"
-                        >
-                          Go to node
-                        </button>
-                      )}
                     </div>
                   </div>
                 ))}
