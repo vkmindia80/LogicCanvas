@@ -254,169 +254,186 @@ const AppShell = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      {(currentView === 'workflows' || currentView === 'forms') && (
-        <header className="border-b border-slate-200 bg-white shadow-sm">
-          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700">
-                <Activity className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-900">LogicCanvas</h1>
-                <p className="text-xs text-slate-500">Visual Workflow Builder</p>
-              </div>
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm">
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center space-x-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700">
+              <Activity className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900">LogicCanvas</h1>
+              <p className="text-xs text-slate-500">Visual Workflow Builder</p>
+            </div>
+          </div>
+
+          {/* Navigation Tabs */}
+          <nav className="flex space-x-1 rounded-lg bg-slate-100 p-1">
+            <button
+              onClick={() => {
+                setActiveTab('workflows');
+                setCurrentView('workflows');
+              }}
+              className={`flex items-center space-x-2 rounded-md px-4 py-2 text-xs sm:text-sm transition-colors ${
+                activeTab === 'workflows'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              data-testid="tab-workflows"
+            >
+              <Workflow className="h-4 w-4" />
+              <span>Workflows</span>
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('forms');
+                setCurrentView('forms');
+              }}
+              className={`flex items-center space-x-2 rounded-md px-4 py-2 text-xs sm:text-sm transition-colors ${
+                activeTab === 'forms'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              data-testid="tab-forms"
+            >
+              <FileText className="h-4 w-4" />
+              <span>Forms</span>
+            </button>
+          </nav>
+
+          {/* Quick Actions + Role & User */}
+          <div className="flex items-center space-x-2">
+            {/* Role Switcher */}
+            <div className="hidden items-center space-x-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-600 sm:flex">
+              <Shield className="mr-1 h-3.5 w-3.5 text-primary-500" />
+              <span className="hidden sm:inline">Role:</span>
+              <select
+                value={currentRole}
+                onChange={(e) => setCurrentRole(e.target.value)}
+                className="bg-transparent text-xs font-medium text-slate-800 focus:outline-none"
+                data-testid="role-switcher-select"
+              >
+                <option value="admin">Admin</option>
+                <option value="builder">Builder</option>
+                <option value="approver">Approver</option>
+                <option value="viewer">Viewer</option>
+              </select>
             </div>
 
-            {/* Navigation Tabs */}
-            <nav className="flex space-x-1 rounded-lg bg-slate-100 p-1">
+            <button
+              onClick={() => setShowOnboarding(true)}
+              className="hidden items-center space-x-1 rounded-lg px-3 py-2 text-xs text-slate-600 hover:bg-slate-100 sm:flex"
+              data-testid="open-onboarding-btn"
+            >
+              <span>Take a tour</span>
+            </button>
+
+            <button
+              onClick={() => setShowGlobalSearch(true)}
+              className="flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-primary-50 hover:text-primary-600"
+              data-testid="open-search-btn"
+            >
+              <SearchIcon className="h-5 w-5" />
+              <span className="hidden sm:inline">Search</span>
+            </button>
+
+            {can('accessImportExport') && (
               <button
-                onClick={() => {
-                  setActiveTab('workflows');
-                  setCurrentView('workflows');
-                }}
-                className={`flex items-center space-x-2 rounded-md px-4 py-2 transition-colors ${
-                  activeTab === 'workflows'
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-                data-testid="tab-workflows"
+                onClick={() => setShowImportExport(true)}
+                className="hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-emerald-50 hover:text-emerald-600 md:flex"
+                data-testid="open-import-export-btn"
               >
-                <Workflow className="h-4 w-4" />
-                <span>Workflows</span>
+                <Download className="h-5 w-5" />
+                <span className="hidden sm:inline">Import/Export</span>
               </button>
+            )}
+
+            {can('accessTasks') && (
               <button
-                onClick={() => {
-                  setActiveTab('forms');
-                  setCurrentView('forms');
-                }}
-                className={`flex items-center space-x-2 rounded-md px-4 py-2 transition-colors ${
-                  activeTab === 'forms'
-                    ? 'bg-white text-primary-600 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-                data-testid="tab-forms"
+                onClick={() => setShowTaskInbox(true)}
+                className="relative hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600 md:flex"
+                data-testid="open-task-inbox-btn"
               >
-                <FileText className="h-4 w-4" />
-                <span>Forms</span>
-              </button>
-            </nav>
-
-            {/* Quick Actions + Role & Onboarding */}
-            <div className="flex items-center space-x-2">
-              {/* Role Switcher */}
-              <div className="hidden items-center space-x-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-600 sm:flex">
-                <Shield className="mr-1 h-3.5 w-3.5 text-primary-500" />
-                <span className="hidden sm:inline">Role:</span>
-                <select
-                  value={currentRole}
-                  onChange={(e) => setCurrentRole(e.target.value)}
-                  className="bg-transparent text-xs font-medium text-slate-800 focus:outline-none"
-                  data-testid="role-switcher-select"
-                >
-                  <option value="admin">Admin</option>
-                  <option value="builder">Builder</option>
-                  <option value="approver">Approver</option>
-                  <option value="viewer">Viewer</option>
-                </select>
-              </div>
-
-              <button
-                onClick={() => setShowOnboarding(true)}
-                className="hidden items-center space-x-1 rounded-lg px-3 py-2 text-xs text-slate-600 hover:bg-slate-100 sm:flex"
-                data-testid="open-onboarding-btn"
-              >
-                <span>Take a tour</span>
-              </button>
-
-              <button
-                onClick={() => setShowGlobalSearch(true)}
-                className="flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-primary-50 hover:text-primary-600"
-                data-testid="open-search-btn"
-              >
-                <SearchIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Search</span>
-              </button>
-
-              {can('accessImportExport') && (
-                <button
-                  onClick={() => setShowImportExport(true)}
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-emerald-50 hover:text-emerald-600"
-                  data-testid="open-import-export-btn"
-                >
-                  <Download className="h-5 w-5" />
-                  <span className="hidden sm:inline">Import/Export</span>
-                </button>
-              )}
-
-              {can('accessTasks') && (
-                <button
-                  onClick={() => setShowTaskInbox(true)}
-                  className="relative flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600"
-                  data-testid="open-task-inbox-btn"
-                >
-                  <CheckSquare className="h-5 w-5" />
-                  <span className="hidden sm:inline">Tasks</span>
-                  {taskCount > 0 && (
-                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
-                      {taskCount > 9 ? '9+' : taskCount}
-                    </span>
-                  )}
-                </button>
-              )}
-
-              {can('accessApprovals') && (
-                <button
-                  onClick={() => setShowApprovalQueue(true)}
-                  className="relative flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-purple-50 hover:text-purple-600"
-                  data-testid="open-approval-queue-btn"
-                >
-                  <ClipboardCheck className="h-5 w-5" />
-                  <span className="hidden sm:inline">Approvals</span>
-                  {approvalCount > 0 && (
-                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
-                      {approvalCount > 9 ? '9+' : approvalCount}
-                    </span>
-                  )}
-                </button>
-              )}
-
-              <button
-                onClick={() => setShowNotifications(true)}
-                className="relative flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
-                data-testid="open-notifications-btn"
-              >
-                <Bell className="h-5 w-5" />
-                <span className="hidden sm:inline">Alerts</span>
-                {notificationCount > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
-                    {notificationCount > 9 ? '9+' : notificationCount}
+                <CheckSquare className="h-5 w-5" />
+                <span className="hidden sm:inline">Tasks</span>
+                {taskCount > 0 && (
+                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                    {taskCount > 9 ? '9+' : taskCount}
                   </span>
                 )}
               </button>
+            )}
 
-              {can('accessAnalytics') && (
-                <button
-                  onClick={() => setShowAnalytics(true)}
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-purple-50 hover:text-purple-600"
-                  data-testid="open-analytics-btn"
-                >
-                  <BarChart3 className="h-5 w-5" />
-                  <span className="hidden sm:inline">Analytics</span>
-                </button>
-              )}
-
+            {can('accessApprovals') && (
               <button
-                onClick={() => setShowAuditTrail(true)}
-                className="flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
-                data-testid="open-audit-trail-btn"
+                onClick={() => setShowApprovalQueue(true)}
+                className="relative hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-purple-50 hover:text-purple-600 md:flex"
+                data-testid="open-approval-queue-btn"
               >
-                <History className="h-5 w-5" />
-                <span className="hidden sm:inline">Audit</span>
+                <ClipboardCheck className="h-5 w-5" />
+                <span className="hidden sm:inline">Approvals</span>
+                {approvalCount > 0 && (
+                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
+                    {approvalCount > 9 ? '9+' : approvalCount}
+                  </span>
+                )}
               </button>
-            </div>
+            )}
+
+            <button
+              onClick={() => setShowNotifications(true)}
+              className="relative hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600 md:flex"
+              data-testid="open-notifications-btn"
+            >
+              <Bell className="h-5 w-5" />
+              <span className="hidden sm:inline">Alerts</span>
+              {notificationCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
+                  {notificationCount > 9 ? '9+' : notificationCount}
+                </span>
+              )}
+            </button>
+
+            {can('accessAnalytics') && (
+              <button
+                onClick={() => setShowAnalytics(true)}
+                className="hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-purple-50 hover:text-purple-600 md:flex"
+                data-testid="open-analytics-btn"
+              >
+                <BarChart3 className="h-5 w-5" />
+                <span className="hidden sm:inline">Analytics</span>
+              </button>
+            )}
+
+            <button
+              onClick={() => setShowAuditTrail(true)}
+              className="hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 md:flex"
+              data-testid="open-audit-trail-btn"
+            >
+              <History className="h-5 w-5" />
+              <span className="hidden sm:inline">Audit</span>
+            </button>
+
+            {currentUser && (
+              <div
+                className="hidden items-center space-x-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 md:flex"
+                data-testid="app-current-user-chip"
+              >
+                <Shield className="h-3.5 w-3.5 text-primary-500" />
+                <span className="font-medium">{currentUser.name || currentUser.email}</span>
+                <span className="text-slate-400">· {currentUser.role}</span>
+              </div>
+            )}
+
+            <button
+              onClick={handleLogout}
+              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+              data-testid="app-logout-btn"
+            >
+              Logout
+            </button>
           </div>
-        </header>
-      )}
+        </div>
+      </header>
 
       {/* Main Content */}
       <main>
