@@ -48,8 +48,8 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
       </header>
 
       <main className="flex-1">
-        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 md:flex-row md:items-center">
-          <div className="flex-1 space-y-6">
+        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:py-16 lg:py-20 md:flex-row md:items-center">
+          <div className="flex-1 space-y-6 text-center md:text-left">
             <div className="inline-flex items-center space-x-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-100">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Enterprise-ready visual workflow builder · Demo environment</span>
