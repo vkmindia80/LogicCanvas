@@ -558,7 +558,7 @@ class NodeExecutor:
         
         try:
             import uuid
-            evaluated_data[\"id\"] = str(uuid.uuid4())
+            evaluated_data["id"] = str(uuid.uuid4())
             
             collection = self.db[collection_name]
             result = collection.insert_one(evaluated_data)
@@ -566,7 +566,7 @@ class NodeExecutor:
             return {
                 "status": "completed",
                 "output": {
-                    "record_id": evaluated_data[\"id\"],
+                    "record_id": evaluated_data["id"],
                     "inserted": True
                 }
             }
