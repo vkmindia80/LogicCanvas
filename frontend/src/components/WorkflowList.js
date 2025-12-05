@@ -384,28 +384,41 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
         {/* Workflows Grid */}
         {loading ? (
-          <div className="flex h-64 items-center justify-center">
-            <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary-500"></div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
           </div>
         ) : filteredWorkflows.length === 0 ? (
-          <div className="rounded-lg border border-slate-200 bg-white p-12 text-center shadow-md">
-            <FileText className="mx-auto mb-4 h-16 w-16 text-slate-300" />
-            <h3 className="mb-2 text-xl font-semibold text-slate-900">No workflows found</h3>
-            <p className="mb-6 text-slate-600">
-              {searchTerm || tagFilter || filter !== 'all'
-                ? 'Try adjusting your filters or search term.'
-                : 'Get started by creating your first workflow.'}
-            </p>
-            {can('createWorkflows') && !searchTerm && !tagFilter && filter === 'all' && (
-              <button
-                onClick={onCreateNew}
-                className="inline-flex items-center space-x-2 rounded-lg bg-primary-500 px-6 py-3 text-white transition-colors hover:bg-primary-600"
-              >
-                <Plus className="h-5 w-5" />
-                <span>Create Your First Workflow</span>
-              </button>
-            )}
-          </div>
+          <EmptyState
+            icon={searchTerm || tagFilter || filter !== 'all' ? Search : WorkflowIcon}
+            title={searchTerm || tagFilter || filter !== 'all' ? 'No workflows found' : 'No workflows yet'}
+            description={
+              searchTerm || tagFilter || filter !== 'all'
+                ? 'Try adjusting your filters or search term to find what you\'re looking for.'
+                : 'Get started by creating your first workflow. You can build from scratch, use a template, or let our Quick Start wizard guide you.'
+            }
+            action={
+              can('createWorkflows') && !searchTerm && !tagFilter && filter === 'all' ? (
+                <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+                  <button
+                    onClick={onCreateNew}
+                    className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white font-semibold shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
+                  >
+                    <Plus className="h-5 w-5" />
+                    <span>Create Your First Workflow</span>
+                  </button>
+                  <button
+                    onClick={() => setShowQuickStartWizard(true)}
+                    className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-3 text-white font-semibold shadow-lg shadow-amber-500/30 transition-all hover:shadow-xl hover:shadow-amber-500/40"
+                  >
+                    <Zap className="h-5 w-5" />
+                    <span>Quick Start Wizard</span>
+                  </button>
+                </div>
+              ) : null
+            }
+          />
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredWorkflows.map((workflow) => (
