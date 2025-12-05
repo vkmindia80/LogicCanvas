@@ -377,17 +377,24 @@ const TaskInbox = ({ onClose, onNotify }) => {
               filteredTasks.map((task) => {
                 const slaStatus = getSlaStatus(task);
                 const SlaIcon = slaStatus?.icon || Clock;
+                const statusColor = getSlaStatus(task);
                 return (
-                  <div
+                  <Tooltip 
                     key={task.id}
-                    onClick={() => setSelectedTask(task)}
-                    className={`bg-white rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
-                      selectedTask?.id === task.id
-                        ? 'border-blue-500 ring-2 ring-blue-200'
-                        : 'border-gray-200 hover:border-gray-300'
-                    } ${task.escalated ? 'border-l-4 border-l-red-500' : ''}`}
-                    data-testid={`task-item-${task.id}`}
+                    content={`${task.title} - ${task.status.replace('_', ' ')}`}
+                    position="right"
+                    disabled={selectedTask?.id === task.id}
+                    delay={500}
                   >
+                    <div
+                      onClick={() => setSelectedTask(task)}
+                      className={`bg-white rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
+                        selectedTask?.id === task.id
+                          ? 'border-blue-500 ring-2 ring-blue-200'
+                          : 'border-gray-200 hover:border-gray-300'
+                      } ${task.escalated ? 'border-l-4 border-l-red-500' : ''}`}
+                      data-testid={`task-item-${task.id}`}
+                    >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
