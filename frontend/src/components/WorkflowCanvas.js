@@ -33,7 +33,7 @@ const nodeTypes = {
   action: CustomNode,
 };
 
-const WorkflowCanvas = ({ workflow, onSave }) => {
+const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState(null);
