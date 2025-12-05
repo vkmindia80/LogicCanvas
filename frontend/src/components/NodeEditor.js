@@ -116,12 +116,25 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     }
   };
 
+  const loadWorkflows = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workflows`);
+      const data = await response.json();
+      setWorkflows(data.workflows || []);
+    } catch (error) {
+      console.error('Failed to load workflows:', error);
+    }
+  };
+
   useEffect(() => {
     if (node?.data?.type === NODE_TYPES.FORM) {
       loadForms();
     }
     if (node?.data?.type === NODE_TYPES.TASK) {
       loadRolesAndUsers();
+    }
+    if (node?.data?.type === NODE_TYPES.SUBPROCESS) {
+      loadWorkflows();
     }
   }, [node]);
 
