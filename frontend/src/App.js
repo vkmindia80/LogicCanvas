@@ -382,6 +382,34 @@ function App() {
         {showAnalytics && (
           <AnalyticsDashboard onClose={() => setShowAnalytics(false)} />
         )}
+
+        {/* Global Search Modal */}
+        {showGlobalSearch && (
+          <GlobalSearch
+            isOpen={showGlobalSearch}
+            onClose={() => setShowGlobalSearch(false)}
+            onSelectWorkflow={handleSelectWorkflow}
+            onSelectForm={handleSelectForm}
+          />
+        )}
+
+        {/* Import/Export Modal */}
+        {showImportExport && (
+          <ImportExport
+            isOpen={showImportExport}
+            onClose={() => setShowImportExport(false)}
+            onImportComplete={() => {
+              addToast('Workflows imported successfully!', 'success');
+              // Reload workflows if on workflow list view
+              if (currentView === 'workflows') {
+                window.location.reload();
+              }
+            }}
+          />
+        )}
+
+        {/* Toast Notifications */}
+        <ToastContainer toasts={toasts} removeToast={removeToast} />
       </div>
     </WorkflowProvider>
   );
