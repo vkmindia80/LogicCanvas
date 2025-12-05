@@ -137,7 +137,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
 
         {/* Action Bar */}
         <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-slate-200">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             {/* Search */}
             <div className="flex items-center space-x-4 flex-1">
               <div className="relative flex-1 max-w-md">
