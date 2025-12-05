@@ -11,7 +11,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
-import NodePalette from './NodePalette';
+import NodePaletteEnhanced from './NodePaletteEnhanced';
 import NodeEditor from './NodeEditor';
 import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
