@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, FileText, Edit, Trash2, Copy, Tag } from 'lucide-react';
+import { useRole } from '../../contexts/RoleContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const FormList = ({ onSelectForm, onCreateNew }) => {
+const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
   const [forms, setForms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
