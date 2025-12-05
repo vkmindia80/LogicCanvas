@@ -84,6 +84,27 @@ export const NODE_CONFIGS = {
     borderColor: 'border-pink-600',
     icon: 'zap',
     description: 'Execute HTTP call, webhook, or script'
+  },
+  [NODE_TYPES.TIMER]: {
+    label: 'Timer',
+    color: 'bg-cyan-500',
+    borderColor: 'border-cyan-600',
+    icon: 'clock',
+    description: 'Delay execution or schedule timeout'
+  },
+  [NODE_TYPES.SUBPROCESS]: {
+    label: 'Subprocess',
+    color: 'bg-violet-500',
+    borderColor: 'border-violet-600',
+    icon: 'workflow',
+    description: 'Execute nested workflow'
+  },
+  [NODE_TYPES.EVENT]: {
+    label: 'Event',
+    color: 'bg-emerald-500',
+    borderColor: 'border-emerald-600',
+    icon: 'radio',
+    description: 'Send/receive messages or signals'
   }
 };
 
