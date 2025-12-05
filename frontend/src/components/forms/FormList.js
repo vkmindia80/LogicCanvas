@@ -56,26 +56,36 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
 
   const handleDuplicate = async (form, e) => {
     e.stopPropagation();
+    if (!can('duplicateForms')) {
+      onNotify?.('You do not have permission to duplicate forms.', 'error');
+      return;
+    }
+
     const duplicatedForm = {
       ...form,
       id: null,
       name: `${form.name} (Copy)`,
       created_at: null,
-      updated_at: null
+      updated_at: null,
     };
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/forms`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(duplicatedForm)
+        body: JSON.stringify(duplicatedForm),
       });
-      
+
       if (response.ok) {
+        onNotify?.('Form duplicated', 'success');
         fetchForms();
+      } else {
+        const body = await response.json().catch(() => ({}));
+        onNotify?.(body.detail || 'Failed to duplicate form', 'error');
       }
     } catch (error) {
       console.error('Failed to duplicate form:', error);
+      onNotify?.('Failed to duplicate form', 'error');
     }
   };
 
