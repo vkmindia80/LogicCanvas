@@ -191,6 +191,42 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
       updatedData.script = script;
     }
 
+    // Timer node
+    if (node.data.type === NODE_TYPES.TIMER) {
+      updatedData.timerType = timerType;
+      updatedData.delaySeconds = parseInt(delaySeconds) || 0;
+      updatedData.delayMinutes = parseInt(delayMinutes) || 0;
+      updatedData.delayHours = parseInt(delayHours) || 0;
+      updatedData.scheduledTime = scheduledTime;
+      updatedData.timeoutHours = parseInt(timeoutHours) || 24;
+    }
+
+    // Subprocess node
+    if (node.data.type === NODE_TYPES.SUBPROCESS) {
+      updatedData.subprocessWorkflowId = subprocessWorkflowId;
+      try {
+        updatedData.inputMapping = JSON.parse(inputMapping);
+        updatedData.outputMapping = JSON.parse(outputMapping);
+      } catch (e) {
+        alert('Invalid JSON in input/output mapping');
+        return;
+      }
+    }
+
+    // Event node
+    if (node.data.type === NODE_TYPES.EVENT) {
+      updatedData.eventType = eventType;
+      updatedData.eventAction = eventAction;
+      updatedData.eventName = eventName;
+      try {
+        updatedData.eventPayload = JSON.parse(eventPayload);
+      } catch (e) {
+        alert('Invalid JSON in event payload');
+        return;
+      }
+      updatedData.timeoutHours = parseInt(timeoutHours) || 24;
+    }
+
     onUpdate(node.id, {
       data: updatedData
     });
