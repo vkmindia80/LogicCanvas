@@ -3,7 +3,7 @@ import { X, Clock, RotateCcw, Save, CheckCircle, AlertCircle } from 'lucide-reac
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const VersionHistory = ({ workflowId, onClose, onRollback }) => {
+const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
   const [versions, setVersions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
