@@ -126,6 +126,86 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     [setNodes],
   );
 
+  // Save current state to history (for undo/redo)
+  const saveToHistory = useCallback(() => {
+    if (isUndoRedoAction) {
+      setIsUndoRedoAction(false);
+      return;
+    }
+
+    const currentState = {
+      nodes,
+      edges,
+      workflowName,
+      timestamp: Date.now()
+    };
+
+    // Remove any future history if we're not at the end
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(currentState);
+
+    // Limit history to 50 states
+    if (newHistory.length > 50) {
+      newHistory.shift();
+    } else {
+      setHistoryIndex(historyIndex + 1);
+    }
+
+    setHistory(newHistory);
+  }, [nodes, edges, workflowName, history, historyIndex, isUndoRedoAction]);
+
+  // Track changes for undo/redo
+  useEffect(() => {
+    if (nodes.length > 0 || edges.length > 0) {
+      const timer = setTimeout(() => {
+        saveToHistory();
+      }, 500); // Debounce to avoid too many history entries
+      return () => clearTimeout(timer);
+    }
+  }, [nodes, edges, workflowName]);
+
+  // Undo function
+  const handleUndo = useCallback(() => {
+    if (historyIndex <= 0) return;
+
+    setIsUndoRedoAction(true);
+    const previousState = history[historyIndex - 1];
+    
+    setNodes(previousState.nodes);
+    setEdges(previousState.edges);
+    setWorkflowName(previousState.workflowName);
+    setHistoryIndex(historyIndex - 1);
+  }, [history, historyIndex, setNodes, setEdges]);
+
+  // Redo function
+  const handleRedo = useCallback(() => {
+    if (historyIndex >= history.length - 1) return;
+
+    setIsUndoRedoAction(true);
+    const nextState = history[historyIndex + 1];
+    
+    setNodes(nextState.nodes);
+    setEdges(nextState.edges);
+    setWorkflowName(nextState.workflowName);
+    setHistoryIndex(historyIndex + 1);
+  }, [history, historyIndex, setNodes, setEdges]);
+
+  // Keyboard shortcuts for undo/redo
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        handleUndo();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        handleRedo();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleUndo, handleRedo]);
+
   // Poll for active instance execution state
   useEffect(() => {
     if (!workflow?.id || !activeInstance) return;
