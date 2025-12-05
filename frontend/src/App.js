@@ -29,9 +29,12 @@ function App() {
   const [showAuditTrail, setShowAuditTrail] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+  const [showImportExport, setShowImportExport] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [approvalCount, setApprovalCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
     const checkHealth = async () => {
