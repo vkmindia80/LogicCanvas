@@ -206,30 +206,39 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                   {form.fields?.length || 0} fields
                 </span>
                 <div className="flex space-x-2">
-                  <button
-                    onClick={(e) => handleDuplicate(form, e)}
-                    className="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
-                    title="Duplicate"
-                    data-testid={`duplicate-form-${form.id}`}
-                  >
-                    <Copy className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={(e) => onSelectForm(form)}
-                    className="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
-                    title="Edit"
-                    data-testid={`edit-form-${form.id}`}
-                  >
-                    <Edit className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={(e) => handleDelete(form.id, e)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                    title="Delete"
-                    data-testid={`delete-form-${form.id}`}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {can('duplicateForms') && (
+                    <button
+                      onClick={(e) => handleDuplicate(form, e)}
+                      className="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+                      title="Duplicate"
+                      data-testid={`duplicate-form-${form.id}`}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  )}
+                  {can('manageForms') && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectForm(form);
+                      }}
+                      className="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+                      title="Edit"
+                      data-testid={`edit-form-${form.id}`}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                  )}
+                  {can('deleteForms') && (
+                    <button
+                      onClick={(e) => handleDelete(form.id, e)}
+                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Delete"
+                      data-testid={`delete-form-${form.id}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
 
