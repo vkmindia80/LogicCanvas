@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Edit, Trash2, Play, FileText } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Play, FileText, Copy, CheckSquare, Square, MoreVertical, Clock } from 'lucide-react';
+import VersionHistory from './VersionHistory';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -8,6 +9,9 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all'); // all, draft, published
+  const [selectedWorkflows, setSelectedWorkflows] = useState([]);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [versionWorkflowId, setVersionWorkflowId] = useState(null);
 
   useEffect(() => {
     loadWorkflows();
