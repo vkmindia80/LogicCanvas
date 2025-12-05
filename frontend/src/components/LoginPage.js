@@ -58,8 +58,9 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 px-4">
-      <div className="max-w-md w-full bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 px-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.3))]" style={{ backgroundSize: '30px 30px' }}></div>
+      <div className="max-w-md w-full bg-white/5 border-2 border-white/10 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl shadow-primary-500/10 relative">
         <button
           type="button"
           onClick={onBack}
