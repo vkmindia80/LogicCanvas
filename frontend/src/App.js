@@ -39,6 +39,8 @@ const AppShell = () => {
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
   const [showImportExport, setShowImportExport] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
+  const [showQuickStartWizard, setShowQuickStartWizard] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('lc_token') || '');
   const [currentUser, setCurrentUser] = useState(() => {
