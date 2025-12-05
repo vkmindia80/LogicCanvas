@@ -62,17 +62,17 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
       );
       
       if (response.ok) {
-        alert('Rolled back successfully!');
+        onNotify?.('Rolled back successfully!', 'success');
         if (onRollback) {
           onRollback();
         }
         onClose();
       } else {
-        alert('Failed to rollback');
+        onNotify?.('Failed to rollback', 'error');
       }
     } catch (error) {
       console.error('Failed to rollback:', error);
-      alert('Failed to rollback');
+      onNotify?.('Failed to rollback', 'error');
     } finally {
       setRolling(null);
     }
