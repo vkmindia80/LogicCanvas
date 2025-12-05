@@ -17,7 +17,7 @@ import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
 import DeletableEdge from './edges/DeletableEdge';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen } from 'lucide-react';
+import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -40,6 +40,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [workflowName, setWorkflowName] = useState(workflow?.name || 'Untitled Workflow');
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
   const [showTriggerConfig, setShowTriggerConfig] = useState(false);
+  const [showCapabilitiesPanel, setShowCapabilitiesPanel] = useState(false);
   const [activeInstance, setActiveInstance] = useState(null);
   const [validationResults, setValidationResults] = useState(null);
   const [validationRan, setValidationRan] = useState(false);
