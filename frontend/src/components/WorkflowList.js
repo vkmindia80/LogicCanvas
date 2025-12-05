@@ -288,11 +288,11 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
               {allTags.length > 0 && (
                 <div className="flex items-center space-x-2">
-                  <Tag className="h-4 w-4 text-slate-400" />
+                  <Tag className="h-5 w-5 text-slate-500" />
                   <select
                     value={tagFilter}
                     onChange={(e) => setTagFilter(e.target.value)}
-                    className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-transparent focus:ring-2 focus:ring-primary-500"
+                    className="rounded-xl border-2 border-slate-200 bg-slate-50 px-3 py-3 text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     data-testid="workflow-tag-filter"
                   >
                     <option value="">All Tags</option>
