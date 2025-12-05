@@ -560,6 +560,28 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
             onNotify={onNotify}
           />
         )}
+
+        {/* Template Library Modal */}
+        <TemplateLibrary
+          isOpen={showTemplateLibrary}
+          onClose={() => setShowTemplateLibrary(false)}
+          onSelectTemplate={(workflow) => {
+            onSelectWorkflow(workflow);
+            setShowTemplateLibrary(false);
+            onNotify?.('Template loaded successfully!', 'success');
+          }}
+        />
+
+        {/* Quick Start Wizard Modal */}
+        <QuickStartWizard
+          isOpen={showQuickStartWizard}
+          onClose={() => setShowQuickStartWizard(false)}
+          onCreate={(workflow) => {
+            onSelectWorkflow(workflow);
+            setShowQuickStartWizard(false);
+            onNotify?.('Workflow created with AI guidance!', 'success');
+          }}
+        />
       </div>
     </div>
   );
