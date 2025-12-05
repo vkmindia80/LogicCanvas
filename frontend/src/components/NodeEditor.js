@@ -598,6 +598,264 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
           </>
         )}
 
+        {/* Timer Node */}
+        {node.data.type === NODE_TYPES.TIMER && (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Timer Type
+              </label>
+              <select
+                value={timerType}
+                onChange={(e) => setTimerType(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                data-testid="timer-type"
+              >
+                <option value="delay">Delay</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="timeout">Timeout</option>
+              </select>
+            </div>
+
+            {timerType === 'delay' && (
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Hours
+                  </label>
+                  <input
+                    type="number"
+                    value={delayHours}
+                    onChange={(e) => setDelayHours(e.target.value)}
+                    min="0"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="0"
+                    data-testid="timer-delay-hours"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Minutes
+                  </label>
+                  <input
+                    type="number"
+                    value={delayMinutes}
+                    onChange={(e) => setDelayMinutes(e.target.value)}
+                    min="0"
+                    max="59"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="0"
+                    data-testid="timer-delay-minutes"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Seconds
+                  </label>
+                  <input
+                    type="number"
+                    value={delaySeconds}
+                    onChange={(e) => setDelaySeconds(e.target.value)}
+                    min="0"
+                    max="59"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="0"
+                    data-testid="timer-delay-seconds"
+                  />
+                </div>
+              </div>
+            )}
+
+            {timerType === 'scheduled' && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Scheduled Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={scheduledTime}
+                  onChange={(e) => setScheduledTime(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  data-testid="timer-scheduled-time"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  Or use cron expression for recurring schedules
+                </p>
+              </div>
+            )}
+
+            {timerType === 'timeout' && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Timeout (hours)
+                </label>
+                <input
+                  type="number"
+                  value={timeoutHours}
+                  onChange={(e) => setTimeoutHours(e.target.value)}
+                  min="1"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="24"
+                  data-testid="timer-timeout-hours"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  SLA timeout for tracking purposes
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Subprocess Node */}
+        {node.data.type === NODE_TYPES.SUBPROCESS && (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Select Subprocess Workflow
+              </label>
+              <select
+                value={subprocessWorkflowId}
+                onChange={(e) => setSubprocessWorkflowId(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                data-testid="subprocess-workflow-id"
+              >
+                <option value="">-- Select a workflow --</option>
+                {workflows.map((wf) => (
+                  <option key={wf.id} value={wf.id}>
+                    {wf.name}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-xs text-slate-500">
+                This workflow will be executed as a subprocess
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Input Mapping (JSON)
+              </label>
+              <textarea
+                value={inputMapping}
+                onChange={(e) => setInputMapping(e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
+                placeholder='{"subprocess_var": "parent_var"}'
+                data-testid="subprocess-input-mapping"
+              />
+              <p className="mt-1 text-xs text-slate-500">
+                Map parent workflow variables to subprocess input
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Output Mapping (JSON)
+              </label>
+              <textarea
+                value={outputMapping}
+                onChange={(e) => setOutputMapping(e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
+                placeholder='{"parent_var": "subprocess_output"}'
+                data-testid="subprocess-output-mapping"
+              />
+              <p className="mt-1 text-xs text-slate-500">
+                Map subprocess output to parent workflow variables
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Event Node */}
+        {node.data.type === NODE_TYPES.EVENT && (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Event Type
+              </label>
+              <select
+                value={eventType}
+                onChange={(e) => setEventType(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                data-testid="event-type"
+              >
+                <option value="message">Message</option>
+                <option value="signal">Signal</option>
+                <option value="error">Error</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Event Action
+              </label>
+              <select
+                value={eventAction}
+                onChange={(e) => setEventAction(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                data-testid="event-action"
+              >
+                <option value="send">Send/Throw</option>
+                <option value="receive">Receive/Catch</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Event Name
+              </label>
+              <input
+                type="text"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="event.name"
+                data-testid="event-name"
+              />
+              <p className="mt-1 text-xs text-slate-500">
+                Unique identifier for this event
+              </p>
+            </div>
+
+            {(eventAction === 'send' || eventAction === 'throw') && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Event Payload (JSON)
+                </label>
+                <textarea
+                  value={eventPayload}
+                  onChange={(e) => setEventPayload(e.target.value)}
+                  rows={4}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
+                  placeholder='{"key": "value"}'
+                  data-testid="event-payload"
+                />
+              </div>
+            )}
+
+            {(eventAction === 'receive' || eventAction === 'catch') && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Timeout (hours)
+                </label>
+                <input
+                  type="number"
+                  value={timeoutHours}
+                  onChange={(e) => setTimeoutHours(e.target.value)}
+                  min="1"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="24"
+                  data-testid="event-timeout-hours"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  How long to wait for the event before timing out
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
         {/* Node ID */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
