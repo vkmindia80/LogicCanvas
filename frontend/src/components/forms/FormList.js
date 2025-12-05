@@ -24,6 +24,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch forms:', error);
+      onNotify?.('Failed to fetch forms', 'error');
       setLoading(false);
     }
   };
