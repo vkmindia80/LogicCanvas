@@ -208,31 +208,33 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
   }, [workflows]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="mb-1 text-3xl font-bold text-slate-900">Workflows</h1>
-            <p className="text-slate-600">Create and manage your visual workflows</p>
+            <h1 className="mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
+              Workflows
+            </h1>
+            <p className="text-lg text-slate-600">Create and manage your visual workflows</p>
           </div>
           {can('createWorkflows') && (
-            <div className="hidden items-center space-x-2 md:flex">
+            <div className="hidden items-center space-x-3 md:flex">
               <button
                 onClick={onCreateNew}
-                className="flex items-center space-x-2 rounded-lg bg-primary-500 px-6 py-2 text-white shadow-sm transition-colors hover:bg-primary-600"
+                className="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
                 data-testid="create-workflow-btn"
               >
                 <Plus className="h-5 w-5" />
-                <span className="font-medium">Create Workflow</span>
+                <span className="font-semibold">Create Workflow</span>
               </button>
               <button
                 onClick={onLoadRecruitingSample}
-                className="flex items-center space-x-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm text-white shadow-sm transition-colors hover:bg-emerald-600"
+                className="flex items-center space-x-2 rounded-xl border-2 border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-medium text-emerald-700 transition-all hover:bg-emerald-100"
                 data-testid="load-recruiting-sample-btn"
               >
                 <FileText className="h-4 w-4" />
-                <span>Load Recruiting Template</span>
+                <span>Load Template</span>
               </button>
             </div>
           )}
