@@ -31,16 +31,26 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
 
   const handleDelete = async (formId, e) => {
     e.stopPropagation();
+    if (!can('deleteForms')) {
+      onNotify?.('You do not have permission to delete forms.', 'error');
+      return;
+    }
     if (!window.confirm('Are you sure you want to delete this form?')) return;
 
     try {
-      await fetch(`${BACKEND_URL}/api/forms/${formId}`, {
-        method: 'DELETE'
+      const res = await fetch(`${BACKEND_URL}/api/forms/${formId}`, {
+        method: 'DELETE',
       });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        onNotify?.(body.detail || 'Failed to delete form', 'error');
+        return;
+      }
+      onNotify?.('Form deleted', 'success');
       fetchForms();
     } catch (error) {
       console.error('Failed to delete form:', error);
-      alert('Failed to delete form');
+      onNotify?.('Failed to delete form', 'error');
     }
   };
 
