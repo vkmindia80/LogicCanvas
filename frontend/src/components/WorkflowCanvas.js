@@ -704,7 +704,20 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                           }}
                           className="text-xs text-blue-600 hover:text-blue-800 mt-1"
                           data-testid="validation-go-to-node-btn"
-      {/* Designer Capabilities Panel */}
+                        >
+                          Go to node
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Designer Capabilities Panel */
       {showCapabilitiesPanel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col" data-testid="designer-capabilities-panel">
