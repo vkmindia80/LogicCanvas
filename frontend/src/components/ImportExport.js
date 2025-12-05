@@ -30,11 +30,11 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
-      alert(`Successfully exported ${data.count} workflow(s)`);
+
+      onNotify?.(`Successfully exported ${data.count} workflow(s)`, 'success');
     } catch (error) {
       console.error('Export failed:', error);
-      alert('Failed to export workflows');
+      onNotify?.('Failed to export workflows', 'error');
     } finally {
       setExporting(false);
     }
