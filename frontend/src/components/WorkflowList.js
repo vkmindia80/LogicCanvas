@@ -241,11 +241,19 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
         </div>
 
         {/* Status chips */}
-        <div className="mb-4 flex flex-wrap gap-2 text-xs text-slate-600">
-          <span className="rounded-full bg-slate-100 px-3 py-1">Draft: {statusCounts.draft}</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1">Published: {statusCounts.published}</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1">Paused: {statusCounts.paused}</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1">Archived: {statusCounts.archived}</span>
+        <div className="mb-6 flex flex-wrap gap-3 text-sm">
+          <div className="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-2 font-medium text-yellow-700">
+            <span className="text-yellow-900">Draft:</span> {statusCounts.draft}
+          </div>
+          <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-2 font-medium text-green-700">
+            <span className="text-green-900">Published:</span> {statusCounts.published}
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-100 px-4 py-2 font-medium text-slate-700">
+            <span className="text-slate-900">Paused:</span> {statusCounts.paused}
+          </div>
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 font-medium text-red-700">
+            <span className="text-red-900">Archived:</span> {statusCounts.archived}
+          </div>
         </div>
 
         {/* Action Bar */}
