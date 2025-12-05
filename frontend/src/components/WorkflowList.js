@@ -276,7 +276,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-transparent focus:ring-2 focus:ring-primary-500"
+                className="rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 data-testid="workflow-filter"
               >
                 <option value="all">All Status</option>
