@@ -132,7 +132,7 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 inline-flex w-full items-center justify-center space-x-2 rounded-lg bg-primary-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-primary-500/30 transition hover:bg-primary-600 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="mt-2 inline-flex w-full items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-3 text-sm font-bold text-white shadow-xl shadow-primary-500/40 transition-all hover:shadow-2xl hover:shadow-primary-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
             data-testid="login-submit-btn"
           >
             {loading ? (
