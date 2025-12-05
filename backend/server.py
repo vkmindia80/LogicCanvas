@@ -570,11 +570,10 @@ async def get_form(form_id: str):
         raise HTTPException(status_code=404, detail="Form not found")
     return form
 
-# Ensure indexes for auth & RBAC related collections
+# Ensure indexes for auth & RBAC related collections and seed demo users
 users_collection.create_index("email", unique=True)
 roles_collection.create_index("name", unique=True)
 
-# Seed an initial admin/builder/demo user set for auto-login and RBAC demos
 AUTO_USERS = [
     {
         "email": "admin@example.com",
