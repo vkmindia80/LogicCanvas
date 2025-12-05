@@ -574,7 +574,7 @@ const AppShell = () => {
             <div className="relative">
               <button
                 onClick={handleBackToList}
-                className="absolute left-4 top-4 z-10 flex items-center space-x-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-700 shadow-md transition-colors hover:bg-slate-50"
+                className="absolute left-4 top-4 z-10 flex items-center space-x-2 rounded-lg border-2 border-slate-300 bg-white px-4 py-2 text-slate-700 shadow-lg hover:shadow-xl transition-all hover:bg-slate-50 font-medium"
                 data-testid="back-to-list-btn"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -582,7 +582,12 @@ const AppShell = () => {
                 </svg>
                 <span>Back to Workflows</span>
               </button>
-              <WorkflowCanvas workflow={currentWorkflow} onSave={handleSaveWorkflow} />
+              <WorkflowCanvas 
+                workflow={currentWorkflow} 
+                onSave={handleSaveWorkflow}
+                showTemplates={() => setShowTemplateLibrary(true)}
+                showWizard={() => setShowQuickStartWizard(true)}
+              />
             </div>
           )}
 
