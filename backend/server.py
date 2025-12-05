@@ -566,6 +566,48 @@ async def get_forms():
 @app.get("/api/forms/{form_id}")
 async def get_form(form_id: str):
     form = forms_collection.find_one({"id": form_id}, {"_id": 0})
+# Ensure indexes for auth & RBAC related collections
+users_collection.create_index("email", unique=True)
+roles_collection.create_index("name", unique=True)
+
+# Seed an initial admin/builder/demo user set for auto-login and RBAC demos
+AUTO_USERS = [
+    {
+        "email": "admin@example.com",
+        "name": "Admin User",
+        "role": "admin",
+        "password": "admin123",
+    },
+    {
+        "email": "builder@example.com",
+        "name": "Builder User",
+        "role": "builder",
+        "password": "builder123",
+    },
+    {
+        "email": "approver@example.com",
+        "name": "Approver User",
+        "role": "approver",
+        "password": "approver123",
+    },
+]
+
+for u in AUTO_USERS:
+    existing = users_collection.find_one({"email": u["email"]})
+    if not existing:
+        users_collection.insert_one(
+            {
+                "id": str(uuid.uuid4()),
+                "email": u["email"],
+                "name": u["name"],
+                "role": u["role"],
+                "password_hash": get_password_hash(u["password"]),
+                "workload": 0,
+                "created_at": datetime.utcnow().isoformat(),
+            }
+        )
+
+
     if not form:
         raise HTTPException(status_code=404, detail="Form not found")
     return form
