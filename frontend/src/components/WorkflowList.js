@@ -488,47 +488,52 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
                   {/* Actions */}
                   <div className="flex items-center space-x-1 border-t border-slate-100 pt-4 text-xs">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectWorkflow(workflow);
-                      }}
-                      className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-primary-600 transition-colors hover:bg-primary-50"
-                      data-testid="workflow-edit-btn"
-                    >
-                      <Edit className="h-4 w-4" />
-                      <span className="font-medium">Edit</span>
-                    </button>
+                    <Tooltip content="Open workflow in canvas editor" position="top">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectWorkflow(workflow);
+                        }}
+                        className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-primary-600 transition-colors hover:bg-primary-50"
+                        data-testid="workflow-edit-btn"
+                      >
+                        <Edit className="h-4 w-4" />
+                        <span className="font-medium">Edit</span>
+                      </button>
+                    </Tooltip>
 
                     {can('duplicateWorkflows') && (
-                      <button
-                        onClick={(e) => duplicateWorkflow(workflow.id, e)}
-                        className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-blue-600 transition-colors hover:bg-blue-50"
-                        title="Duplicate"
-                      >
-                        <Copy className="h-4 w-4" />
-                        <span className="font-medium">Copy</span>
-                      </button>
+                      <Tooltip content="Create a copy of this workflow" position="top">
+                        <button
+                          onClick={(e) => duplicateWorkflow(workflow.id, e)}
+                          className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-blue-600 transition-colors hover:bg-blue-50"
+                        >
+                          <Copy className="h-4 w-4" />
+                          <span className="font-medium">Copy</span>
+                        </button>
+                      </Tooltip>
                     )}
 
-                    <button
-                      onClick={(e) => openVersionHistory(workflow.id, e)}
-                      className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-purple-600 transition-colors hover:bg-purple-50"
-                      title="Version History"
-                    >
-                      <Clock className="h-4 w-4" />
-                      <span className="font-medium">Versions</span>
-                    </button>
+                    <Tooltip content="View and restore previous versions" position="top">
+                      <button
+                        onClick={(e) => openVersionHistory(workflow.id, e)}
+                        className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-purple-600 transition-colors hover:bg-purple-50"
+                      >
+                        <Clock className="h-4 w-4" />
+                        <span className="font-medium">Versions</span>
+                      </button>
+                    </Tooltip>
 
                     {can('deleteWorkflows') && (
-                      <button
-                        onClick={(e) => deleteWorkflow(workflow.id, e)}
-                        className="flex items-center justify-center rounded px-2 py-2 text-red-600 transition-colors hover:bg-red-50"
-                        data-testid="workflow-delete-btn"
-                        title="Delete"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      <Tooltip content="Permanently delete this workflow" position="top">
+                        <button
+                          onClick={(e) => deleteWorkflow(workflow.id, e)}
+                          className="flex items-center justify-center rounded px-2 py-2 text-red-600 transition-colors hover:bg-red-50"
+                          data-testid="workflow-delete-btn"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </Tooltip>
                     )}
                   </div>
 
