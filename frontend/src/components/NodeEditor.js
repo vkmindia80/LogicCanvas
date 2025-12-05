@@ -55,6 +55,31 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     }
   }, [node]);
 
+  const loadForms = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/forms`);
+      const data = await response.json();
+      setForms(data.forms || []);
+    } catch (error) {
+      console.error('Failed to load forms:', error);
+    }
+  };
+
+  const loadRolesAndUsers = async () => {
+    try {
+      const [rolesRes, usersRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/roles`),
+        fetch(`${BACKEND_URL}/api/users`)
+      ]);
+      const rolesData = await rolesRes.json();
+      const usersData = await usersRes.json();
+      setRoles(rolesData.roles || []);
+      setUsers(usersData.users || []);
+    } catch (error) {
+      console.error('Failed to load roles/users:', error);
+    }
+  };
+
   useEffect(() => {
     if (node?.data?.type === NODE_TYPES.FORM) {
       loadForms();
@@ -64,7 +89,6 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     }
   }, [node]);
 
-  const loadForms = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/forms`);
       const data = await response.json();
