@@ -428,12 +428,12 @@ Building a fully-featured, enterprise-grade Visual Workflow Builder with:
 - Interactive tooltips and legends
 
 ### What's NOT Built Yet:
-❌ Workflow versioning UI
-❌ RBAC permissions system
-❌ Import/export functionality
-❌ Global search
-❌ Onboarding walkthrough
-❌ Workflow timeline component (deferred from Phase 6)
+❌ Backend-enforced RBAC permissions and multi-tenant workspaces
+✅ Workflow versioning UI (VersionHistory modal + backend endpoints)
+✅ Import/export functionality (ImportExport modal + /api/workflows/export|import)
+✅ Global search (GlobalSearch modal + /api/search endpoint)
+✅ Onboarding walkthrough (OnboardingTour overlay component)
+❌ Workflow timeline visualization component (deferred from Phase 6)
 
 ---
 
