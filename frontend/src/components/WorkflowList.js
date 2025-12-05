@@ -233,12 +233,20 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                 <span className="font-semibold">Create Workflow</span>
               </button>
               <button
-                onClick={onLoadRecruitingSample}
-                className="flex items-center space-x-2 rounded-xl border-2 border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-medium text-emerald-700 transition-all hover:bg-emerald-100"
-                data-testid="load-recruiting-sample-btn"
+                onClick={() => setShowQuickStartWizard(true)}
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-amber-500/30"
+                data-testid="quick-start-wizard-btn"
               >
-                <FileText className="h-4 w-4" />
-                <span>Load Template</span>
+                <Zap className="h-4 w-4" />
+                <span>Quick Start</span>
+              </button>
+              <button
+                onClick={() => setShowTemplateLibrary(true)}
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-purple-500/30"
+                data-testid="template-library-btn"
+              >
+                <BookOpen className="h-4 w-4" />
+                <span>Templates</span>
               </button>
             </div>
           )}
