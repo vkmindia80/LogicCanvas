@@ -776,3 +776,68 @@ high-level KPIs:
 Tracking these KPIs alongside the phase-based roadmap will ensure LogicCanvas evolves into a
 platform that is **simpler to adopt**, **more reliable to operate**, and **more intelligent** than
 ProcessMaker for both internal approval workflows and broader BPM use cases.
+
+
+---
+
+## 🏁 Competitive Capability Matrix: LogicCanvas vs ProcessMaker
+
+This matrix summarizes how LogicCanvas relates to the main ProcessMaker products and features
+(ProcessMaker Platform, ProcessMaker IDP, AI Genies) and how the roadmap phases A–D evolve it
+beyond parity.
+
+| Capability Area | ProcessMaker (Today) | LogicCanvas (Today – Phases 1–6) | LogicCanvas Roadmap Advantage |
+|-----------------|----------------------|------------------------------------|-------------------------------|
+| **Process Modeling** | BPMN 2.0 designer for business analysts | Visual workflow canvas with core node types, execution engine, auto-layout | Phase A: BPMN-minded primitives, templates, wizards → **faster to usable workflow** for non-experts |
+| **Case / Task Mgmt** | Rich task queues, SLAs, approvals | Completed Task Inbox, Approval Queue, SLAs, auto-escalation | Continue simplifying UX, add RBAC & lifecycle → **less configuration, same power** |
+| **Forms & Data** | Form designer, data model tools | Form builder with 19 field types, conditional logic, validation | AI-assisted form design & templates → **faster and smarter form creation** (Phase C) |
+| **Analytics & Reporting** | Built-in reports, dashboards | Full analytics dashboard (throughput, SLA, nodes, users) with 11 endpoints | Auto-optimization engine recommending changes → **analytics that act, not just show** (Phase C) |
+| **Integrations Hub** | Integration framework & connectors | Webhooks, HTTP action nodes, triggers | Dedicated Integration Hub, key connectors, public API & API keys → **cleaner, opinionated integration story** (Phase A/D) |
+| **Document Automation (IDP)** | IDP product: OCR, extraction, classification | Document-aware workflows not yet implemented | Deeply embedded IDP (intake nodes, bundles, schemas, review queues, compliance) → **IDP as a first-class workflow primitive** (Phase B) |
+| **AI Assistance** | AI Genies for documentation, process automation help | No AI assistance yet | AI co-pilot for modeling/rules/forms, runtime AI, auto-optimization → **AI-native platform, not bolt-on AI** (Phase C) |
+| **Rules & Decisions** | Decision tables, multi-hit policies | Expression-based decisions implemented | Visual decision tables + AI-assisted rule authoring → **faster simple & complex policy design** (Phase A/C) |
+| **Governance & RBAC** | Mature RBAC, environments, admin console | Audit logs, notifications, roles conceptually present | RBAC, workspaces, environments, promotion workflows → **governance by design** (Phase A/D) |
+| **Extensibility & Ecosystem** | Plugins, connectors, partner ecosystem | Strong but closed implementation | Extension model + marketplace, SDKs → **modern, developer-friendly extension story** (Phase D) |
+
+---
+
+## 🌟 Core Product Principles & Differentiators
+
+To keep LogicCanvas “the BEST” relative to ProcessMaker, all roadmap decisions should adhere to
+the following principles:
+
+1. **Opinionated Simplicity**
+   - Always ship **curated templates** and sensible defaults before exposing raw configuration.
+   - Minimize the number of concepts a new builder must learn: canvas, forms, tasks/approvals,
+     SLAs, documents.
+   - Prefer guided wizards and AI co-pilot flows over deep settings pages.
+
+2. **AI-Native, Not AI-Decorated**
+   - AI should **design with the user**, not merely assist from the sidelines.
+   - Use AI for: modeling, forms, rules, routing, exception handling, and optimization.
+   - Provide explanations and simulations so AI-driven changes remain trustworthy.
+
+3. **Document-First for Approval Workflows**
+   - Assume many high-value workflows are document-heavy: invoices, contracts, KYC, HR files.
+   - Make it trivial to move from “email & attachments” to **IDP-powered** workflows.
+   - Treat documents, extracted data, and approvals as first-class citizens across UX and APIs.
+
+4. **Governance by Default**
+   - RBAC, audit logs, environments, and promotion flows should feel like part of normal usage,
+     not afterthoughts.
+   - Every critical action should leave a meaningful audit trail.
+   - Changes to production workflows should naturally pass through review/approval.
+
+5. **Analytics that Drive Action**
+   - Analytics features must always answer: *“What should I do next?”*
+   - Tie metrics to recommendations, simulations, and one-click changes where safe.
+   - Ship pre-built optimization playbooks (e.g., “reduce approval chain length”, “parallelize
+     low-risk steps”).
+
+6. **Extensible, But Safe for Non-Developers**
+   - Developers get extensibility via nodes, templates, and SDKs.
+   - Business users remain shielded from complexity with templates, wizards, and AI guidance.
+
+By grounding implementation work in these principles and measuring progress with the KPIs defined
+above, LogicCanvas can evolve into a **simpler, more robust, and more advanced** alternative to
+ProcessMaker for both internal approval flows and broader BPM use cases.
