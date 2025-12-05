@@ -7,9 +7,10 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 from pymongo.collection import Collection
 
+
 class ExpressionEvaluator:
     """Evaluate expressions with workflow variables"""
-    
+
     @staticmethod
     def evaluate(expression: str, variables: Dict[str, Any]) -> Any:
         """Safely evaluate expressions with variables"""
@@ -17,61 +18,62 @@ class ExpressionEvaluator:
             # Simple variable substitution: ${variable}
             for var_name, var_value in variables.items():
                 expression = expression.replace(f"${{{var_name}}}", str(var_value))
-            
+
             # Safe evaluation for basic comparisons
             # Support: ==, !=, >, <, >=, <=, and, or, not
             # Replace common operators
             expression = expression.replace(" and ", " and ").replace(" or ", " or ")
-            
+
             # For simple boolean checks
-            if expression.lower() in ['true', 'yes', '1']:
+            if expression.lower() in ["true", "yes", "1"]:
                 return True
-            if expression.lower() in ['false', 'no', '0']:
+            if expression.lower() in ["false", "no", "0"]:
                 return False
-            
+
             # Try to evaluate safely
             # This is a simplified evaluator - production would use ast.literal_eval or similar
             try:
                 result = eval(expression, {"__builtins__": {}}, variables)
                 return result
-            except:
+            except Exception:
                 return expression
         except Exception as e:
             print(f"Expression evaluation error: {e}")
             return expression
 
+
 class NodeExecutor:
     """Execute individual workflow nodes"""
-    
+
     def __init__(self, db, instance_id: str, variables: Dict[str, Any]):
         self.db = db
         self.instance_id = instance_id
         self.variables = variables
         self.evaluator = ExpressionEvaluator()
-    
+
     def execute_start_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute start node"""
         return {"status": "completed", "output": {"started": True}}
-    
+
     def execute_task_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute task node - creates a task with assignment strategy and SLA"""
         task_data = node.get("data", {})
-        
+
         task_id = str(uuid.uuid4())
         now = datetime.utcnow()
-        
+
         # Calculate due date based on SLA hours
         due_in_hours = task_data.get("dueInHours", 24)
         due_date = (now + timedelta(hours=due_in_hours)).isoformat()
-        
+
         # Determine assignee based on strategy
         assignment_strategy = task_data.get("assignmentStrategy", "direct")
         assigned_to = task_data.get("assignedTo")
         assignment_role = task_data.get("assignmentRole")
-        
+
         # For non-direct strategies, we'll assign when the task is created
         # The actual assignment will be done via the API endpoint
-        
+
         task = {
             "id": task_id,
             "workflow_instance_id": self.instance_id,
@@ -86,67 +88,67 @@ class NodeExecutor:
             "due_date": due_date,
             "sla_hours": due_in_hours,
             "created_at": now.isoformat(),
-            "updated_at": now.isoformat()
+            "updated_at": now.isoformat(),
         }
-        
-        self.db['tasks'].insert_one(task)
-        
+
+        self.db["tasks"].insert_one(task)
+
         # If using role-based assignment, auto-assign now
         if assignment_strategy != "direct" and assignment_role:
             self._auto_assign_task(task_id, assignment_strategy, assignment_role)
-        
+
         # Return waiting status - execution will resume when task is completed
         return {"status": "waiting", "waiting_for": "task", "task_id": task_id}
-    
+
     def _auto_assign_task(self, task_id: str, strategy: str, role: str):
         """Auto-assign task based on strategy"""
-        role_doc = self.db['roles'].find_one({"name": role})
+        role_doc = self.db["roles"].find_one({"name": role})
         if not role_doc or not role_doc.get("members"):
             return
-        
+
         members = role_doc["members"]
         assignee = None
-        
+
         if strategy == "role":
             # First available in role
             assignee = members[0]
-        
+
         elif strategy == "round_robin":
             # Simple round-robin using task count
-            task_count = self.db['tasks'].count_documents({})
+            task_count = self.db["tasks"].count_documents({})
             assignee = members[task_count % len(members)]
-        
+
         elif strategy == "load_balanced":
             # Get user with lowest workload
-            users = list(self.db['users'].find({"email": {"$in": members}}).sort("workload", 1))
+            users = list(self.db["users"].find({"email": {"$in": members}}).sort("workload", 1))
             if users:
                 assignee = users[0]["email"]
-                self.db['users'].update_one({"email": assignee}, {"$inc": {"workload": 1}})
-        
+                self.db["users"].update_one({"email": assignee}, {"$inc": {"workload": 1}})
+
         if assignee:
-            self.db['tasks'].update_one(
+            self.db["tasks"].update_one(
                 {"id": task_id},
-                {"$set": {"assigned_to": assignee, "assigned_at": datetime.utcnow().isoformat()}}
+                {"$set": {"assigned_to": assignee, "assigned_at": datetime.utcnow().isoformat()}},
             )
-    
+
     def execute_decision_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute decision node - evaluate condition"""
         node_data = node.get("data", {})
         condition = node_data.get("condition", "true")
-        
+
         # Evaluate condition
         result = self.evaluator.evaluate(condition, self.variables)
-        
+
         return {
             "status": "completed",
             "output": {"decision": bool(result), "condition": condition},
-            "route": "true" if result else "false"
+            "route": "true" if result else "false",
         }
-    
+
     def execute_approval_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute approval node - creates approval and waits"""
         approval_data = node.get("data", {})
-        
+
         approval_id = str(uuid.uuid4())
         approval = {
             "id": approval_id,
@@ -159,46 +161,45 @@ class NodeExecutor:
             "status": "pending",
             "decisions": [],
             "created_at": datetime.utcnow().isoformat(),
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.utcnow().isoformat(),
         }
-        
-        self.db['approvals'].insert_one(approval)
-        
+
+        self.db["approvals"].insert_one(approval)
+
         return {"status": "waiting", "waiting_for": "approval", "approval_id": approval_id}
-    
+
     def execute_form_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute form node - presents form and waits for submission"""
         form_data = node.get("data", {})
         form_id = form_data.get("formId")
-        
+
         if not form_id:
             return {"status": "failed", "error": "No form configured"}
-        
+
         return {"status": "waiting", "waiting_for": "form", "form_id": form_id}
-    
+
     def execute_parallel_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute parallel node - fork execution"""
         return {"status": "completed", "output": {"forked": True}, "parallel": True}
-    
+
     def execute_merge_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute merge node - wait for all branches"""
         # Check if all incoming branches are completed
         return {"status": "completed", "output": {"merged": True}}
-    
+
     def execute_action_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute action node - HTTP call, webhook, script"""
         action_data = node.get("data", {})
         action_type = action_data.get("actionType", "http")
-        
+
         if action_type == "http":
             return self._execute_http_action(action_data)
-        elif action_type == "webhook":
+        if action_type == "webhook":
             return self._execute_webhook_action(action_data)
-        elif action_type == "script":
+        if action_type == "script":
             return self._execute_script_action(action_data)
-        else:
-            return {"status": "failed", "error": f"Unknown action type: {action_type}"}
-    
+        return {"status": "failed", "error": f"Unknown action type: {action_type}"}
+
     def _execute_http_action(self, action_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute HTTP request"""
         try:
@@ -207,21 +208,22 @@ class NodeExecutor:
             headers = action_data.get("headers", {})
             body = action_data.get("body", {})
             auth_type = action_data.get("authType")
-            
+
             # Substitute variables in URL and body
             url = self.evaluator.evaluate(url, self.variables)
             if isinstance(body, str):
                 body = self.evaluator.evaluate(body, self.variables)
-            
+
             # Add authentication
             if auth_type == "bearer":
                 token = action_data.get("token", "")
                 headers["Authorization"] = f"Bearer {token}"
+                auth = None
             elif auth_type == "basic":
                 auth = (action_data.get("username", ""), action_data.get("password", ""))
             else:
                 auth = None
-            
+
             # Make request
             response = requests.request(
                 method=method,
@@ -229,37 +231,40 @@ class NodeExecutor:
                 headers=headers,
                 json=body if method in ["POST", "PUT", "PATCH"] else None,
                 auth=auth,
-                timeout=30
+                timeout=30,
             )
-            
+
             return {
                 "status": "completed",
                 "output": {
                     "status_code": response.status_code,
                     "response": response.text[:1000],  # Limit response size
-                    "success": response.status_code < 400
-                }
+                    "success": response.status_code < 400,
+                },
             }
-        except Exception as e:
-            return {"status": "failed", "error": str(e)}
-    
+        except Exception as exc:  # noqa: BLE001
+            return {"status": "failed", "error": str(exc)}
+
     def _execute_webhook_action(self, action_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute webhook"""
+        """Execute webhook (same as HTTP action)"""
         return self._execute_http_action(action_data)
-    
+
     def _execute_script_action(self, action_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute script (simplified - just store for now)"""
         script = action_data.get("script", "")
-        return {"status": "completed", "output": {"script_executed": True, "script": script[:100]}}
-    
+        return {
+            "status": "completed",
+            "output": {"script_executed": True, "script": script[:100]},
+        }
+
     def execute_end_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute end node"""
         return {"status": "completed", "output": {"ended": True}}
-    
+
     def execute_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a node based on its type"""
         node_type = node.get("type", "")
-        
+
         executors = {
             "start": self.execute_start_node,
             "task": self.execute_task_node,
@@ -269,52 +274,61 @@ class NodeExecutor:
             "parallel": self.execute_parallel_node,
             "merge": self.execute_merge_node,
             "action": self.execute_action_node,
-            "end": self.execute_end_node
+            "end": self.execute_end_node,
         }
-        
+
         executor = executors.get(node_type)
         if executor:
             return executor(node)
-        else:
-            return {"status": "failed", "error": f"Unknown node type: {node_type}"}
+        return {"status": "failed", "error": f"Unknown node type: {node_type}"}
+
 
 class WorkflowExecutionEngine:
     """Main workflow execution engine"""
-    
+
     def __init__(self, db):
         self.db = db
-    
-    def start_execution(self, workflow_id: str, triggered_by: str = "manual", input_data: Dict[str, Any] = None) -> str:
+
+    def start_execution(
+        self,
+        workflow_id: str,
+        triggered_by: str = "manual",
+        input_data: Optional[Dict[str, Any]] = None,
+    ) -> str:
         """Start a new workflow execution"""
         # Get workflow definition
-        workflow = self.db['workflows'].find_one({"id": workflow_id}, {"_id": 0})
+        workflow = self.db["workflows"].find_one({"id": workflow_id}, {"_id": 0})
         if not workflow:
             raise ValueError(f"Workflow {workflow_id} not found")
-        
+
         # Create workflow instance
         instance_id = str(uuid.uuid4())
+        now_iso = datetime.utcnow().isoformat()
         instance = {
             "id": instance_id,
             "workflow_id": workflow_id,
             "status": "running",
             "triggered_by": triggered_by,
-            "started_at": datetime.utcnow().isoformat(),
-            "updated_at": datetime.utcnow().isoformat(),
+            "started_at": now_iso,
+            "updated_at": now_iso,
             "completed_at": None,
             "current_node_id": None,
             "variables": input_data or {},
             "execution_history": [],
-            "node_states": {}  # Track state of each node
+            # New: normalized execution log used by analytics endpoints
+            "execution_log": [],
+            # Per-node status map
+            "node_states": {},
         }
-        
-        self.db['workflow_instances'].insert_one(instance)
-        
+
+        self.db["workflow_instances"].insert_one(instance)
+
         # Start execution from start node
         self._execute_from_start(instance_id, workflow)
-        
+
         return instance_id
-    
-    def _execute_from_start(self, instance_id: str, workflow: Dict[str, Any]):
+
+    def _execute_from_start(self, instance_id: str, workflow: Dict[str, Any]) -> None:
         """Execute workflow from start node"""
         # Find start node
         start_node = None
@@ -322,75 +336,97 @@ class WorkflowExecutionEngine:
             if node.get("type") == "start":
                 start_node = node
                 break
-        
+
         if not start_node:
             self._update_instance_status(instance_id, "failed", "No start node found")
             return
-        
+
         # Execute from start node
         self._execute_node(instance_id, start_node, workflow)
-    
-    def _execute_node(self, instance_id: str, node: Dict[str, Any], workflow: Dict[str, Any]):
+
+    def _execute_node(self, instance_id: str, node: Dict[str, Any], workflow: Dict[str, Any]) -> None:
         """Execute a single node and continue to next"""
-        instance = self.db['workflow_instances'].find_one({"id": instance_id}, {"_id": 0})
+        instance = self.db["workflow_instances"].find_one({"id": instance_id}, {"_id": 0})
         if not instance:
             return
-        
-        # Update current node
-        self.db['workflow_instances'].update_one(
+
+        node_id = node["id"]
+        node_type = node.get("type")
+
+        # Mark current node on instance
+        now_iso = datetime.utcnow().isoformat()
+        self.db["workflow_instances"].update_one(
             {"id": instance_id},
-            {"$set": {"current_node_id": node["id"], "updated_at": datetime.utcnow().isoformat()}}
+            {"$set": {"current_node_id": node_id, "updated_at": now_iso}},
         )
-        
-        # Execute node
+
+        # Execute node and measure timing for analytics
+        started_at = datetime.utcnow().isoformat()
         executor = NodeExecutor(self.db, instance_id, instance.get("variables", {}))
         result = executor.execute_node(node)
-        
-        # Record execution history
+        completed_at = datetime.utcnow().isoformat()
+
+        status = result.get("status")
+
+        # Record execution history (back-compat) and normalized execution_log
         history_entry = {
-            "node_id": node["id"],
-            "node_type": node.get("type"),
-            "timestamp": datetime.utcnow().isoformat(),
-            "result": result
+            "node_id": node_id,
+            "node_type": node_type,
+            "timestamp": completed_at,
+            "result": result,
         }
-        
-        self.db['workflow_instances'].update_one(
+
+        log_entry = {
+            "node_id": node_id,
+            "node_type": node_type,
+            "status": status,
+            "started_at": started_at,
+            "completed_at": completed_at,
+            "error": result.get("error"),
+        }
+
+        self.db["workflow_instances"].update_one(
             {"id": instance_id},
             {
-                "$push": {"execution_history": history_entry},
-                "$set": {f"node_states.{node['id']}": result.get("status")}
-            }
+                "$push": {"execution_history": history_entry, "execution_log": log_entry},
+                "$set": {f"node_states.{node_id}": status},
+            },
         )
-        
+
         # Handle result
-        if result.get("status") == "completed":
+        if status == "completed":
             # Update variables with output
             if "output" in result:
-                self.db['workflow_instances'].update_one(
+                self.db["workflow_instances"].update_one(
                     {"id": instance_id},
-                    {"$set": {f"variables.{node['id']}": result["output"]}}
+                    {"$set": {f"variables.{node_id}": result["output"]}},
                 )
-            
+
             # Check if this is an end node
-            if node.get("type") == "end":
+            if node_type == "end":
                 self._update_instance_status(instance_id, "completed")
                 return
-            
+
             # Find next node(s)
             next_nodes = self._get_next_nodes(node, workflow, result.get("route"))
-            
+
             # Execute next nodes
             for next_node in next_nodes:
                 self._execute_node(instance_id, next_node, workflow)
-        
-        elif result.get("status") == "waiting":
+
+        elif status == "waiting":
             # Node is waiting for external input (task, approval, form)
             self._update_instance_status(instance_id, "waiting")
-        
-        elif result.get("status") == "failed":
+
+        elif status == "failed":
             self._update_instance_status(instance_id, "failed", result.get("error"))
-    
-    def _get_next_nodes(self, current_node: Dict[str, Any], workflow: Dict[str, Any], route: Optional[str] = None) -> List[Dict[str, Any]]:
+
+    def _get_next_nodes(
+        self,
+        current_node: Dict[str, Any],
+        workflow: Dict[str, Any],
+        route: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """Get next nodes based on edges.
 
         Supports:
@@ -398,6 +434,7 @@ class WorkflowExecutionEngine:
         - Backwards compatibility with label-based routing for existing workflows
         - Fan-out for parallel gateways (all outgoing edges)
         """
+
         next_nodes: List[Dict[str, Any]] = []
         current_node_id = current_node.get("id")
         node_type = current_node.get("type")
@@ -426,11 +463,31 @@ class WorkflowExecutionEngine:
                     edge_label = (edge.get("label") or "").lower()
                     if desired_handle == "yes":
                         # Treat yes/true/approve/shortlist as positive branch
-                        if not any(k in edge_label for k in ["yes", "true", "approve", "approved", "shortlist", "accept"]):
+                        if not any(
+                            k in edge_label
+                            for k in [
+                                "yes",
+                                "true",
+                                "approve",
+                                "approved",
+                                "shortlist",
+                                "accept",
+                            ]
+                        ):
                             continue
                     else:
                         # Treat no/false/reject/decline as negative branch
-                        if not any(k in edge_label for k in ["no", "false", "reject", "rejected", "decline", "fail"]):
+                        if not any(
+                            k in edge_label
+                            for k in [
+                                "no",
+                                "false",
+                                "reject",
+                                "rejected",
+                                "decline",
+                                "fail",
+                            ]
+                        ):
                             continue
 
             # For non-decision nodes, we currently ignore `route` and simply
@@ -447,61 +504,64 @@ class WorkflowExecutionEngine:
                     break
 
         return next_nodes
-    
-    def _update_instance_status(self, instance_id: str, status: str, error: Optional[str] = None):
+
+    def _update_instance_status(self, instance_id: str, status: str, error: Optional[str] = None) -> None:
         """Update workflow instance status"""
-        update_data = {
+        update_data: Dict[str, Any] = {
             "status": status,
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.utcnow().isoformat(),
         }
-        
+
         if status in ["completed", "failed", "cancelled"]:
             update_data["completed_at"] = datetime.utcnow().isoformat()
-        
+
         if error:
             update_data["error"] = error
-        
-        self.db['workflow_instances'].update_one(
-            {"id": instance_id},
-            {"$set": update_data}
-        )
-    
-    def resume_execution(self, instance_id: str, node_id: str, result_data: Dict[str, Any] = None):
+
+        self.db["workflow_instances"].update_one({"id": instance_id}, {"$set": update_data})
+
+    def resume_execution(self, instance_id: str, node_id: str, result_data: Optional[Dict[str, Any]] = None) -> None:
         """Resume execution after waiting (task completed, approval given, form submitted)"""
-        instance = self.db['workflow_instances'].find_one({"id": instance_id}, {"_id": 0})
+        instance = self.db["workflow_instances"].find_one({"id": instance_id}, {"_id": 0})
         if not instance:
             return
-        
-        workflow = self.db['workflows'].find_one({"id": instance["workflow_id"]}, {"_id": 0})
+
+        workflow = self.db["workflows"].find_one({"id": instance["workflow_id"]}, {"_id": 0})
         if not workflow:
             return
-        
+
         # Find the node
-        current_node = None
+        current_node: Optional[Dict[str, Any]] = None
         for node in workflow.get("nodes", []):
             if node["id"] == node_id:
                 current_node = node
                 break
-        
+
         if not current_node:
             return
-        
-        # Update variables with result data
-        if result_data:
-            self.db['workflow_instances'].update_one(
+
+        # Update variables with result data and mark running
+        if result_data is not None:
+            self.db["workflow_instances"].update_one(
                 {"id": instance_id},
-                {"$set": {f"variables.{node_id}_result": result_data, "status": "running"}}
+                {
+                    "$set": {
+                        f"variables.{node_id}_result": result_data,
+                        "status": "running",
+                        "updated_at": datetime.utcnow().isoformat(),
+                    }
+                },
             )
-        
+
         # Continue to next nodes
         next_nodes = self._get_next_nodes(current_node, workflow)
         for next_node in next_nodes:
             self._execute_node(instance_id, next_node, workflow)
-    
-    def pause_execution(self, instance_id: str):
+
+    def pause_execution(self, instance_id: str) -> None:
         """Pause workflow execution"""
         self._update_instance_status(instance_id, "paused")
-    
-    def cancel_execution(self, instance_id: str):
+
+    def cancel_execution(self, instance_id: str) -> None:
         """Cancel workflow execution"""
         self._update_instance_status(instance_id, "cancelled")

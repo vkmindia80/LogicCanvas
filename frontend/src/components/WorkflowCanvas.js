@@ -7,7 +7,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   BackgroundVariant,
-  MarkerType
+  MarkerType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
@@ -30,12 +30,12 @@ const nodeTypes = {
   end: CustomNode,
   parallel: CustomNode,
   merge: CustomNode,
-  action: CustomNode
+  action: CustomNode,
 };
 
 const WorkflowCanvas = ({ workflow, onSave }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(workflow?.nodes || []);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(workflow?.edges || []);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [workflowName, setWorkflowName] = useState(workflow?.name || 'Untitled Workflow');
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
@@ -43,36 +43,55 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
   const [activeInstance, setActiveInstance] = useState(null);
   const [validationResults, setValidationResults] = useState(null);
   const [validationRan, setValidationRan] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState(null);
+
   const reactFlowWrapper = useRef(null);
   const nodeIdCounter = useRef(1);
+  const autoSaveTimeoutRef = useRef(null);
 
-  const updateNodeStates = useCallback((instance) => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        const nodeState = instance.node_states?.[node.id];
-        const isCurrent = instance.current_node_id === node.id;
-        
-        let executionState = null;
-        if (isCurrent) {
-          executionState = 'running';
-        } else if (nodeState === 'completed') {
-          executionState = 'completed';
-        } else if (nodeState === 'waiting') {
-          executionState = 'waiting';
-        } else if (nodeState === 'failed') {
-          executionState = 'failed';
-        }
+  // Sync local nodes/edges/name when the workflow prop changes
+  useEffect(() => {
+    if (workflow) {
+      setNodes(workflow.nodes || []);
+      setEdges(workflow.edges || []);
+      setWorkflowName(workflow.name || 'Untitled Workflow');
+      setSelectedNode(null);
+      setValidationResults(null);
+      setValidationRan(false);
+    }
+  }, [workflow?.id, setNodes, setEdges]);
 
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            executionState
+  const updateNodeStates = useCallback(
+    (instance) => {
+      setNodes((nds) =>
+        nds.map((node) => {
+          const nodeState = instance.node_states?.[node.id];
+          const isCurrent = instance.current_node_id === node.id;
+
+          let executionState = null;
+          if (isCurrent) {
+            executionState = 'running';
+          } else if (nodeState === 'completed') {
+            executionState = 'completed';
+          } else if (nodeState === 'waiting') {
+            executionState = 'waiting';
+          } else if (nodeState === 'failed') {
+            executionState = 'failed';
           }
-        };
-      })
-    );
-  }, [setNodes]);
+
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              executionState,
+            },
+          };
+        }),
+      );
+    },
+    [setNodes],
+  );
 
   // Poll for active instance execution state
   useEffect(() => {
@@ -81,12 +100,12 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
     const interval = setInterval(async () => {
       try {
         const response = await fetch(`${BACKEND_URL}/api/workflow-instances/${activeInstance}`);
+        if (!response.ok) return;
         const instance = await response.json();
-        
+
         if (instance) {
           updateNodeStates(instance);
-          
-        
+
           // Stop polling if instance is no longer running
           if (!['running', 'waiting'].includes(instance.status)) {
             setActiveInstance(null);
@@ -110,12 +129,12 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
         style: { stroke: '#94a3b8', strokeWidth: 2 },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: '#64748b'
-        }
+          color: '#64748b',
+        },
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
-    [setEdges]
+    [setEdges],
   );
 
   const onNodeClick = useCallback((event, node) => {
@@ -130,26 +149,26 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
     (type) => {
       const newNode = {
         id: `node-${nodeIdCounter.current++}`,
-        type: type,
+        type,
         position: {
           x: Math.random() * 400 + 100,
-          y: Math.random() * 300 + 100
+          y: Math.random() * 300 + 100,
         },
-        data: createNodeData(type)
+        data: createNodeData(type),
       };
       setNodes((nds) => [...nds, newNode]);
     },
-    [setNodes]
+    [setNodes],
   );
 
   const updateNode = useCallback(
     (nodeId, updates) => {
       setNodes((nds) =>
-        nds.map((node) => (node.id === nodeId ? { ...node, ...updates } : node))
+        nds.map((node) => (node.id === nodeId ? { ...node, ...updates } : node)),
       );
       setSelectedNode(null);
     },
-    [setNodes]
+    [setNodes],
   );
 
   const deleteNode = useCallback(
@@ -158,138 +177,266 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
       setEdges((eds) => eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
       setSelectedNode(null);
     },
-    [setNodes, setEdges]
+    [setNodes, setEdges],
   );
 
-  const handleSave = useCallback(async () => {
-    const workflowData = {
-      ...workflow,
-      name: workflowName,
-      nodes: nodes,
-      edges: edges
+  const applyValidationToNodes = useCallback(
+    (issues) => {
+      setNodes((nds) =>
+        nds.map((node) => {
+          const hasError = issues.some((i) => i.nodeId === node.id && i.type === 'error');
+          const hasWarning = !hasError && issues.some((i) => i.nodeId === node.id && i.type === 'warning');
+
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              validationStatus: hasError ? 'error' : hasWarning ? 'warning' : null,
+            },
+          };
+        }),
+      );
+    },
+    [setNodes],
+  );
+
+  const clearValidationOnNodes = useCallback(() => {
+    setNodes((nds) =>
+      nds.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          validationStatus: null,
+        },
+      })),
+    );
+  }, [setNodes]);
+
+  const computeLocalValidationIssues = useCallback(() => {
+    const issues = [];
+
+    if (!nodes || nodes.length === 0) {
+      issues.push({ type: 'error', message: 'Workflow has no nodes configured.' });
+      return issues;
+    }
+
+    const edgesBySource = new Map();
+    const edgesByTarget = new Map();
+
+    edges.forEach((edge) => {
+      if (!edgesBySource.has(edge.source)) edgesBySource.set(edge.source, []);
+      edgesBySource.get(edge.source).push(edge);
+
+      if (!edgesByTarget.has(edge.target)) edgesByTarget.set(edge.target, []);
+      edgesByTarget.get(edge.target).push(edge);
+    });
+
+    const startNodes = nodes.filter((n) => n.type === 'start');
+    const endNodes = nodes.filter((n) => n.type === 'end');
+
+    if (startNodes.length === 0) {
+      issues.push({ type: 'error', message: 'No Start node found. Add a Start node to begin the workflow.' });
+    }
+    if (startNodes.length > 1) {
+      issues.push({
+        type: 'warning',
+        message: `Multiple Start nodes detected (${startNodes.length}). Ensure this is intentional.`,
+      });
+    }
+    if (endNodes.length === 0) {
+      issues.push({
+        type: 'warning',
+        message:
+          'No End node found. Add at least one End node to properly terminate the workflow.',
+      });
+    }
+
+    // Nodes with no outgoing edges (excluding End nodes)
+    nodes.forEach((node) => {
+      const outgoing = edgesBySource.get(node.id) || [];
+      if (outgoing.length === 0 && node.type !== 'end') {
+        issues.push({
+          type: 'warning',
+          message: `Node "${node.data?.label || node.id}" has no outgoing connections.`,
+          nodeId: node.id,
+        });
+      }
+    });
+
+    // Decision nodes: ensure Yes/No branches
+    nodes
+      .filter((n) => n.type === 'decision')
+      .forEach((node) => {
+        const outgoing = edgesBySource.get(node.id) || [];
+        const handles = new Set(
+          outgoing
+            .map((e) => e.sourceHandle || e.source_handle || '')
+            .filter((id) => !!id),
+        );
+
+        if (!handles.has('yes')) {
+          issues.push({
+            type: 'warning',
+            message: `Decision node "${node.data?.label || node.id}" is missing a 'Yes' branch.`,
+            nodeId: node.id,
+          });
+        }
+        if (!handles.has('no')) {
+          issues.push({
+            type: 'warning',
+            message: `Decision node "${node.data?.label || node.id}" is missing a 'No' branch.`,
+            nodeId: node.id,
+          });
+        }
+      });
+
+    // Unreachable nodes (from first Start node)
+    if (startNodes.length > 0) {
+      const startId = startNodes[0].id;
+      const visited = new Set([startId]);
+      const queue = [startId];
+
+      while (queue.length > 0) {
+        const current = queue.shift();
+        const outgoing = edgesBySource.get(current) || [];
+        outgoing.forEach((edge) => {
+          if (!visited.has(edge.target)) {
+            visited.add(edge.target);
+            queue.push(edge.target);
+          }
+        });
+      }
+
+      nodes.forEach((node) => {
+        if (!visited.has(node.id)) {
+          issues.push({
+            type: 'warning',
+            message: `Node "${node.data?.label || node.id}" is unreachable from the Start node.`,
+            nodeId: node.id,
+          });
+        }
+      });
+    }
+
+    return issues;
+  }, [nodes, edges]);
+
+  const handleValidate = useCallback(async () => {
+    const localIssues = computeLocalValidationIssues();
+    let combinedIssues = [...localIssues];
+
+    // Ask backend to run server-side validation as well (for persisted workflows)
+    if (workflow?.id) {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/workflows/${workflow.id}/validate`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.issues)) {
+            combinedIssues = [...localIssues, ...data.issues];
+          }
+        }
+      } catch (err) {
+        console.error('Server-side validation failed:', err);
+      }
+    }
+
+    setValidationResults(combinedIssues);
+    setValidationRan(true);
+    applyValidationToNodes(combinedIssues);
+  }, [computeLocalValidationIssues, workflow?.id, applyValidationToNodes]);
+
+  const buildCleanNodesForSave = () =>
+    nodes.map((node) => ({
+      ...node,
+      data: {
+        ...node.data,
+        // Do not persist client-only validation state
+        validationStatus: undefined,
+      },
+    }));
+
+  const handleSave = useCallback(
+    async (isAuto = false) => {
+      if (!onSave) return;
+
+      const workflowData = {
+        ...workflow,
+        name: workflowName,
+        nodes: buildCleanNodesForSave(),
+        edges,
+      };
+
+      try {
+        setIsSaving(true);
+        await onSave(workflowData);
+        setLastSavedAt(new Date());
+      } catch (err) {
+        if (!isAuto) {
+          // For manual saves, surface error
+          // eslint-disable-next-line no-alert
+          alert('Failed to save workflow');
+        }
+        console.error('Failed to save workflow:', err);
+      } finally {
+        setIsSaving(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onSave, workflow, workflowName, nodes, edges],
+  );
+
+  // Auto-save when nodes/edges/name change (debounced)
+  useEffect(() => {
+    if (!onSave || !workflow) return;
+
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      handleSave(true);
+    }, 2000);
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
     };
-    await onSave(workflowData);
-  }, [workflow, workflowName, nodes, edges, onSave]);
+  }, [nodes, edges, workflowName, workflow, onSave, handleSave]);
 
   const handleAutoLayout = useCallback(async () => {
     if (!workflow?.id) {
+      // eslint-disable-next-line no-alert
       alert('Please save the workflow first');
       return;
     }
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/workflows/${workflow.id}/auto-layout`, {
-        method: 'POST'
+        method: 'POST',
       });
       const data = await response.json();
       if (data.nodes) {
         setNodes(data.nodes);
+        // eslint-disable-next-line no-alert
         alert('Auto-layout applied');
       }
     } catch (error) {
-      alert('Failed to apply auto-layout: ' + error.message);
+      // eslint-disable-next-line no-alert
+      alert(`Failed to apply auto-layout: ${error.message}`);
     }
   }, [workflow, setNodes]);
 
-  const handleValidate = useCallback(() => {
-    const issues = [];
+  const handleValidationPanelClose = () => {
+    setValidationResults(null);
+    setValidationRan(false);
+    clearValidationOnNodes();
+  };
 
-    if (!nodes || nodes.length === 0) {
-      issues.push({ type: 'error', message: 'Workflow has no nodes configured.' });
-    } else {
-      const nodeMap = new Map(nodes.map((n) => [n.id, n]));
-      const edgesBySource = new Map();
-      const edgesByTarget = new Map();
-
-      edges.forEach((edge) => {
-        if (!edgesBySource.has(edge.source)) edgesBySource.set(edge.source, []);
-        edgesBySource.get(edge.source).push(edge);
-
-        if (!edgesByTarget.has(edge.target)) edgesByTarget.set(edge.target, []);
-        edgesByTarget.get(edge.target).push(edge);
-      });
-
-      const startNodes = nodes.filter((n) => n.type === 'start');
-      const endNodes = nodes.filter((n) => n.type === 'end');
-
-      if (startNodes.length === 0) {
-        issues.push({ type: 'error', message: 'No Start node found. Add a Start node to begin the workflow.' });
-      }
-      if (endNodes.length === 0) {
-        issues.push({ type: 'warning', message: 'No End node found. Add at least one End node to properly terminate the workflow.' });
-      }
-
-      // Nodes with no outgoing edges (excluding End nodes)
-      nodes.forEach((node) => {
-        const outgoing = edgesBySource.get(node.id) || [];
-        if (outgoing.length === 0 && node.type !== 'end') {
-          issues.push({
-            type: 'warning',
-            message: `Node "${node.data?.label || node.id}" has no outgoing connections.`,
-            nodeId: node.id
-          });
-        }
-      });
-
-      // Decision nodes: ensure Yes/No branches
-      nodes
-        .filter((n) => n.type === 'decision')
-        .forEach((node) => {
-          const outgoing = edgesBySource.get(node.id) || [];
-          const handles = new Set(
-            outgoing
-              .map((e) => e.sourceHandle || e.source_handle || '')
-              .filter((id) => !!id)
-          );
-
-          if (!handles.has('yes')) {
-            issues.push({
-              type: 'warning',
-              message: `Decision node "${node.data?.label || node.id}" is missing a 'Yes' branch.`,
-              nodeId: node.id
-            });
-          }
-          if (!handles.has('no')) {
-            issues.push({
-              type: 'warning',
-              message: `Decision node "${node.data?.label || node.id}" is missing a 'No' branch.`,
-              nodeId: node.id
-            });
-          }
-        });
-
-      // Unreachable nodes (from first Start node)
-      if (startNodes.length > 0) {
-        const startId = startNodes[0].id;
-        const visited = new Set([startId]);
-        const queue = [startId];
-
-        while (queue.length > 0) {
-          const current = queue.shift();
-          const outgoing = edgesBySource.get(current) || [];
-          outgoing.forEach((edge) => {
-            if (!visited.has(edge.target)) {
-              visited.add(edge.target);
-              queue.push(edge.target);
-            }
-          });
-        }
-
-        nodes.forEach((node) => {
-          if (!visited.has(node.id)) {
-            issues.push({
-              type: 'warning',
-              message: `Node "${node.data?.label || node.id}" is unreachable from the Start node.`,
-              nodeId: node.id
-            });
-          }
-        });
-      }
-    }
-
-    setValidationResults(issues);
-    setValidationRan(true);
-  }, [nodes, edges]);
+  const formatLastSaved = () => {
+    if (!lastSavedAt) return 'Unsaved changes';
+    return `Last saved at ${lastSavedAt.toLocaleTimeString()}`;
+  };
 
   return (
     <div className="flex h-screen bg-slate-50">
@@ -311,8 +458,14 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
               placeholder="Workflow Name"
               data-testid="workflow-name-input"
             />
-            <span className="text-sm text-slate-500">|
-              {nodes.length} nodes, {edges.length} connections
+            <span className="text-sm text-slate-500">
+              | {nodes.length} nodes, {edges.length} connections
+            </span>
+            <span
+              className="ml-4 text-xs text-slate-500"
+              data-testid="workflow-save-status"
+            >
+              {isSaving ? 'Saving…' : formatLastSaved()}
             </span>
           </div>
 
@@ -328,7 +481,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
             </button>
             <button
               onClick={() => setShowTriggerConfig(!showTriggerConfig)}
-              className="flex items-center space-x-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
+              className="flex items-center space-x-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50"
               data-testid="trigger-config-btn"
               title="Configure triggers"
               disabled={!workflow?.id}
@@ -346,7 +499,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
               <span>Auto-Layout</span>
             </button>
             <button
-              onClick={handleSave}
+              onClick={() => handleSave(false)}
               className="flex items-center space-x-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
               data-testid="workflow-save-btn"
             >
@@ -355,6 +508,11 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
             </button>
             <button
               onClick={() => {
+                if (!workflow?.id) {
+                  // eslint-disable-next-line no-alert
+                  alert('Please save the workflow before executing.');
+                  return;
+                }
                 setShowExecutionPanel(!showExecutionPanel);
                 setShowTriggerConfig(false);
               }}
@@ -386,12 +544,17 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
               animated: true,
               style: { stroke: '#94a3b8', strokeWidth: 2 },
               markerEnd: {
-                type: 'arrowclosed'
-              }
+                type: 'arrowclosed',
+              },
             }}
             data-testid="workflow-canvas"
           >
-            <Background variant={BackgroundVariant.Dots} gap={15} size={1} color="#cbd5e1" />
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={15}
+              size={1}
+              color="#cbd5e1"
+            />
             <Controls />
             <MiniMap
               nodeColor={(node) => {
@@ -403,7 +566,8 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
                   form: '#6366f1',
                   end: '#ef4444',
                   parallel: '#f97316',
-                  merge: '#14b8a6'
+                  merge: '#14b8a6',
+                  action: '#ec4899',
                 };
                 return colors[node.type] || '#94a3b8';
               }}
@@ -457,10 +621,7 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <h3 className="text-lg font-semibold text-gray-800">Validation Results</h3>
             <button
-              onClick={() => {
-                setValidationResults(null);
-                setValidationRan(false);
-              }}
+              onClick={handleValidationPanelClose}
               className="text-gray-500 hover:text-gray-700"
               data-testid="close-validation-panel"
             >
@@ -470,17 +631,17 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
           <div className="p-4">
             {validationResults.length === 0 ? (
               <div className="flex items-center space-x-2 text-green-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <span>Workflow validation passed! No issues found.</span>
               </div>
             ) : (
               <div className="space-y-3">
                 {validationResults.map((issue, index) => (
                   <div
-                    key={index}
+                    key={`${issue.message}-${issue.nodeId || 'global'}-${index}`}
                     className={`flex items-start space-x-2 p-3 rounded-lg ${
-                      issue.type === 'error' 
-                        ? 'bg-red-50 border border-red-200' 
+                      issue.type === 'error'
+                        ? 'bg-red-50 border border-red-200'
                         : 'bg-yellow-50 border border-yellow-200'
                     }`}
                   >
@@ -488,24 +649,26 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
                       className={`w-2 h-2 rounded-full mt-2 ${
                         issue.type === 'error' ? 'bg-red-500' : 'bg-yellow-500'
                       }`}
-                    ></div>
+                    />
                     <div className="flex-1">
-                      <p className={`text-sm ${
-                        issue.type === 'error' ? 'text-red-800' : 'text-yellow-800'
-                      }`}>
+                      <p
+                        className={`text-sm ${
+                          issue.type === 'error' ? 'text-red-800' : 'text-yellow-800'
+                        }`}
+                      >
                         {issue.message}
                       </p>
                       {issue.nodeId && (
                         <button
                           onClick={() => {
-                            const node = nodes.find(n => n.id === issue.nodeId);
+                            const node = nodes.find((n) => n.id === issue.nodeId);
                             if (node) {
                               setSelectedNode(node);
-                              setValidationResults(null);
-                              setValidationRan(false);
+                              handleValidationPanelClose();
                             }
                           }}
                           className="text-xs text-blue-600 hover:text-blue-800 mt-1"
+                          data-testid="validation-go-to-node-btn"
                         >
                           Go to node
                         </button>

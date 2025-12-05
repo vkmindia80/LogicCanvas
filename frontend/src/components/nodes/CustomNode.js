@@ -1,8 +1,18 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { 
-  PlayCircle, CheckSquare, GitBranch, ClipboardCheck, 
-  FileText, StopCircle, Split, Merge, Zap, Clock, CheckCircle, AlertCircle
+import {
+  PlayCircle,
+  CheckSquare,
+  GitBranch,
+  ClipboardCheck,
+  FileText,
+  StopCircle,
+  Split,
+  Merge,
+  Zap,
+  Clock,
+  CheckCircle,
+  AlertCircle,
 } from 'lucide-react';
 import { NODE_TYPES, NODE_CONFIGS } from '../../utils/nodeTypes';
 
@@ -13,23 +23,28 @@ const iconMap = {
   'clipboard-check': ClipboardCheck,
   'file-text': FileText,
   'stop-circle': StopCircle,
-  'split': Split,
-  'merge': Merge,
-  'zap': Zap
+  split: Split,
+  merge: Merge,
+  zap: Zap,
 };
 
 const CustomNode = ({ data, selected }) => {
   const config = NODE_CONFIGS[data.type];
   const IconComponent = iconMap[config.icon];
-  
+
   // Execution state from data (if provided)
   const executionState = data.executionState; // 'running', 'completed', 'waiting', 'failed'
 
-  // Determine if node is actively executing
+  // Validation state from data (if provided)
+  const validationStatus = data.validationStatus; // 'error' | 'warning' | null
+
   const isExecuting = executionState === 'running';
   const isCompleted = executionState === 'completed';
   const isWaiting = executionState === 'waiting';
   const isFailed = executionState === 'failed';
+
+  const hasValidationError = validationStatus === 'error';
+  const hasValidationWarning = validationStatus === 'warning';
 
   return (
     <div
@@ -72,6 +87,22 @@ const CustomNode = ({ data, selected }) => {
         </div>
       )}
 
+      {/* Validation Indicator (separate from execution state) */}
+      {validationStatus && (
+        <div className="absolute -top-2 -left-2 z-10" data-testid="node-validation-indicator">
+          {hasValidationError && (
+            <div className="bg-red-600 rounded-full p-1 shadow-md" title="This node has validation errors">
+              <AlertCircle className="w-3 h-3 text-white" />
+            </div>
+          )}
+          {hasValidationWarning && !hasValidationError && (
+            <div className="bg-amber-500 rounded-full p-1 shadow-md" title="This node has validation warnings">
+              <AlertCircle className="w-3 h-3 text-white" />
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Input Handle - not for start node */}
       {data.type !== NODE_TYPES.START && (
         <Handle
@@ -87,9 +118,7 @@ const CustomNode = ({ data, selected }) => {
         {IconComponent && <IconComponent className="w-5 h-5" />}
         <div className="flex-1">
           <div className="font-semibold text-sm">{data.label}</div>
-          {data.description && (
-            <div className="text-xs opacity-90 mt-1">{data.description}</div>
-          )}
+          {data.description && <div className="text-xs opacity-90 mt-1">{data.description}</div>}
         </div>
       </div>
 
@@ -113,7 +142,10 @@ const CustomNode = ({ data, selected }) => {
                 <div
                   key={handle.id}
                   className="absolute flex flex-col items-center"
-                  style={{ left: `${((index + 1) * 100) / (NODE_CONFIGS[data.type].outputHandles.length + 1)}%`, transform: 'translateX(-50%)' }}
+                  style={{
+                    left: `${((index + 1) * 100) / (NODE_CONFIGS[data.type].outputHandles.length + 1)}%`,
+                    transform: 'translateX(-50%)',
+                  }}
                 >
                   <Handle
                     id={handle.id}
