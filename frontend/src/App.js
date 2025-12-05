@@ -40,16 +40,6 @@ const AppShell = () => {
   const [taskCount, setTaskCount] = useState(0);
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('lc_token') || '');
   const [currentUser, setCurrentUser] = useState(() => {
-  const { currentRole, setCurrentRole, can } = useRole();
-
-  // Sync UI role with logged-in user when present
-  useEffect(() => {
-    if (currentUser?.role) {
-      setCurrentRole(currentUser.role);
-    }
-  }, [currentUser, setCurrentRole]);
-
-
     const stored = localStorage.getItem('lc_user');
     return stored ? JSON.parse(stored) : null;
   });
