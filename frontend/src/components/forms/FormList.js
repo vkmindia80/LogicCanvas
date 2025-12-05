@@ -164,7 +164,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
           <p className="text-slate-500 mb-6">
             {searchTerm || selectedTag ? 'Try adjusting your filters' : 'Get started by creating your first form'}
           </p>
-          {!searchTerm && !selectedTag && (
+          {!searchTerm && !selectedTag && can('manageForms') && (
             <button
               onClick={onCreateNew}
               className="inline-flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
