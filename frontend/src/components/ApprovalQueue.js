@@ -374,7 +374,7 @@ const ApprovalQueue = ({ onClose, onNotify }) => {
                             <div>
                               <span className="text-sm font-medium text-gray-700">{approver}</span>
                               {decision?.comment && (
-                                <p className="text-xs text-gray-500 mt-0.5">"{decision.comment}"</p>
+                                <p className="text-xs text-gray-500 mt-0.5">{decision.comment}</p>
                               )}
                             </div>
                           </div>
