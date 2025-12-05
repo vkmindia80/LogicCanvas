@@ -869,7 +869,7 @@ async def add_task_comment(task_id: str, data: Dict[str, Any] = None):
             "entity_type": "task",
             "entity_id": task_id,
             "recipient": mention,
-            "title": f"You were mentioned in a comment",
+            "title": "You were mentioned in a comment",
             "message": f"{author} mentioned you in task: {task.get('title')}",
             "read": False,
             "created_at": now
@@ -1223,7 +1223,7 @@ async def decide_approval(approval_id: str, decision: str, comment: Optional[str
                         "entity_id": approval_id,
                         "recipient": next_approver,
                         "title": f"Approval Required: {approval.get('title')}",
-                        "message": f"You are the next approver in the sequential approval flow",
+                        "message": "You are the next approver in the sequential approval flow",
                         "read": False,
                         "created_at": now
                     })
