@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell, BarChart3 } from 'lucide-react';
+import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell, BarChart3, Search as SearchIcon, Download } from 'lucide-react';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import WorkflowList from './components/WorkflowList';
 import WorkflowCanvas from './components/WorkflowCanvas';
@@ -11,6 +11,9 @@ import ApprovalQueue from './components/ApprovalQueue';
 import AuditTrail from './components/AuditTrail';
 import NotificationsPanel from './components/NotificationsPanel';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
+import GlobalSearch from './components/GlobalSearch';
+import ImportExport from './components/ImportExport';
+import { ToastContainer } from './components/Toast';
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
