@@ -16,6 +16,8 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [versionWorkflowId, setVersionWorkflowId] = useState(null);
   const [tagFilter, setTagFilter] = useState('');
+  const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
+  const [showQuickStartWizard, setShowQuickStartWizard] = useState(false);
 
   const { can } = useRole();
 
