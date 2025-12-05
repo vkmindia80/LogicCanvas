@@ -1,0 +1,163 @@
+{
+  "name": "HR Onboarding Workflow",
+  "description": "Complete employee onboarding process with manager approval, IT setup, and HR paperwork",
+  "category": "Human Resources",
+  "tags": ["hr", "onboarding", "template"],
+  "complexity": "medium",
+  "estimatedSetupTime": "10 minutes",
+  "icon": "users",
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 200},
+      "data": {
+        "label": "Start Onboarding",
+        "description": "Begin new hire onboarding process"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 200},
+      "data": {
+        "label": "New Hire Information",
+        "description": "Collect new employee details",
+        "formId": "new-hire-form",
+        "formFields": [
+          {"id": "full_name", "label": "Full Name", "type": "text", "required": true},
+          {"id": "email", "label": "Email", "type": "email", "required": true},
+          {"id": "department", "label": "Department", "type": "text", "required": true},
+          {"id": "position", "label": "Position", "type": "text", "required": true},
+          {"id": "start_date", "label": "Start Date", "type": "date", "required": true},
+          {"id": "manager", "label": "Manager Email", "type": "email", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 500, "y": 200},
+      "data": {
+        "label": "Manager Approval",
+        "description": "Hiring manager approves new employee",
+        "approvers": ["${form-1.manager}"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 700, "y": 200},
+      "data": {
+        "label": "Approval Decision",
+        "description": "Check if manager approved",
+        "condition": "${approval-1.status} == 'approved'"
+      }
+    },
+    {
+      "id": "parallel-1",
+      "type": "parallel",
+      "position": {"x": 900, "y": 200},
+      "data": {
+        "label": "Setup Tasks",
+        "description": "Parallel IT and HR setup"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 1100, "y": 100},
+      "data": {
+        "label": "IT Setup",
+        "description": "Create email, setup computer, grant system access",
+        "assignmentStrategy": "role",
+        "assignmentRole": "it_team",
+        "priority": "high",
+        "dueInHours": 24
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": {"x": 1100, "y": 300},
+      "data": {
+        "label": "HR Paperwork",
+        "description": "Prepare employment contract, benefits enrollment, tax forms",
+        "assignmentStrategy": "role",
+        "assignmentRole": "hr_team",
+        "priority": "high",
+        "dueInHours": 24
+      }
+    },
+    {
+      "id": "merge-1",
+      "type": "merge",
+      "position": {"x": 1300, "y": 200},
+      "data": {
+        "label": "Combine Setup",
+        "description": "Wait for both IT and HR tasks"
+      }
+    },
+    {
+      "id": "approval-2",
+      "type": "approval",
+      "position": {"x": 1500, "y": 200},
+      "data": {
+        "label": "Director Sign-off",
+        "description": "Director final approval",
+        "approvers": ["director@example.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {"x": 1700, "y": 200},
+      "data": {
+        "label": "Send Welcome Email",
+        "description": "Send automated welcome email to new hire",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.example.com/send-email",
+        "body": {
+          "to": "${form-1.email}",
+          "subject": "Welcome to the Team!",
+          "template": "welcome_template"
+        }
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1900, "y": 200},
+      "data": {
+        "label": "Onboarding Complete",
+        "description": "Employee successfully onboarded"
+      }
+    },
+    {
+      "id": "end-2",
+      "type": "end",
+      "position": {"x": 700, "y": 350},
+      "data": {
+        "label": "Onboarding Rejected",
+        "description": "Manager rejected onboarding"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "approval-1"},
+    {"id": "e3", "source": "approval-1", "target": "decision-1"},
+    {"id": "e4", "source": "decision-1", "target": "parallel-1", "sourceHandle": "yes", "label": "Approved"},
+    {"id": "e5", "source": "decision-1", "target": "end-2", "sourceHandle": "no", "label": "Rejected"},
+    {"id": "e6", "source": "parallel-1", "target": "task-1"},
+    {"id": "e7", "source": "parallel-1", "target": "task-2"},
+    {"id": "e8", "source": "task-1", "target": "merge-1"},
+    {"id": "e9", "source": "task-2", "target": "merge-1"},
+    {"id": "e10", "source": "merge-1", "target": "approval-2"},
+    {"id": "e11", "source": "approval-2", "target": "action-1"},
+    {"id": "e12", "source": "action-1", "target": "end-1"}
+  ]
+}

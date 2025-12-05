@@ -1,0 +1,159 @@
+{
+  "name": "Invoice Approval Workflow",
+  "description": "Multi-level invoice approval with conditional routing based on amount and sequential approvals",
+  "category": "Finance",
+  "tags": ["finance", "invoice", "approval", "template"],
+  "complexity": "medium",
+  "estimatedSetupTime": "8 minutes",
+  "icon": "dollar-sign",
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 250},
+      "data": {
+        "label": "New Invoice",
+        "description": "Invoice submission"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 250},
+      "data": {
+        "label": "Invoice Details",
+        "description": "Submit invoice information",
+        "formId": "invoice-form",
+        "formFields": [
+          {"id": "vendor_name", "label": "Vendor Name", "type": "text", "required": true},
+          {"id": "invoice_number", "label": "Invoice Number", "type": "text", "required": true},
+          {"id": "amount", "label": "Amount", "type": "number", "required": true},
+          {"id": "currency", "label": "Currency", "type": "dropdown", "options": ["USD", "EUR", "GBP"], "required": true},
+          {"id": "category", "label": "Category", "type": "dropdown", "options": ["IT", "Marketing", "Operations", "HR"], "required": true},
+          {"id": "invoice_date", "label": "Invoice Date", "type": "date", "required": true},
+          {"id": "due_date", "label": "Due Date", "type": "date", "required": true},
+          {"id": "description", "label": "Description", "type": "textarea", "required": true},
+          {"id": "invoice_file", "label": "Invoice Document", "type": "file", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 500, "y": 250},
+      "data": {
+        "label": "Amount Check",
+        "description": "Check if invoice > $10,000",
+        "condition": "${form-1.amount} > 10000"
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 700, "y": 150},
+      "data": {
+        "label": "Manager Approval",
+        "description": "Department manager approves",
+        "approvers": ["manager@example.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "approval-2",
+      "type": "approval",
+      "position": {"x": 900, "y": 150},
+      "data": {
+        "label": "Director Approval",
+        "description": "Department director approves",
+        "approvers": ["director@example.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "approval-3",
+      "type": "approval",
+      "position": {"x": 1100, "y": 150},
+      "data": {
+        "label": "CFO Approval",
+        "description": "CFO final approval for high-value invoices",
+        "approvers": ["cfo@example.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "approval-4",
+      "type": "approval",
+      "position": {"x": 700, "y": 350},
+      "data": {
+        "label": "Manager Approval",
+        "description": "Simple manager approval for low-value invoices",
+        "approvers": ["manager@example.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "merge-1",
+      "type": "merge",
+      "position": {"x": 1300, "y": 250},
+      "data": {
+        "label": "Approval Complete",
+        "description": "Merge approval paths"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {"x": 1500, "y": 250},
+      "data": {
+        "label": "Update Accounting System",
+        "description": "Post approved invoice to accounting system",
+        "actionType": "http",
+        "method": "POST",
+        "url": "https://api.accounting.example.com/invoices",
+        "body": {
+          "vendor": "${form-1.vendor_name}",
+          "invoice_number": "${form-1.invoice_number}",
+          "amount": "${form-1.amount}",
+          "currency": "${form-1.currency}",
+          "status": "approved"
+        }
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "position": {"x": 1700, "y": 250},
+      "data": {
+        "label": "Notify Submitter",
+        "description": "Send approval notification",
+        "actionType": "webhook",
+        "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        "body": {
+          "text": "Invoice ${form-1.invoice_number} has been approved and processed."
+        }
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1900, "y": 250},
+      "data": {
+        "label": "Invoice Processed",
+        "description": "Invoice approved and posted"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "target": "approval-1", "sourceHandle": "yes", "label": "> $10K"},
+    {"id": "e4", "source": "decision-1", "target": "approval-4", "sourceHandle": "no", "label": "<= $10K"},
+    {"id": "e5", "source": "approval-1", "target": "approval-2", "label": "Manager Approved"},
+    {"id": "e6", "source": "approval-2", "target": "approval-3", "label": "Director Approved"},
+    {"id": "e7", "source": "approval-3", "target": "merge-1", "label": "CFO Approved"},
+    {"id": "e8", "source": "approval-4", "target": "merge-1", "label": "Manager Approved"},
+    {"id": "e9", "source": "merge-1", "target": "action-1"},
+    {"id": "e10", "source": "action-1", "target": "action-2"},
+    {"id": "e11", "source": "action-2", "target": "end-1"}
+  ]
+}
