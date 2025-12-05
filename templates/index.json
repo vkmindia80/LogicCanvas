@@ -1,0 +1,136 @@
+{
+  "templates": [
+    {
+      "id": "hr-onboarding",
+      "name": "HR Onboarding Workflow",
+      "description": "Complete employee onboarding process with manager approval, IT setup, and HR paperwork",
+      "category": "Human Resources",
+      "tags": ["hr", "onboarding", "template"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "users",
+      "file": "hr-onboarding.json",
+      "preview": "/templates/previews/hr-onboarding.png",
+      "features": [
+        "Manager approval workflow",
+        "Parallel IT and HR setup tasks",
+        "Director sign-off",
+        "Automated welcome email"
+      ],
+      "nodeCount": 12,
+      "useCases": ["New employee onboarding", "Contractor onboarding", "Intern programs"]
+    },
+    {
+      "id": "invoice-approval",
+      "name": "Invoice Approval Workflow",
+      "description": "Multi-level invoice approval with conditional routing based on amount and sequential approvals",
+      "category": "Finance",
+      "tags": ["finance", "invoice", "approval", "template"],
+      "complexity": "medium",
+      "estimatedSetupTime": "8 minutes",
+      "icon": "dollar-sign",
+      "file": "invoice-approval.json",
+      "preview": "/templates/previews/invoice-approval.png",
+      "features": [
+        "Amount-based conditional routing",
+        "Sequential multi-level approvals",
+        "Accounting system integration",
+        "Automated notifications"
+      ],
+      "nodeCount": 11,
+      "useCases": ["Invoice processing", "Expense reimbursement", "Payment approvals"]
+    },
+    {
+      "id": "purchase-request",
+      "name": "Purchase Request Workflow",
+      "description": "Comprehensive purchase request with budget check, approval, procurement, and vendor selection subprocess",
+      "category": "Procurement",
+      "tags": ["procurement", "purchase", "approval", "template"],
+      "complexity": "high",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "shopping-cart",
+      "file": "purchase-request.json",
+      "preview": "/templates/previews/purchase-request.png",
+      "features": [
+        "Budget availability check",
+        "Department head approval",
+        "Nested vendor selection subprocess",
+        "ERP system integration"
+      ],
+      "nodeCount": 12,
+      "useCases": ["Purchase requests", "Equipment procurement", "Software licenses"]
+    },
+    {
+      "id": "contract-approval",
+      "name": "Contract Approval Workflow",
+      "description": "Parallel review by Legal and Finance teams with unanimous approval and e-signature integration",
+      "category": "Legal",
+      "tags": ["legal", "contract", "approval", "template"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "file-text",
+      "file": "contract-approval.json",
+      "preview": "/templates/previews/contract-approval.png",
+      "features": [
+        "Parallel Legal and Finance review",
+        "Unanimous approval requirement",
+        "E-signature integration (DocuSign)",
+        "Contract repository storage"
+      ],
+      "nodeCount": 12,
+      "useCases": ["Vendor contracts", "Customer agreements", "Partnership contracts"]
+    },
+    {
+      "id": "it-support-ticket",
+      "name": "IT Support Ticket Workflow",
+      "description": "IT support ticket with priority triage, SLA tracking, timer-based escalation, and closure approval",
+      "category": "IT Support",
+      "tags": ["it", "support", "helpdesk", "template"],
+      "complexity": "medium",
+      "estimatedSetupTime": "8 minutes",
+      "icon": "headphones",
+      "file": "it-support-ticket.json",
+      "preview": "/templates/previews/it-support-ticket.png",
+      "features": [
+        "Priority-based triage",
+        "SLA timer with escalation",
+        "Requester closure approval",
+        "Satisfaction survey automation"
+      ],
+      "nodeCount": 14,
+      "useCases": ["IT helpdesk tickets", "Bug reports", "Service requests"]
+    }
+  ],
+  "categories": [
+    {
+      "id": "human-resources",
+      "name": "Human Resources",
+      "description": "Employee management and HR processes",
+      "icon": "users"
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "description": "Financial approvals and accounting workflows",
+      "icon": "dollar-sign"
+    },
+    {
+      "id": "procurement",
+      "name": "Procurement",
+      "description": "Purchase and procurement processes",
+      "icon": "shopping-cart"
+    },
+    {
+      "id": "legal",
+      "name": "Legal",
+      "description": "Contract and legal document workflows",
+      "icon": "file-text"
+    },
+    {
+      "id": "it-support",
+      "name": "IT Support",
+      "description": "Technical support and helpdesk processes",
+      "icon": "headphones"
+    }
+  ]
+}
