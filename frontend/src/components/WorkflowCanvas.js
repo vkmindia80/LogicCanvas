@@ -427,8 +427,11 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
   return (
     <div className="flex h-screen bg-slate-50">
       {/* Left Sidebar - Node Palette */}
-      <div className="w-64 bg-slate-100 border-r border-slate-200 p-4 overflow-y-auto">
-        <NodePalette onAddNode={addNode} />
+      <div className="w-64 bg-white border-r border-slate-200 overflow-hidden">
+        <NodePaletteEnhanced 
+          onAddNode={addNode} 
+          lastNodeType={nodes[nodes.length - 1]?.type}
+        />
       </div>
 
       {/* Main Canvas Area */}
