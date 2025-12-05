@@ -9,7 +9,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 text-slate-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-slate-200/50 bg-white/80 backdrop-blur-xl shadow-sm">
+      <header className="sticky top-0 z-50 border-b border-slate-200/50 bg-white/90 backdrop-blur-xl shadow-lg shadow-slate-200/50">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-3" data-testid="landing-header-brand">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 shadow-lg shadow-primary-500/30">
