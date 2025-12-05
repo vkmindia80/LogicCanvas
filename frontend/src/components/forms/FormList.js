@@ -188,7 +188,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                   onSelectForm(form);
                 }
               }}
-              className="bg-white border border-slate-200 rounded-lg p-6 hover:shadow-lg transition-all cursor-pointer group"
+              className="bg-white border-2 border-slate-200 rounded-2xl p-6 hover:border-primary-300 hover:shadow-2xl hover:shadow-primary-500/20 shadow-lg shadow-slate-200/50 transition-all cursor-pointer group"
               data-testid={`form-card-${form.id}`}
             >
               <div className="flex justify-between items-start mb-4">
