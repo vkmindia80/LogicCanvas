@@ -15,6 +15,8 @@ import AnalyticsDashboard from './components/AnalyticsDashboard';
 import GlobalSearch from './components/GlobalSearch';
 import ImportExport from './components/ImportExport';
 import OnboardingTour from './components/OnboardingTour';
+import TemplateLibrary from './components/TemplateLibrary';
+import QuickStartWizard from './components/QuickStartWizard';
 import { ToastContainer } from './components/Toast';
 import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage';
