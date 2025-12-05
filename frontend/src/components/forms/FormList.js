@@ -107,25 +107,26 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-slate-900">Form Library</h2>
-            <p className="text-slate-600 mt-1">Create and manage reusable forms</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">Form Library</h2>
+              <p className="text-lg text-slate-600">Create and manage reusable forms</p>
+            </div>
+            {can('manageForms') && (
+              <button
+                onClick={onCreateNew}
+                className="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
+                data-testid="create-new-form-btn"
+              >
+                <Plus className="w-5 h-5" />
+                <span className="font-semibold">Create New Form</span>
+              </button>
+            )}
           </div>
-          {can('manageForms') && (
-            <button
-              onClick={onCreateNew}
-              className="flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors shadow-lg"
-              data-testid="create-new-form-btn"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create New Form</span>
-            </button>
-          )}
-        </div>
 
         {/* Search and Filter */}
         <div className="flex gap-4">
