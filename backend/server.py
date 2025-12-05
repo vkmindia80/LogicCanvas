@@ -1058,10 +1058,14 @@ async def get_me(current_user: Dict[str, Any] = Depends(get_current_user)):
     """Return the profile of the currently authenticated user."""
     return {"user": current_user}
 
-
+# SLA Tracking
+@app.get("/api/tasks/sla/overdue")
+async def get_overdue_tasks():
+    """Get tasks that are past their due date"""
+    now_iso = datetime.utcnow().isoformat()
     overdue_tasks = list(tasks_collection.find(
         {
-            "due_date": {"$lt": now},
+            "due_date": {"$lt": now_iso},
             "status": {"$nin": ["completed", "cancelled"]}
         },
         {"_id": 0}
