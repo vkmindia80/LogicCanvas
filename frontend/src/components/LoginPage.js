@@ -146,6 +146,33 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
               </>
             )}
           </button>
+
+          <button
+            type="button"
+            onClick={async () => {
+              setError('');
+              try {
+                const res = await fetch(`${BACKEND_URL}/api/admin/generate-sample-data`, {
+                  method: 'POST',
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                  setError(data.detail || 'Failed to generate sample data');
+                  return;
+                }
+                // Surface a lightweight toast-like message inline
+                alert(data.message || 'Sample data generated successfully');
+              } catch (e) {
+                console.error('Sample data generation failed', e);
+                setError('Sample data generation failed.');
+              }
+            }}
+            className="mt-3 inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-dashed border-emerald-400 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-200 hover:bg-emerald-500/20"
+            data-testid="generate-sample-data-btn"
+          >
+            <span>Generate rich sample data (workflows, forms, tasks, approvals)</span>
+          </button>
+
         </form>
 
         <div className="mt-6 border-t border-white/10 pt-4">
