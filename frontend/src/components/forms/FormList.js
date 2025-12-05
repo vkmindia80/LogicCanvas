@@ -29,18 +29,6 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
     fetchForms();
   }, []);
 
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/forms`);
-      const data = await response.json();
-      setForms(data.forms || []);
-      setLoading(false);
-    } catch (error) {
-      console.error('Failed to fetch forms:', error);
-      onNotify?.('Failed to fetch forms', 'error');
-      setLoading(false);
-    }
-  };
-
   const handleDelete = async (formId, e) => {
     e.stopPropagation();
     if (!can('deleteForms')) {
