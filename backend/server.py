@@ -610,11 +610,6 @@ for u in AUTO_USERS:
             }
         )
 
-
-    if not form:
-        raise HTTPException(status_code=404, detail="Form not found")
-    return form
-
 @app.post("/api/forms")
 async def create_form(form: Form):
     form_id = str(uuid.uuid4())
