@@ -258,6 +258,116 @@ Building a fully-featured, enterprise-grade Visual Workflow Builder with:
 
 ---
 
+### 🚀 **PHASE 8: Enhanced Workflow Designer - Salesforce Flow Builder Parity**
+**Status:** 🔄 IN PROGRESS  
+**Priority:** ⚡ HIGH PRIORITY - ALL FEATURES
+**Estimated Time:** 4-5 hours | **Started:** Today
+
+#### Goals:
+Transform LogicCanvas workflow designer to match and exceed Salesforce Flow Builder capabilities with comprehensive node types, enhanced UI, data management tools, and visual API builder.
+
+#### Tasks:
+- [ ] 8.1 **Expand Node Types Library** (20+ new node types)
+  - Loop/Iteration nodes (For Each, While, Repeat)
+  - Data Operation nodes (Assignment, Lookup, Create Record, Update Record, Delete Record)
+  - Screen/Display nodes (Screen, Wait for User Input)
+  - Advanced Logic nodes (Switch/Case, Filter, Sort)
+  - Data Transform nodes (Map, Aggregate, Calculate)
+  - Database Query nodes (Query Records, Get Record, Count Records)
+  - Integration nodes (REST Callout, SOAP Callout, Email)
+
+- [ ] 8.2 **Enhanced Node Palette UI** (Salesforce-style categorization)
+  - Categorized palette with collapsible sections:
+    * 🖥️ User Interaction (Screen, Form, Input)
+    * 🔀 Logic (Decision, Assignment, Loop, Switch)
+    * 📊 Data (Create, Read, Update, Delete, Lookup, Query)
+    * 🔧 Flow Components (Start, End, Parallel, Merge, Subprocess)
+    * 🔌 Integrations (API Call, Webhook, Email, Action)
+  - Search and filter functionality
+  - Drag preview with node descriptions
+  - Recently used nodes section
+
+- [ ] 8.3 **Top Toolbar Enhancements**
+  - Undo/Redo functionality with history stack
+  - Debug mode toggle with step-through execution
+  - Enhanced status indicators (Draft/Published/Running/Paused)
+  - Zoom controls and fit-to-view
+  - Grid snap toggle
+  - Export to image/PDF
+
+- [ ] 8.4 **Data Management Tools**
+  - Variable Management Panel (view all workflow variables)
+  - Data Mapping UI in NodeEditor (visual input/output mapping)
+  - Variable Inspector for debugging (watch variables during execution)
+  - Data Type support (String, Number, Boolean, Object, Array, Date)
+  - Variable scope management (workflow, node, global)
+
+- [ ] 8.5 **Visual API Connector Builder**
+  - Visual REST API builder interface
+  - Request configuration (method, headers, auth, body)
+  - Response mapping to workflow variables
+  - Pre-built connector library (common APIs)
+  - Authentication templates (OAuth, API Key, Basic)
+  - Request/response testing
+  - Error handling configuration
+
+- [ ] 8.6 **Enhanced Node Editor**
+  - Visual data mapping interface
+  - Expression builder with autocomplete
+  - Formula editor for calculations
+  - Condition builder (visual rule editor)
+  - Input/output port management
+  - Node validation with inline errors
+
+- [ ] 8.7 **Visual Polish - Salesforce Flow Builder Aesthetic**
+  - Enhanced node styling (rounded corners, shadows, gradients)
+  - Improved connector styling (smooth curves, better arrows)
+  - Node state indicators (running, completed, error, waiting)
+  - Hover effects and tooltips on nodes
+  - Canvas background patterns
+  - Professional color scheme
+  - Enhanced minimap styling
+
+- [ ] 8.8 **Advanced Debugging Features**
+  - Breakpoints on nodes
+  - Step-through execution mode
+  - Variable watch panel
+  - Execution timeline view
+  - Node execution logs
+  - Performance profiling
+
+- [ ] 8.9 **Loop & Iteration Support**
+  - For Each loop (iterate over collections)
+  - While loop (conditional iteration)
+  - Repeat loop (fixed iterations)
+  - Loop variable management
+  - Break/Continue logic
+  - Nested loop support
+
+- [ ] 8.10 **Data Record Operations**
+  - Create Record node (insert into database)
+  - Update Record node (modify existing records)
+  - Delete Record node (remove records)
+  - Lookup Record node (find records by criteria)
+  - Query Records node (advanced queries)
+  - Bulk operations support
+
+**Deliverables:**
+- ✅ 20+ additional node types covering all workflow scenarios
+- ✅ Salesforce-style categorized node palette with search
+- ✅ Undo/Redo functionality with 50-step history
+- ✅ Debug mode with step-through execution
+- ✅ Variable Management Panel with full CRUD
+- ✅ Visual API Connector Builder
+- ✅ Enhanced NodeEditor with data mapping UI
+- ✅ Professional Salesforce-inspired visual design
+- ✅ Advanced debugging tools (breakpoints, watch panel)
+- ✅ Loop/iteration node support with nested loops
+- ✅ Full database CRUD operations via nodes
+- ✅ Testing validation via testing_agent
+
+---
+
 ## 📊 **PROGRESS TRACKER**
 
 | Phase | Status | Progress | Completion Date |
