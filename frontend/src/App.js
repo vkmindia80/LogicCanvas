@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell, BarChart3, Search as SearchIcon, Download, Shield } from 'lucide-react';
+import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell, BarChart3, Search as SearchIcon, Download, Shield, Menu, X, ChevronLeft, ChevronRight, Home, Settings, LogOut } from 'lucide-react';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import { RoleProvider, useRole } from './contexts/RoleContext';
 import WorkflowList from './components/WorkflowList';
@@ -24,7 +24,7 @@ import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 const AppShell = () => {
-  const [currentView, setCurrentView] = useState('workflows'); // 'workflows', 'canvas', 'forms', 'form-builder'
+  const [currentView, setCurrentView] = useState('workflows');
   const [currentWorkflow, setCurrentWorkflow] = useState(null);
   const [currentForm, setCurrentForm] = useState(null);
   const [activeTab, setActiveTab] = useState('workflows');
@@ -43,12 +43,13 @@ const AppShell = () => {
     const stored = localStorage.getItem('lc_user');
     return stored ? JSON.parse(stored) : null;
   });
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const [approvalCount, setApprovalCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [toasts, setToasts] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
-
 
   const { currentRole, setCurrentRole, can } = useRole();
 
@@ -70,7 +71,6 @@ const AppShell = () => {
     addToast('Logged out', 'info');
   };
 
-  // Sync UI role with logged-in user when present
   useEffect(() => {
     if (currentUser?.role) {
       setCurrentRole(currentUser.role);
@@ -92,7 +92,6 @@ const AppShell = () => {
     checkHealth();
   }, []);
 
-  // Load badge counts for tasks, approvals, and notifications
   useEffect(() => {
     const loadCounts = async () => {
       try {
@@ -113,7 +112,6 @@ const AppShell = () => {
     };
 
     loadCounts();
-    // Refresh counts every 30 seconds
     const interval = setInterval(loadCounts, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -221,8 +219,6 @@ const AppShell = () => {
     );
   }
 
-  // Unauthenticated users see either the marketing/landing page or the full-screen login page.
-  // We treat this as a simple view switch so the login "feels" like a separate page.
   if (!currentUser || !authToken) {
     if (showLogin) {
       return (
@@ -252,65 +248,183 @@ const AppShell = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="border-b border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700">
+    <div className="flex min-h-screen bg-slate-50">
+      {/* Left Sidebar */}
+      <aside
+        className={`fixed left-0 top-0 z-40 h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl transition-all duration-300 ${
+          sidebarCollapsed ? 'w-20' : 'w-72'
+        } hidden lg:block`}
+      >
+        {/* Logo Section */}
+        <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4">
+          {!sidebarCollapsed && (
+            <div className="flex items-center space-x-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
+                <Activity className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-white">LogicCanvas</h1>
+                <p className="text-xs text-slate-400">Workflow Builder</p>
+              </div>
+            </div>
+          )}
+          {sidebarCollapsed && (
+            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
               <Activity className="h-6 w-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900">LogicCanvas</h1>
-              <p className="text-xs text-slate-500">Visual Workflow Builder</p>
-            </div>
-          </div>
+          )}
+        </div>
 
-          {/* Navigation Tabs */}
-          <nav className="flex space-x-1 rounded-lg bg-slate-100 p-1">
-            <button
-              onClick={() => {
-                setActiveTab('workflows');
-                setCurrentView('workflows');
-              }}
-              className={`flex items-center space-x-2 rounded-md px-4 py-2 text-xs sm:text-sm transition-colors ${
-                activeTab === 'workflows'
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              data-testid="tab-workflows"
-            >
-              <Workflow className="h-4 w-4" />
-              <span>Workflows</span>
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('forms');
-                setCurrentView('forms');
-              }}
-              className={`flex items-center space-x-2 rounded-md px-4 py-2 text-xs sm:text-sm transition-colors ${
-                activeTab === 'forms'
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              data-testid="tab-forms"
-            >
-              <FileText className="h-4 w-4" />
-              <span>Forms</span>
-            </button>
-          </nav>
+        {/* Navigation */}
+        <nav className="flex-1 space-y-1 px-3 py-4">
+          <button
+            onClick={() => {
+              setActiveTab('workflows');
+              setCurrentView('workflows');
+              setMobileSidebarOpen(false);
+            }}
+            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              activeTab === 'workflows'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+            }`}
+            data-testid="sidebar-workflows"
+          >
+            <Workflow className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Workflows</span>}
+          </button>
 
-          {/* Quick Actions + Role & User */}
-          <div className="flex items-center space-x-2">
-            {/* Role Switcher */}
-            <div className="hidden items-center space-x-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-600 sm:flex">
-              <Shield className="mr-1 h-3.5 w-3.5 text-primary-500" />
-              <span className="hidden sm:inline">Role:</span>
+          <button
+            onClick={() => {
+              setActiveTab('forms');
+              setCurrentView('forms');
+              setMobileSidebarOpen(false);
+            }}
+            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              activeTab === 'forms'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+            }`}
+            data-testid="sidebar-forms"
+          >
+            <FileText className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Forms</span>}
+          </button>
+
+          <div className="my-3 border-t border-slate-700"></div>
+
+          {can('accessTasks') && (
+            <button
+              onClick={() => setShowTaskInbox(true)}
+              className="relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+              data-testid="sidebar-tasks"
+            >
+              <CheckSquare className="h-5 w-5 flex-shrink-0" />
+              {!sidebarCollapsed && <span>Tasks</span>}
+              {taskCount > 0 && (
+                <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                  {taskCount > 9 ? '9+' : taskCount}
+                </span>
+              )}
+            </button>
+          )}
+
+          {can('accessApprovals') && (
+            <button
+              onClick={() => setShowApprovalQueue(true)}
+              className="relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+              data-testid="sidebar-approvals"
+            >
+              <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
+              {!sidebarCollapsed && <span>Approvals</span>}
+              {approvalCount > 0 && (
+                <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
+                  {approvalCount > 9 ? '9+' : approvalCount}
+                </span>
+              )}
+            </button>
+          )}
+
+          <button
+            onClick={() => setShowNotifications(true)}
+            className="relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+            data-testid="sidebar-notifications"
+          >
+            <Bell className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Notifications</span>}
+            {notificationCount > 0 && (
+              <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
+                {notificationCount > 9 ? '9+' : notificationCount}
+              </span>
+            )}
+          </button>
+
+          {can('accessAnalytics') && (
+            <button
+              onClick={() => setShowAnalytics(true)}
+              className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+              data-testid="sidebar-analytics"
+            >
+              <BarChart3 className="h-5 w-5 flex-shrink-0" />
+              {!sidebarCollapsed && <span>Analytics</span>}
+            </button>
+          )}
+
+          <button
+            onClick={() => setShowAuditTrail(true)}
+            className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+            data-testid="sidebar-audit"
+          >
+            <History className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Audit Trail</span>}
+          </button>
+
+          <div className="my-3 border-t border-slate-700"></div>
+
+          <button
+            onClick={() => setShowGlobalSearch(true)}
+            className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+            data-testid="sidebar-search"
+          >
+            <SearchIcon className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Search</span>}
+          </button>
+
+          {can('accessImportExport') && (
+            <button
+              onClick={() => setShowImportExport(true)}
+              className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+              data-testid="sidebar-import-export"
+            >
+              <Download className="h-5 w-5 flex-shrink-0" />
+              {!sidebarCollapsed && <span>Import/Export</span>}
+            </button>
+          )}
+
+          <button
+            onClick={() => setShowOnboarding(true)}
+            className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+            data-testid="sidebar-tour"
+          >
+            <Home className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Take a Tour</span>}
+          </button>
+        </nav>
+
+        {/* User Section */}
+        <div className="border-t border-slate-700 p-4">
+          {/* Role Switcher */}
+          {!sidebarCollapsed && (
+            <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+              <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
+                <Shield className="h-3.5 w-3.5" />
+                <span>Current Role</span>
+              </div>
               <select
                 value={currentRole}
                 onChange={(e) => setCurrentRole(e.target.value)}
-                className="bg-transparent text-xs font-medium text-slate-800 focus:outline-none"
-                data-testid="role-switcher-select"
+                className="w-full rounded-md border border-slate-600 bg-slate-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                data-testid="sidebar-role-switcher"
               >
                 <option value="admin">Admin</option>
                 <option value="builder">Builder</option>
@@ -318,187 +432,166 @@ const AppShell = () => {
                 <option value="viewer">Viewer</option>
               </select>
             </div>
+          )}
 
-            <button
-              onClick={() => setShowOnboarding(true)}
-              className="hidden items-center space-x-1 rounded-lg px-3 py-2 text-xs text-slate-600 hover:bg-slate-100 sm:flex"
-              data-testid="open-onboarding-btn"
-            >
-              <span>Take a tour</span>
-            </button>
-
-            <button
-              onClick={() => setShowGlobalSearch(true)}
-              className="flex items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-primary-50 hover:text-primary-600"
-              data-testid="open-search-btn"
-            >
-              <SearchIcon className="h-5 w-5" />
-              <span className="hidden sm:inline">Search</span>
-            </button>
-
-            {can('accessImportExport') && (
-              <button
-                onClick={() => setShowImportExport(true)}
-                className="hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-emerald-50 hover:text-emerald-600 md:flex"
-                data-testid="open-import-export-btn"
-              >
-                <Download className="h-5 w-5" />
-                <span className="hidden sm:inline">Import/Export</span>
-              </button>
-            )}
-
-            {can('accessTasks') && (
-              <button
-                onClick={() => setShowTaskInbox(true)}
-                className="relative hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600 md:flex"
-                data-testid="open-task-inbox-btn"
-              >
-                <CheckSquare className="h-5 w-5" />
-                <span className="hidden sm:inline">Tasks</span>
-                {taskCount > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
-                    {taskCount > 9 ? '9+' : taskCount}
-                  </span>
-                )}
-              </button>
-            )}
-
-            {can('accessApprovals') && (
-              <button
-                onClick={() => setShowApprovalQueue(true)}
-                className="relative hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-purple-50 hover:text-purple-600 md:flex"
-                data-testid="open-approval-queue-btn"
-              >
-                <ClipboardCheck className="h-5 w-5" />
-                <span className="hidden sm:inline">Approvals</span>
-                {approvalCount > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
-                    {approvalCount > 9 ? '9+' : approvalCount}
-                  </span>
-                )}
-              </button>
-            )}
-
-            <button
-              onClick={() => setShowNotifications(true)}
-              className="relative hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600 md:flex"
-              data-testid="open-notifications-btn"
-            >
-              <Bell className="h-5 w-5" />
-              <span className="hidden sm:inline">Alerts</span>
-              {notificationCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
-                  {notificationCount > 9 ? '9+' : notificationCount}
-                </span>
+          {/* User Info */}
+          {currentUser && (
+            <div className={`mb-3 rounded-lg bg-slate-800/50 p-3 ${sidebarCollapsed ? 'text-center' : ''}`}>
+              {!sidebarCollapsed ? (
+                <>
+                  <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
+                  <div className="text-xs text-slate-400">{currentUser.role}</div>
+                </>
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white">
+                  {(currentUser.name || currentUser.email).charAt(0).toUpperCase()}
+                </div>
               )}
-            </button>
+            </div>
+          )}
 
-            {can('accessAnalytics') && (
-              <button
-                onClick={() => setShowAnalytics(true)}
-                className="hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-purple-50 hover:text-purple-600 md:flex"
-                data-testid="open-analytics-btn"
-              >
-                <BarChart3 className="h-5 w-5" />
-                <span className="hidden sm:inline">Analytics</span>
-              </button>
-            )}
-
-            <button
-              onClick={() => setShowAuditTrail(true)}
-              className="hidden items-center space-x-2 rounded-lg px-3 py-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 md:flex"
-              data-testid="open-audit-trail-btn"
-            >
-              <History className="h-5 w-5" />
-              <span className="hidden sm:inline">Audit</span>
-            </button>
-
-            {currentUser && (
-              <div
-                className="hidden items-center space-x-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 md:flex"
-                data-testid="app-current-user-chip"
-              >
-                <Shield className="h-3.5 w-3.5 text-primary-500" />
-                <span className="font-medium">{currentUser.name || currentUser.email}</span>
-                <span className="text-slate-400">· {currentUser.role}</span>
-              </div>
-            )}
-
-            <button
-              onClick={handleLogout}
-              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
-              data-testid="app-logout-btn"
-            >
-              Logout
-            </button>
-          </div>
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20"
+            data-testid="sidebar-logout"
+          >
+            <LogOut className="h-4 w-4" />
+            {!sidebarCollapsed && <span>Logout</span>}
+          </button>
         </div>
-      </header>
+
+        {/* Collapse Toggle */}
+        <button
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg transition-all hover:bg-slate-600"
+        >
+          {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </button>
+      </aside>
+
+      {/* Mobile Sidebar */}
+      {mobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)}></div>
+          <aside className="absolute left-0 top-0 h-full w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
+            <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4">
+              <div className="flex items-center space-x-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
+                  <Activity className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-white">LogicCanvas</h1>
+                  <p className="text-xs text-slate-400">Workflow Builder</p>
+                </div>
+              </div>
+              <button onClick={() => setMobileSidebarOpen(false)} className="text-slate-400 hover:text-white">
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+              <button
+                onClick={() => {
+                  setActiveTab('workflows');
+                  setCurrentView('workflows');
+                  setMobileSidebarOpen(false);
+                }}
+                className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeTab === 'workflows'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <Workflow className="h-5 w-5 flex-shrink-0" />
+                <span>Workflows</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('forms');
+                  setCurrentView('forms');
+                  setMobileSidebarOpen(false);
+                }}
+                className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeTab === 'forms'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <FileText className="h-5 w-5 flex-shrink-0" />
+                <span>Forms</span>
+              </button>
+            </nav>
+          </aside>
+        </div>
+      )}
 
       {/* Main Content */}
-      <main>
-        {currentView === 'workflows' && (
-          <WorkflowList
-            onSelectWorkflow={handleSelectWorkflow}
-            onCreateNew={handleCreateNew}
-            onLoadRecruitingSample={() => {
-              if (!can('createWorkflows')) {
-                addToast('You do not have permission to load templates.', 'error');
-                return;
-              }
-              const template = getRecruitingWorkflowTemplate();
-              setCurrentWorkflow(template);
-              setCurrentView('canvas');
-            }}
-            onNotify={addToast}
-          />
-        )}
-
-        {currentView === 'forms' && (
-          <FormList
-            onSelectForm={handleSelectForm}
-            onCreateNew={handleCreateNewForm}
-            onNotify={addToast}
-          />
-        )}
-
-        {currentView === 'canvas' && (
-          <div className="relative">
-            {/* Back Button */}
-            <button
-              onClick={handleBackToList}
-              className="absolute left-4 top-4 z-10 flex items-center space-x-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-700 shadow-md transition-colors hover:bg-slate-50"
-              data-testid="back-to-list-btn"
-            >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span>Back to Workflows</span>
+      <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-72'}`}>
+        {/* Mobile Header */}
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm lg:hidden">
+          <div className="flex h-16 items-center justify-between px-4">
+            <button onClick={() => setMobileSidebarOpen(true)} className="text-slate-600 hover:text-slate-900">
+              <Menu className="h-6 w-6" />
             </button>
-
-            <WorkflowCanvas workflow={currentWorkflow} onSave={handleSaveWorkflow} />
+            <div className="flex items-center space-x-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700">
+                <Activity className="h-5 w-5 text-white" />
+              </div>
+              <h1 className="text-lg font-bold text-slate-900">LogicCanvas</h1>
+            </div>
+            <div className="w-6"></div>
           </div>
-        )}
+        </header>
 
-        {currentView === 'form-builder' && <FormBuilder form={currentForm} onBack={handleBackToForms} />}
+        {/* Content Area */}
+        <div className="min-h-screen">
+          {currentView === 'workflows' && (
+            <WorkflowList
+              onSelectWorkflow={handleSelectWorkflow}
+              onCreateNew={handleCreateNew}
+              onLoadRecruitingSample={() => {
+                if (!can('createWorkflows')) {
+                  addToast('You do not have permission to load templates.', 'error');
+                  return;
+                }
+                const template = getRecruitingWorkflowTemplate();
+                setCurrentWorkflow(template);
+                setCurrentView('canvas');
+              }}
+              onNotify={addToast}
+            />
+          )}
+
+          {currentView === 'forms' && (
+            <FormList onSelectForm={handleSelectForm} onCreateNew={handleCreateNewForm} onNotify={addToast} />
+          )}
+
+          {currentView === 'canvas' && (
+            <div className="relative">
+              <button
+                onClick={handleBackToList}
+                className="absolute left-4 top-4 z-10 flex items-center space-x-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-700 shadow-md transition-colors hover:bg-slate-50"
+                data-testid="back-to-list-btn"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>Back to Workflows</span>
+              </button>
+              <WorkflowCanvas workflow={currentWorkflow} onSave={handleSaveWorkflow} />
+            </div>
+          )}
+
+          {currentView === 'form-builder' && <FormBuilder form={currentForm} onBack={handleBackToForms} />}
+        </div>
       </main>
 
-      {/* Task Inbox Modal */}
+      {/* Modals */}
       {showTaskInbox && <TaskInbox onClose={() => setShowTaskInbox(false)} onNotify={addToast} />}
-
-      {/* Approval Queue Modal */}
       {showApprovalQueue && <ApprovalQueue onClose={() => setShowApprovalQueue(false)} onNotify={addToast} />}
-
-      {/* Notifications Panel Modal */}
       {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
-
-      {/* Audit Trail Modal */}
       {showAuditTrail && <AuditTrail onClose={() => setShowAuditTrail(false)} />}
-
-      {/* Analytics Dashboard Modal */}
       {showAnalytics && <AnalyticsDashboard onClose={() => setShowAnalytics(false)} />}
-
-      {/* Global Search Modal */}
       {showGlobalSearch && (
         <GlobalSearch
           isOpen={showGlobalSearch}
@@ -507,8 +600,6 @@ const AppShell = () => {
           onSelectForm={handleSelectForm}
         />
       )}
-
-      {/* Import/Export Modal */}
       {showImportExport && (
         <ImportExport
           isOpen={showImportExport}
@@ -522,11 +613,7 @@ const AppShell = () => {
           onNotify={addToast}
         />
       )}
-
-      {/* Onboarding Tour */}
       <OnboardingTour isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
-
-      {/* Toast Notifications */}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
