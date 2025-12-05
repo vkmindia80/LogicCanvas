@@ -36,7 +36,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             {currentUser ? (
               <button
                 onClick={onLogout}
-                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition-all"
+                className="rounded-xl border-2 border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-md hover:bg-slate-50 transition-all"
                 data-testid="landing-logout-btn"
               >
                 Logout
@@ -44,11 +44,11 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             ) : (
               <button
                 onClick={onGetStarted}
-                className="inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-primary-500 to-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary-500/40 hover:shadow-xl hover:shadow-primary-500/50 transition-all"
+                className="group inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-primary-500/40 transition-all hover:shadow-2xl hover:shadow-primary-500/50"
                 data-testid="landing-login-btn"
               >
                 <span>Access Demo</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
             )}
           </div>
