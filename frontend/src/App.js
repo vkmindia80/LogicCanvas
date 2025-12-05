@@ -345,6 +345,11 @@ function App() {
         {showAuditTrail && (
           <AuditTrail onClose={() => setShowAuditTrail(false)} />
         )}
+
+        {/* Analytics Dashboard Modal */}
+        {showAnalytics && (
+          <AnalyticsDashboard onClose={() => setShowAnalytics(false)} />
+        )}
       </div>
     </WorkflowProvider>
   );
