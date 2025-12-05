@@ -314,29 +314,39 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center space-x-2 pt-4 border-t border-slate-100">
+                  <div className="flex items-center space-x-1 pt-4 border-t border-slate-100">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onSelectWorkflow(workflow);
                       }}
-                      className="flex-1 flex items-center justify-center space-x-1 text-primary-600 hover:bg-primary-50 px-3 py-2 rounded transition-colors"
+                      className="flex-1 flex items-center justify-center space-x-1 text-primary-600 hover:bg-primary-50 px-2 py-2 rounded transition-colors"
                       data-testid="workflow-edit-btn"
                     >
                       <Edit className="w-4 h-4" />
-                      <span className="text-sm font-medium">Edit</span>
+                      <span className="text-xs font-medium">Edit</span>
                     </button>
                     <button
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 flex items-center justify-center space-x-1 text-green-600 hover:bg-green-50 px-3 py-2 rounded transition-colors"
+                      onClick={(e) => duplicateWorkflow(workflow.id, e)}
+                      className="flex-1 flex items-center justify-center space-x-1 text-blue-600 hover:bg-blue-50 px-2 py-2 rounded transition-colors"
+                      title="Duplicate"
                     >
-                      <Play className="w-4 h-4" />
-                      <span className="text-sm font-medium">Run</span>
+                      <Copy className="w-4 h-4" />
+                      <span className="text-xs font-medium">Copy</span>
+                    </button>
+                    <button
+                      onClick={(e) => openVersionHistory(workflow.id, e)}
+                      className="flex-1 flex items-center justify-center space-x-1 text-purple-600 hover:bg-purple-50 px-2 py-2 rounded transition-colors"
+                      title="Version History"
+                    >
+                      <Clock className="w-4 h-4" />
+                      <span className="text-xs font-medium">Versions</span>
                     </button>
                     <button
                       onClick={(e) => deleteWorkflow(workflow.id, e)}
-                      className="flex items-center justify-center text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors"
+                      className="flex items-center justify-center text-red-600 hover:bg-red-50 px-2 py-2 rounded transition-colors"
                       data-testid="workflow-delete-btn"
+                      title="Delete"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -345,6 +355,20 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
               </div>
             ))}
           </div>
+        )}
+
+        {/* Version History Modal */}
+        {showVersionHistory && versionWorkflowId && (
+          <VersionHistory
+            workflowId={versionWorkflowId}
+            onClose={() => {
+              setShowVersionHistory(false);
+              setVersionWorkflowId(null);
+            }}
+            onRollback={() => {
+              loadWorkflows();
+            }}
+          />
         )}
       </div>
     </div>
