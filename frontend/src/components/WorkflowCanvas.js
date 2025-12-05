@@ -580,8 +580,30 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
 
           <div className="flex items-center justify-between">
-            {/* Left: Template & AI Builder */}
+            {/* Left: Undo/Redo + Template & AI Builder */}
             <div className="flex items-center space-x-2">
+              {/* Undo/Redo */}
+              <div className="flex items-center space-x-1 border-r border-slate-300 pr-2 mr-1">
+                <button
+                  onClick={handleUndo}
+                  disabled={historyIndex <= 0}
+                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Undo (Ctrl+Z)"
+                  data-testid="undo-btn"
+                >
+                  <Undo2 className="w-4 h-4 text-slate-700" />
+                </button>
+                <button
+                  onClick={handleRedo}
+                  disabled={historyIndex >= history.length - 1}
+                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Redo (Ctrl+Y)"
+                  data-testid="redo-btn"
+                >
+                  <Redo2 className="w-4 h-4 text-slate-700" />
+                </button>
+              </div>
+
               {showTemplates && (
                 <button
                   onClick={showTemplates}
