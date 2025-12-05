@@ -1764,6 +1764,396 @@ async def get_user_workload():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ===================================================================
+# PHASE 7: IMPORT/EXPORT, VERSION CONTROL, SEARCH & MANAGEMENT
+# ===================================================================
+
+# -------------------------------
+# Import/Export Endpoints
+# -------------------------------
+
+@app.post("/api/workflows/export")
+async def export_workflows(workflow_ids: Optional[List[str]] = None):
+    """Export workflows to JSON format"""
+    try:
+        query = {}
+        if workflow_ids:
+            query = {"id": {"$in": workflow_ids}}
+        
+        workflows = list(workflows_collection.find(query))
+        
+        # Remove MongoDB _id field
+        for workflow in workflows:
+            if '_id' in workflow:
+                del workflow['_id']
+        
+        return {
+            "workflows": workflows,
+            "exported_at": datetime.utcnow().isoformat(),
+            "count": len(workflows)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/import")
+async def import_workflows(workflows_data: Dict[str, Any]):
+    """Import workflows from JSON"""
+    try:
+        workflows = workflows_data.get("workflows", [])
+        imported = []
+        errors = []
+        
+        for workflow in workflows:
+            try:
+                # Generate new ID
+                workflow_id = str(uuid.uuid4())
+                workflow['id'] = workflow_id
+                workflow['created_at'] = datetime.utcnow().isoformat()
+                workflow['updated_at'] = datetime.utcnow().isoformat()
+                workflow['status'] = 'draft'  # Imported workflows start as draft
+                
+                # Insert to database
+                workflows_collection.insert_one(workflow)
+                imported.append(workflow_id)
+                
+                # Audit log
+                audit_logs_collection.insert_one({
+                    "id": str(uuid.uuid4()),
+                    "entity_type": "workflow",
+                    "entity_id": workflow_id,
+                    "action": "imported",
+                    "user": "system",
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "details": {"name": workflow.get("name", "Untitled")}
+                })
+            except Exception as e:
+                errors.append({
+                    "workflow": workflow.get("name", "Unknown"),
+                    "error": str(e)
+                })
+        
+        return {
+            "imported_count": len(imported),
+            "imported_ids": imported,
+            "errors": errors,
+            "success": len(imported) > 0
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# -------------------------------
+# Version Control Endpoints
+# -------------------------------
+
+@app.post("/api/workflows/{workflow_id}/versions")
+async def create_workflow_version(workflow_id: str):
+    """Create a new version of a workflow"""
+    try:
+        workflow = workflows_collection.find_one({"id": workflow_id})
+        if not workflow:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+        
+        # Create version snapshot
+        version_id = str(uuid.uuid4())
+        version_data = {
+            "id": version_id,
+            "workflow_id": workflow_id,
+            "version_number": workflow.get("version", 1),
+            "name": workflow.get("name"),
+            "description": workflow.get("description"),
+            "nodes": workflow.get("nodes", []),
+            "edges": workflow.get("edges", []),
+            "status": workflow.get("status"),
+            "tags": workflow.get("tags", []),
+            "created_at": datetime.utcnow().isoformat(),
+            "created_by": "system"
+        }
+        
+        # Store in versions collection (create if doesn't exist)
+        versions_collection = db['workflow_versions']
+        versions_collection.insert_one(version_data)
+        
+        # Increment workflow version
+        workflows_collection.update_one(
+            {"id": workflow_id},
+            {"$inc": {"version": 1}, "$set": {"updated_at": datetime.utcnow().isoformat()}}
+        )
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow",
+            "entity_id": workflow_id,
+            "action": "version_created",
+            "user": "system",
+            "timestamp": datetime.utcnow().isoformat(),
+            "details": {"version": version_data["version_number"]}
+        })
+        
+        return {
+            "version_id": version_id,
+            "version_number": version_data["version_number"],
+            "message": "Version created successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/workflows/{workflow_id}/versions")
+async def get_workflow_versions(workflow_id: str):
+    """Get all versions of a workflow"""
+    try:
+        versions_collection = db['workflow_versions']
+        versions = list(versions_collection.find({"workflow_id": workflow_id}))
+        
+        # Remove MongoDB _id
+        for version in versions:
+            if '_id' in version:
+                del version['_id']
+        
+        # Sort by version number descending
+        versions.sort(key=lambda x: x.get("version_number", 0), reverse=True)
+        
+        return {"versions": versions, "count": len(versions)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/{workflow_id}/rollback/{version_id}")
+async def rollback_workflow(workflow_id: str, version_id: str):
+    """Rollback workflow to a specific version"""
+    try:
+        versions_collection = db['workflow_versions']
+        version = versions_collection.find_one({"id": version_id, "workflow_id": workflow_id})
+        
+        if not version:
+            raise HTTPException(status_code=404, detail="Version not found")
+        
+        # Update workflow with version data
+        update_data = {
+            "nodes": version.get("nodes", []),
+            "edges": version.get("edges", []),
+            "description": version.get("description", ""),
+            "tags": version.get("tags", []),
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        
+        workflows_collection.update_one(
+            {"id": workflow_id},
+            {"$set": update_data}
+        )
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow",
+            "entity_id": workflow_id,
+            "action": "rolled_back",
+            "user": "system",
+            "timestamp": datetime.utcnow().isoformat(),
+            "details": {"version": version.get("version_number")}
+        })
+        
+        return {"message": "Workflow rolled back successfully", "version": version.get("version_number")}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# -------------------------------
+# Bulk Operations Endpoints
+# -------------------------------
+
+@app.post("/api/workflows/bulk-delete")
+async def bulk_delete_workflows(workflow_ids: List[str]):
+    """Delete multiple workflows at once"""
+    try:
+        deleted = []
+        errors = []
+        
+        for workflow_id in workflow_ids:
+            try:
+                result = workflows_collection.delete_one({"id": workflow_id})
+                if result.deleted_count > 0:
+                    deleted.append(workflow_id)
+                    
+                    # Audit log
+                    audit_logs_collection.insert_one({
+                        "id": str(uuid.uuid4()),
+                        "entity_type": "workflow",
+                        "entity_id": workflow_id,
+                        "action": "deleted",
+                        "user": "system",
+                        "timestamp": datetime.utcnow().isoformat(),
+                        "details": {}
+                    })
+                else:
+                    errors.append({"id": workflow_id, "error": "Not found"})
+            except Exception as e:
+                errors.append({"id": workflow_id, "error": str(e)})
+        
+        return {
+            "deleted_count": len(deleted),
+            "deleted_ids": deleted,
+            "errors": errors
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/bulk-update-status")
+async def bulk_update_status(workflow_ids: List[str], status: str):
+    """Update status of multiple workflows"""
+    try:
+        updated = []
+        
+        for workflow_id in workflow_ids:
+            result = workflows_collection.update_one(
+                {"id": workflow_id},
+                {"$set": {"status": status, "updated_at": datetime.utcnow().isoformat()}}
+            )
+            if result.modified_count > 0:
+                updated.append(workflow_id)
+        
+        return {
+            "updated_count": len(updated),
+            "updated_ids": updated,
+            "status": status
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/{workflow_id}/duplicate")
+async def duplicate_workflow(workflow_id: str):
+    """Duplicate a workflow"""
+    try:
+        workflow = workflows_collection.find_one({"id": workflow_id})
+        if not workflow:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+        
+        # Create duplicate
+        new_id = str(uuid.uuid4())
+        duplicate = {
+            "id": new_id,
+            "name": f"{workflow.get('name', 'Untitled')} (Copy)",
+            "description": workflow.get("description", ""),
+            "nodes": workflow.get("nodes", []),
+            "edges": workflow.get("edges", []),
+            "status": "draft",
+            "version": 1,
+            "tags": workflow.get("tags", []),
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        
+        workflows_collection.insert_one(duplicate)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow",
+            "entity_id": new_id,
+            "action": "duplicated",
+            "user": "system",
+            "timestamp": datetime.utcnow().isoformat(),
+            "details": {"source_id": workflow_id}
+        })
+        
+        return {
+            "id": new_id,
+            "message": "Workflow duplicated successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# -------------------------------
+# Global Search Endpoint
+# -------------------------------
+
+@app.get("/api/search")
+async def global_search(query: str, entity_types: Optional[str] = "all"):
+    """Global search across workflows, forms, tasks"""
+    try:
+        results = {
+            "workflows": [],
+            "forms": [],
+            "tasks": [],
+            "approvals": []
+        }
+        
+        search_types = entity_types.split(",") if entity_types != "all" else ["workflows", "forms", "tasks", "approvals"]
+        
+        # Search workflows
+        if "workflows" in search_types:
+            workflows = list(workflows_collection.find({
+                "$or": [
+                    {"name": {"$regex": query, "$options": "i"}},
+                    {"description": {"$regex": query, "$options": "i"}},
+                    {"tags": {"$regex": query, "$options": "i"}}
+                ]
+            }).limit(10))
+            
+            for wf in workflows:
+                if '_id' in wf:
+                    del wf['_id']
+                results["workflows"].append(wf)
+        
+        # Search forms
+        if "forms" in search_types:
+            forms = list(forms_collection.find({
+                "$or": [
+                    {"name": {"$regex": query, "$options": "i"}},
+                    {"description": {"$regex": query, "$options": "i"}}
+                ]
+            }).limit(10))
+            
+            for form in forms:
+                if '_id' in form:
+                    del form['_id']
+                results["forms"].append(form)
+        
+        # Search tasks
+        if "tasks" in search_types:
+            tasks = list(tasks_collection.find({
+                "$or": [
+                    {"title": {"$regex": query, "$options": "i"}},
+                    {"description": {"$regex": query, "$options": "i"}}
+                ]
+            }).limit(10))
+            
+            for task in tasks:
+                if '_id' in task:
+                    del task['_id']
+                results["tasks"].append(task)
+        
+        # Search approvals
+        if "approvals" in search_types:
+            approvals = list(approvals_collection.find({
+                "$or": [
+                    {"title": {"$regex": query, "$options": "i"}},
+                    {"description": {"$regex": query, "$options": "i"}}
+                ]
+            }).limit(10))
+            
+            for approval in approvals:
+                if '_id' in approval:
+                    del approval['_id']
+                results["approvals"].append(approval)
+        
+        total_results = sum(len(results[key]) for key in results)
+        
+        return {
+            "query": query,
+            "results": results,
+            "total": total_results
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
