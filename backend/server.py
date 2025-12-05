@@ -1063,6 +1063,236 @@ async def get_at_risk_tasks():
     """Get tasks due within 24 hours"""
     now = datetime.utcnow()
     tomorrow = (now + timedelta(hours=24)).isoformat()
+
+
+# ==================== SAMPLE DATA GENERATOR ====================
+
+@app.post("/api/admin/generate-sample-data")
+async def generate_sample_data():
+    """Generate comprehensive sample data across the system for demo purposes.
+
+    This endpoint is idempotent-ish: it seeds core entities once and only
+    appends more workflows/instances/tasks on subsequent calls without
+    duplicating users/roles.
+    """
+    now = datetime.utcnow().isoformat()
+
+    # --- Seed users & roles (reuse existing demo users/roles) ---
+    # Users: admin/builder/approver already seeded via AUTO_USERS above.
+    # Ensure a few more execution users exist.
+    extra_users = [
+        {"email": "requester@example.com", "name": "Requester User", "role": "builder"},
+        {"email": "analyst@example.com", "name": "Analytics User", "role": "approver"},
+    ]
+    for u in extra_users:
+        if not users_collection.find_one({"email": u["email"]}):
+            users_collection.insert_one({
+                "id": str(uuid.uuid4()),
+                "email": u["email"],
+                "name": u["name"],
+                "role": u["role"],
+                "password_hash": get_password_hash("password123"),
+                "workload": 0,
+                "created_at": now,
+            })
+
+    # Roles: ensure builder/approver/admin roles exist for UI RBAC demos
+    base_roles = [
+        {"name": "admin", "members": ["admin@example.com"]},
+        {"name": "builder", "members": ["builder@example.com", "requester@example.com"]},
+        {"name": "approver", "members": ["approver@example.com", "analyst@example.com"]},
+    ]
+    for r in base_roles:
+        existing = roles_collection.find_one({"name": r["name"]})
+        if existing:
+            # Merge members
+            merged = sorted(list(set(existing.get("members", []) + r["members"])))
+            roles_collection.update_one({"name": r["name"]}, {"$set": {"members": merged}})
+        else:
+            roles_collection.insert_one({
+                "id": str(uuid.uuid4()),
+                "name": r["name"],
+                "members": r["members"],
+            })
+
+    # --- Seed a couple of sample forms ---
+    if forms_collection.count_documents({}) == 0:
+        hiring_form_id = str(uuid.uuid4())
+        expense_form_id = str(uuid.uuid4())
+        forms_collection.insert_many([
+            {
+                "id": hiring_form_id,
+                "name": "Job Application Form",
+                "description": "Capture candidate details for the recruiting workflow.",
+                "fields": [
+                    {"id": "full_name", "label": "Full Name", "type": "text", "required": True},
+                    {"id": "email", "label": "Email", "type": "email", "required": True},
+                    {"id": "role", "label": "Role Applied For", "type": "text", "required": True},
+                    {"id": "experience", "label": "Years of Experience", "type": "number"},
+                ],
+                "tags": ["recruiting", "demo"],
+                "version": 1,
+                "created_at": now,
+                "updated_at": now,
+            },
+            {
+                "id": expense_form_id,
+                "name": "Expense Reimbursement Form",
+                "description": "Submit expenses for approval.",
+                "fields": [
+                    {"id": "employee", "label": "Employee Name", "type": "text", "required": True},
+                    {"id": "amount", "label": "Amount", "type": "number", "required": True},
+                    {"id": "category", "label": "Category", "type": "dropdown", "options": ["Travel", "Meals", "Office"], "required": True},
+                ],
+                "tags": ["finance", "demo"],
+                "version": 1,
+                "created_at": now,
+                "updated_at": now,
+            },
+        ])
+
+    # --- Seed a sample workflow with nodes & edges ---
+    sample_workflow = workflows_collection.find_one({"tags": {"$in": ["demo"]}})
+    if not sample_workflow:
+        wf_id = str(uuid.uuid4())
+        # Pick first form as attached form
+        form = forms_collection.find_one({}, {"_id": 0})
+        form_id = form["id"] if form else None
+
+        nodes = [
+            {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "Start"}},
+            {
+                "id": "form-1",
+                "type": "form",
+                "position": {"x": 300, "y": 100},
+                "data": {"label": "Candidate Details", "formId": form_id},
+            },
+            {
+                "id": "task-1",
+                "type": "task",
+                "position": {"x": 500, "y": 100},
+                "data": {
+                    "label": "Initial Screening",
+                    "description": "Recruiter reviews application",
+                    "assignmentStrategy": "role",
+                    "assignmentRole": "builder",
+                    "priority": "medium",
+                    "dueInHours": 24,
+                },
+            },
+            {
+                "id": "approval-1",
+                "type": "approval",
+                "position": {"x": 700, "y": 100},
+                "data": {
+                    "label": "Hiring Manager Approval",
+                    "approvers": ["approver@example.com"],
+                    "approvalType": "single",
+                },
+            },
+            {"id": "end-1", "type": "end", "position": {"x": 900, "y": 100}, "data": {"label": "Hired"}},
+        ]
+
+        edges = [
+            {"id": "e-start-form", "source": "start-1", "target": "form-1"},
+            {"id": "e-form-task", "source": "form-1", "target": "task-1"},
+            {"id": "e-task-approval", "source": "task-1", "target": "approval-1"},
+            {"id": "e-approval-end", "source": "approval-1", "target": "end-1"},
+        ]
+
+        workflows_collection.insert_one(
+            {
+                "id": wf_id,
+                "name": "Sample Recruiting Workflow",
+                "description": "End-to-end hiring example with form, task, and approval.",
+                "nodes": nodes,
+                "edges": edges,
+                "status": "published",
+                "version": 1,
+                "tags": ["recruiting", "demo"],
+                "created_at": now,
+                "updated_at": now,
+            }
+        )
+    else:
+        wf_id = sample_workflow["id"]
+
+    # --- Seed workflow instances, tasks, approvals, notifications ---
+    # Create a few instances in different states for analytics and inboxes
+    for i in range(3):
+        instance_id = str(uuid.uuid4())
+        status = "completed" if i == 0 else ("running" if i == 1 else "waiting")
+        started_at = datetime.utcnow() - timedelta(hours=48 - i * 12)
+        completed_at = started_at + timedelta(hours=4) if status == "completed" else None
+
+        workflow_instances_collection.insert_one(
+            {
+                "id": instance_id,
+                "workflow_id": wf_id,
+                "status": status,
+                "triggered_by": "sample_data",
+                "started_at": started_at.isoformat(),
+                "updated_at": (completed_at or datetime.utcnow()).isoformat(),
+                "completed_at": completed_at.isoformat() if completed_at else None,
+                "current_node_id": "approval-1" if status != "completed" else "end-1",
+                "variables": {},
+                "execution_history": [],
+                "execution_log": [],
+                "node_states": {},
+            }
+        )
+
+        # Create a task and approval tied to the instance
+        task_id = str(uuid.uuid4())
+        tasks_collection.insert_one(
+            {
+                "id": task_id,
+                "workflow_instance_id": instance_id,
+                "node_id": "task-1",
+                "title": "Initial Screening",
+                "description": "Review candidate application",
+                "assigned_to": "builder@example.com",
+                "assignment_strategy": "role",
+                "assignment_role": "builder",
+                "priority": "medium",
+                "status": "completed" if status == "completed" else "pending",
+                "due_date": (started_at + timedelta(hours=24)).isoformat(),
+                "sla_hours": 24,
+                "created_at": started_at.isoformat(),
+                "updated_at": (completed_at or datetime.utcnow()).isoformat(),
+            }
+        )
+
+        approval_id = str(uuid.uuid4())
+        approvals_collection.insert_one(
+            {
+                "id": approval_id,
+                "workflow_instance_id": instance_id,
+                "node_id": "approval-1",
+                "title": "Hiring Manager Approval",
+                "description": "Approve or reject candidate",
+                "approvers": ["approver@example.com"],
+                "approval_type": "single",
+                "status": "approved" if status == "completed" else "pending",
+                "decisions": [],
+                "created_at": started_at.isoformat(),
+                "updated_at": (completed_at or datetime.utcnow()).isoformat(),
+            }
+        )
+
+        notifications_collection.insert_one(
+            {
+                "id": str(uuid.uuid4()),
+                "user": "approver@example.com",
+                "type": "task_assigned",
+                "message": f"New approval request for instance {instance_id}",
+                "created_at": now,
+                "read": False,
+            }
+        )
+
+    return {"message": "Sample data generated successfully"}
+
     now_iso = now.isoformat()
     
     at_risk_tasks = list(tasks_collection.find(
