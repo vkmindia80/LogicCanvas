@@ -25,6 +25,7 @@ function App() {
   const [showApprovalQueue, setShowApprovalQueue] = useState(false);
   const [showAuditTrail, setShowAuditTrail] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [approvalCount, setApprovalCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
