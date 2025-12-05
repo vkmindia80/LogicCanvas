@@ -72,6 +72,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [validationRan, setValidationRan] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState(null);
+  const [showVariablePanel, setShowVariablePanel] = useState(false);
+  
+  // Undo/Redo state
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [isUndoRedoAction, setIsUndoRedoAction] = useState(false);
 
   const reactFlowWrapper = useRef(null);
   const nodeIdCounter = useRef(1);
