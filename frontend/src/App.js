@@ -623,6 +623,24 @@ const AppShell = () => {
         />
       )}
       <OnboardingTour isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
+      <TemplateLibrary
+        isOpen={showTemplateLibrary}
+        onClose={() => setShowTemplateLibrary(false)}
+        onSelectTemplate={(workflow) => {
+          setCurrentWorkflow(workflow);
+          setCurrentView('canvas');
+          addToast('Template loaded successfully!', 'success');
+        }}
+      />
+      <QuickStartWizard
+        isOpen={showQuickStartWizard}
+        onClose={() => setShowQuickStartWizard(false)}
+        onCreate={(workflow) => {
+          setCurrentWorkflow(workflow);
+          setCurrentView('canvas');
+          addToast('Workflow created with AI guidance!', 'success');
+        }}
+      />
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
