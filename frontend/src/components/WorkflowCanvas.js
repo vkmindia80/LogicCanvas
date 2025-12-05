@@ -17,7 +17,7 @@ import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
 import DeletableEdge from './edges/DeletableEdge';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play, Layers, Zap } from 'lucide-react';
+import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
