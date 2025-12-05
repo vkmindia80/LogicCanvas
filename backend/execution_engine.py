@@ -391,6 +391,247 @@ class NodeExecutor:
         
         return {"status": "completed", "output": {"event_processed": True}}
 
+    def execute_screen_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute screen node - display information to user"""
+        screen_data = node.get("data", {})
+        return {"status": "waiting", "waiting_for": "screen", "screen_data": screen_data}
+
+    def execute_switch_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute switch/case node - multi-way branching"""
+        switch_data = node.get("data", {})
+        switch_variable = switch_data.get("variable", "")
+        cases = switch_data.get("cases", [])
+        
+        # Evaluate the variable
+        value = self.evaluator.evaluate(switch_variable, self.variables)
+        
+        # Find matching case
+        matched_case = None
+        for case in cases:
+            case_value = case.get("value")
+            if str(value) == str(case_value):
+                matched_case = case.get("id", case_value)
+                break
+        
+        # If no match, use default
+        if not matched_case:
+            matched_case = "default"
+        
+        return {
+            "status": "completed",
+            "output": {"switch_result": value, "case": matched_case},
+            "route": matched_case
+        }
+
+    def execute_assignment_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute assignment node - set variables"""
+        assignment_data = node.get("data", {})
+        assignments = assignment_data.get("assignments", [])
+        
+        updated_variables = {}
+        for assignment in assignments:
+            var_name = assignment.get("variable")
+            value_expr = assignment.get("value")
+            
+            if var_name and value_expr is not None:
+                # Evaluate the value expression
+                value = self.evaluator.evaluate(str(value_expr), self.variables)
+                updated_variables[var_name] = value
+                self.variables[var_name] = value
+        
+        return {
+            "status": "completed",
+            "output": {"assigned": updated_variables}
+        }
+
+    def execute_loop_for_each_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute for-each loop node"""
+        loop_data = node.get("data", {})
+        collection = loop_data.get("collection", [])
+        item_var = loop_data.get("itemVariable", "item")
+        
+        # Evaluate collection
+        if isinstance(collection, str):
+            collection = self.evaluator.evaluate(collection, self.variables)
+        
+        if not isinstance(collection, list):
+            return {"status": "failed", "error": "Collection is not iterable"}
+        
+        return {
+            "status": "completed",
+            "output": {
+                "loop_type": "for_each",
+                "collection": collection,
+                "item_variable": item_var,
+                "total_iterations": len(collection)
+            },
+            "loop": True
+        }
+
+    def execute_loop_while_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute while loop node"""
+        loop_data = node.get("data", {})
+        condition = loop_data.get("condition", "false")
+        max_iterations = loop_data.get("maxIterations", 100)
+        
+        # Evaluate condition
+        result = self.evaluator.evaluate(condition, self.variables)
+        
+        return {
+            "status": "completed",
+            "output": {
+                "loop_type": "while",
+                "condition": condition,
+                "condition_result": bool(result),
+                "max_iterations": max_iterations
+            },
+            "loop": True,
+            "continue_loop": bool(result)
+        }
+
+    def execute_loop_repeat_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute repeat loop node"""
+        loop_data = node.get("data", {})
+        count = loop_data.get("count", 1)
+        counter_var = loop_data.get("counterVariable", "counter")
+        
+        # Evaluate count
+        if isinstance(count, str):
+            count = self.evaluator.evaluate(count, self.variables)
+        
+        try:
+            count = int(count)
+        except (ValueError, TypeError):
+            count = 1
+        
+        return {
+            "status": "completed",
+            "output": {
+                "loop_type": "repeat",
+                "count": count,
+                "counter_variable": counter_var
+            },
+            "loop": True
+        }
+
+    def execute_lookup_record_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute lookup record node - find record by criteria"""
+        lookup_data = node.get("data", {})
+        collection_name = lookup_data.get("collection", "")
+        criteria = lookup_data.get("criteria", {})
+        
+        if not collection_name:
+            return {"status": "failed", "error": "No collection specified"}
+        
+        # Evaluate criteria with variables
+        evaluated_criteria = {}
+        for key, value in criteria.items():
+            evaluated_criteria[key] = self.evaluator.evaluate(str(value), self.variables)
+        
+        try:
+            collection = self.db[collection_name]
+            record = collection.find_one(evaluated_criteria, {"_id": 0})
+            
+            return {
+                "status": "completed",
+                "output": {"record": record, "found": record is not None}
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Lookup failed: {str(e)}"}
+
+    def execute_create_record_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute create record node - insert into database"""
+        create_data = node.get("data", {})
+        collection_name = create_data.get("collection", "")
+        record_data = create_data.get("recordData", {})
+        
+        if not collection_name:
+            return {"status": "failed", "error": "No collection specified"}
+        
+        # Evaluate record data with variables
+        evaluated_data = {}
+        for key, value in record_data.items():
+            if isinstance(value, str):
+                evaluated_data[key] = self.evaluator.evaluate(value, self.variables)
+            else:
+                evaluated_data[key] = value
+        
+        try:
+            import uuid
+            evaluated_data[\"id\"] = str(uuid.uuid4())
+            
+            collection = self.db[collection_name]
+            result = collection.insert_one(evaluated_data)
+            
+            return {
+                "status": "completed",
+                "output": {
+                    "record_id": evaluated_data[\"id\"],
+                    "inserted": True
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Create failed: {str(e)}"}
+
+    def execute_update_record_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute update record node - modify existing record"""
+        update_data = node.get("data", {})
+        collection_name = update_data.get("collection", "")
+        record_id = update_data.get("recordId", "")
+        update_fields = update_data.get("updateFields", {})
+        
+        if not collection_name or not record_id:
+            return {"status": "failed", "error": "Collection or record ID not specified"}
+        
+        # Evaluate update fields with variables
+        evaluated_updates = {}
+        for key, value in update_fields.items():
+            if isinstance(value, str):
+                evaluated_updates[key] = self.evaluator.evaluate(value, self.variables)
+            else:
+                evaluated_updates[key] = value
+        
+        try:
+            collection = self.db[collection_name]
+            result = collection.update_one(
+                {"id": record_id},
+                {"$set": evaluated_updates}
+            )
+            
+            return {
+                "status": "completed",
+                "output": {
+                    "record_id": record_id,
+                    "updated": result.modified_count > 0,
+                    "matched": result.matched_count > 0
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Update failed: {str(e)}"}
+
+    def execute_delete_record_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute delete record node - remove record"""
+        delete_data = node.get("data", {})
+        collection_name = delete_data.get("collection", "")
+        record_id = delete_data.get("recordId", "")
+        
+        if not collection_name or not record_id:
+            return {"status": "failed", "error": "Collection or record ID not specified"}
+        
+        try:
+            collection = self.db[collection_name]
+            result = collection.delete_one({"id": record_id})
+            
+            return {
+                "status": "completed",
+                "output": {
+                    "record_id": record_id,
+                    "deleted": result.deleted_count > 0
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Delete failed: {str(e)}"}
+
     def execute_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a node based on its type"""
         node_type = node.get("type", "")
@@ -408,6 +649,17 @@ class NodeExecutor:
             "timer": self.execute_timer_node,
             "subprocess": self.execute_subprocess_node,
             "event": self.execute_event_node,
+            # New Sprint 1 nodes
+            "screen": self.execute_screen_node,
+            "switch": self.execute_switch_node,
+            "assignment": self.execute_assignment_node,
+            "loop_for_each": self.execute_loop_for_each_node,
+            "loop_while": self.execute_loop_while_node,
+            "loop_repeat": self.execute_loop_repeat_node,
+            "lookup_record": self.execute_lookup_record_node,
+            "create_record": self.execute_create_record_node,
+            "update_record": self.execute_update_record_node,
+            "delete_record": self.execute_delete_record_node,
         }
 
         executor = executors.get(node_type)
