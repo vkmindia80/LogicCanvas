@@ -48,6 +48,73 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
     }
   };
 
+  const duplicateWorkflow = async (workflowId, event) => {
+    event.stopPropagation();
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workflows/${workflowId}/duplicate`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        alert('Workflow duplicated successfully!');
+        loadWorkflows();
+      }
+    } catch (error) {
+      console.error('Failed to duplicate workflow:', error);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Delete ${selectedWorkflows.length} selected workflow(s)?`)) return;
+    
+    try {
+      await fetch(`${BACKEND_URL}/api/workflows/bulk-delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedWorkflows)
+      });
+      setSelectedWorkflows([]);
+      loadWorkflows();
+    } catch (error) {
+      console.error('Failed to bulk delete:', error);
+    }
+  };
+
+  const handleBulkUpdateStatus = async (status) => {
+    try {
+      await fetch(`${BACKEND_URL}/api/workflows/bulk-update-status?status=${status}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedWorkflows)
+      });
+      setSelectedWorkflows([]);
+      loadWorkflows();
+    } catch (error) {
+      console.error('Failed to bulk update status:', error);
+    }
+  };
+
+  const toggleSelectWorkflow = (workflowId) => {
+    setSelectedWorkflows(prev =>
+      prev.includes(workflowId)
+        ? prev.filter(id => id !== workflowId)
+        : [...prev, workflowId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedWorkflows.length === filteredWorkflows.length) {
+      setSelectedWorkflows([]);
+    } else {
+      setSelectedWorkflows(filteredWorkflows.map(w => w.id));
+    }
+  };
+
+  const openVersionHistory = (workflowId, event) => {
+    event.stopPropagation();
+    setVersionWorkflowId(workflowId);
+    setShowVersionHistory(true);
+  };
+
   const filteredWorkflows = workflows.filter(workflow =>
     workflow.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
