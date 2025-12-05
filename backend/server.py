@@ -9,6 +9,88 @@ from apscheduler.triggers.cron import CronTrigger
 import os
 import uuid
 from execution_engine import WorkflowExecutionEngine, ExpressionEvaluator
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+
+# JWT / Auth configuration
+SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "dev-secret-change-me")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 8
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    user: Dict[str, Any]
+
+
+class TokenData(BaseModel):
+    user_id: Optional[str] = None
+    email: Optional[str] = None
+    role: Optional[str] = None
+
+
+def verify_password(plain_password: str, password_hash: str) -> bool:
+    try:
+        return pwd_context.verify(plain_password, password_hash)
+    except Exception:
+        return False
+
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+
+def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
+    return db["users"].find_one({"email": email})
+
+
+async def get_current_user(token: str = Security(oauth2_scheme)) -> Dict[str, Any]:
+    """Decode JWT and return current user document.
+
+    For now this is used primarily for auditing and simple RBAC checks and is
+    only attached to specific endpoints, so existing anonymous flows continue
+    to work unchanged unless explicitly protected.
+    """
+    credentials_exception = HTTPException(status_code=401, detail="Could not validate credentials")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: Optional[str] = payload.get("sub")
+        email: Optional[str] = payload.get("email")
+        if user_id is None or email is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    user = db["users"].find_one({"id": user_id, "email": email}, {"_id": 0})
+    if not user:
+        raise credentials_exception
+    return user
+
+
+def require_roles(*allowed_roles: str):
+    async def dependency(current_user: Dict[str, Any] = Depends(get_current_user)) -> Dict[str, Any]:
+        role = current_user.get("role")
+        if allowed_roles and role not in allowed_roles:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        return current_user
+
+    return dependency
+
+
 
 app = FastAPI(title="LogicCanvas Workflow Builder API")
 
