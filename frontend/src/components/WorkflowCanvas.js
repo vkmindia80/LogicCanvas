@@ -467,6 +467,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
 
           <div className="flex items-center justify-between">
+            {/* Left: Template & AI Builder */}
             <div className="flex items-center space-x-2">
               {showTemplates && (
                 <button
@@ -484,15 +485,25 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                   onClick={showWizard}
                   className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all font-medium"
                   data-testid="show-wizard-btn"
-                  title="Quick start wizard"
+                  title="AI Builder"
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Wizard</span>
+                  <span>AI Builder</span>
                 </button>
               )}
             </div>
 
+            {/* Right: Capabilities summary + core actions */}
             <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setShowCapabilitiesPanel(true)}
+                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-primary-300"
+                data-testid="designer-capabilities-btn"
+                title="View all designer capabilities"
+              >
+                <Activity className="w-4 h-4 text-primary-500" />
+                <span>Designer Capabilities</span>
+              </button>
               <button
                 onClick={handleValidate}
                 className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all font-medium"
