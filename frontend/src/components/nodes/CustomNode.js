@@ -13,6 +13,8 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  Workflow,
+  Radio,
 } from 'lucide-react';
 import { NODE_TYPES, NODE_CONFIGS } from '../../utils/nodeTypes';
 
@@ -26,6 +28,9 @@ const iconMap = {
   split: Split,
   merge: Merge,
   zap: Zap,
+  clock: Clock,
+  workflow: Workflow,
+  radio: Radio,
 };
 
 const CustomNode = ({ data, selected }) => {
