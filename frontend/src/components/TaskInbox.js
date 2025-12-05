@@ -653,13 +653,12 @@ const TaskInbox = ({ onClose, onNotify }) => {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <CheckSquare className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-600">Select a task</h3>
-                <p className="text-gray-400">Click on a task to view details</p>
-              </div>
-            </div>
+            <EmptyState
+              icon={CheckSquare}
+              title="Select a task"
+              description="Click on a task from the list to view its details, add comments, and take actions."
+              className="flex-1"
+            />
           )}
         </div>
       </div>
