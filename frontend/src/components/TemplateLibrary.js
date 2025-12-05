@@ -18,7 +18,11 @@ const complexityColors = {
   'high': 'bg-orange-100 text-orange-800'
 };
 
-const TemplateLibrary = ({ onClose, onSelectTemplate }) => {
+const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
+  if (!isOpen) {
+    return null;
+  }
+
   const [templates, setTemplates] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
