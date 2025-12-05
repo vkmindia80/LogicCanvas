@@ -436,6 +436,7 @@ const AppShell = () => {
               window.location.reload();
             }
           }}
+          onNotify={addToast}
         />
       )}
 
