@@ -16,6 +16,9 @@ import GlobalSearch from './components/GlobalSearch';
 import ImportExport from './components/ImportExport';
 import OnboardingTour from './components/OnboardingTour';
 import { ToastContainer } from './components/Toast';
+import LoginPage from './components/LoginPage';
+import LandingPage from './components/LandingPage';
+
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
