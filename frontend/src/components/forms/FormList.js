@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, FileText, Edit, Trash2, Copy, Tag } from 'lucide-react';
+import { Plus, Search, FileText, Edit, Trash2, Copy, Tag, ClipboardList } from 'lucide-react';
 import { useRole } from '../../contexts/RoleContext';
+import EmptyState from '../EmptyState';
+import Tooltip from '../Tooltip';
+import { SkeletonCard } from '../Skeleton';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
