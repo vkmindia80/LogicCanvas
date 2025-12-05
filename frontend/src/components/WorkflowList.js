@@ -187,6 +187,51 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
               </button>
             </div>
           </div>
+
+          {/* Bulk Actions Bar */}
+          {selectedWorkflows.length > 0 && (
+            <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={toggleSelectAll}
+                  className="flex items-center space-x-2 text-sm text-slate-600 hover:text-slate-900"
+                >
+                  {selectedWorkflows.length === filteredWorkflows.length ? (
+                    <CheckSquare className="w-4 h-4" />
+                  ) : (
+                    <Square className="w-4 h-4" />
+                  )}
+                  <span>{selectedWorkflows.length} selected</span>
+                </button>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => handleBulkUpdateStatus('published')}
+                  className="px-3 py-1.5 text-sm bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  Publish
+                </button>
+                <button
+                  onClick={() => handleBulkUpdateStatus('draft')}
+                  className="px-3 py-1.5 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                >
+                  Draft
+                </button>
+                <button
+                  onClick={() => handleBulkUpdateStatus('archived')}
+                  className="px-3 py-1.5 text-sm bg-slate-500 text-white rounded hover:bg-slate-600"
+                >
+                  Archive
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  className="px-3 py-1.5 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Workflows Grid */}
