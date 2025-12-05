@@ -3,7 +3,7 @@ import { Download, Upload, X, FileJson, CheckCircle, AlertCircle } from 'lucide-
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplete }) => {
+const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplete, onNotify }) => {
   const [activeTab, setActiveTab] = useState('export'); // 'export' or 'import'
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
