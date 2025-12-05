@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, Clock, CheckCircle, AlertTriangle, X, Activity,
-  Users, Zap, Target, FileText, AlertCircle, Award
+  Users, Zap, Target, FileText, AlertCircle, Award, Workflow
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
