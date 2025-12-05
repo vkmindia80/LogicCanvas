@@ -66,7 +66,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3" data-testid="landing-hero-cta">
+            <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start" data-testid="landing-hero-cta">
               <button
                 onClick={onGetStarted}
                 className="inline-flex items-center space-x-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary-500/30 hover:bg-primary-600"
