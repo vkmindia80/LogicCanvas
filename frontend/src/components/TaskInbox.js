@@ -428,7 +428,8 @@ const TaskInbox = ({ onClose, onNotify }) => {
                         </span>
                       )}
                     </div>
-                  </div>
+                    </div>
+                  </Tooltip>
                 );
               })
             )}
