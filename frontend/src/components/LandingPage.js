@@ -4,8 +4,8 @@ import { Activity, Workflow, FileText, BarChart3, CheckSquare, ArrowRight, Shiel
 const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50 flex flex-col">
-      <header className="border-b border-white/5 bg-slate-950/70 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <header className="border-b border-white/5 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-20">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-3" data-testid="landing-header-brand">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700">
               <Activity className="h-5 w-5 text-white" />
