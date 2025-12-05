@@ -232,6 +232,22 @@ function App() {
                 {/* Quick Actions */}
                 <div className="flex items-center space-x-2">
                   <button
+                    onClick={() => setShowGlobalSearch(true)}
+                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                    data-testid="open-search-btn"
+                  >
+                    <SearchIcon className="w-5 h-5" />
+                    <span className="hidden sm:inline">Search</span>
+                  </button>
+                  <button
+                    onClick={() => setShowImportExport(true)}
+                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                    data-testid="open-import-export-btn"
+                  >
+                    <Download className="w-5 h-5" />
+                    <span className="hidden sm:inline">Import/Export</span>
+                  </button>
+                  <button
                     onClick={() => setShowTaskInbox(true)}
                     className="relative flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                     data-testid="open-task-inbox-btn"
