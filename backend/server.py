@@ -1275,6 +1275,495 @@ def _apply_hierarchical_layout(nodes: List[Dict], edges: List[Dict]) -> List[Dic
     return positioned
 
 
+# ==================== PHASE 6: ANALYTICS ENDPOINTS ====================
+
+@app.get("/api/analytics/overview")
+async def get_analytics_overview():
+    """Get dashboard overview statistics"""
+    try:
+        # Workflow metrics
+        total_workflows = workflows_collection.count_documents({})
+        total_instances = workflow_instances_collection.count_documents({})
+        completed_instances = workflow_instances_collection.count_documents({"status": "completed"})
+        failed_instances = workflow_instances_collection.count_documents({"status": "failed"})
+        success_rate = (completed_instances / total_instances * 100) if total_instances > 0 else 0
+        
+        # Get recent activity (last 7 days)
+        week_ago = (datetime.utcnow() - timedelta(days=7)).isoformat()
+        recent_instances = workflow_instances_collection.count_documents({
+            "started_at": {"$gte": week_ago}
+        })
+        
+        # Task metrics
+        total_tasks = tasks_collection.count_documents({})
+        pending_tasks = tasks_collection.count_documents({"status": "pending"})
+        completed_tasks = tasks_collection.count_documents({"status": "completed"})
+        overdue_tasks = tasks_collection.count_documents({
+            "due_date": {"$lt": datetime.utcnow().isoformat()},
+            "status": {"$nin": ["completed", "cancelled"]}
+        })
+        
+        # SLA compliance
+        sla_compliance = ((total_tasks - overdue_tasks) / total_tasks * 100) if total_tasks > 0 else 100
+        
+        # Approval metrics
+        total_approvals = approvals_collection.count_documents({})
+        pending_approvals = approvals_collection.count_documents({"status": "pending"})
+        
+        return {
+            "workflows": {
+                "total": total_workflows,
+                "total_executions": total_instances,
+                "completed": completed_instances,
+                "failed": failed_instances,
+                "success_rate": round(success_rate, 2)
+            },
+            "recent_activity": {
+                "last_7_days": recent_instances
+            },
+            "tasks": {
+                "total": total_tasks,
+                "pending": pending_tasks,
+                "completed": completed_tasks,
+                "overdue": overdue_tasks
+            },
+            "sla": {
+                "compliance_rate": round(sla_compliance, 2)
+            },
+            "approvals": {
+                "total": total_approvals,
+                "pending": pending_approvals
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/workflows/throughput")
+async def get_workflow_throughput(days: int = 30):
+    """Get workflow execution throughput over time"""
+    try:
+        start_date = datetime.utcnow() - timedelta(days=days)
+        
+        # Get all instances in date range
+        instances = list(workflow_instances_collection.find({
+            "started_at": {"$gte": start_date.isoformat()}
+        }, {"_id": 0, "started_at": 1, "status": 1}))
+        
+        # Group by date
+        date_map = {}
+        for instance in instances:
+            if instance.get("started_at"):
+                date_str = instance["started_at"][:10]  # Get YYYY-MM-DD
+                if date_str not in date_map:
+                    date_map[date_str] = {"date": date_str, "total": 0, "completed": 0, "failed": 0}
+                date_map[date_str]["total"] += 1
+                if instance.get("status") == "completed":
+                    date_map[date_str]["completed"] += 1
+                elif instance.get("status") == "failed":
+                    date_map[date_str]["failed"] += 1
+        
+        # Convert to sorted list
+        data = sorted(date_map.values(), key=lambda x: x["date"])
+        
+        return {"data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/workflows/execution-time")
+async def get_workflow_execution_time():
+    """Get average execution time per workflow"""
+    try:
+        # Get completed instances with execution time
+        instances = list(workflow_instances_collection.find({
+            "status": "completed",
+            "started_at": {"$exists": True},
+            "completed_at": {"$exists": True}
+        }, {"_id": 0, "workflow_id": 1, "started_at": 1, "completed_at": 1}))
+        
+        # Calculate execution time per workflow
+        workflow_times = {}
+        for instance in instances:
+            workflow_id = instance.get("workflow_id")
+            if not workflow_id:
+                continue
+                
+            try:
+                start = datetime.fromisoformat(instance["started_at"])
+                end = datetime.fromisoformat(instance["completed_at"])
+                duration = (end - start).total_seconds()
+                
+                if workflow_id not in workflow_times:
+                    workflow_times[workflow_id] = {"times": [], "workflow_id": workflow_id}
+                workflow_times[workflow_id]["times"].append(duration)
+            except:
+                continue
+        
+        # Calculate averages and get workflow names
+        data = []
+        for workflow_id, info in workflow_times.items():
+            workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0, "name": 1})
+            avg_time = sum(info["times"]) / len(info["times"]) if info["times"] else 0
+            data.append({
+                "workflow_id": workflow_id,
+                "workflow_name": workflow.get("name", "Unknown") if workflow else "Unknown",
+                "avg_execution_time": round(avg_time, 2),
+                "executions": len(info["times"]),
+                "min_time": round(min(info["times"]), 2) if info["times"] else 0,
+                "max_time": round(max(info["times"]), 2) if info["times"] else 0
+            })
+        
+        # Sort by average execution time descending
+        data.sort(key=lambda x: x["avg_execution_time"], reverse=True)
+        
+        return {"data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/workflows/success-rate")
+async def get_workflow_success_rate():
+    """Get success vs failure rate"""
+    try:
+        total = workflow_instances_collection.count_documents({})
+        completed = workflow_instances_collection.count_documents({"status": "completed"})
+        failed = workflow_instances_collection.count_documents({"status": "failed"})
+        running = workflow_instances_collection.count_documents({"status": "running"})
+        paused = workflow_instances_collection.count_documents({"status": "paused"})
+        
+        return {
+            "data": [
+                {"name": "Completed", "value": completed, "percentage": round((completed/total*100) if total > 0 else 0, 2)},
+                {"name": "Failed", "value": failed, "percentage": round((failed/total*100) if total > 0 else 0, 2)},
+                {"name": "Running", "value": running, "percentage": round((running/total*100) if total > 0 else 0, 2)},
+                {"name": "Paused", "value": paused, "percentage": round((paused/total*100) if total > 0 else 0, 2)}
+            ],
+            "total": total
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/workflows/popularity")
+async def get_workflow_popularity():
+    """Get most executed workflows"""
+    try:
+        # Count executions per workflow
+        instances = list(workflow_instances_collection.find({}, {"_id": 0, "workflow_id": 1}))
+        
+        workflow_counts = {}
+        for instance in instances:
+            wf_id = instance.get("workflow_id")
+            if wf_id:
+                workflow_counts[wf_id] = workflow_counts.get(wf_id, 0) + 1
+        
+        # Get workflow names and build data
+        data = []
+        for workflow_id, count in workflow_counts.items():
+            workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0, "name": 1})
+            data.append({
+                "workflow_id": workflow_id,
+                "workflow_name": workflow.get("name", "Unknown") if workflow else "Unknown",
+                "executions": count
+            })
+        
+        # Sort by executions descending
+        data.sort(key=lambda x: x["executions"], reverse=True)
+        
+        return {"data": data[:10]}  # Top 10
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/sla/compliance")
+async def get_sla_compliance():
+    """Get SLA compliance metrics"""
+    try:
+        total_tasks = tasks_collection.count_documents({})
+        
+        # Tasks with SLA
+        tasks_with_sla = tasks_collection.count_documents({"sla_hours": {"$exists": True, "$ne": None}})
+        
+        # Overdue tasks
+        overdue = tasks_collection.count_documents({
+            "due_date": {"$lt": datetime.utcnow().isoformat()},
+            "status": {"$nin": ["completed", "cancelled"]}
+        })
+        
+        # At risk (due within 24h)
+        at_risk_date = (datetime.utcnow() + timedelta(hours=24)).isoformat()
+        at_risk = tasks_collection.count_documents({
+            "due_date": {"$lt": at_risk_date, "$gte": datetime.utcnow().isoformat()},
+            "status": {"$nin": ["completed", "cancelled"]}
+        })
+        
+        # Completed on time
+        completed_on_time = 0
+        completed_late = 0
+        completed_tasks = list(tasks_collection.find({
+            "status": "completed",
+            "due_date": {"$exists": True}
+        }, {"_id": 0, "due_date": 1, "updated_at": 1}))
+        
+        for task in completed_tasks:
+            try:
+                due = datetime.fromisoformat(task["due_date"])
+                completed = datetime.fromisoformat(task["updated_at"])
+                if completed <= due:
+                    completed_on_time += 1
+                else:
+                    completed_late += 1
+            except:
+                continue
+        
+        compliance_rate = ((completed_on_time) / (completed_on_time + completed_late) * 100) if (completed_on_time + completed_late) > 0 else 100
+        
+        return {
+            "total_tasks": total_tasks,
+            "tasks_with_sla": tasks_with_sla,
+            "overdue": overdue,
+            "at_risk": at_risk,
+            "completed_on_time": completed_on_time,
+            "completed_late": completed_late,
+            "compliance_rate": round(compliance_rate, 2)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/sla/trends")
+async def get_sla_trends(days: int = 30):
+    """Get SLA compliance trends over time"""
+    try:
+        start_date = datetime.utcnow() - timedelta(days=days)
+        
+        # Get completed tasks in date range
+        tasks = list(tasks_collection.find({
+            "status": "completed",
+            "updated_at": {"$gte": start_date.isoformat()},
+            "due_date": {"$exists": True}
+        }, {"_id": 0, "updated_at": 1, "due_date": 1}))
+        
+        # Group by date
+        date_map = {}
+        for task in tasks:
+            try:
+                date_str = task["updated_at"][:10]
+                due = datetime.fromisoformat(task["due_date"])
+                completed = datetime.fromisoformat(task["updated_at"])
+                
+                if date_str not in date_map:
+                    date_map[date_str] = {"date": date_str, "on_time": 0, "late": 0}
+                
+                if completed <= due:
+                    date_map[date_str]["on_time"] += 1
+                else:
+                    date_map[date_str]["late"] += 1
+            except:
+                continue
+        
+        # Calculate compliance percentage per day
+        data = []
+        for date_str, counts in date_map.items():
+            total = counts["on_time"] + counts["late"]
+            compliance = (counts["on_time"] / total * 100) if total > 0 else 100
+            data.append({
+                "date": date_str,
+                "compliance": round(compliance, 2),
+                "on_time": counts["on_time"],
+                "late": counts["late"]
+            })
+        
+        data.sort(key=lambda x: x["date"])
+        
+        return {"data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/nodes/performance")
+async def get_node_performance():
+    """Get node-level performance statistics"""
+    try:
+        # Get all workflow instances with execution data
+        instances = list(workflow_instances_collection.find({
+            "execution_log": {"$exists": True}
+        }, {"_id": 0, "execution_log": 1, "workflow_id": 1}))
+        
+        node_stats = {}
+        
+        for instance in instances:
+            exec_log = instance.get("execution_log", [])
+            for entry in exec_log:
+                node_id = entry.get("node_id")
+                node_type = entry.get("node_type")
+                status = entry.get("status")
+                
+                if not node_id:
+                    continue
+                
+                if node_id not in node_stats:
+                    node_stats[node_id] = {
+                        "node_id": node_id,
+                        "node_type": node_type or "unknown",
+                        "executions": 0,
+                        "successes": 0,
+                        "failures": 0,
+                        "total_time": 0,
+                        "times": []
+                    }
+                
+                node_stats[node_id]["executions"] += 1
+                
+                if status == "completed":
+                    node_stats[node_id]["successes"] += 1
+                elif status == "failed":
+                    node_stats[node_id]["failures"] += 1
+                
+                # Calculate execution time if available
+                if entry.get("started_at") and entry.get("completed_at"):
+                    try:
+                        start = datetime.fromisoformat(entry["started_at"])
+                        end = datetime.fromisoformat(entry["completed_at"])
+                        duration = (end - start).total_seconds()
+                        node_stats[node_id]["times"].append(duration)
+                        node_stats[node_id]["total_time"] += duration
+                    except:
+                        pass
+        
+        # Calculate averages
+        data = []
+        for node_id, stats in node_stats.items():
+            avg_time = (stats["total_time"] / len(stats["times"])) if stats["times"] else 0
+            failure_rate = (stats["failures"] / stats["executions"] * 100) if stats["executions"] > 0 else 0
+            
+            data.append({
+                "node_id": node_id,
+                "node_type": stats["node_type"],
+                "executions": stats["executions"],
+                "avg_execution_time": round(avg_time, 2),
+                "failure_rate": round(failure_rate, 2),
+                "successes": stats["successes"],
+                "failures": stats["failures"]
+            })
+        
+        return {"data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/nodes/bottlenecks")
+async def get_node_bottlenecks(limit: int = 10):
+    """Identify bottleneck nodes (slowest/most problematic)"""
+    try:
+        # Get node performance data
+        perf_response = await get_node_performance()
+        all_nodes = perf_response["data"]
+        
+        # Sort by execution time (descending) - these are bottlenecks
+        slowest = sorted(all_nodes, key=lambda x: x["avg_execution_time"], reverse=True)[:limit]
+        
+        # Sort by failure rate (descending) - these are problematic
+        most_failures = sorted(all_nodes, key=lambda x: x["failure_rate"], reverse=True)[:limit]
+        
+        return {
+            "slowest_nodes": slowest,
+            "highest_failure_nodes": most_failures
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/users/productivity")
+async def get_user_productivity():
+    """Get user productivity statistics"""
+    try:
+        # Get all users
+        users = list(db['users'].find({}, {"_id": 0, "email": 1, "name": 1}))
+        
+        user_stats = {}
+        for user in users:
+            email = user.get("email")
+            if not email:
+                continue
+            
+            # Count tasks
+            total_tasks = tasks_collection.count_documents({"assigned_to": email})
+            completed = tasks_collection.count_documents({"assigned_to": email, "status": "completed"})
+            pending = tasks_collection.count_documents({"assigned_to": email, "status": "pending"})
+            
+            # Calculate average completion time
+            completed_tasks = list(tasks_collection.find({
+                "assigned_to": email,
+                "status": "completed",
+                "created_at": {"$exists": True},
+                "updated_at": {"$exists": True}
+            }, {"_id": 0, "created_at": 1, "updated_at": 1}))
+            
+            completion_times = []
+            for task in completed_tasks:
+                try:
+                    created = datetime.fromisoformat(task["created_at"])
+                    updated = datetime.fromisoformat(task["updated_at"])
+                    duration = (updated - created).total_seconds() / 3600  # hours
+                    completion_times.append(duration)
+                except:
+                    continue
+            
+            avg_completion = sum(completion_times) / len(completion_times) if completion_times else 0
+            
+            user_stats[email] = {
+                "email": email,
+                "name": user.get("name", email),
+                "total_tasks": total_tasks,
+                "completed": completed,
+                "pending": pending,
+                "avg_completion_hours": round(avg_completion, 2),
+                "completion_rate": round((completed / total_tasks * 100) if total_tasks > 0 else 0, 2)
+            }
+        
+        # Convert to list and sort by completed tasks
+        data = sorted(user_stats.values(), key=lambda x: x["completed"], reverse=True)
+        
+        return {"data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/users/workload")
+async def get_user_workload():
+    """Get current workload distribution"""
+    try:
+        # Get all users
+        users = list(db['users'].find({}, {"_id": 0, "email": 1, "name": 1}))
+        
+        workload_data = []
+        for user in users:
+            email = user.get("email")
+            if not email:
+                continue
+            
+            # Count pending tasks
+            pending = tasks_collection.count_documents({
+                "assigned_to": email,
+                "status": {"$in": ["pending", "in_progress"]}
+            })
+            
+            workload_data.append({
+                "email": email,
+                "name": user.get("name", email),
+                "pending_tasks": pending
+            })
+        
+        # Sort by pending tasks
+        workload_data.sort(key=lambda x: x["pending_tasks"], reverse=True)
+        
+        return {"data": workload_data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
