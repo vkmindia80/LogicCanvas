@@ -229,18 +229,18 @@ Building a fully-featured, enterprise-grade Visual Workflow Builder with:
 **Estimated Time:** 2-3 hours
 
 #### Tasks:
-- [ ] 7.1 Create workflow dashboard with filters
-- [ ] 7.2 Implement workflow lifecycle management
-- [ ] 7.3 Add version control (branching, merging, rollback)
-- [ ] 7.4 Build import/export functionality (JSON)
-- [ ] 7.5 Implement RBAC permissions system
-- [ ] 7.6 Add global search functionality
-- [ ] 7.7 Create empty states with illustrations
-- [ ] 7.8 Add onboarding walkthrough
-- [ ] 7.9 Implement tooltips and helper messages
-- [ ] 7.10 Add loading states and animations
-- [ ] 7.11 Mobile-responsive design
-- [ ] 7.12 Error handling and toast notifications
+- [ ] 7.1 Create workflow dashboard with advanced filters and tag-based search
+- [ ] 7.2 Implement workflow lifecycle management (publish / pause / archive controls)
+- [x] 7.3 Add version control (branching, rollback via version history UI)
+- [x] 7.4 Build import/export functionality (JSON) with modal UI
+- [ ] 7.5 Implement lightweight RBAC permissions system (UI roles: admin, builder, approver, viewer)
+- [x] 7.6 Add global search functionality (workflows, forms, tasks, approvals)
+- [ ] 7.7 Create helpful empty states and helper text across dashboards
+- [ ] 7.8 Add onboarding walkthrough (guided tour overlay)
+- [ ] 7.9 Implement tooltips and helper messages for key actions
+- [ ] 7.10 Add consistent loading states and micro-animations
+- [ ] 7.11 Improve mobile-responsive layout for dashboards & modals
+- [ ] 7.12 Harden error handling and toast notifications for critical actions
 - [ ] 7.13 Final polish and UX improvements
 
 **Deliverables:**
