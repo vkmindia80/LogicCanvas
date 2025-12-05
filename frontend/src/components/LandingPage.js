@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Activity, Workflow, FileText, BarChart3, CheckSquare, ArrowRight, Shield, 
-  Zap, Users, GitBranch, Clock, Database, Lock, Repeat, Settings, 
+  Zap, Users, GitBranch, Clock, Database, Lock, Settings, 
   TrendingUp, Target, Layers, Box, Play, CheckCircle2
 } from 'lucide-react';
 
