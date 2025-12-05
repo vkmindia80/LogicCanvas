@@ -1,16 +1,57 @@
 export const NODE_TYPES = {
+  // Flow Control
   START: 'start',
-  TASK: 'task',
-  DECISION: 'decision',
-  APPROVAL: 'approval',
-  FORM: 'form',
   END: 'end',
+  
+  // User Interaction
+  TASK: 'task',
+  FORM: 'form',
+  SCREEN: 'screen',
+  WAIT: 'wait',
+  
+  // Logic
+  DECISION: 'decision',
+  SWITCH: 'switch',
+  ASSIGNMENT: 'assignment',
+  
+  // Loops & Iteration
+  LOOP_FOR_EACH: 'loop_for_each',
+  LOOP_WHILE: 'loop_while',
+  LOOP_REPEAT: 'loop_repeat',
+  
+  // Approval & Review
+  APPROVAL: 'approval',
+  
+  // Data Operations
+  CREATE_RECORD: 'create_record',
+  UPDATE_RECORD: 'update_record',
+  DELETE_RECORD: 'delete_record',
+  LOOKUP_RECORD: 'lookup_record',
+  QUERY_RECORDS: 'query_records',
+  GET_RECORD: 'get_record',
+  
+  // Data Transform
+  TRANSFORM: 'transform',
+  FILTER: 'filter',
+  SORT: 'sort',
+  AGGREGATE: 'aggregate',
+  CALCULATE: 'calculate',
+  
+  // Flow Components
   PARALLEL: 'parallel',
   MERGE: 'merge',
-  ACTION: 'action',
-  TIMER: 'timer',
   SUBPROCESS: 'subprocess',
-  EVENT: 'event'
+  
+  // Integrations & Actions
+  ACTION: 'action',
+  API_CALL: 'api_call',
+  WEBHOOK: 'webhook',
+  EMAIL: 'email',
+  
+  // Advanced
+  TIMER: 'timer',
+  EVENT: 'event',
+  ERROR_HANDLER: 'error_handler'
 };
 
 export const NODE_CONFIGS = {
