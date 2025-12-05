@@ -37,13 +37,13 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
       
       if (response.ok) {
         await loadVersions();
-        alert('Version created successfully!');
+        onNotify?.('Version created successfully!', 'success');
       } else {
-        alert('Failed to create version');
+        onNotify?.('Failed to create version', 'error');
       }
     } catch (error) {
       console.error('Failed to create version:', error);
-      alert('Failed to create version');
+      onNotify?.('Failed to create version', 'error');
     } finally {
       setCreating(false);
     }
