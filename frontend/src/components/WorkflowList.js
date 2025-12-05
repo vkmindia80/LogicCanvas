@@ -257,11 +257,27 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample })
             {filteredWorkflows.map((workflow) => (
               <div
                 key={workflow.id}
-                onClick={() => onSelectWorkflow(workflow)}
-                className="bg-white rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-all cursor-pointer group"
+                className="bg-white rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-all group relative"
                 data-testid={`workflow-card-${workflow.id}`}
               >
-                <div className="p-6">
+                {/* Selection Checkbox */}
+                <div className="absolute top-4 left-4 z-10">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSelectWorkflow(workflow.id);
+                    }}
+                    className="p-1 hover:bg-slate-100 rounded"
+                  >
+                    {selectedWorkflows.includes(workflow.id) ? (
+                      <CheckSquare className="w-5 h-5 text-primary-600" />
+                    ) : (
+                      <Square className="w-5 h-5 text-slate-400" />
+                    )}
+                  </button>
+                </div>
+
+                <div className="p-6 pl-14 cursor-pointer" onClick={() => onSelectWorkflow(workflow)}>
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="text-lg font-semibold text-slate-900 group-hover:text-primary-600 transition-colors">
