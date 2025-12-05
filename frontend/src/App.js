@@ -97,6 +97,16 @@ function App() {
     setCurrentView('canvas');
   };
 
+  // Toast notification helper
+  const addToast = (message, type = 'info', duration = 3000) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type, duration }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
+
   const handleSaveWorkflow = async (workflowData) => {
     try {
       const method = workflowData.id ? 'PUT' : 'POST';
@@ -115,16 +125,16 @@ function App() {
       const result = await response.json();
       
       if (response.ok) {
-        alert('Workflow saved successfully!');
+        addToast('Workflow saved successfully!', 'success');
         if (!workflowData.id && result.id) {
           setCurrentWorkflow({ ...workflowData, id: result.id });
         }
       } else {
-        alert('Failed to save workflow');
+        addToast('Failed to save workflow', 'error');
       }
     } catch (error) {
       console.error('Failed to save workflow:', error);
-      alert('Failed to save workflow');
+      addToast('Failed to save workflow', 'error');
     }
   };
 
