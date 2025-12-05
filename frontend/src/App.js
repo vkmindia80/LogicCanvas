@@ -404,7 +404,7 @@ const AppShell = () => {
       {showTaskInbox && <TaskInbox onClose={() => setShowTaskInbox(false)} onNotify={addToast} />}
 
       {/* Approval Queue Modal */}
-      {showApprovalQueue && <ApprovalQueue onClose={() => setShowApprovalQueue(false)} />}
+      {showApprovalQueue && <ApprovalQueue onClose={() => setShowApprovalQueue(false)} onNotify={addToast} />}
 
       {/* Notifications Panel Modal */}
       {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
