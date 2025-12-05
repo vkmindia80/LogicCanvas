@@ -385,24 +385,10 @@ const WorkflowCanvas = ({ workflow, onSave }) => {
     [onSave, workflow, workflowName, nodes, edges],
   );
 
-  // Auto-save when nodes/edges/name change (debounced)
-  useEffect(() => {
-    if (!onSave || !workflow) return;
-
-    if (autoSaveTimeoutRef.current) {
-      clearTimeout(autoSaveTimeoutRef.current);
-    }
-
-    autoSaveTimeoutRef.current = setTimeout(() => {
-      handleSave(true);
-    }, 2000);
-
-    return () => {
-      if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
-      }
-    };
-  }, [nodes, edges, workflowName, workflow, onSave, handleSave]);
+  // NOTE: Auto-save has been intentionally disabled.
+  // Workflows are now saved **only** when the user clicks the explicit Save button.
+  // If you want to re-enable auto-save in the future, restore the debounced
+  // useEffect that called handleSave(true) on nodes/edges/name changes.
 
   const handleAutoLayout = useCallback(async () => {
     if (!workflow?.id) {
