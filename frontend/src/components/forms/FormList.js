@@ -164,23 +164,33 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
       </div>
 
       {/* Forms Grid */}
-      {filteredForms.length === 0 ? (
-        <div className="text-center py-16">
-          <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">No forms found</h3>
-          <p className="text-slate-500 mb-6">
-            {searchTerm || selectedTag ? 'Try adjusting your filters' : 'Get started by creating your first form'}
-          </p>
-          {!searchTerm && !selectedTag && can('manageForms') && (
-            <button
-              onClick={onCreateNew}
-              className="inline-flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create First Form</span>
-            </button>
-          )}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
+      ) : filteredForms.length === 0 ? (
+        <EmptyState
+          icon={searchTerm || selectedTag ? Search : ClipboardList}
+          title={searchTerm || selectedTag ? 'No forms found' : 'No forms yet'}
+          description={
+            searchTerm || selectedTag
+              ? 'No forms match your current filters. Try adjusting your search term or tag filter.'
+              : 'Forms allow you to collect structured data in your workflows. Create your first form to get started.'
+          }
+          action={
+            !searchTerm && !selectedTag && can('manageForms') ? (
+              <button
+                onClick={onCreateNew}
+                className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white font-semibold shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
+              >
+                <Plus className="w-5 h-5" />
+                <span>Create Your First Form</span>
+              </button>
+            ) : null
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredForms.map((form) => (
