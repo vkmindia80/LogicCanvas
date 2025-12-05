@@ -261,6 +261,136 @@ class NodeExecutor:
         """Execute end node"""
         return {"status": "completed", "output": {"ended": True}}
 
+    def execute_timer_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute timer node - delay execution or schedule timeout"""
+        timer_data = node.get("data", {})
+        timer_type = timer_data.get("timerType", "delay")  # delay, scheduled, timeout
+        
+        if timer_type == "delay":
+            # Delay in seconds
+            delay_seconds = timer_data.get("delaySeconds", 0)
+            delay_minutes = timer_data.get("delayMinutes", 0)
+            delay_hours = timer_data.get("delayHours", 0)
+            
+            total_seconds = delay_seconds + (delay_minutes * 60) + (delay_hours * 3600)
+            
+            # Store timer end time
+            end_time = (datetime.utcnow() + timedelta(seconds=total_seconds)).isoformat()
+            
+            return {
+                "status": "waiting",
+                "waiting_for": "timer",
+                "timer_type": "delay",
+                "timer_end": end_time,
+                "delay_seconds": total_seconds
+            }
+        
+        elif timer_type == "scheduled":
+            # Scheduled time (cron or specific datetime)
+            scheduled_time = timer_data.get("scheduledTime")
+            return {
+                "status": "waiting",
+                "waiting_for": "timer",
+                "timer_type": "scheduled",
+                "timer_end": scheduled_time
+            }
+        
+        elif timer_type == "timeout":
+            # Timeout - execute immediately but can be used for SLA tracking
+            timeout_hours = timer_data.get("timeoutHours", 24)
+            timeout_end = (datetime.utcnow() + timedelta(hours=timeout_hours)).isoformat()
+            
+            return {
+                "status": "completed",
+                "output": {"timeout_set": True, "timeout_end": timeout_end}
+            }
+        
+        return {"status": "completed", "output": {"timer_executed": True}}
+
+    def execute_subprocess_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute subprocess node - nested workflow execution"""
+        subprocess_data = node.get("data", {})
+        subprocess_workflow_id = subprocess_data.get("subprocessWorkflowId")
+        
+        if not subprocess_workflow_id:
+            return {"status": "failed", "error": "No subprocess workflow configured"}
+        
+        # Get input mapping
+        input_mapping = subprocess_data.get("inputMapping", {})
+        subprocess_input = {}
+        
+        # Map parent variables to subprocess input
+        for key, parent_var in input_mapping.items():
+            if parent_var in self.variables:
+                subprocess_input[key] = self.variables[parent_var]
+        
+        # Start subprocess execution
+        from server import execution_engine as global_engine
+        try:
+            subprocess_instance_id = global_engine.start_execution(
+                subprocess_workflow_id,
+                triggered_by=f"subprocess:{self.instance_id}",
+                input_data=subprocess_input
+            )
+            
+            return {
+                "status": "waiting",
+                "waiting_for": "subprocess",
+                "subprocess_instance_id": subprocess_instance_id,
+                "subprocess_workflow_id": subprocess_workflow_id
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Subprocess execution failed: {str(e)}"}
+
+    def execute_event_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute event node - send/receive messages or signals"""
+        event_data = node.get("data", {})
+        event_type = event_data.get("eventType", "message")  # message, signal, error
+        event_action = event_data.get("eventAction", "send")  # send, receive, throw, catch
+        
+        if event_action == "send" or event_action == "throw":
+            # Send message/signal or throw error
+            event_name = event_data.get("eventName", "")
+            event_payload = event_data.get("eventPayload", {})
+            
+            # Store event in events collection
+            event_id = str(uuid.uuid4())
+            self.db["workflow_events"].insert_one({
+                "id": event_id,
+                "instance_id": self.instance_id,
+                "node_id": node["id"],
+                "event_type": event_type,
+                "event_name": event_name,
+                "event_payload": event_payload,
+                "timestamp": datetime.utcnow().isoformat(),
+                "status": "sent"
+            })
+            
+            return {
+                "status": "completed",
+                "output": {
+                    "event_sent": True,
+                    "event_id": event_id,
+                    "event_type": event_type,
+                    "event_name": event_name
+                }
+            }
+        
+        elif event_action == "receive" or event_action == "catch":
+            # Wait for message/signal or catch error
+            event_name = event_data.get("eventName", "")
+            timeout_hours = event_data.get("timeoutHours", 24)
+            
+            return {
+                "status": "waiting",
+                "waiting_for": "event",
+                "event_type": event_type,
+                "event_name": event_name,
+                "timeout": (datetime.utcnow() + timedelta(hours=timeout_hours)).isoformat()
+            }
+        
+        return {"status": "completed", "output": {"event_processed": True}}
+
     def execute_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a node based on its type"""
         node_type = node.get("type", "")
@@ -275,6 +405,9 @@ class NodeExecutor:
             "merge": self.execute_merge_node,
             "action": self.execute_action_node,
             "end": self.execute_end_node,
+            "timer": self.execute_timer_node,
+            "subprocess": self.execute_subprocess_node,
+            "event": self.execute_event_node,
         }
 
         executor = executors.get(node_type)
