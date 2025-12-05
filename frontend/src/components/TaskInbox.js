@@ -275,31 +275,31 @@ const TaskInbox = ({ onClose, onNotify }) => {
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
+      <div className="bg-white border-b-2 border-slate-200 px-6 py-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-              <span className="text-sm text-gray-600">Pending: <strong>{stats.pending}</strong></span>
+          <div className="flex items-center space-x-4">
+            <div className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-xl flex items-center space-x-2 font-medium">
+              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+              <span className="text-sm">Pending: <strong>{stats.pending}</strong></span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
-              <span className="text-sm text-gray-600">In Progress: <strong>{stats.inProgress}</strong></span>
+            <div className="px-4 py-2 bg-blue-100 text-blue-800 rounded-xl flex items-center space-x-2 font-medium">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm">In Progress: <strong>{stats.inProgress}</strong></span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-              <span className="text-sm text-gray-600">Completed: <strong>{stats.completed}</strong></span>
+            <div className="px-4 py-2 bg-green-100 text-green-800 rounded-xl flex items-center space-x-2 font-medium">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-sm">Completed: <strong>{stats.completed}</strong></span>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {overdueCount > 0 && (
-              <div className="flex items-center space-x-2 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-red-100 text-red-700 rounded-xl text-sm font-semibold border border-red-200">
                 <AlertTriangle className="w-4 h-4" />
                 <span>{overdueCount} Overdue</span>
               </div>
             )}
             {atRiskCount > 0 && (
-              <div className="flex items-center space-x-2 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-xl text-sm font-semibold border border-orange-200">
                 <Timer className="w-4 h-4" />
                 <span>{atRiskCount} At Risk</span>
               </div>
