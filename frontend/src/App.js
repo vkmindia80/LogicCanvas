@@ -60,6 +60,24 @@ const AppShell = () => {
 
   const { currentRole, setCurrentRole, can } = useRole();
 
+  const handleAuthSuccess = (token, user) => {
+    setAuthToken(token);
+    setCurrentUser(user);
+    localStorage.setItem('lc_token', token);
+    localStorage.setItem('lc_user', JSON.stringify(user));
+    setCurrentRole(user.role || 'viewer');
+    addToast(`Signed in as ${user.name || user.email}`, 'success');
+  };
+
+  const handleLogout = () => {
+    setAuthToken('');
+    setCurrentUser(null);
+    localStorage.removeItem('lc_token');
+    localStorage.removeItem('lc_user');
+    setCurrentRole('viewer');
+    addToast('Logged out', 'info');
+  };
+
   useEffect(() => {
     const checkHealth = async () => {
       try {
