@@ -1012,6 +1012,45 @@ def _extract_mentions(text: str) -> List[str]:
 async def get_overdue_tasks():
     """Get tasks that are past their due date"""
     now = datetime.utcnow().isoformat()
+
+# ==================== AUTH & RBAC ENDPOINTS ====================
+
+@app.post("/api/auth/login", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    """Issue JWT access token for valid username/password.
+
+    We treat `username` as the email field. This endpoint is used by the
+    frontend login page and by the auto-login shortcuts.
+    """
+    user = get_user_by_email(form_data.username)
+    if not user or not verify_password(form_data.password, user.get("password_hash", "")):
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
+
+    access_token = create_access_token(
+        {
+            "sub": user["id"],
+            "email": user["email"],
+            "role": user.get("role", "viewer"),
+            "name": user.get("name"),
+        }
+    )
+
+    user_payload = {
+        "id": user["id"],
+        "email": user["email"],
+        "name": user.get("name"),
+        "role": user.get("role", "viewer"),
+    }
+
+    return {"access_token": access_token, "token_type": "bearer", "user": user_payload}
+
+
+@app.get("/api/auth/me")
+async def get_me(current_user: Dict[str, Any] = Depends(get_current_user)):
+    """Return the profile of the currently authenticated user."""
+    return {"user": current_user}
+
+
     overdue_tasks = list(tasks_collection.find(
         {
             "due_date": {"$lt": now},
