@@ -10,11 +10,22 @@ const TriggerConfig = ({ workflowId }) => {
   const [cronExpression, setCronExpression] = useState('0 0 * * *');
   const [loading, setLoading] = useState(true);
 
+  const loadTriggers = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/triggers?workflow_id=${workflowId}`);
+      const data = await response.json();
+      setTriggers(data.triggers || []);
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to load triggers:', error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadTriggers();
   }, [workflowId]);
 
-  const loadTriggers = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/triggers?workflow_id=${workflowId}`);
       const data = await response.json();

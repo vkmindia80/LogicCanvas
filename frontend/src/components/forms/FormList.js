@@ -12,11 +12,23 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
 
   const { can } = useRole();
 
+  const fetchForms = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/forms`);
+      const data = await response.json();
+      setForms(data.forms || []);
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to fetch forms:', error);
+      onNotify?.('Failed to fetch forms', 'error');
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchForms();
   }, []);
 
-  const fetchForms = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/forms`);
       const data = await response.json();

@@ -247,7 +247,7 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
                 <h3 className="font-semibold text-slate-900 mb-2">Import Notes</h3>
                 <ul className="text-sm text-slate-600 space-y-1">
                   <li>• Imported workflows receive new unique IDs</li>
-                  <li>• All workflows are imported with "draft" status</li>
+                  <li>• All workflows are imported with 'draft' status</li>
                   <li>• Original workflow structure is preserved</li>
                   <li>• Import logs are recorded in audit trail</li>
                 </ul>
