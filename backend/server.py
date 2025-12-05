@@ -571,6 +571,8 @@ async def get_form(form_id: str):
     return form
 
 # Ensure indexes for auth & RBAC related collections and seed demo users
+users_collection = db['users']
+roles_collection = db['roles']
 users_collection.create_index("email", unique=True)
 roles_collection.create_index("name", unique=True)
 
