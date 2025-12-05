@@ -115,14 +115,16 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
             <h2 className="text-3xl font-bold text-slate-900">Form Library</h2>
             <p className="text-slate-600 mt-1">Create and manage reusable forms</p>
           </div>
-          <button
-            onClick={onCreateNew}
-            className="flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors shadow-lg"
-            data-testid="create-new-form-btn"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Create New Form</span>
-          </button>
+          {can('manageForms') && (
+            <button
+              onClick={onCreateNew}
+              className="flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors shadow-lg"
+              data-testid="create-new-form-btn"
+            >
+              <Plus className="w-5 h-5" />
+              <span>Create New Form</span>
+            </button>
+          )}
         </div>
 
         {/* Search and Filter */}
