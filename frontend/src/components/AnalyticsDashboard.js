@@ -42,22 +42,7 @@ const AnalyticsDashboard = ({ onClose }) => {
   const loadAllAnalytics = async () => {
     try {
       setLoading(true);
-      // existing body remains
-    } catch (error) {
-      console.error('Failed to load analytics:', error);
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    loadAllAnalytics();
-    const interval = setInterval(loadAllAnalytics, 30000); // Refresh every 30s
-    return () => clearInterval(interval);
-  }, []);
-
-    try {
-      setLoading(true);
-      
       // Load all analytics data in parallel
       const [
         overviewRes,
@@ -88,10 +73,10 @@ const AnalyticsDashboard = ({ onClose }) => {
       setOverview(await overviewRes.json());
       setThroughput((await throughputRes.json()).data || []);
       setExecutionTime((await execTimeRes.json()).data || []);
-      
+
       const successData = await successRateRes.json();
       setSuccessRate(successData.data || []);
-      
+
       setPopularity((await popularityRes.json()).data || []);
       setSlaCompliance(await slaComplianceRes.json());
       setSlaTrends((await slaTrendsRes.json()).data || []);
@@ -99,13 +84,19 @@ const AnalyticsDashboard = ({ onClose }) => {
       setBottlenecks(await bottlenecksRes.json());
       setUserProductivity((await userProdRes.json()).data || []);
       setUserWorkload((await workloadRes.json()).data || []);
-      
+
       setLoading(false);
     } catch (error) {
       console.error('Failed to load analytics:', error);
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadAllAnalytics();
+    const interval = setInterval(loadAllAnalytics, 30000); // Refresh every 30s
+    return () => clearInterval(interval);
+  }, []);
 
   if (loading && !overview) {
     return (
