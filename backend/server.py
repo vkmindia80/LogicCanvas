@@ -1007,20 +1007,6 @@ def _extract_mentions(text: str) -> List[str]:
     mentions = re.findall(r'@(\w+)', text)
     return list(set(mentions))
 
-# SLA Tracking
-@app.get("/api/tasks/sla/overdue")
-async def get_overdue_tasks():
-    """Get tasks that are past their due date"""
-    now_iso = datetime.utcnow().isoformat()
-    overdue_tasks = list(tasks_collection.find(
-        {
-            "due_date": {"$lt": now_iso},
-            "status": {"$nin": ["completed", "cancelled"]}
-        },
-        {"_id": 0}
-    ))
-    return {"tasks": overdue_tasks, "count": len(overdue_tasks)}
-
 # ==================== AUTH & RBAC ENDPOINTS ====================
 
 @app.post("/api/auth/login", response_model=Token)
