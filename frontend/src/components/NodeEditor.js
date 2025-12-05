@@ -72,6 +72,22 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
       setAuthType(node.data?.authType || 'none');
       setToken(node.data?.token || '');
       setScript(node.data?.script || '');
+      
+      setTimerType(node.data?.timerType || 'delay');
+      setDelaySeconds(node.data?.delaySeconds || 0);
+      setDelayMinutes(node.data?.delayMinutes || 0);
+      setDelayHours(node.data?.delayHours || 0);
+      setScheduledTime(node.data?.scheduledTime || '');
+      setTimeoutHours(node.data?.timeoutHours || 24);
+      
+      setSubprocessWorkflowId(node.data?.subprocessWorkflowId || '');
+      setInputMapping(node.data?.inputMapping ? JSON.stringify(node.data?.inputMapping, null, 2) : '{}');
+      setOutputMapping(node.data?.outputMapping ? JSON.stringify(node.data?.outputMapping, null, 2) : '{}');
+      
+      setEventType(node.data?.eventType || 'message');
+      setEventAction(node.data?.eventAction || 'send');
+      setEventName(node.data?.eventName || '');
+      setEventPayload(node.data?.eventPayload ? JSON.stringify(node.data?.eventPayload, null, 2) : '{}');
     }
   }, [node]);
 
