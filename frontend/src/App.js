@@ -38,6 +38,12 @@ const AppShell = () => {
   const [showImportExport, setShowImportExport] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem('lc_token') || '');
+  const [currentUser, setCurrentUser] = useState(() => {
+    const stored = localStorage.getItem('lc_user');
+    return stored ? JSON.parse(stored) : null;
+  });
+
   const [approvalCount, setApprovalCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [toasts, setToasts] = useState([]);
