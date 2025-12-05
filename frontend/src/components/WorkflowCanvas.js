@@ -437,80 +437,114 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       {/* Main Canvas Area */}
       <div className="flex-1 flex flex-col">
         {/* Top Toolbar */}
-        <div className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-sm">
-          <div className="flex items-center space-x-4 flex-1">
-            <input
-              type="text"
-              value={workflowName}
-              onChange={(e) => setWorkflowName(e.target.value)}
-              className="text-xl font-semibold text-slate-900 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-primary-500 rounded px-2 py-1"
-              placeholder="Workflow Name"
-              data-testid="workflow-name-input"
-            />
-            <span className="text-sm text-slate-500">
-              | {nodes.length} nodes, {edges.length} connections
-            </span>
+        <div className="bg-gradient-to-r from-slate-50 to-white border-b-2 border-slate-200 px-6 py-3 shadow-md">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center space-x-4 flex-1">
+              <input
+                type="text"
+                value={workflowName}
+                onChange={(e) => setWorkflowName(e.target.value)}
+                className="text-xl font-bold text-slate-900 bg-white border-2 border-slate-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-lg px-3 py-2 transition-all"
+                placeholder="Workflow Name"
+                data-testid="workflow-name-input"
+              />
+              <div className="flex items-center space-x-3 text-sm">
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
+                  {nodes.length} nodes
+                </span>
+                <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full font-medium">
+                  {edges.length} connections
+                </span>
+              </div>
+            </div>
             <span
-              className="ml-4 text-xs text-slate-500"
+              className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm font-medium"
               data-testid="workflow-save-status"
             >
-              {isSaving ? 'Saving…' : formatLastSaved()}
+              {isSaving ? '💾 Saving…' : formatLastSaved()}
             </span>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handleValidate}
-              className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
-              data-testid="validate-workflow-btn"
-              title="Validate workflow"
-            >
-              <Eye className="w-4 h-4" />
-              <span>Validate</span>
-            </button>
-            <button
-              onClick={() => setShowTriggerConfig(!showTriggerConfig)}
-              className="flex items-center space-x-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50"
-              data-testid="trigger-config-btn"
-              title="Configure triggers"
-              disabled={!workflow?.id}
-            >
-              <Zap className="w-4 h-4" />
-              <span>Triggers</span>
-            </button>
-            <button
-              onClick={handleAutoLayout}
-              className="flex items-center space-x-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
-              data-testid="auto-layout-btn"
-              title="Auto-layout nodes"
-            >
-              <Layers className="w-4 h-4" />
-              <span>Auto-Layout</span>
-            </button>
-            <button
-              onClick={() => handleSave(false)}
-              className="flex items-center space-x-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
-              data-testid="workflow-save-btn"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save</span>
-            </button>
-            <button
-              onClick={() => {
-                if (!workflow?.id) {
-                  // eslint-disable-next-line no-alert
-                  alert('Please save the workflow before executing.');
-                  return;
-                }
-                setShowExecutionPanel(!showExecutionPanel);
-                setShowTriggerConfig(false);
-              }}
-              className="flex items-center space-x-2 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
-              data-testid="workflow-run-btn"
-            >
-              <Play className="w-4 h-4" />
-              <span>Execute</span>
-            </button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              {showTemplates && (
+                <button
+                  onClick={showTemplates}
+                  className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
+                  data-testid="show-templates-btn"
+                  title="Browse templates"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Templates</span>
+                </button>
+              )}
+              {showWizard && (
+                <button
+                  onClick={showWizard}
+                  className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all font-medium"
+                  data-testid="show-wizard-btn"
+                  title="Quick start wizard"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Wizard</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleValidate}
+                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all font-medium"
+                data-testid="validate-workflow-btn"
+                title="Validate workflow"
+              >
+                <Eye className="w-4 h-4" />
+                <span>Validate</span>
+              </button>
+              <button
+                onClick={() => setShowTriggerConfig(!showTriggerConfig)}
+                className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50 font-medium"
+                data-testid="trigger-config-btn"
+                title="Configure triggers"
+                disabled={!workflow?.id}
+              >
+                <Zap className="w-4 h-4" />
+                <span>Triggers</span>
+              </button>
+              <button
+                onClick={handleAutoLayout}
+                className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-indigo-500/30 transition-all font-medium"
+                data-testid="auto-layout-btn"
+                title="Auto-layout nodes"
+              >
+                <Layers className="w-4 h-4" />
+                <span>Layout</span>
+              </button>
+              <button
+                onClick={() => handleSave(false)}
+                className="flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-medium"
+                data-testid="workflow-save-btn"
+              >
+                <Save className="w-4 h-4" />
+                <span>Save</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (!workflow?.id) {
+                    // eslint-disable-next-line no-alert
+                    alert('Please save the workflow before executing.');
+                    return;
+                  }
+                  setShowExecutionPanel(!showExecutionPanel);
+                  setShowTriggerConfig(false);
+                }}
+                className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
+                data-testid="workflow-run-btn"
+              >
+                <Play className="w-4 h-4" />
+                <span>Execute</span>
+              </button>
+            </div>
           </div>
         </div>
 
