@@ -372,7 +372,11 @@ const AppShell = () => {
         )}
 
         {currentView === 'forms' && (
-          <FormList onSelectForm={handleSelectForm} onCreateNew={handleCreateNewForm} />
+          <FormList
+            onSelectForm={handleSelectForm}
+            onCreateNew={handleCreateNewForm}
+            onNotify={addToast}
+          />
         )}
 
         {currentView === 'canvas' && (
