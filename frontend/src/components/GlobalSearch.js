@@ -100,7 +100,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm }) => {
           {results && results.total === 0 && (
             <div className="text-center py-12">
               <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <p className="text-slate-600">No results found for '{query}'</p>
+              <p className="text-slate-600">No results found for {`"${query}"`}</p>
             </div>
           )}
 
