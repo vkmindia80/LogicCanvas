@@ -97,12 +97,12 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
               >
                 <button
                   onClick={onGetStarted}
-                  className="group inline-flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-primary-500/40 hover:shadow-2xl hover:shadow-primary-500/50 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto"
+                  className="group inline-flex items-center justify-center space-x-2 rounded-2xl bg-gradient-to-r from-primary-600 to-primary-700 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-primary-500/50 transition-all hover:shadow-3xl hover:shadow-primary-500/60 hover:-translate-y-1 w-full sm:w-auto"
                   data-testid="landing-get-started-btn"
                 >
-                  <Play className="h-5 w-5" />
+                  <Play className="h-6 w-6" />
                   <span>{currentUser ? 'Enter Workspace' : 'Start Demo Now'}</span>
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </button>
                 
                 <div className="flex items-center space-x-6 text-sm text-slate-600">
