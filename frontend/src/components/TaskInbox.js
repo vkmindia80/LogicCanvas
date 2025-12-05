@@ -361,15 +361,18 @@ const TaskInbox = ({ onClose, onNotify }) => {
           {/* Task Items */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              </div>
+              <SkeletonList count={5} />
             ) : filteredTasks.length === 0 ? (
-              <div className="text-center py-12">
-                <CheckCircle className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-600">No tasks found</h3>
-                <p className="text-gray-400">You&apos;re all caught up!</p>
-              </div>
+              <EmptyState
+                icon={searchTerm || filter !== 'all' || priorityFilter !== 'all' ? Search : CheckCircleIcon}
+                title={searchTerm || filter !== 'all' || priorityFilter !== 'all' ? 'No tasks found' : 'All caught up!'}
+                description={
+                  searchTerm || filter !== 'all' || priorityFilter !== 'all'
+                    ? 'No tasks match your current filters. Try adjusting your search or filter criteria.'
+                    : 'You have no pending tasks. Great job! New tasks will appear here when they are assigned to you.'
+                }
+                className="py-8"
+              />
             ) : (
               filteredTasks.map((task) => {
                 const slaStatus = getSlaStatus(task);
