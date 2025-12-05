@@ -8,13 +8,32 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
   const [selectedInstance, setSelectedInstance] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const loadInstances = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workflow-instances?workflow_id=${workflowId}`);
+      const data = await response.json();
+      setInstances(data.instances || []);
+      
+      // Update selected instance if still loading
+      if (selectedInstance) {
+        const updated = data.instances.find(i => i.id === selectedInstance.id);
+        if (updated) {
+          setSelectedInstance(updated);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to load instances:', error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadInstances();
     const interval = setInterval(loadInstances, 3000); // Poll every 3 seconds
     return () => clearInterval(interval);
   }, [workflowId]);
 
-  const loadInstances = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/workflow-instances?workflow_id=${workflowId}`);
       const data = await response.json();

@@ -39,13 +39,22 @@ const AnalyticsDashboard = ({ onClose }) => {
   const [userWorkload, setUserWorkload] = useState([]);
   const [activeTab, setActiveTab] = useState('overview'); // overview, workflows, sla, nodes, users
 
+  const loadAllAnalytics = async () => {
+    try {
+      setLoading(true);
+      // existing body remains
+    } catch (error) {
+      console.error('Failed to load analytics:', error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadAllAnalytics();
     const interval = setInterval(loadAllAnalytics, 30000); // Refresh every 30s
     return () => clearInterval(interval);
   }, []);
 
-  const loadAllAnalytics = async () => {
     try {
       setLoading(true);
       
