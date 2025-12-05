@@ -214,6 +214,267 @@ async def delete_workflow(workflow_id: str):
     
     return {"message": "Workflow deleted successfully"}
 
+
+# ========== WORKFLOW VALIDATION ENDPOINT ==========
+
+def _validate_workflow_document(workflow: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Server-side validation for a workflow definition.
+
+    Returns a list of issues with shape:
+    {"type": "error"|"warning", "message": str, "nodeId": Optional[str]}
+    """
+    issues: List[Dict[str, Any]] = []
+
+    nodes: List[Dict[str, Any]] = workflow.get("nodes") or []
+    edges: List[Dict[str, Any]] = workflow.get("edges") or []
+
+    if not nodes:
+        issues.append({
+            "type": "error",
+            "message": "Workflow has no nodes configured.",
+        })
+        return issues
+
+    # Basic node/index maps
+    node_by_id: Dict[str, Dict[str, Any]] = {}
+    for node in nodes:
+        node_id = node.get("id")
+        if not node_id:
+            issues.append({
+                "type": "error",
+                "message": "A node is missing an 'id' property.",
+            })
+            continue
+        if node_id in node_by_id:
+            issues.append({
+                "type": "error",
+                "message": f"Duplicate node id detected: '{node_id}'. Node IDs must be unique.",
+                "nodeId": node_id,
+            })
+        else:
+            node_by_id[node_id] = node
+
+    # Build edge adjacency maps and validate references
+    edges_by_source: Dict[str, List[Dict[str, Any]]] = {}
+    edges_by_target: Dict[str, List[Dict[str, Any]]] = {}
+
+    for idx, edge in enumerate(edges):
+        src = edge.get("source")
+        tgt = edge.get("target")
+
+        if not src or src not in node_by_id:
+            issues.append({
+                "type": "error",
+                "message": f"Edge #{idx + 1} references a missing source node '{src}'.",
+                "nodeId": src,
+            })
+        if not tgt or tgt not in node_by_id:
+            issues.append({
+                "type": "error",
+                "message": f"Edge #{idx + 1} references a missing target node '{tgt}'.",
+                "nodeId": tgt,
+            })
+
+        if src:
+            edges_by_source.setdefault(src, []).append(edge)
+        if tgt:
+            edges_by_target.setdefault(tgt, []).append(edge)
+
+    # High-level structural checks (mirrors + extends frontend checks)
+    start_nodes = [n for n in nodes if n.get("type") == "start"]
+    end_nodes = [n for n in nodes if n.get("type") == "end"]
+
+    if not start_nodes:
+        issues.append({
+            "type": "error",
+            "message": "No Start node found. Add a Start node to begin the workflow.",
+        })
+    if len(start_nodes) > 1:
+        issues.append({
+            "type": "warning",
+            "message": f"Multiple Start nodes detected ({len(start_nodes)}). Ensure this is intentional.",
+        })
+    if not end_nodes:
+        issues.append({
+            "type": "warning",
+            "message": "No End node found. Add at least one End node to properly terminate the workflow.",
+        })
+
+    # Nodes with no outgoing edges (excluding End nodes)
+    for node in nodes:
+        node_id = node.get("id")
+        if not node_id:
+            continue
+        if node.get("type") == "end":
+            continue
+        outgoing = edges_by_source.get(node_id, [])
+        if not outgoing:
+            issues.append({
+                "type": "warning",
+                "message": f"Node '{node.get('data', {}).get('label') or node_id}' has no outgoing connections.",
+                "nodeId": node_id,
+            })
+
+    # Reachability from first Start node
+    if start_nodes:
+        from collections import deque
+
+        visited = set()
+        queue: deque[str] = deque()
+
+        start_id = start_nodes[0].get("id")
+        if start_id:
+            visited.add(start_id)
+            queue.append(start_id)
+
+        while queue:
+            current = queue.popleft()
+            for edge in edges_by_source.get(current, []):
+                target_id = edge.get("target")
+                if target_id and target_id not in visited:
+                    visited.add(target_id)
+                    queue.append(target_id)
+
+        for node in nodes:
+            node_id = node.get("id")
+            if node_id and node_id not in visited:
+                issues.append({
+                    "type": "warning",
+                    "message": f"Node '{node.get('data', {}).get('label') or node_id}' is unreachable from the Start node.",
+                    "nodeId": node_id,
+                })
+
+        # Ensure at least one End node is reachable from Start
+        reachable_end_ids = {n.get("id") for n in end_nodes if n.get("id") in visited}
+        if end_nodes and not reachable_end_ids:
+            issues.append({
+                "type": "error",
+                "message": "No End node is reachable from the Start node. Check your connections.",
+            })
+
+    # Node-type specific validations
+    def _add_issue(node: Dict[str, Any], level: str, message: str) -> None:
+        issues.append({
+            "type": level,
+            "message": message,
+            "nodeId": node.get("id"),
+        })
+
+    for node in nodes:
+        node_id = node.get("id")
+        node_type = node.get("type")
+        data = node.get("data", {})
+        label = data.get("label") or node_id
+
+        if node_type == "decision":
+            condition = data.get("condition")
+            if not condition or not str(condition).strip():
+                _add_issue(node, "warning", f"Decision node '{label}' has no condition configured.")
+
+            outgoing = edges_by_source.get(node_id or "", [])
+            if not outgoing:
+                _add_issue(node, "error", f"Decision node '{label}' has no outgoing branches.")
+            else:
+                # Check for both positive and negative branches
+                positive_keywords = ["yes", "true", "approve", "approved", "shortlist", "accept"]
+                negative_keywords = ["no", "false", "reject", "rejected", "decline", "fail"]
+
+                has_positive = False
+                has_negative = False
+
+                for edge in outgoing:
+                    handle = edge.get("sourceHandle") or edge.get("source_handle") or ""
+                    label_text = (edge.get("label") or "").lower()
+
+                    if handle.lower() in ["yes", "true"] or any(k in label_text for k in positive_keywords):
+                        has_positive = True
+                    if handle.lower() in ["no", "false"] or any(k in label_text for k in negative_keywords):
+                        has_negative = True
+
+                if not has_positive or not has_negative:
+                    _add_issue(
+                        node,
+                        "warning",
+                        f"Decision node '{label}' does not appear to have both Yes/No branches configured.",
+                    )
+
+        elif node_type == "form":
+            form_id = data.get("formId")
+            if not form_id:
+                _add_issue(node, "error", f"Form node '{label}' is missing a linked form.")
+            else:
+                # Cross-check with forms collection to avoid broken links
+                if not forms_collection.find_one({"id": form_id}):
+                    _add_issue(
+                        node,
+                        "error",
+                        f"Form node '{label}' references a form that does not exist (id='{form_id}').",
+                    )
+
+        elif node_type == "approval":
+            approvers = data.get("approvers") or []
+            if not approvers:
+                _add_issue(node, "warning", f"Approval node '{label}' has no approvers configured.")
+
+        elif node_type == "task":
+            if not label:
+                _add_issue(node, "warning", "Task node is missing a title/label.")
+            sla_hours = data.get("dueInHours")
+            try:
+                if sla_hours is not None and float(sla_hours) <= 0:
+                    _add_issue(node, "warning", f"Task node '{label}' has a non-positive SLA/dueInHours value.")
+            except (TypeError, ValueError):
+                _add_issue(node, "warning", f"Task node '{label}' has an invalid SLA/dueInHours value.")
+
+        elif node_type == "action":
+            action_type = data.get("actionType", "http")
+            if action_type in {"http", "webhook"}:
+                url = data.get("url")
+                if not url or not str(url).strip():
+                    _add_issue(node, "warning", f"Action node '{label}' has no URL configured.")
+            elif action_type == "script":
+                script = data.get("script")
+                if not script:
+                    _add_issue(node, "warning", f"Action node '{label}' has no script configured.")
+
+        elif node_type == "parallel":
+            outgoing = edges_by_source.get(node_id or "", [])
+            if len(outgoing) < 2:
+                _add_issue(
+                    node,
+                    "warning",
+                    f"Parallel node '{label}' should typically have 2 or more outgoing branches.",
+                )
+
+        elif node_type == "merge":
+            incoming = edges_by_target.get(node_id or "", [])
+            if len(incoming) < 2:
+                _add_issue(
+                    node,
+                    "warning",
+                    f"Merge node '{label}' should typically have 2 or more incoming branches.",
+                )
+
+    return issues
+
+
+@app.get("/api/workflows/{workflow_id}/validate")
+async def validate_workflow(workflow_id: str):
+    """Validate a stored workflow definition on the backend.
+
+    This complements the client-side validation by checking:
+    - Graph integrity (missing nodes, unreachable nodes, missing Start/End)
+    - Node wiring (no outgoing edges, decision branches)
+    - Cross-collection references (e.g., Form nodes referencing existing forms)
+    """
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+
+    issues = _validate_workflow_document(workflow)
+    return {"workflow_id": workflow_id, "issues": issues, "issue_count": len(issues)}
+
+
 # Form Endpoints
 @app.get("/api/forms")
 async def get_forms():
