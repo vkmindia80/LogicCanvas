@@ -50,6 +50,9 @@ class NodeExecutor:
         self.instance_id = instance_id
         self.variables = variables
         self.evaluator = ExpressionEvaluator()
+        # Phase 3.2: Loop nesting tracking
+        self.loop_stack = []  # Track nested loops (max 3 levels)
+        self.max_loop_nesting = 3
 
     def execute_start_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute start node"""
