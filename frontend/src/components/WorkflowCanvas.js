@@ -566,10 +566,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     setTimeout(() => setZoomLevel(Math.round(getZoom() * 100)), 250);
   }, [fitView, getZoom]);
 
-  // Sprint 2: Export to PNG
+  // Sprint 2: Export to PNG with loading state
   const exportToPNG = useCallback(async () => {
     setIsExporting(true);
     try {
+      await new Promise(resolve => setTimeout(resolve, 300)); // Brief delay for UI feedback
       const canvasElement = reactFlowWrapper.current.querySelector('.react-flow');
       if (!canvasElement) {
         alert('Canvas not found');
