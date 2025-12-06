@@ -348,15 +348,22 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
 
         {/* Decision Node - Condition */}
         {node.data.type === NODE_TYPES.DECISION && (
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Condition
-            </label>
-            <ExpressionEditor
-              value={condition}
-              onChange={setCondition}
-              variables={{}}
-            />
+          <div className="bg-white border-2 border-amber-200 rounded-lg p-4 shadow-sm">
+            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Decision Logic</h3>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Condition Expression <span className="text-red-500">*</span>
+              </label>
+              <ExpressionEditor
+                value={condition}
+                onChange={setCondition}
+                variables={{}}
+              />
+              <p className="text-xs text-slate-500 mt-2 flex items-center space-x-1">
+                <Info className="w-3 h-3" />
+                <span>Expression evaluated to determine Yes/No branch</span>
+              </p>
+            </div>
           </div>
         )}
 
