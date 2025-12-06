@@ -152,9 +152,15 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
   if (!node) return null;
 
+  // Debug logging
+  console.log('NodeEditor received node:', node);
+  console.log('Node type:', node.type);
+  console.log('Node data:', node.data);
+  console.log('Node data.type:', node.data?.type);
+
   const config = NODE_CONFIGS[node.data.type];
   
-  // If config is not found, show error message
+  // If config is not found, show error message with more details
   if (!config) {
     return (
       <div className="bg-white rounded-xl shadow-2xl border-2 border-red-500 overflow-hidden animate-slide-in">
@@ -163,7 +169,9 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             <Info className="w-6 h-6" />
             <div>
               <h3 className="font-bold text-lg">Unknown Node Type</h3>
-              <p className="text-sm mt-1">Cannot edit node of type: {node.data.type}</p>
+              <p className="text-sm mt-1">Cannot edit node of type: {node.data.type || 'undefined'}</p>
+              <p className="text-xs mt-1">Node root type: {node.type}</p>
+              <p className="text-xs mt-1">Available types: {Object.keys(NODE_CONFIGS).join(', ')}</p>
             </div>
           </div>
         </div>
