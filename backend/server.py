@@ -121,6 +121,8 @@ approvals_collection = db['approvals']
 notifications_collection = db['notifications']
 audit_logs_collection = db['audit_logs']
 api_connectors_collection = db['api_connectors']
+workflow_components_collection = db['workflow_components']  # Phase 3.1: Reusable components
+workflow_versions_collection = db['workflow_versions']  # Phase 3.1: Version management
 
 # Initialize Execution Engine
 execution_engine = WorkflowExecutionEngine(db)
