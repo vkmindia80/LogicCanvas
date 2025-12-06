@@ -723,6 +723,10 @@ const AppShell = () => {
           }
         }}
       />
+      <VideoTutorials
+        isOpen={showVideoTutorials}
+        onClose={() => setShowVideoTutorials(false)}
+      />
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
