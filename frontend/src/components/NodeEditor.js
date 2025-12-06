@@ -1240,6 +1240,172 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
           </>
         )}
 
+        {/* Data Operation Nodes (CREATE, UPDATE, DELETE, LOOKUP, QUERY, GET) */}
+        {[NODE_TYPES.CREATE_RECORD, NODE_TYPES.UPDATE_RECORD, NODE_TYPES.DELETE_RECORD,
+          NODE_TYPES.LOOKUP_RECORD, NODE_TYPES.QUERY_RECORDS, NODE_TYPES.GET_RECORD].includes(resolvedNodeType) && (
+          <DataOperationConfig
+            nodeType={resolvedNodeType}
+            collection={collection}
+            setCollection={setCollection}
+            recordId={recordId}
+            setRecordId={setRecordId}
+            recordData={recordData}
+            setRecordData={setRecordData}
+            queryFilters={queryFilters}
+            setQueryFilters={setQueryFilters}
+            queryLimit={queryLimit}
+            setQueryLimit={setQueryLimit}
+            querySortBy={querySortBy}
+            setQuerySortBy={setQuerySortBy}
+            querySortOrder={querySortOrder}
+            setQuerySortOrder={setQuerySortOrder}
+          />
+        )}
+
+        {/* Data Transform Nodes (TRANSFORM, FILTER, SORT, AGGREGATE, CALCULATE) */}
+        {[NODE_TYPES.TRANSFORM, NODE_TYPES.FILTER, NODE_TYPES.SORT,
+          NODE_TYPES.AGGREGATE, NODE_TYPES.CALCULATE].includes(resolvedNodeType) && (
+          <DataTransformConfig
+            nodeType={resolvedNodeType}
+            transformMapping={transformMapping}
+            setTransformMapping={setTransformMapping}
+            filterCondition={filterCondition}
+            setFilterCondition={setFilterCondition}
+            sortField={sortField}
+            setSortField={setSortField}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            aggregateField={aggregateField}
+            setAggregateField={setAggregateField}
+            aggregateOperation={aggregateOperation}
+            setAggregateOperation={setAggregateOperation}
+            calculateFormula={calculateFormula}
+            setCalculateFormula={setCalculateFormula}
+            calculateOutputVar={calculateOutputVar}
+            setCalculateOutputVar={setCalculateOutputVar}
+            workflowVariables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+          />
+        )}
+
+        {/* Loop Nodes (FOR_EACH, WHILE, REPEAT) */}
+        {[NODE_TYPES.LOOP_FOR_EACH, NODE_TYPES.LOOP_WHILE, NODE_TYPES.LOOP_REPEAT].includes(resolvedNodeType) && (
+          <LoopConfig
+            nodeType={resolvedNodeType}
+            loopCollection={loopCollection}
+            setLoopCollection={setLoopCollection}
+            loopItemVar={loopItemVar}
+            setLoopItemVar={setLoopItemVar}
+            loopIndexVar={loopIndexVar}
+            setLoopIndexVar={setLoopIndexVar}
+            whileCondition={whileCondition}
+            setWhileCondition={setWhileCondition}
+            repeatCount={repeatCount}
+            setRepeatCount={setRepeatCount}
+            maxIterations={maxIterations}
+            setMaxIterations={setMaxIterations}
+            workflowVariables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+          />
+        )}
+
+        {/* Switch/Case Node */}
+        {resolvedNodeType === NODE_TYPES.SWITCH && (
+          <SwitchConfig
+            switchVariable={switchVariable}
+            setSwitchVariable={setSwitchVariable}
+            switchCases={switchCases}
+            setSwitchCases={setSwitchCases}
+            workflowVariables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+          />
+        )}
+
+        {/* Assignment Node */}
+        {resolvedNodeType === NODE_TYPES.ASSIGNMENT && (
+          <AssignmentConfig
+            assignments={assignments}
+            setAssignments={setAssignments}
+            workflowVariables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+          />
+        )}
+
+        {/* Email Node */}
+        {resolvedNodeType === NODE_TYPES.EMAIL && (
+          <EmailConfig
+            emailTo={emailTo}
+            setEmailTo={setEmailTo}
+            emailSubject={emailSubject}
+            setEmailSubject={setEmailSubject}
+            emailBody={emailBody}
+            setEmailBody={setEmailBody}
+            emailTemplate={emailTemplate}
+            setEmailTemplate={setEmailTemplate}
+          />
+        )}
+
+        {/* Wait Node */}
+        {resolvedNodeType === NODE_TYPES.WAIT && (
+          <WaitConfig
+            waitForEvent={waitForEvent}
+            setWaitForEvent={setWaitForEvent}
+            waitCondition={waitCondition}
+            setWaitCondition={setWaitCondition}
+            workflowVariables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+          />
+        )}
+
+        {/* Screen Node */}
+        {resolvedNodeType === NODE_TYPES.SCREEN && (
+          <ScreenConfig
+            screenContent={screenContent}
+            setScreenContent={setScreenContent}
+            screenTemplate={screenTemplate}
+            setScreenTemplate={setScreenTemplate}
+          />
+        )}
+
+        {/* Error Handler Node */}
+        {resolvedNodeType === NODE_TYPES.ERROR_HANDLER && (
+          <ErrorHandlerConfig
+            errorHandlerType={errorHandlerType}
+            setErrorHandlerType={setErrorHandlerType}
+            errorHandlerAction={errorHandlerAction}
+            setErrorHandlerAction={setErrorHandlerAction}
+          />
+        )}
+
+        {/* API Call Node (similar to Action but separate) */}
+        {resolvedNodeType === NODE_TYPES.API_CALL && (
+          <div className="bg-white border-2 border-rose-200 rounded-lg p-4 shadow-sm">
+            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">API Call Configuration</h3>
+            <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-rose-800 flex items-start space-x-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Make HTTP/REST API calls to external services</span>
+              </p>
+            </div>
+            <VisualAPIBuilder
+              value={apiConfig}
+              onChange={setApiConfig}
+            />
+          </div>
+        )}
+
+        {/* Webhook Node */}
+        {resolvedNodeType === NODE_TYPES.WEBHOOK && (
+          <div className="bg-white border-2 border-pink-300 rounded-lg p-4 shadow-sm">
+            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Webhook Configuration</h3>
+            <div className="bg-pink-50 border border-pink-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-pink-800 flex items-start space-x-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Send or receive webhook notifications</span>
+              </p>
+            </div>
+            <VisualAPIBuilder
+              value={apiConfig}
+              onChange={setApiConfig}
+            />
+          </div>
+        )}
+
         {/* Data Mapping - Collapsible */}
         <CollapsibleSection title="Data Mapping" id="dataMapping" icon={Link}>
           <DataMappingPanel 
