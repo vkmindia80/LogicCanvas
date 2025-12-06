@@ -2713,7 +2713,7 @@ async def get_instance_hierarchy(instance_id: str):
 
 @app.post("/api/workflow-instances/{instance_id}/complete-subprocess")
 async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
-    """Complete a subprocess execution and return output to parent"""
+    """Complete a subprocess execution and return output to parent - Enhanced Phase 3.1"""
     if data is None:
         data = {}
     
@@ -2726,27 +2726,33 @@ async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
         raise HTTPException(status_code=400, detail="Instance is not a subprocess")
     
     # Get output data from subprocess
-    output_data = data.get("output", {})
+    output_data = data.get("output", instance.get("variables", {}))
+    subprocess_status = instance.get("status", "completed")
+    subprocess_error = instance.get("error")
     
     # Update subprocess status
     now = datetime.utcnow().isoformat()
     workflow_instances_collection.update_one(
         {"id": instance_id},
         {"$set": {
-            "status": "completed",
+            "status": subprocess_status,
             "completed_at": now,
             "output_data": output_data
         }}
     )
     
-    # Update parent instance - map subprocess output to parent variables
+    # Update parent instance - map subprocess output to parent variables and resume execution
     parent_instance = workflow_instances_collection.find_one({"id": parent_id}, {"_id": 0})
     if parent_instance:
+        subprocess_node_id = None
+        
         # Find the subprocess node in parent's execution history
         for history_entry in reversed(parent_instance.get("execution_history", [])):
             result = history_entry.get("result", {})
             if (result.get("subprocess_instance_id") == instance_id and 
                 result.get("status") == "waiting"):
+                
+                subprocess_node_id = history_entry.get("node_id")
                 
                 # Get output mapping from subprocess node
                 output_mapping = result.get("output_mapping", {})
@@ -2756,6 +2762,14 @@ async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
                 for parent_var, subprocess_var in output_mapping.items():
                     if subprocess_var in output_data:
                         parent_variables[parent_var] = output_data[subprocess_var]
+                    elif isinstance(subprocess_var, str) and subprocess_var.startswith("${"):
+                        # Evaluate expression from subprocess context
+                        evaluator = ExpressionEvaluator()
+                        value = evaluator.evaluate(subprocess_var, output_data)
+                        parent_variables[parent_var] = value
+                
+                # Store entire subprocess output under a special key
+                parent_variables[f"subprocess_{instance_id}"] = output_data
                 
                 # Update parent variables
                 workflow_instances_collection.update_one(
@@ -2763,14 +2777,38 @@ async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
                     {"$set": {"variables": parent_variables}}
                 )
                 
-                # TODO: Resume parent execution from subprocess node
+                # Resume parent execution from subprocess node
+                if subprocess_node_id:
+                    try:
+                        # Create result data to pass to parent
+                        result_data = {
+                            "subprocess_completed": True,
+                            "subprocess_status": subprocess_status,
+                            "subprocess_output": output_data,
+                            "subprocess_error": subprocess_error
+                        }
+                        
+                        # Resume parent workflow execution
+                        execution_engine.resume_execution(parent_id, subprocess_node_id, result_data)
+                    except Exception as e:
+                        print(f"Error resuming parent execution: {str(e)}")
+                        # Update parent status to indicate error
+                        workflow_instances_collection.update_one(
+                            {"id": parent_id},
+                            {"$set": {
+                                "status": "failed",
+                                "error": f"Failed to resume after subprocess: {str(e)}"
+                            }}
+                        )
+                
                 break
     
     return {
-        "message": "Subprocess completed",
+        "message": "Subprocess completed and parent resumed",
         "instance_id": instance_id,
         "parent_instance_id": parent_id,
-        "output_data": output_data
+        "output_data": output_data,
+        "status": subprocess_status
     }
 
 
