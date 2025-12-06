@@ -781,8 +781,10 @@ class WorkflowExecutionEngine:
         workflow_id: str,
         triggered_by: str = "manual",
         input_data: Optional[Dict[str, Any]] = None,
+        parent_instance_id: Optional[str] = None,
+        nesting_level: int = 0,
     ) -> str:
-        """Start a new workflow execution"""
+        """Start a new workflow execution with optional parent-child support"""
         # Get workflow definition
         workflow = self.db["workflows"].find_one({"id": workflow_id}, {"_id": 0})
         if not workflow:
