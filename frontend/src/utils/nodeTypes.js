@@ -157,6 +157,14 @@ export const NODE_CONFIGS = {
     icon: 'refresh-cw',
     description: 'Repeat while condition is true'
   },
+  [NODE_TYPES.LOOP_DO_WHILE]: {
+    label: 'Do-While Loop',
+    category: 'Logic',
+    color: 'bg-indigo-500',
+    borderColor: 'border-indigo-600',
+    icon: 'rotate-cw',
+    description: 'Execute once, then repeat while condition is true'
+  },
   [NODE_TYPES.LOOP_REPEAT]: {
     label: 'Repeat Loop',
     category: 'Logic',
