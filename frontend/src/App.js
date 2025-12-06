@@ -681,6 +681,24 @@ const AppShell = () => {
           addToast('Workflow created with AI guidance!', 'success');
         }}
       />
+      {showConnectorLibrary && (
+        <ConnectorLibrary
+          onClose={() => setShowConnectorLibrary(false)}
+          onSelect={(connector) => {
+            addToast(`Connector "${connector.name}" selected!`, 'success');
+            setShowConnectorLibrary(false);
+          }}
+        />
+      )}
+      {showDebugPanel && debugInstanceId && (
+        <DebugPanel
+          instanceId={debugInstanceId}
+          onClose={() => {
+            setShowDebugPanel(false);
+            setDebugInstanceId(null);
+          }}
+        />
+      )}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
