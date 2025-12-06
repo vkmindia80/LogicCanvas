@@ -718,6 +718,29 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     return `Last saved at ${lastSavedAt.toLocaleTimeString()}`;
   };
 
+  // Handle quick fix actions from validation
+  const handleQuickFix = useCallback((quickFix) => {
+    switch (quickFix.action) {
+      case 'addStartNode':
+        addNode(NODE_TYPES.START);
+        handleValidationPanelClose();
+        break;
+      case 'addEndNode':
+        addNode(NODE_TYPES.END);
+        handleValidationPanelClose();
+        break;
+      case 'editNode':
+        const node = nodes.find(n => n.id === quickFix.nodeId);
+        if (node) {
+          setSelectedNode(node);
+          handleValidationPanelClose();
+        }
+        break;
+      default:
+        console.log('Unknown quick fix action:', quickFix.action);
+    }
+  }, [addNode, nodes, handleValidationPanelClose]);
+
   // Sprint 2: Zoom Controls
   const handleZoomIn = useCallback(() => {
     zoomIn({ duration: 200 });
