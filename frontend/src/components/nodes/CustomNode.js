@@ -327,6 +327,40 @@ const CustomNode = ({ data, selected }) => {
         </div>
       )}
 
+      {/* Configuration Status Badge - Bottom Left */}
+      {!executionState && configStatus.status === 'incomplete' && (
+        <div 
+          className="absolute -bottom-2 -left-2 z-10 group" 
+          data-testid="node-config-status"
+          title={configStatus.message}
+        >
+          <div className="bg-amber-500 rounded-full p-1 shadow-md hover:scale-110 transition-transform">
+            <Settings className="w-3 h-3 text-white" />
+          </div>
+          {/* Tooltip on hover */}
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block">
+            <div className="bg-slate-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-xl">
+              <div className="font-semibold mb-1">Configuration Needed</div>
+              <div className="text-slate-300">{configStatus.message}</div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fully Configured Badge - Bottom Left */}
+      {!executionState && isConfigured && !validationStatus && (
+        <div 
+          className="absolute -bottom-2 -left-2 z-10" 
+          data-testid="node-config-complete"
+          title="Fully configured"
+        >
+          <div className="bg-green-500 rounded-full p-1 shadow-md">
+            <CheckCircle className="w-3 h-3 text-white" />
+          </div>
+        </div>
+      )}
+
       {/* Shine effect overlay for Salesforce aesthetic */}
       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
