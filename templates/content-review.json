@@ -1,0 +1,122 @@
+{
+  "id": null,
+  "name": "Content Review & Publishing",
+  "description": "Multi-stage content review with editorial approval, compliance check, and scheduled publishing",
+  "status": "draft",
+  "version": 1,
+  "tags": ["content", "publishing", "marketing", "template"],
+  "features": [
+    "Parallel editorial and compliance review",
+    "Scheduled content publishing",
+    "Revision workflow with feedback loop",
+    "Automated stakeholder notifications"
+  ],
+  "useCases": [
+    "Blog post publishing workflow",
+    "Social media content approval",
+    "Marketing collateral review process"
+  ],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": { "x": 250, "y": 50 },
+      "data": {
+        "type": "start",
+        "label": "Content Submitted",
+        "description": "New content submitted for review"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": { "x": 250, "y": 150 },
+      "data": {
+        "type": "form",
+        "label": "Content Details",
+        "description": "Capture content metadata and category"
+      }
+    },
+    {
+      "id": "parallel-1",
+      "type": "parallel",
+      "position": { "x": 250, "y": 250 },
+      "data": {
+        "type": "parallel",
+        "label": "Parallel Review",
+        "description": "Editorial and compliance review simultaneously"
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": { "x": 100, "y": 350 },
+      "data": {
+        "type": "approval",
+        "label": "Editorial Review",
+        "description": "Editor reviews content quality"
+      }
+    },
+    {
+      "id": "approval-2",
+      "type": "approval",
+      "position": { "x": 400, "y": 350 },
+      "data": {
+        "type": "approval",
+        "label": "Compliance Check",
+        "description": "Legal reviews for compliance"
+      }
+    },
+    {
+      "id": "merge-1",
+      "type": "merge",
+      "position": { "x": 250, "y": 450 },
+      "data": {
+        "type": "merge",
+        "label": "Reviews Complete",
+        "description": "Wait for both reviews to complete"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": { "x": 250, "y": 550 },
+      "data": {
+        "type": "decision",
+        "label": "All Approved?",
+        "description": "Check if both reviews approved"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": { "x": 400, "y": 650 },
+      "data": {
+        "type": "action",
+        "label": "Publish Content",
+        "description": "Publish to website/platform"
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": { "x": 400, "y": 750 },
+      "data": {
+        "type": "end",
+        "label": "Published",
+        "description": "Content successfully published"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start-1", "target": "form-1" },
+    { "id": "e2", "source": "form-1", "target": "parallel-1" },
+    { "id": "e3", "source": "parallel-1", "target": "approval-1" },
+    { "id": "e4", "source": "parallel-1", "target": "approval-2" },
+    { "id": "e5", "source": "approval-1", "target": "merge-1" },
+    { "id": "e6", "source": "approval-2", "target": "merge-1" },
+    { "id": "e7", "source": "merge-1", "target": "decision-1" },
+    { "id": "e8", "source": "decision-1", "sourceHandle": "yes", "target": "action-1" },
+    { "id": "e9", "source": "action-1", "target": "end-1" }
+  ]
+}
