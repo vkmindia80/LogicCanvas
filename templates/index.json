@@ -179,6 +179,121 @@
       "icon": "database",
       "file": "data-migration.json",
       "nodeCount": 12
+    },
+    {
+      "id": "sales-opportunity",
+      "name": "Sales Opportunity Management",
+      "description": "Complete sales opportunity tracking with lead qualification, proposal generation, and deal closure",
+      "category": "Sales",
+      "tags": ["sales", "crm", "opportunity", "pipeline"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "trending-up",
+      "file": "sales-opportunity.json",
+      "nodeCount": 9,
+      "features": [
+        "Automated lead scoring",
+        "Proposal generation workflow",
+        "CRM integration",
+        "Deal closure tracking"
+      ],
+      "useCases": [
+        "B2B sales pipeline",
+        "Enterprise deal tracking",
+        "Sales performance"
+      ]
+    },
+    {
+      "id": "content-review",
+      "name": "Content Review & Publishing",
+      "description": "Multi-stage content review with editorial approval, compliance check, and scheduled publishing",
+      "category": "Marketing",
+      "tags": ["content", "publishing", "marketing", "approval"],
+      "complexity": "medium",
+      "estimatedSetupTime": "8 minutes",
+      "icon": "file-edit",
+      "file": "content-review.json",
+      "nodeCount": 9,
+      "features": [
+        "Parallel editorial review",
+        "Compliance checking",
+        "Scheduled publishing",
+        "Revision workflow"
+      ],
+      "useCases": [
+        "Blog post publishing",
+        "Social media content",
+        "Marketing collateral"
+      ]
+    },
+    {
+      "id": "asset-maintenance",
+      "name": "Asset Maintenance Workflow",
+      "description": "Preventive maintenance scheduling with work order creation, technician assignment, and completion tracking",
+      "category": "Operations",
+      "tags": ["maintenance", "facilities", "operations", "assets"],
+      "complexity": "simple",
+      "estimatedSetupTime": "7 minutes",
+      "icon": "wrench",
+      "file": "asset-maintenance.json",
+      "nodeCount": 6,
+      "features": [
+        "Priority-based routing",
+        "Asset tracking",
+        "Work order management",
+        "Manager sign-off"
+      ],
+      "useCases": [
+        "Facility maintenance",
+        "Equipment preventive maintenance",
+        "Work order tracking"
+      ]
+    },
+    {
+      "id": "employee-offboarding",
+      "name": "Employee Offboarding",
+      "description": "Complete employee exit process with asset collection, access revocation, and exit interview",
+      "category": "Human Resources",
+      "tags": ["hr", "offboarding", "exit", "employee"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "user-minus",
+      "file": "employee-offboarding.json",
+      "nodeCount": 9,
+      "features": [
+        "Automated access revocation",
+        "Asset collection tracking",
+        "Exit interview scheduling",
+        "Parallel task execution"
+      ],
+      "useCases": [
+        "Employee resignation",
+        "Termination process",
+        "Contractor end of engagement"
+      ]
+    },
+    {
+      "id": "project-request",
+      "name": "Project Request & Approval",
+      "description": "New project initiation with business case review, budget approval, and resource allocation",
+      "category": "PMO",
+      "tags": ["project", "pmo", "approval", "budget"],
+      "complexity": "medium",
+      "estimatedSetupTime": "8 minutes",
+      "icon": "briefcase",
+      "file": "project-request.json",
+      "nodeCount": 8,
+      "features": [
+        "Business case submission",
+        "Multi-level budget approval",
+        "Resource allocation",
+        "Project kickoff automation"
+      ],
+      "useCases": [
+        "IT project approval",
+        "Capital expenditure",
+        "New initiative evaluation"
+      ]
     }
   ],
   "categories": [
