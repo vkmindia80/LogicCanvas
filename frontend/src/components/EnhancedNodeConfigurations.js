@@ -2,6 +2,7 @@ import React from 'react';
 import { Info, Plus, Trash2, Database, Filter as FilterIcon, ArrowUpDown, BarChart2, Calculator, Repeat, GitBranch, Mail, Clock, Monitor, AlertTriangle } from 'lucide-react';
 import KeyValueEditor from './KeyValueEditor';
 import ExpressionEditor from './ExpressionEditor';
+import DataTransformationMapper from './DataTransformationMapper';
 
 /**
  * Enhanced Node Configuration Components
