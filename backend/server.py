@@ -5576,6 +5576,212 @@ async def get_performance_profile(instance_id: str):
     }
 
 
+# ============================================================================
+# PHASE 2: AI-POWERED FEATURES
+# ============================================================================
+
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+from dotenv import load_dotenv
+load_dotenv()
+
+
+class AIWorkflowRequest(BaseModel):
+    description: str
+    industry: str = "general"
+    preferences: Dict[str, Any] = {}
+
+
+@app.post("/api/ai/generate-workflow")
+async def generate_workflow_with_ai(request: AIWorkflowRequest):
+    """
+    Generate workflow structure from natural language description using AI
+    """
+    try:
+        # Get API key from environment
+        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        if not api_key:
+            raise HTTPException(status_code=500, detail="AI service not configured")
+        
+        # Initialize AI chat
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"workflow-gen-{uuid.uuid4()}",
+            system_message="""You are a workflow design expert. Your task is to convert natural language descriptions into structured workflow definitions.
+
+Generate workflows that include:
+- Appropriate node types (Start, Task, Form, Decision, Approval, Action, End)
+- Logical connections between nodes
+- Proper node positioning for visual layout
+- Metadata like estimated time and suggestions
+
+Return ONLY valid JSON with this structure:
+{
+  "name": "Workflow Name",
+  "description": "Brief description",
+  "nodes": [{"id": "uuid", "type": "start|task|form|decision|approval|action|end", "data": {"label": "...", "description": "..."}, "position": {"x": 100, "y": 100}}],
+  "edges": [{"id": "uuid", "source": "node-id", "target": "node-id"}],
+  "metadata": {"nodeTypes": ["Task", "Approval"], "estimatedTime": "~10min", "suggestions": ["Add notifications", "Consider adding validation"]}
+}"""
+        ).with_model("openai", "gpt-4o-mini")
+        
+        # Create prompt
+        prompt = f"""Create a workflow for the {request.industry} industry:
+
+Description: {request.description}
+
+Preferences:
+- Include approvals: {request.preferences.get('includeApprovals', True)}
+- Include forms: {request.preferences.get('includeForms', True)}
+- Include notifications: {request.preferences.get('includeNotifications', True)}
+
+Generate a complete, executable workflow with all necessary nodes and connections."""
+        
+        user_message = UserMessage(text=prompt)
+        response = await chat.send_message(user_message)
+        
+        # Parse AI response
+        import json
+        import re
+        
+        # Extract JSON from response (handle markdown code blocks)
+        json_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', response, re.DOTALL)
+        if json_match:
+            workflow_json = json_match.group(1)
+        else:
+            workflow_json = response
+        
+        workflow = json.loads(workflow_json)
+        
+        # Add required fields
+        workflow['id'] = str(uuid.uuid4())
+        workflow['created_at'] = datetime.utcnow().isoformat()
+        workflow['updated_at'] = datetime.utcnow().isoformat()
+        workflow['status'] = 'draft'
+        workflow['tags'] = ['ai-generated', request.industry]
+        
+        # Ensure all nodes have proper IDs and structure
+        for node in workflow.get('nodes', []):
+            if 'id' not in node:
+                node['id'] = str(uuid.uuid4())
+            if 'data' not in node:
+                node['data'] = {}
+            if 'position' not in node:
+                node['position'] = {'x': 100, 'y': 100}
+        
+        # Ensure all edges have proper IDs
+        for edge in workflow.get('edges', []):
+            if 'id' not in edge:
+                edge['id'] = str(uuid.uuid4())
+        
+        return {"workflow": workflow, "success": True}
+        
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=500, detail=f"AI response parsing error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {str(e)}")
+
+
+@app.post("/api/ai/optimize-workflow")
+async def optimize_workflow_with_ai(workflow_id: str):
+    """
+    Get AI-powered optimization suggestions for an existing workflow
+    """
+    try:
+        workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+        if not workflow:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+        
+        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        if not api_key:
+            raise HTTPException(status_code=500, detail="AI service not configured")
+        
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"workflow-opt-{uuid.uuid4()}",
+            system_message="You are a workflow optimization expert. Analyze workflows and provide actionable improvement suggestions."
+        ).with_model("openai", "gpt-4o-mini")
+        
+        prompt = f"""Analyze this workflow and provide optimization suggestions:
+
+Workflow Name: {workflow.get('name')}
+Description: {workflow.get('description')}
+Number of nodes: {len(workflow.get('nodes', []))}
+Number of edges: {len(workflow.get('edges', []))}
+
+Node types: {', '.join(set(n.get('type', 'unknown') for n in workflow.get('nodes', [])))}
+
+Provide 3-5 specific, actionable suggestions to improve efficiency, reliability, or user experience.
+Return as JSON array of strings: ["suggestion 1", "suggestion 2", ...]"""
+        
+        user_message = UserMessage(text=prompt)
+        response = await chat.send_message(user_message)
+        
+        # Parse suggestions
+        import json
+        import re
+        
+        json_match = re.search(r'```(?:json)?\s*(\[.*?\])\s*```', response, re.DOTALL)
+        if json_match:
+            suggestions_json = json_match.group(1)
+        else:
+            # Try to find array in response
+            suggestions_json = re.search(r'\[.*?\]', response, re.DOTALL)
+            suggestions_json = suggestions_json.group(0) if suggestions_json else '[]'
+        
+        suggestions = json.loads(suggestions_json)
+        
+        return {
+            "workflow_id": workflow_id,
+            "suggestions": suggestions,
+            "analysis_date": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Optimization failed: {str(e)}")
+
+
+@app.post("/api/ai/suggest-config")
+async def suggest_node_config_with_ai(node_type: str, context: Dict[str, Any] = {}):
+    """
+    Get AI-powered configuration suggestions for a node
+    """
+    try:
+        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        if not api_key:
+            raise HTTPException(status_code=500, detail="AI service not configured")
+        
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"node-config-{uuid.uuid4()}",
+            system_message="You are a workflow configuration expert. Provide best practice configuration recommendations."
+        ).with_model("openai", "gpt-4o-mini")
+        
+        prompt = f"""Suggest optimal configuration for a {node_type} node in a workflow.
+
+Context: {json.dumps(context, indent=2)}
+
+Provide recommendations for:
+- Timeout values
+- Retry settings
+- Error handling approach
+- Notifications
+- Any node-specific best practices
+
+Return as JSON object with recommended values and explanations."""
+        
+        user_message = UserMessage(text=prompt)
+        response = await chat.send_message(user_message)
+        
+        return {
+            "node_type": node_type,
+            "suggestions": response,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Configuration suggestion failed: {str(e)}")
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
