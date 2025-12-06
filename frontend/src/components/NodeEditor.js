@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2, ChevronDown, ChevronUp, Info, Link } from 'lucide-react';
+import { X, Save, Trash2, Copy, ChevronDown, ChevronUp, Info, Link } from 'lucide-react';
 import { NODE_CONFIGS, NODE_TYPES } from '../utils/nodeTypes';
 import ExpressionEditor from './ExpressionEditor';
 import DataMappingPanel from './DataMappingPanel';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
+const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   const [label, setLabel] = useState(node?.data?.label || '');
   const [description, setDescription] = useState(node?.data?.description || '');
   const [condition, setCondition] = useState(node?.data?.condition || '');
