@@ -68,6 +68,9 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     dataMapping: false,
   });
 
+  // UI mode states
+  const [conditionMode, setConditionMode] = useState('visual'); // 'visual' or 'code'
+
   // Workflow variables for data mapping
   const [workflowVariables, setWorkflowVariables] = useState([]);
 
