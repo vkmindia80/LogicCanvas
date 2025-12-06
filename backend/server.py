@@ -6584,6 +6584,444 @@ async def execute_connector(connector_id: str, variables: Dict[str, Any]):
 
 
 # ============================================================================
+# PHASE 3.4: INTEGRATION ENHANCEMENTS
+# ============================================================================
+
+# OAuth 2.0 Management
+oauth_states_collection = db['oauth_states']
+oauth_tokens_collection = db['oauth_tokens']
+webhook_endpoints_collection = db['webhook_endpoints']
+webhook_logs_collection = db['webhook_logs']
+
+# Rate limiting storage (in-memory for simplicity, use Redis in production)
+rate_limit_cache = {}
+circuit_breaker_states = {}
+
+class OAuthConfig(BaseModel):
+    provider: str  # salesforce, hubspot, servicenow, etc.
+    client_id: str
+    client_secret: str
+    redirect_uri: str
+    authorization_url: str
+    token_url: str
+    scopes: List[str] = []
+
+class WebhookConfig(BaseModel):
+    name: str
+    url: str
+    events: List[str]
+    secret: Optional[str] = None
+    headers: Dict[str, str] = {}
+    active: bool = True
+
+@app.post("/api/oauth/authorize")
+async def initiate_oauth_flow(config: OAuthConfig):
+    """Initiate OAuth 2.0 authorization flow"""
+    state = str(uuid.uuid4())
+    
+    # Store state for verification
+    oauth_states_collection.insert_one({
+        "id": state,
+        "provider": config.provider,
+        "client_id": config.client_id,
+        "redirect_uri": config.redirect_uri,
+        "token_url": config.token_url,
+        "created_at": datetime.utcnow().isoformat(),
+        "expires_at": (datetime.utcnow() + timedelta(minutes=10)).isoformat()
+    })
+    
+    # Build authorization URL
+    auth_params = {
+        "client_id": config.client_id,
+        "redirect_uri": config.redirect_uri,
+        "response_type": "code",
+        "state": state,
+        "scope": " ".join(config.scopes) if config.scopes else ""
+    }
+    
+    auth_url = config.authorization_url
+    if "?" in auth_url:
+        auth_url += "&"
+    else:
+        auth_url += "?"
+    
+    auth_url += "&".join([f"{k}={v}" for k, v in auth_params.items() if v])
+    
+    return {
+        "authorization_url": auth_url,
+        "state": state,
+        "message": "Redirect user to authorization_url"
+    }
+
+@app.post("/api/oauth/callback")
+async def oauth_callback(data: Dict[str, Any]):
+    """Handle OAuth callback and exchange code for token"""
+    code = data.get("code")
+    state = data.get("state")
+    
+    if not code or not state:
+        raise HTTPException(status_code=400, detail="Missing code or state parameter")
+    
+    # Verify state
+    state_doc = oauth_states_collection.find_one({"id": state})
+    if not state_doc:
+        raise HTTPException(status_code=400, detail="Invalid state parameter")
+    
+    # Check expiration
+    expires_at = datetime.fromisoformat(state_doc["expires_at"])
+    if datetime.utcnow() > expires_at:
+        raise HTTPException(status_code=400, detail="State expired")
+    
+    # Exchange code for token
+    token_url = state_doc["token_url"]
+    client_id = state_doc["client_id"]
+    redirect_uri = state_doc["redirect_uri"]
+    
+    # Get client_secret from request (should be passed securely)
+    client_secret = data.get("client_secret")
+    if not client_secret:
+        raise HTTPException(status_code=400, detail="client_secret required")
+    
+    try:
+        token_response = requests.post(
+            token_url,
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "redirect_uri": redirect_uri
+            },
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+        
+        if token_response.status_code != 200:
+            raise HTTPException(
+                status_code=token_response.status_code,
+                detail=f"Token exchange failed: {token_response.text}"
+            )
+        
+        token_data = token_response.json()
+        
+        # Store token
+        token_id = str(uuid.uuid4())
+        oauth_tokens_collection.insert_one({
+            "id": token_id,
+            "provider": state_doc["provider"],
+            "access_token": token_data.get("access_token"),
+            "refresh_token": token_data.get("refresh_token"),
+            "token_type": token_data.get("token_type", "Bearer"),
+            "expires_in": token_data.get("expires_in"),
+            "scope": token_data.get("scope"),
+            "created_at": datetime.utcnow().isoformat(),
+            "expires_at": (datetime.utcnow() + timedelta(seconds=token_data.get("expires_in", 3600))).isoformat()
+        })
+        
+        # Clean up state
+        oauth_states_collection.delete_one({"id": state})
+        
+        return {
+            "success": True,
+            "token_id": token_id,
+            "access_token": token_data.get("access_token"),
+            "refresh_token": token_data.get("refresh_token"),
+            "expires_in": token_data.get("expires_in")
+        }
+        
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Token exchange failed: {str(e)}")
+
+@app.post("/api/oauth/refresh")
+async def refresh_oauth_token(data: Dict[str, Any]):
+    """Refresh OAuth access token using refresh token"""
+    token_id = data.get("token_id")
+    
+    if not token_id:
+        raise HTTPException(status_code=400, detail="token_id required")
+    
+    token_doc = oauth_tokens_collection.find_one({"id": token_id})
+    if not token_doc:
+        raise HTTPException(status_code=404, detail="Token not found")
+    
+    refresh_token = token_doc.get("refresh_token")
+    if not refresh_token:
+        raise HTTPException(status_code=400, detail="No refresh token available")
+    
+    # Provider-specific token refresh (simplified - should be configured per provider)
+    token_url = data.get("token_url")
+    client_id = data.get("client_id")
+    client_secret = data.get("client_secret")
+    
+    if not all([token_url, client_id, client_secret]):
+        raise HTTPException(status_code=400, detail="token_url, client_id, and client_secret required")
+    
+    try:
+        refresh_response = requests.post(
+            token_url,
+            data={
+                "grant_type": "refresh_token",
+                "refresh_token": refresh_token,
+                "client_id": client_id,
+                "client_secret": client_secret
+            },
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+        
+        if refresh_response.status_code != 200:
+            raise HTTPException(
+                status_code=refresh_response.status_code,
+                detail=f"Token refresh failed: {refresh_response.text}"
+            )
+        
+        new_token_data = refresh_response.json()
+        
+        # Update stored token
+        oauth_tokens_collection.update_one(
+            {"id": token_id},
+            {"$set": {
+                "access_token": new_token_data.get("access_token"),
+                "refresh_token": new_token_data.get("refresh_token", refresh_token),
+                "expires_in": new_token_data.get("expires_in"),
+                "updated_at": datetime.utcnow().isoformat(),
+                "expires_at": (datetime.utcnow() + timedelta(seconds=new_token_data.get("expires_in", 3600))).isoformat()
+            }}
+        )
+        
+        return {
+            "success": True,
+            "access_token": new_token_data.get("access_token"),
+            "expires_in": new_token_data.get("expires_in")
+        }
+        
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Token refresh failed: {str(e)}")
+
+@app.get("/api/oauth/tokens")
+async def get_oauth_tokens():
+    """Get all stored OAuth tokens"""
+    tokens = list(oauth_tokens_collection.find({}, {"_id": 0, "access_token": 0, "refresh_token": 0}))
+    return {"tokens": tokens, "count": len(tokens)}
+
+@app.delete("/api/oauth/tokens/{token_id}")
+async def revoke_oauth_token(token_id: str):
+    """Revoke and delete OAuth token"""
+    result = oauth_tokens_collection.delete_one({"id": token_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Token not found")
+    return {"message": "Token revoked successfully"}
+
+# Rate Limiting & Circuit Breaker
+class RateLimitConfig(BaseModel):
+    connector_id: str
+    max_requests: int = 100
+    time_window: int = 60  # seconds
+    retry_after: int = 60  # seconds to wait after limit exceeded
+
+@app.post("/api/connectors/{connector_id}/rate-limit")
+async def configure_rate_limit(connector_id: str, config: RateLimitConfig):
+    """Configure rate limiting for a connector"""
+    connector = api_connectors_collection.find_one({"id": connector_id})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    api_connectors_collection.update_one(
+        {"id": connector_id},
+        {"$set": {
+            "rate_limit": config.dict(),
+            "updated_at": datetime.utcnow().isoformat()
+        }}
+    )
+    
+    return {"message": "Rate limit configured successfully"}
+
+@app.get("/api/connectors/{connector_id}/rate-limit/status")
+async def get_rate_limit_status(connector_id: str):
+    """Get current rate limit status for connector"""
+    connector = api_connectors_collection.find_one({"id": connector_id})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    rate_limit = connector.get("rate_limit", {})
+    cache_key = f"rate_limit:{connector_id}"
+    current_usage = rate_limit_cache.get(cache_key, {"count": 0, "reset_at": None})
+    
+    return {
+        "connector_id": connector_id,
+        "rate_limit": rate_limit,
+        "current_usage": current_usage.get("count", 0),
+        "max_requests": rate_limit.get("max_requests", 100),
+        "reset_at": current_usage.get("reset_at"),
+        "available": rate_limit.get("max_requests", 100) - current_usage.get("count", 0)
+    }
+
+# Webhook Management
+@app.post("/api/webhooks")
+async def create_webhook(webhook: WebhookConfig):
+    """Register a new webhook endpoint"""
+    webhook_id = str(uuid.uuid4())
+    webhook_token = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    webhook_dict = webhook.dict()
+    webhook_dict["id"] = webhook_id
+    webhook_dict["token"] = webhook_token
+    webhook_dict["created_at"] = now
+    webhook_dict["updated_at"] = now
+    webhook_dict["total_calls"] = 0
+    webhook_dict["last_called_at"] = None
+    
+    webhook_endpoints_collection.insert_one(webhook_dict)
+    
+    return {
+        "message": "Webhook created successfully",
+        "id": webhook_id,
+        "token": webhook_token,
+        "endpoint_url": f"/api/webhooks/{webhook_id}/receive"
+    }
+
+@app.get("/api/webhooks")
+async def get_webhooks():
+    """Get all registered webhooks"""
+    webhooks = list(webhook_endpoints_collection.find({}, {"_id": 0}))
+    return {"webhooks": webhooks, "count": len(webhooks)}
+
+@app.get("/api/webhooks/{webhook_id}")
+async def get_webhook(webhook_id: str):
+    """Get webhook details"""
+    webhook = webhook_endpoints_collection.find_one({"id": webhook_id}, {"_id": 0})
+    if not webhook:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    return webhook
+
+@app.put("/api/webhooks/{webhook_id}")
+async def update_webhook(webhook_id: str, webhook: WebhookConfig):
+    """Update webhook configuration"""
+    existing = webhook_endpoints_collection.find_one({"id": webhook_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    
+    webhook_dict = webhook.dict()
+    webhook_dict["id"] = webhook_id
+    webhook_dict["token"] = existing.get("token")
+    webhook_dict["created_at"] = existing.get("created_at")
+    webhook_dict["updated_at"] = datetime.utcnow().isoformat()
+    webhook_dict["total_calls"] = existing.get("total_calls", 0)
+    webhook_dict["last_called_at"] = existing.get("last_called_at")
+    
+    webhook_endpoints_collection.replace_one({"id": webhook_id}, webhook_dict)
+    
+    return {"message": "Webhook updated successfully"}
+
+@app.delete("/api/webhooks/{webhook_id}")
+async def delete_webhook(webhook_id: str):
+    """Delete webhook"""
+    result = webhook_endpoints_collection.delete_one({"id": webhook_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    return {"message": "Webhook deleted successfully"}
+
+@app.post("/api/webhooks/{webhook_id}/receive")
+async def receive_webhook(webhook_id: str, data: Dict[str, Any], background_tasks: BackgroundTasks):
+    """Receive webhook payload"""
+    webhook = webhook_endpoints_collection.find_one({"id": webhook_id})
+    if not webhook:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    
+    if not webhook.get("active", True):
+        raise HTTPException(status_code=403, detail="Webhook is inactive")
+    
+    # Log webhook call
+    log_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    webhook_logs_collection.insert_one({
+        "id": log_id,
+        "webhook_id": webhook_id,
+        "payload": data,
+        "received_at": now,
+        "status": "received"
+    })
+    
+    # Update webhook stats
+    webhook_endpoints_collection.update_one(
+        {"id": webhook_id},
+        {
+            "$inc": {"total_calls": 1},
+            "$set": {"last_called_at": now}
+        }
+    )
+    
+    # Process webhook in background
+    def process_webhook():
+        try:
+            # Forward to configured URL
+            if webhook.get("url"):
+                headers = webhook.get("headers", {})
+                requests.post(webhook["url"], json=data, headers=headers, timeout=30)
+            
+            webhook_logs_collection.update_one(
+                {"id": log_id},
+                {"$set": {"status": "processed", "processed_at": datetime.utcnow().isoformat()}}
+            )
+        except Exception as e:
+            webhook_logs_collection.update_one(
+                {"id": log_id},
+                {"$set": {"status": "failed", "error": str(e), "processed_at": datetime.utcnow().isoformat()}}
+            )
+    
+    background_tasks.add_task(process_webhook)
+    
+    return {"message": "Webhook received", "log_id": log_id}
+
+@app.get("/api/webhooks/{webhook_id}/logs")
+async def get_webhook_logs(webhook_id: str, limit: int = 50):
+    """Get webhook call logs"""
+    webhook = webhook_endpoints_collection.find_one({"id": webhook_id})
+    if not webhook:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    
+    logs = list(webhook_logs_collection.find(
+        {"webhook_id": webhook_id},
+        {"_id": 0}
+    ).sort("received_at", -1).limit(limit))
+    
+    return {"logs": logs, "count": len(logs)}
+
+@app.post("/api/webhooks/{webhook_id}/test")
+async def test_webhook(webhook_id: str, test_payload: Dict[str, Any]):
+    """Test webhook with sample payload"""
+    webhook = webhook_endpoints_collection.find_one({"id": webhook_id})
+    if not webhook:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    
+    try:
+        if webhook.get("url"):
+            headers = webhook.get("headers", {})
+            response = requests.post(
+                webhook["url"],
+                json=test_payload,
+                headers=headers,
+                timeout=30
+            )
+            
+            return {
+                "success": True,
+                "status_code": response.status_code,
+                "response": response.text[:1000]  # Limit response size
+            }
+        else:
+            return {
+                "success": True,
+                "message": "Webhook has no URL configured, payload would be logged only"
+            }
+    except requests.RequestException as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+# ============================================================================
 # SPRINT 4: ADVANCED DEBUGGING ENDPOINTS
 # ============================================================================
 
