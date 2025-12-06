@@ -294,6 +294,29 @@
         "Capital expenditure",
         "New initiative evaluation"
       ]
+    },
+    {
+      "id": "training-request",
+      "name": "Training Request & Enrollment",
+      "description": "Employee training request with manager approval, budget check, and automatic enrollment",
+      "category": "Human Resources",
+      "tags": ["training", "hr", "learning", "development"],
+      "complexity": "simple",
+      "estimatedSetupTime": "7 minutes",
+      "icon": "graduation-cap",
+      "file": "training-request.json",
+      "nodeCount": 11,
+      "features": [
+        "Manager approval workflow",
+        "Budget availability check",
+        "Automatic course enrollment",
+        "Calendar invitation"
+      ],
+      "useCases": [
+        "Professional development",
+        "Compliance training",
+        "Skill development"
+      ]
     }
   ],
   "categories": [
