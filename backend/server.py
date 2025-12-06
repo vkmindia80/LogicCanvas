@@ -1378,6 +1378,120 @@ async def get_workflow_health(workflow_id: str):
     }
 
 
+# ========== WORKFLOW TEMPLATES ENDPOINTS ==========
+
+@app.get("/api/templates")
+async def get_workflow_templates():
+    """Get all available workflow templates"""
+    import glob
+    template_files = glob.glob("/app/templates/*.json")
+    
+    templates = []
+    for template_file in template_files:
+        if "index.json" in template_file:
+            # Load index file
+            try:
+                with open(template_file, 'r') as f:
+                    index_data = json.load(f)
+                    templates = index_data.get("templates", [])
+            except Exception as e:
+                print(f"Error loading template index: {e}")
+        
+    # If no index, scan files directly
+    if not templates:
+        for template_file in template_files:
+            if "index.json" in template_file:
+                continue
+            try:
+                with open(template_file, 'r') as f:
+                    template_data = json.load(f)
+                    templates.append({
+                        "id": template_data.get("id", os.path.basename(template_file).replace(".json", "")),
+                        "name": template_data.get("name", "Untitled Template"),
+                        "description": template_data.get("description", ""),
+                        "category": template_data.get("category", "general"),
+                        "icon": template_data.get("icon", "Workflow"),
+                        "difficulty": template_data.get("difficulty", "intermediate"),
+                        "estimated_time": template_data.get("estimated_time", "10-15 mins")
+                    })
+            except Exception as e:
+                print(f"Error loading template {template_file}: {e}")
+    
+    return {"templates": templates, "count": len(templates)}
+
+
+@app.get("/api/templates/{template_id}")
+async def get_workflow_template(template_id: str):
+    """Get a specific workflow template"""
+    template_file = f"/app/templates/{template_id}.json"
+    
+    if not os.path.exists(template_file):
+        raise HTTPException(status_code=404, detail="Template not found")
+    
+    try:
+        with open(template_file, 'r') as f:
+            template_data = json.load(f)
+            return template_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading template: {str(e)}")
+
+
+@app.post("/api/templates/{template_id}/create-workflow")
+async def create_workflow_from_template(template_id: str, data: Dict[str, Any]):
+    """Create a new workflow from a template"""
+    # Load template
+    template_file = f"/app/templates/{template_id}.json"
+    
+    if not os.path.exists(template_file):
+        raise HTTPException(status_code=404, detail="Template not found")
+    
+    try:
+        with open(template_file, 'r') as f:
+            template_data = json.load(f)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading template: {str(e)}")
+    
+    # Create new workflow from template
+    workflow_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    # Allow user to override name
+    workflow_name = data.get("name", template_data.get("name", "Untitled Workflow"))
+    
+    workflow_dict = {
+        "id": workflow_id,
+        "name": workflow_name,
+        "description": template_data.get("description", ""),
+        "nodes": template_data.get("nodes", []),
+        "edges": template_data.get("edges", []),
+        "status": "draft",
+        "version": 1,
+        "created_at": now,
+        "updated_at": now,
+        "tags": template_data.get("tags", []) + ["from-template"],
+        "template_id": template_id,
+        "template_name": template_data.get("name")
+    }
+    
+    workflows_collection.insert_one(workflow_dict)
+    
+    # Log audit
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "created_from_template",
+        "details": {"template_id": template_id, "template_name": template_data.get("name")},
+        "timestamp": now
+    })
+    
+    return {
+        "message": "Workflow created successfully from template",
+        "id": workflow_id,
+        "workflow": workflow_dict
+    }
+
+
 # Form Endpoints
 @app.get("/api/forms")
 async def get_forms():
