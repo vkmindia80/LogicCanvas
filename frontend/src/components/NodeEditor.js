@@ -220,6 +220,9 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   
   // ============ END CRITICAL FIX ============
   
+  // Use resolved nodeType throughout component for consistency
+  const resolvedNodeType = nodeType;
+  
   const toggleSection = (section) => {
     setSectionsExpanded(prev => ({
       ...prev,
