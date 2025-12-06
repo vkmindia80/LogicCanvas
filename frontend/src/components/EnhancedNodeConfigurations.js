@@ -453,6 +453,89 @@ export const LoopConfig = ({
         />
         <p className="text-xs text-slate-500 mt-1">Loop will stop after this many iterations to prevent infinite loops</p>
       </div>
+
+      {/* Phase 3.2: Advanced Loop Features */}
+      <div className="border-t-2 border-purple-100 pt-4 space-y-4">
+        <h4 className="text-sm font-semibold text-purple-700">⚡ Advanced Options (Phase 3)</h4>
+        
+        {isForEach && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Batch Size (Optional)
+            </label>
+            <input
+              type="number"
+              value={loopCollection?.batchSize || ''}
+              onChange={(e) => {
+                const batch = e.target.value;
+                if (typeof loopCollection === 'object') {
+                  setLoopCollection({ ...loopCollection, batchSize: batch });
+                }
+              }}
+              min="0"
+              placeholder="0 = no batching"
+              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+              data-testid="batch-size"
+            />
+            <p className="text-xs text-slate-500 mt-1">Process items in batches for better performance (0 = no batching)</p>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Early Exit Condition (Optional)
+          </label>
+          <input
+            type="text"
+            placeholder="e.g., ${count} > 100"
+            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+            data-testid="break-condition"
+          />
+          <p className="text-xs text-slate-500 mt-1">Exit loop early when condition becomes true</p>
+        </div>
+
+        {isWhile && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Counter Variable
+            </label>
+            <input
+              type="text"
+              placeholder="loop_counter"
+              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+              data-testid="counter-variable"
+            />
+            <p className="text-xs text-slate-500 mt-1">Track loop iterations in a variable</p>
+          </div>
+        )}
+
+        {isRepeat && (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Start From
+              </label>
+              <input
+                type="number"
+                placeholder="0"
+                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+                data-testid="start-from"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Step Increment
+              </label>
+              <input
+                type="number"
+                placeholder="1"
+                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+                data-testid="step-increment"
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
