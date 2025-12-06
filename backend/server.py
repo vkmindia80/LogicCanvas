@@ -7048,6 +7048,298 @@ async def convert_to_csv(request: Dict[str, Any]):
         }
 
 
+# ========== PHASE 3.1: ENHANCED SUB-WORKFLOW SUPPORT ENDPOINTS ==========
+
+@app.get("/api/workflows/subprocess-compatible")
+async def get_subprocess_compatible_workflows():
+    """Get all workflows that can be used as subprocesses"""
+    try:
+        # Get all published and draft workflows
+        workflows = list(workflows_collection.find({
+            "$or": [
+                {"lifecycle_state": {"$in": ["published", "draft"]}},
+                {"status": {"$in": ["published", "draft"]}}
+            ]
+        }, {"_id": 0}))
+        
+        # Filter to ensure they have start and end nodes
+        compatible_workflows = []
+        for workflow in workflows:
+            nodes = workflow.get("nodes", [])
+            has_start = any(n.get("type") == "start" for n in nodes)
+            has_end = any(n.get("type") == "end" for n in nodes)
+            
+            if has_start and has_end:
+                compatible_workflows.append({
+                    "id": workflow["id"],
+                    "name": workflow["name"],
+                    "description": workflow.get("description", ""),
+                    "lifecycle_state": workflow.get("lifecycle_state", workflow.get("status", "draft")),
+                    "is_subprocess_compatible": workflow.get("is_subprocess_compatible", False),
+                    "subprocess_metadata": workflow.get("subprocess_metadata", {}),
+                    "version": workflow.get("version", 1),
+                    "updated_at": workflow.get("updated_at")
+                })
+        
+        return {"workflows": compatible_workflows, "count": len(compatible_workflows)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/workflows/{workflow_id}/versions/list")
+async def list_workflow_versions(workflow_id: str):
+    """Get list of all versions for a workflow"""
+    try:
+        from subprocess_manager import SubprocessManager
+        subprocess_manager = SubprocessManager(db)
+        
+        # Get versions from workflow_versions collection
+        versions = list(workflow_versions_collection.find(
+            {"workflow_id": workflow_id},
+            {"_id": 0}
+        ).sort("created_at", -1))
+        
+        return {
+            "workflow_id": workflow_id,
+            "versions": versions,
+            "count": len(versions)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/{workflow_id}/validate-subprocess")
+async def validate_subprocess(workflow_id: str, request: Dict[str, Any]):
+    """Validate if a workflow can be used as a subprocess"""
+    try:
+        from subprocess_manager import SubprocessManager
+        subprocess_manager = SubprocessManager(db)
+        
+        version = request.get("version", "latest")
+        validation_result = subprocess_manager.validate_subprocess_compatibility(workflow_id, version)
+        
+        return validation_result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/{workflow_id}/subprocess/mark-compatible")
+async def mark_workflow_subprocess_compatible(workflow_id: str, request: Dict[str, Any]):
+    """Mark a workflow as subprocess-compatible with metadata"""
+    try:
+        workflow = workflows_collection.find_one({"id": workflow_id})
+        if not workflow:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+        
+        subprocess_metadata = request.get("subprocess_metadata", {})
+        is_compatible = request.get("is_subprocess_compatible", True)
+        
+        now = datetime.utcnow().isoformat()
+        
+        workflows_collection.update_one(
+            {"id": workflow_id},
+            {
+                "$set": {
+                    "is_subprocess_compatible": is_compatible,
+                    "subprocess_metadata": subprocess_metadata,
+                    "updated_at": now
+                }
+            }
+        )
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow",
+            "entity_id": workflow_id,
+            "action": "marked_subprocess_compatible",
+            "details": {
+                "is_compatible": is_compatible,
+                "metadata": subprocess_metadata
+            },
+            "timestamp": now
+        })
+        
+        return {
+            "message": "Workflow marked as subprocess-compatible" if is_compatible else "Workflow unmarked as subprocess-compatible",
+            "is_subprocess_compatible": is_compatible,
+            "subprocess_metadata": subprocess_metadata
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/workflow-instances/{instance_id}/subprocess-tree")
+async def get_subprocess_execution_tree(instance_id: str):
+    """Get complete execution tree including all nested subprocesses"""
+    try:
+        from subprocess_manager import SubprocessManager
+        subprocess_manager = SubprocessManager(db)
+        
+        tree = subprocess_manager.get_subprocess_tree(instance_id)
+        
+        return tree
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflows/{workflow_id}/versions/create")
+async def create_workflow_version_snapshot(workflow_id: str, request: Dict[str, Any]):
+    """Create a version snapshot for subprocess version pinning"""
+    try:
+        from subprocess_manager import SubprocessManager
+        subprocess_manager = SubprocessManager(db)
+        
+        version_number = request.get("version_number")
+        comment = request.get("comment", "")
+        
+        if not version_number:
+            raise HTTPException(status_code=400, detail="version_number is required")
+        
+        version_id = subprocess_manager.create_version_snapshot(workflow_id, version_number, comment)
+        
+        return {
+            "message": "Version snapshot created successfully",
+            "version_id": version_id,
+            "version_number": version_number
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ========== WORKFLOW COMPONENTS LIBRARY (REUSABLE COMPONENTS) ==========
+
+class WorkflowComponent(BaseModel):
+    id: Optional[str] = None
+    name: str
+    description: Optional[str] = ""
+    category: str = "general"  # general, approval, data_processing, communication, etc.
+    tags: List[str] = []
+    pattern: Dict[str, Any]  # The node configuration pattern
+    is_public: bool = True
+    created_by: Optional[str] = "system"
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+
+@app.get("/api/workflow-components")
+async def get_workflow_components(category: Optional[str] = None):
+    """Get all reusable workflow components"""
+    try:
+        query = {}
+        if category:
+            query["category"] = category
+        
+        components = list(workflow_components_collection.find(query, {"_id": 0}))
+        return {"components": components, "count": len(components)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/workflow-components/{component_id}")
+async def get_workflow_component(component_id: str):
+    """Get a specific workflow component"""
+    try:
+        component = workflow_components_collection.find_one({"id": component_id}, {"_id": 0})
+        if not component:
+            raise HTTPException(status_code=404, detail="Component not found")
+        return component
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/workflow-components")
+async def create_workflow_component(component: WorkflowComponent):
+    """Create a new reusable workflow component"""
+    try:
+        component_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        
+        component_dict = component.dict()
+        component_dict["id"] = component_id
+        component_dict["created_at"] = now
+        component_dict["updated_at"] = now
+        
+        workflow_components_collection.insert_one(component_dict)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow_component",
+            "entity_id": component_id,
+            "action": "created",
+            "timestamp": now
+        })
+        
+        return {"message": "Component created successfully", "id": component_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.put("/api/workflow-components/{component_id}")
+async def update_workflow_component(component_id: str, component: WorkflowComponent):
+    """Update a workflow component"""
+    try:
+        existing = workflow_components_collection.find_one({"id": component_id})
+        if not existing:
+            raise HTTPException(status_code=404, detail="Component not found")
+        
+        now = datetime.utcnow().isoformat()
+        component_dict = component.dict()
+        component_dict["id"] = component_id
+        component_dict["created_at"] = existing.get("created_at")
+        component_dict["updated_at"] = now
+        
+        workflow_components_collection.replace_one({"id": component_id}, component_dict)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow_component",
+            "entity_id": component_id,
+            "action": "updated",
+            "timestamp": now
+        })
+        
+        return {"message": "Component updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/workflow-components/{component_id}")
+async def delete_workflow_component(component_id: str):
+    """Delete a workflow component"""
+    try:
+        result = workflow_components_collection.delete_one({"id": component_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Component not found")
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow_component",
+            "entity_id": component_id,
+            "action": "deleted",
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
+        return {"message": "Component deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/workflow-components/categories")
+async def get_component_categories():
+    """Get all unique component categories"""
+    try:
+        categories = workflow_components_collection.distinct("category")
+        return {"categories": categories, "count": len(categories)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
