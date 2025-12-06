@@ -159,6 +159,38 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     }
   };
 
+  // Real-time validation
+  useEffect(() => {
+    if (showValidation) {
+      const newValidations = {};
+      
+      // Validate label (required for all nodes)
+      const labelValidation = validators.required(label, 'Label');
+      if (!labelValidation.valid) {
+        newValidations.label = labelValidation;
+      }
+
+      // Validate condition for decision nodes
+      const currentType = node?.data?.type || node?.type;
+      if (currentType === NODE_TYPES.DECISION && condition) {
+        const conditionValidation = validators.expression(condition, 'Condition');
+        if (!conditionValidation.valid) {
+          newValidations.condition = conditionValidation;
+        }
+      }
+
+      // Validate approvers for approval nodes
+      if (currentType === NODE_TYPES.APPROVAL) {
+        const approversValidation = validators.csvEmails(approvers, 'Approvers');
+        if (!approversValidation.valid) {
+          newValidations.approvers = approversValidation;
+        }
+      }
+
+      setValidations(newValidations);
+    }
+  }, [label, condition, approvers, showValidation]);
+
   useEffect(() => {
     // Use resolved type for consistency
     const currentType = node?.data?.type || node?.type;
