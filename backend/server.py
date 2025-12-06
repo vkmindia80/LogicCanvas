@@ -118,6 +118,7 @@ tasks_collection = db['tasks']
 approvals_collection = db['approvals']
 notifications_collection = db['notifications']
 audit_logs_collection = db['audit_logs']
+api_connectors_collection = db['api_connectors']
 
 # Initialize Execution Engine
 execution_engine = WorkflowExecutionEngine(db)
