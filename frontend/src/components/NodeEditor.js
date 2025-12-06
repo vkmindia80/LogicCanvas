@@ -72,6 +72,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   // UI mode states
   const [conditionMode, setConditionMode] = useState('visual'); // 'visual' or 'code'
 
+  // Validation states
+  const [validations, setValidations] = useState({});
+  const [showValidation, setShowValidation] = useState(false);
+
   // Workflow variables for data mapping
   const [workflowVariables, setWorkflowVariables] = useState([]);
 
