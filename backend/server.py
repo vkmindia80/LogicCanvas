@@ -3825,6 +3825,511 @@ async def convert_variable_type(data: VariableTypeConversionRequest):
         }
 
 
+# ========== PHASE 8 SPRINT 4: VISUAL API CONNECTOR BUILDER ==========
+
+# API Connectors Collection
+api_connectors_collection = db['api_connectors']
+
+class APIConnectorConfig(BaseModel):
+    """API Connector configuration model"""
+    id: Optional[str] = None
+    name: str
+    description: Optional[str] = ""
+    base_url: str
+    auth_type: str = "none"  # none, api_key, basic, oauth, bearer
+    auth_config: Optional[Dict[str, Any]] = {}
+    headers: Optional[Dict[str, str]] = {}
+    endpoints: List[Dict[str, Any]] = []  # List of endpoint configurations
+    tags: List[str] = []
+    is_template: bool = False
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+class APITestRequest(BaseModel):
+    """API test request model"""
+    method: str = "GET"
+    url: str
+    headers: Optional[Dict[str, str]] = {}
+    body: Optional[Dict[str, Any]] = None
+    auth_type: str = "none"
+    auth_config: Optional[Dict[str, Any]] = {}
+
+@app.get("/api/connectors")
+async def get_api_connectors(is_template: Optional[bool] = None):
+    """Get all API connectors, optionally filter by template status"""
+    query = {}
+    if is_template is not None:
+        query["is_template"] = is_template
+    
+    connectors = list(api_connectors_collection.find(query, {"_id": 0}))
+    return {"connectors": connectors, "count": len(connectors)}
+
+@app.get("/api/connectors/{connector_id}")
+async def get_api_connector(connector_id: str):
+    """Get a specific API connector"""
+    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
+    if not connector:
+        raise HTTPException(status_code=404, detail="API connector not found")
+    return connector
+
+@app.post("/api/connectors")
+async def create_api_connector(connector: APIConnectorConfig):
+    """Create a new API connector"""
+    connector_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    connector_dict = connector.dict()
+    connector_dict["id"] = connector_id
+    connector_dict["created_at"] = now
+    connector_dict["updated_at"] = now
+    
+    api_connectors_collection.insert_one(connector_dict)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "api_connector",
+        "entity_id": connector_id,
+        "action": "created",
+        "timestamp": now
+    })
+    
+    return {"message": "API connector created successfully", "id": connector_id}
+
+@app.put("/api/connectors/{connector_id}")
+async def update_api_connector(connector_id: str, connector: APIConnectorConfig):
+    """Update an existing API connector"""
+    existing = api_connectors_collection.find_one({"id": connector_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="API connector not found")
+    
+    now = datetime.utcnow().isoformat()
+    connector_dict = connector.dict()
+    connector_dict["id"] = connector_id
+    connector_dict["created_at"] = existing.get("created_at")
+    connector_dict["updated_at"] = now
+    
+    api_connectors_collection.replace_one({"id": connector_id}, connector_dict)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "api_connector",
+        "entity_id": connector_id,
+        "action": "updated",
+        "timestamp": now
+    })
+    
+    return {"message": "API connector updated successfully"}
+
+@app.delete("/api/connectors/{connector_id}")
+async def delete_api_connector(connector_id: str):
+    """Delete an API connector"""
+    result = api_connectors_collection.delete_one({"id": connector_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="API connector not found")
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "api_connector",
+        "entity_id": connector_id,
+        "action": "deleted",
+        "timestamp": datetime.utcnow().isoformat()
+    })
+    
+    return {"message": "API connector deleted successfully"}
+
+@app.post("/api/connectors/test")
+async def test_api_connector(request: APITestRequest):
+    """Test an API call with the provided configuration"""
+    import httpx
+    
+    try:
+        # Prepare headers
+        headers = request.headers.copy() if request.headers else {}
+        
+        # Add authentication
+        if request.auth_type == "api_key":
+            key_name = request.auth_config.get("key_name", "X-API-Key")
+            key_value = request.auth_config.get("key_value", "")
+            headers[key_name] = key_value
+        elif request.auth_type == "bearer":
+            token = request.auth_config.get("token", "")
+            headers["Authorization"] = f"Bearer {token}"
+        elif request.auth_type == "basic":
+            import base64
+            username = request.auth_config.get("username", "")
+            password = request.auth_config.get("password", "")
+            credentials = base64.b64encode(f"{username}:{password}".encode()).decode()
+            headers["Authorization"] = f"Basic {credentials}"
+        
+        # Make request
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            if request.method.upper() == "GET":
+                response = await client.get(request.url, headers=headers)
+            elif request.method.upper() == "POST":
+                response = await client.post(request.url, headers=headers, json=request.body)
+            elif request.method.upper() == "PUT":
+                response = await client.put(request.url, headers=headers, json=request.body)
+            elif request.method.upper() == "DELETE":
+                response = await client.delete(request.url, headers=headers)
+            else:
+                raise HTTPException(status_code=400, detail=f"Unsupported HTTP method: {request.method}")
+        
+        # Parse response
+        try:
+            response_data = response.json()
+        except:
+            response_data = {"text": response.text}
+        
+        return {
+            "success": response.is_success,
+            "status_code": response.status_code,
+            "headers": dict(response.headers),
+            "data": response_data,
+            "elapsed_ms": response.elapsed.total_seconds() * 1000
+        }
+    
+    except httpx.TimeoutException:
+        return {
+            "success": False,
+            "error": "Request timeout after 30 seconds",
+            "status_code": 0
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "status_code": 0
+        }
+
+@app.get("/api/connectors/templates/library")
+async def get_connector_templates():
+    """Get pre-built API connector templates"""
+    templates = [
+        {
+            "id": "template-rest-api",
+            "name": "Generic REST API",
+            "description": "Standard REST API connector with JSON support",
+            "base_url": "https://api.example.com",
+            "auth_type": "api_key",
+            "auth_config": {"key_name": "X-API-Key", "key_value": ""},
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "GET", "path": "/resource", "description": "Get resource"},
+                {"method": "POST", "path": "/resource", "description": "Create resource"},
+            ],
+            "tags": ["template", "rest"]
+        },
+        {
+            "id": "template-webhook",
+            "name": "Webhook Receiver",
+            "description": "Configure webhook endpoints to receive data",
+            "base_url": "https://your-domain.com/webhooks",
+            "auth_type": "bearer",
+            "auth_config": {"token": ""},
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "POST", "path": "/receive", "description": "Receive webhook data"},
+            ],
+            "tags": ["template", "webhook"]
+        },
+        {
+            "id": "template-oauth",
+            "name": "OAuth 2.0 API",
+            "description": "API using OAuth 2.0 authentication",
+            "base_url": "https://api.oauth-service.com",
+            "auth_type": "oauth",
+            "auth_config": {
+                "client_id": "",
+                "client_secret": "",
+                "token_url": "https://api.oauth-service.com/oauth/token",
+                "scope": ""
+            },
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "GET", "path": "/user/profile", "description": "Get user profile"},
+            ],
+            "tags": ["template", "oauth"]
+        },
+        {
+            "id": "template-graphql",
+            "name": "GraphQL API",
+            "description": "GraphQL API connector",
+            "base_url": "https://api.example.com/graphql",
+            "auth_type": "bearer",
+            "auth_config": {"token": ""},
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "POST", "path": "", "description": "GraphQL query/mutation"},
+            ],
+            "tags": ["template", "graphql"]
+        },
+    ]
+    
+    return {"templates": templates, "count": len(templates)}
+
+
+# ========== PHASE 8 SPRINT 4: ADVANCED DEBUGGING FEATURES ==========
+
+class BreakpointConfig(BaseModel):
+    """Breakpoint configuration"""
+    node_id: str
+    enabled: bool = True
+    condition: Optional[str] = None  # Optional condition expression
+
+class DebugStepRequest(BaseModel):
+    """Debug step execution request"""
+    mode: str = "step_over"  # step_over, step_into, continue
+
+@app.get("/api/instances/{instance_id}/debug/breakpoints")
+async def get_breakpoints(instance_id: str):
+    """Get all breakpoints for a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("debug_breakpoints", [])
+    return {"instance_id": instance_id, "breakpoints": breakpoints, "count": len(breakpoints)}
+
+@app.post("/api/instances/{instance_id}/debug/breakpoint")
+async def add_breakpoint(instance_id: str, config: BreakpointConfig):
+    """Add a breakpoint to a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("debug_breakpoints", [])
+    
+    # Check if breakpoint already exists
+    existing = next((bp for bp in breakpoints if bp.get("node_id") == config.node_id), None)
+    if existing:
+        # Update existing breakpoint
+        existing["enabled"] = config.enabled
+        existing["condition"] = config.condition
+    else:
+        # Add new breakpoint
+        breakpoints.append({
+            "node_id": config.node_id,
+            "enabled": config.enabled,
+            "condition": config.condition,
+            "added_at": datetime.utcnow().isoformat()
+        })
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint added/updated successfully", "breakpoints": breakpoints}
+
+@app.delete("/api/instances/{instance_id}/debug/breakpoint/{node_id}")
+async def remove_breakpoint(instance_id: str, node_id: str):
+    """Remove a breakpoint from a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("debug_breakpoints", [])
+    breakpoints = [bp for bp in breakpoints if bp.get("node_id") != node_id]
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint removed successfully"}
+
+@app.post("/api/instances/{instance_id}/debug/step")
+async def debug_step_execution(instance_id: str, request: DebugStepRequest):
+    """Execute workflow in step-by-step debug mode"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    current_node = instance.get("current_node_id")
+    debug_mode = instance.get("debug_mode", False)
+    
+    if not debug_mode:
+        # Enable debug mode
+        workflow_instances_collection.update_one(
+            {"id": instance_id},
+            {"$set": {"debug_mode": True, "debug_step_mode": request.mode}}
+        )
+    
+    # Execute single step
+    try:
+        # Get workflow
+        workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0})
+        if not workflow:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+        
+        # Execute one node
+        result = execution_engine.execute_single_node(instance_id, current_node, workflow)
+        
+        return {
+            "message": "Step executed successfully",
+            "current_node": current_node,
+            "next_node": result.get("next_node"),
+            "status": result.get("status"),
+            "variables": result.get("variables", {})
+        }
+    except Exception as e:
+        return {
+            "message": "Step execution failed",
+            "error": str(e)
+        }
+
+@app.get("/api/instances/{instance_id}/debug/logs")
+async def get_debug_logs(instance_id: str, limit: int = 100):
+    """Get detailed execution logs for debugging"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    # Get execution logs from audit logs
+    logs = list(
+        audit_logs_collection.find(
+            {"entity_id": instance_id, "entity_type": "workflow_instance"},
+            {"_id": 0}
+        )
+        .sort("timestamp", -1)
+        .limit(limit)
+    )
+    
+    # Get node execution details
+    execution_history = instance.get("execution_history", [])
+    
+    return {
+        "instance_id": instance_id,
+        "logs": logs,
+        "execution_history": execution_history,
+        "log_count": len(logs)
+    }
+
+@app.get("/api/instances/{instance_id}/debug/performance")
+async def get_performance_profile(instance_id: str):
+    """Get performance profiling data for workflow execution"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    execution_history = instance.get("execution_history", [])
+    
+    # Calculate node performance metrics
+    node_performance = {}
+    total_execution_time = 0
+    
+    for entry in execution_history:
+        node_id = entry.get("node_id")
+        started_at = entry.get("started_at")
+        completed_at = entry.get("completed_at")
+        
+        if started_at and completed_at:
+            try:
+                start = datetime.fromisoformat(started_at)
+                end = datetime.fromisoformat(completed_at)
+                duration = (end - start).total_seconds()
+                total_execution_time += duration
+                
+                if node_id not in node_performance:
+                    node_performance[node_id] = {
+                        "node_id": node_id,
+                        "executions": 0,
+                        "total_time": 0,
+                        "avg_time": 0,
+                        "min_time": float('inf'),
+                        "max_time": 0,
+                        "errors": 0
+                    }
+                
+                perf = node_performance[node_id]
+                perf["executions"] += 1
+                perf["total_time"] += duration
+                perf["min_time"] = min(perf["min_time"], duration)
+                perf["max_time"] = max(perf["max_time"], duration)
+                
+                if entry.get("status") == "failed":
+                    perf["errors"] += 1
+            except:
+                continue
+    
+    # Calculate averages and percentages
+    for node_id, perf in node_performance.items():
+        if perf["executions"] > 0:
+            perf["avg_time"] = round(perf["total_time"] / perf["executions"], 3)
+        if total_execution_time > 0:
+            perf["percentage"] = round((perf["total_time"] / total_execution_time) * 100, 2)
+        else:
+            perf["percentage"] = 0
+    
+    # Sort by total time descending (bottlenecks first)
+    performance_list = sorted(
+        node_performance.values(),
+        key=lambda x: x["total_time"],
+        reverse=True
+    )
+    
+    return {
+        "instance_id": instance_id,
+        "total_execution_time": round(total_execution_time, 3),
+        "node_performance": performance_list,
+        "bottlenecks": performance_list[:5],  # Top 5 slowest nodes
+        "total_nodes_executed": len(node_performance)
+    }
+
+@app.get("/api/instances/{instance_id}/debug/timeline")
+async def get_execution_timeline(instance_id: str):
+    """Get detailed execution timeline with node-by-node progression"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    execution_history = instance.get("execution_history", [])
+    workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0})
+    
+    # Build timeline with node details
+    timeline = []
+    for entry in execution_history:
+        node_id = entry.get("node_id")
+        
+        # Find node details
+        node = None
+        if workflow:
+            nodes = workflow.get("nodes", [])
+            node = next((n for n in nodes if n.get("id") == node_id), None)
+        
+        timeline_entry = {
+            "node_id": node_id,
+            "node_type": node.get("type") if node else "unknown",
+            "node_label": node.get("data", {}).get("label") if node else node_id,
+            "started_at": entry.get("started_at"),
+            "completed_at": entry.get("completed_at"),
+            "status": entry.get("status"),
+            "output": entry.get("output"),
+            "error": entry.get("error")
+        }
+        
+        # Calculate duration
+        if entry.get("started_at") and entry.get("completed_at"):
+            try:
+                start = datetime.fromisoformat(entry["started_at"])
+                end = datetime.fromisoformat(entry["completed_at"])
+                timeline_entry["duration_seconds"] = round((end - start).total_seconds(), 3)
+            except:
+                timeline_entry["duration_seconds"] = 0
+        
+        timeline.append(timeline_entry)
+    
+    return {
+        "instance_id": instance_id,
+        "timeline": timeline,
+        "total_steps": len(timeline),
+        "status": instance.get("status")
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
