@@ -114,7 +114,16 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   // Sync local nodes/edges/name when the workflow prop changes
   useEffect(() => {
     if (workflow) {
-      setNodes(workflow.nodes || []);
+      // Normalize nodes to ensure data.type exists (fix for properties panel display)
+      const normalizedNodes = (workflow.nodes || []).map(node => ({
+        ...node,
+        data: {
+          ...node.data,
+          type: node.data?.type || node.type  // Ensure type exists in data
+        }
+      }));
+      
+      setNodes(normalizedNodes);
       setEdges(workflow.edges || []);
       setWorkflowName(workflow.name || 'Untitled Workflow');
       setSelectedNode(null);
