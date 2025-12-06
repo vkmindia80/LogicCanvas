@@ -69,8 +69,23 @@ const nodeTypes = {
 };
 
 const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodes, setNodes, onNodesChangeInternal] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  
+  // Wrap onNodesChange to ensure data.type is always normalized
+  const onNodesChange = useCallback((changes) => {
+    onNodesChangeInternal(changes);
+    // After changes are applied, ensure all nodes have data.type set
+    setNodes((currentNodes) =>
+      currentNodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          type: node.data?.type || node.type
+        }
+      }))
+    );
+  }, [onNodesChangeInternal, setNodes]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [workflowName, setWorkflowName] = useState(workflow?.name || 'Untitled Workflow');
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
