@@ -262,33 +262,35 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
       {/* Content with improved spacing */}
       <div className="p-5 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
         {/* Label */}
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Label *
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-slate-800 mb-2">
+            Label <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300"
             placeholder="Enter node label"
             data-testid="node-editor-label"
           />
+          {!label && <p className="text-xs text-red-500 mt-1">Label is required</p>}
         </div>
 
         {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-slate-800 mb-2">
             Description
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="Enter node description"
+            className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 resize-none"
+            placeholder="Enter node description (optional)"
             data-testid="node-editor-description"
           />
+          <p className="text-xs text-slate-500">Provide a brief description of what this node does</p>
         </div>
 
         {/* Decision Node - Condition */}
