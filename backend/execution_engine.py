@@ -474,17 +474,31 @@ class NodeExecutor:
         }
 
     def execute_loop_for_each_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute for-each loop node"""
+        """Execute for-each loop node with advanced features"""
         loop_data = node.get("data", {})
         collection = loop_data.get("collection", [])
         item_var = loop_data.get("itemVariable", "item")
+        index_var = loop_data.get("indexVariable", "index")
+        max_iterations = loop_data.get("maxIterations", 1000)
+        batch_size = loop_data.get("batchSize", 0)  # 0 means no batching
+        break_condition = loop_data.get("breakCondition", "")  # Exit early if condition is true
         
         # Evaluate collection
         if isinstance(collection, str):
             collection = self.evaluator.evaluate(collection, self.variables)
         
         if not isinstance(collection, list):
-            return {"status": "failed", "error": "Collection is not iterable"}
+            # Try to convert to list if it's a dict
+            if isinstance(collection, dict):
+                collection = list(collection.items())
+            else:
+                return {"status": "failed", "error": "Collection is not iterable"}
+        
+        # Apply max iterations limit for safety
+        total_items = len(collection)
+        if total_items > max_iterations:
+            collection = collection[:max_iterations]
+            print(f"⚠️  Loop limited to {max_iterations} iterations (collection had {total_items} items)")
         
         return {
             "status": "completed",
@@ -492,7 +506,10 @@ class NodeExecutor:
                 "loop_type": "for_each",
                 "collection": collection,
                 "item_variable": item_var,
-                "total_iterations": len(collection)
+                "index_variable": index_var,
+                "total_iterations": len(collection),
+                "batch_size": batch_size,
+                "break_condition": break_condition
             },
             "loop": True
         }
