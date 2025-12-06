@@ -2814,6 +2814,546 @@ async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
     }
 
 
+
+# ========== PHASE 3.1: WORKFLOW COMPONENTS & COMPOSITION PATTERNS ==========
+
+class WorkflowComponent(BaseModel):
+    id: Optional[str] = None
+    name: str
+    description: Optional[str] = ""
+    category: str = "custom"  # approval, data_processing, integration, notification, custom
+    tags: List[str] = []
+    nodes: List[WorkflowNode]
+    edges: List[WorkflowEdge]
+    input_variables: List[str] = []  # Expected input variables
+    output_variables: List[str] = []  # Output variables produced
+    is_public: bool = False
+    created_by: Optional[str] = "system"
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+    usage_count: int = 0
+
+class CompositionPattern(BaseModel):
+    id: Optional[str] = None
+    name: str
+    description: Optional[str] = ""
+    category: str  # approval_chain, data_pipeline, notification_flow, error_handling, etc.
+    tags: List[str] = []
+    template_nodes: List[WorkflowNode]
+    template_edges: List[WorkflowEdge]
+    configuration_schema: Dict[str, Any] = {}  # JSON schema for pattern customization
+    preview_image: Optional[str] = None
+    is_featured: bool = False
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+# Workflow Components Endpoints
+@app.get("/api/workflow-components")
+async def get_workflow_components(
+    category: Optional[str] = None,
+    tag: Optional[str] = None,
+    search: Optional[str] = None
+):
+    """Get all reusable workflow components with optional filters"""
+    query = {}
+    
+    if category:
+        query["category"] = category
+    if tag:
+        query["tags"] = tag
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}},
+            {"tags": {"$regex": search, "$options": "i"}}
+        ]
+    
+    components = list(workflow_components_collection.find(query, {"_id": 0}).sort("usage_count", -1))
+    
+    return {
+        "components": components,
+        "count": len(components),
+        "categories": ["approval", "data_processing", "integration", "notification", "custom"]
+    }
+
+@app.get("/api/workflow-components/{component_id}")
+async def get_workflow_component(component_id: str):
+    """Get a specific workflow component by ID"""
+    component = workflow_components_collection.find_one({"id": component_id}, {"_id": 0})
+    if not component:
+        raise HTTPException(status_code=404, detail="Component not found")
+    return component
+
+@app.post("/api/workflow-components")
+async def create_workflow_component(component: WorkflowComponent):
+    """Create a new reusable workflow component"""
+    component_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    component_dict = component.dict()
+    component_dict["id"] = component_id
+    component_dict["created_at"] = now
+    component_dict["updated_at"] = now
+    component_dict["usage_count"] = 0
+    
+    # Validate that component has at least one node
+    if not component_dict.get("nodes") or len(component_dict["nodes"]) == 0:
+        raise HTTPException(status_code=400, detail="Component must have at least one node")
+    
+    workflow_components_collection.insert_one(component_dict)
+    
+    # Log audit
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow_component",
+        "entity_id": component_id,
+        "action": "created",
+        "timestamp": now
+    })
+    
+    return {
+        "message": "Workflow component created successfully",
+        "id": component_id,
+        "component": component_dict
+    }
+
+@app.put("/api/workflow-components/{component_id}")
+async def update_workflow_component(component_id: str, component: WorkflowComponent):
+    """Update an existing workflow component"""
+    existing = workflow_components_collection.find_one({"id": component_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Component not found")
+    
+    now = datetime.utcnow().isoformat()
+    component_dict = component.dict()
+    component_dict["id"] = component_id
+    component_dict["created_at"] = existing.get("created_at")
+    component_dict["created_by"] = existing.get("created_by")
+    component_dict["usage_count"] = existing.get("usage_count", 0)
+    component_dict["updated_at"] = now
+    
+    workflow_components_collection.replace_one({"id": component_id}, component_dict)
+    
+    # Log audit
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow_component",
+        "entity_id": component_id,
+        "action": "updated",
+        "timestamp": now
+    })
+    
+    return {"message": "Component updated successfully", "component": component_dict}
+
+@app.delete("/api/workflow-components/{component_id}")
+async def delete_workflow_component(component_id: str):
+    """Delete a workflow component"""
+    result = workflow_components_collection.delete_one({"id": component_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Component not found")
+    
+    # Log audit
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow_component",
+        "entity_id": component_id,
+        "action": "deleted",
+        "timestamp": datetime.utcnow().isoformat()
+    })
+    
+    return {"message": "Component deleted successfully"}
+
+@app.post("/api/workflow-components/{component_id}/increment-usage")
+async def increment_component_usage(component_id: str):
+    """Increment usage count when component is used"""
+    result = workflow_components_collection.update_one(
+        {"id": component_id},
+        {"$inc": {"usage_count": 1}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Component not found")
+    
+    return {"message": "Usage count incremented"}
+
+@app.post("/api/workflows/{workflow_id}/save-as-component")
+async def save_workflow_as_component(
+    workflow_id: str,
+    data: Dict[str, Any]
+):
+    """Save entire workflow or selected nodes as a reusable component"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    # Extract component data
+    component_name = data.get("name", f"{workflow.get('name')} Component")
+    component_description = data.get("description", "")
+    component_category = data.get("category", "custom")
+    component_tags = data.get("tags", [])
+    selected_node_ids = data.get("selected_node_ids", [])
+    
+    # Get nodes and edges
+    if selected_node_ids and len(selected_node_ids) > 0:
+        # Save only selected nodes
+        nodes = [n for n in workflow.get("nodes", []) if n.get("id") in selected_node_ids]
+        # Get edges that connect selected nodes
+        edges = [e for e in workflow.get("edges", []) 
+                if e.get("source") in selected_node_ids and e.get("target") in selected_node_ids]
+    else:
+        # Save entire workflow
+        nodes = workflow.get("nodes", [])
+        edges = workflow.get("edges", [])
+    
+    if not nodes:
+        raise HTTPException(status_code=400, detail="No nodes to save as component")
+    
+    # Create component
+    component = WorkflowComponent(
+        name=component_name,
+        description=component_description,
+        category=component_category,
+        tags=component_tags,
+        nodes=nodes,
+        edges=edges,
+        input_variables=data.get("input_variables", []),
+        output_variables=data.get("output_variables", []),
+        is_public=data.get("is_public", False),
+        created_by=data.get("created_by", "system")
+    )
+    
+    # Save component
+    result = await create_workflow_component(component)
+    
+    return result
+
+# Composition Patterns Endpoints
+@app.get("/api/composition-patterns")
+async def get_composition_patterns(
+    category: Optional[str] = None,
+    featured: Optional[bool] = None
+):
+    """Get all composition patterns with optional filters"""
+    query = {}
+    
+    if category:
+        query["category"] = category
+    if featured is not None:
+        query["is_featured"] = featured
+    
+    patterns = list(db["composition_patterns"].find(query, {"_id": 0}))
+    
+    return {
+        "patterns": patterns,
+        "count": len(patterns),
+        "categories": [
+            "approval_chain",
+            "data_pipeline", 
+            "notification_flow",
+            "error_handling",
+            "parallel_processing",
+            "sequential_approval",
+            "conditional_routing"
+        ]
+    }
+
+@app.get("/api/composition-patterns/{pattern_id}")
+async def get_composition_pattern(pattern_id: str):
+    """Get a specific composition pattern"""
+    pattern = db["composition_patterns"].find_one({"id": pattern_id}, {"_id": 0})
+    if not pattern:
+        raise HTTPException(status_code=404, detail="Pattern not found")
+    return pattern
+
+@app.post("/api/composition-patterns")
+async def create_composition_pattern(pattern: CompositionPattern):
+    """Create a new composition pattern"""
+    pattern_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    pattern_dict = pattern.dict()
+    pattern_dict["id"] = pattern_id
+    pattern_dict["created_at"] = now
+    pattern_dict["updated_at"] = now
+    
+    db["composition_patterns"].insert_one(pattern_dict)
+    
+    return {
+        "message": "Composition pattern created successfully",
+        "id": pattern_id,
+        "pattern": pattern_dict
+    }
+
+@app.post("/api/composition-patterns/{pattern_id}/instantiate")
+async def instantiate_pattern(pattern_id: str, config: Dict[str, Any]):
+    """Instantiate a composition pattern with custom configuration"""
+    pattern = db["composition_patterns"].find_one({"id": pattern_id}, {"_id": 0})
+    if not pattern:
+        raise HTTPException(status_code=404, detail="Pattern not found")
+    
+    # Clone template nodes and edges
+    nodes = []
+    edges = []
+    node_id_map = {}  # Map old IDs to new IDs
+    
+    # Generate new node IDs
+    for template_node in pattern.get("template_nodes", []):
+        old_id = template_node.get("id")
+        new_id = str(uuid.uuid4())
+        node_id_map[old_id] = new_id
+        
+        # Clone node with new ID
+        new_node = {**template_node}
+        new_node["id"] = new_id
+        
+        # Apply configuration overrides
+        if "node_configs" in config and old_id in config["node_configs"]:
+            node_config = config["node_configs"][old_id]
+            new_node["data"] = {**new_node.get("data", {}), **node_config}
+        
+        nodes.append(new_node)
+    
+    # Update edge IDs
+    for template_edge in pattern.get("template_edges", []):
+        new_edge = {**template_edge}
+        new_edge["id"] = str(uuid.uuid4())
+        new_edge["source"] = node_id_map.get(new_edge["source"], new_edge["source"])
+        new_edge["target"] = node_id_map.get(new_edge["target"], new_edge["target"])
+        edges.append(new_edge)
+    
+    return {
+        "message": "Pattern instantiated successfully",
+        "nodes": nodes,
+        "edges": edges,
+        "node_id_map": node_id_map
+    }
+
+# Initialize default composition patterns
+@app.post("/api/composition-patterns/initialize-defaults")
+async def initialize_default_patterns():
+    """Initialize default composition patterns if they don't exist"""
+    
+    default_patterns = [
+        {
+            "name": "Sequential Approval Chain",
+            "description": "Multi-level sequential approval workflow with escalation",
+            "category": "approval_chain",
+            "tags": ["approval", "sequential", "escalation"],
+            "is_featured": True,
+            "template_nodes": [
+                {
+                    "id": "start_1",
+                    "type": "start",
+                    "data": {"label": "Start"},
+                    "position": {"x": 100, "y": 100}
+                },
+                {
+                    "id": "approval_1",
+                    "type": "approval",
+                    "data": {
+                        "label": "Level 1 Approval",
+                        "approvalType": "single",
+                        "approvers": []
+                    },
+                    "position": {"x": 100, "y": 200}
+                },
+                {
+                    "id": "decision_1",
+                    "type": "decision",
+                    "data": {
+                        "label": "Approved?",
+                        "condition": "${approval_1_result.decision} == 'approved'"
+                    },
+                    "position": {"x": 100, "y": 300}
+                },
+                {
+                    "id": "approval_2",
+                    "type": "approval",
+                    "data": {
+                        "label": "Level 2 Approval",
+                        "approvalType": "single",
+                        "approvers": []
+                    },
+                    "position": {"x": 100, "y": 400}
+                },
+                {
+                    "id": "end_approved",
+                    "type": "end",
+                    "data": {"label": "Approved"},
+                    "position": {"x": 100, "y": 500}
+                },
+                {
+                    "id": "end_rejected",
+                    "type": "end",
+                    "data": {"label": "Rejected"},
+                    "position": {"x": 300, "y": 350}
+                }
+            ],
+            "template_edges": [
+                {"id": "e1", "source": "start_1", "target": "approval_1"},
+                {"id": "e2", "source": "approval_1", "target": "decision_1"},
+                {"id": "e3", "source": "decision_1", "target": "approval_2", "label": "Yes", "sourceHandle": "yes"},
+                {"id": "e4", "source": "decision_1", "target": "end_rejected", "label": "No", "sourceHandle": "no"},
+                {"id": "e5", "source": "approval_2", "target": "end_approved"}
+            ],
+            "configuration_schema": {
+                "type": "object",
+                "properties": {
+                    "level_1_approvers": {"type": "array", "items": {"type": "string"}},
+                    "level_2_approvers": {"type": "array", "items": {"type": "string"}}
+                }
+            }
+        },
+        {
+            "name": "Parallel Data Processing Pipeline",
+            "description": "Process data in parallel branches and merge results",
+            "category": "data_pipeline",
+            "tags": ["parallel", "data", "processing"],
+            "is_featured": True,
+            "template_nodes": [
+                {
+                    "id": "start_1",
+                    "type": "start",
+                    "data": {"label": "Start"},
+                    "position": {"x": 250, "y": 50}
+                },
+                {
+                    "id": "parallel_1",
+                    "type": "parallel",
+                    "data": {"label": "Split Processing"},
+                    "position": {"x": 250, "y": 150}
+                },
+                {
+                    "id": "transform_1",
+                    "type": "transform",
+                    "data": {"label": "Transform A"},
+                    "position": {"x": 100, "y": 250}
+                },
+                {
+                    "id": "transform_2",
+                    "type": "transform",
+                    "data": {"label": "Transform B"},
+                    "position": {"x": 400, "y": 250}
+                },
+                {
+                    "id": "merge_1",
+                    "type": "merge",
+                    "data": {"label": "Merge Results"},
+                    "position": {"x": 250, "y": 350}
+                },
+                {
+                    "id": "end_1",
+                    "type": "end",
+                    "data": {"label": "Complete"},
+                    "position": {"x": 250, "y": 450}
+                }
+            ],
+            "template_edges": [
+                {"id": "e1", "source": "start_1", "target": "parallel_1"},
+                {"id": "e2", "source": "parallel_1", "target": "transform_1"},
+                {"id": "e3", "source": "parallel_1", "target": "transform_2"},
+                {"id": "e4", "source": "transform_1", "target": "merge_1"},
+                {"id": "e5", "source": "transform_2", "target": "merge_1"},
+                {"id": "e6", "source": "merge_1", "target": "end_1"}
+            ],
+            "configuration_schema": {
+                "type": "object",
+                "properties": {
+                    "transform_a_logic": {"type": "string"},
+                    "transform_b_logic": {"type": "string"}
+                }
+            }
+        },
+        {
+            "name": "Error Handling with Retry",
+            "description": "Robust error handling with automatic retry and fallback",
+            "category": "error_handling",
+            "tags": ["error", "retry", "fallback"],
+            "is_featured": True,
+            "template_nodes": [
+                {
+                    "id": "start_1",
+                    "type": "start",
+                    "data": {"label": "Start"},
+                    "position": {"x": 200, "y": 50}
+                },
+                {
+                    "id": "action_1",
+                    "type": "action",
+                    "data": {
+                        "label": "Main Action",
+                        "actionType": "http_request"
+                    },
+                    "position": {"x": 200, "y": 150}
+                },
+                {
+                    "id": "decision_error",
+                    "type": "decision",
+                    "data": {
+                        "label": "Success?",
+                        "condition": "${action_1.status} == 'completed'"
+                    },
+                    "position": {"x": 200, "y": 250}
+                },
+                {
+                    "id": "action_fallback",
+                    "type": "action",
+                    "data": {
+                        "label": "Fallback Action",
+                        "actionType": "webhook"
+                    },
+                    "position": {"x": 400, "y": 250}
+                },
+                {
+                    "id": "end_success",
+                    "type": "end",
+                    "data": {"label": "Success"},
+                    "position": {"x": 200, "y": 350}
+                },
+                {
+                    "id": "end_fallback",
+                    "type": "end",
+                    "data": {"label": "Completed via Fallback"},
+                    "position": {"x": 400, "y": 350}
+                }
+            ],
+            "template_edges": [
+                {"id": "e1", "source": "start_1", "target": "action_1"},
+                {"id": "e2", "source": "action_1", "target": "decision_error"},
+                {"id": "e3", "source": "decision_error", "target": "end_success", "label": "Yes", "sourceHandle": "yes"},
+                {"id": "e4", "source": "decision_error", "target": "action_fallback", "label": "No", "sourceHandle": "no"},
+                {"id": "e5", "source": "action_fallback", "target": "end_fallback"}
+            ],
+            "configuration_schema": {
+                "type": "object",
+                "properties": {
+                    "main_action_url": {"type": "string"},
+                    "fallback_action_url": {"type": "string"},
+                    "retry_count": {"type": "number", "default": 3}
+                }
+            }
+        }
+    ]
+    
+    created_count = 0
+    for pattern_data in default_patterns:
+        # Check if pattern already exists
+        existing = db["composition_patterns"].find_one({"name": pattern_data["name"]})
+        if not existing:
+            pattern_id = str(uuid.uuid4())
+            now = datetime.utcnow().isoformat()
+            pattern_data["id"] = pattern_id
+            pattern_data["created_at"] = now
+            pattern_data["updated_at"] = now
+            db["composition_patterns"].insert_one(pattern_data)
+            created_count += 1
+    
+    return {
+        "message": f"Initialized {created_count} default patterns",
+        "created_count": created_count
+    }
+
+
 # ========== PHASE 3.2: ADVANCED LOOPING & BRANCHING ENDPOINTS ==========
 
 @app.get("/api/workflow-instances/{instance_id}/loop-status")
