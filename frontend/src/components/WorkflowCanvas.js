@@ -288,7 +288,15 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   );
 
   const onNodeClick = useCallback((event, node) => {
-    setSelectedNode(node);
+    // Normalize node structure to ensure data.type is always available
+    const normalizedNode = {
+      ...node,
+      data: {
+        ...node.data,
+        type: node.data?.type || node.type  // Ensure type exists in data for NodeEditor
+      }
+    };
+    setSelectedNode(normalizedNode);
   }, []);
 
   const onPaneClick = useCallback(() => {
