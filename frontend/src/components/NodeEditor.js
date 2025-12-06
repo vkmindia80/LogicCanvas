@@ -57,7 +57,11 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
     basic: true,
     advanced: false,
     validation: false,
+    dataMapping: false,
   });
+
+  // Workflow variables for data mapping
+  const [workflowVariables, setWorkflowVariables] = useState([]);
 
   useEffect(() => {
     if (node) {
