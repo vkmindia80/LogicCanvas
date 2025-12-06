@@ -567,43 +567,44 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const getNodeConfigurationIssues = (node) => {
     const issues = [];
     const data = node.data;
+    const nodeType = node.data?.type || node.type;
 
     if (!data.label || data.label.trim() === '' || data.label === 'New Node') {
       issues.push('Add a descriptive label to identify this step');
     }
 
-    switch (node.type) {
-      case NODE_TYPES.TASK:
+    switch (nodeType) {
+      case 'task':
         if (!data.assignedTo && !data.assignmentRole) {
           issues.push('Assign this task to a user or role');
         }
         break;
-      case NODE_TYPES.FORM:
+      case 'form':
         if (!data.formId) {
           issues.push('Select a form to collect data');
         }
         break;
-      case NODE_TYPES.DECISION:
+      case 'decision':
         if (!data.condition) {
           issues.push('Define the condition to evaluate');
         }
         break;
-      case NODE_TYPES.APPROVAL:
+      case 'approval':
         if (!data.approvers || data.approvers.length === 0) {
           issues.push('Add at least one approver');
         }
         break;
-      case NODE_TYPES.ACTION:
+      case 'action':
         if (!data.url) {
           issues.push('Configure the API endpoint URL');
         }
         break;
-      case NODE_TYPES.SUBPROCESS:
+      case 'subprocess':
         if (!data.subprocessWorkflowId) {
           issues.push('Select a workflow to execute as subprocess');
         }
         break;
-      case NODE_TYPES.TIMER:
+      case 'timer':
         if (!data.delaySeconds && !data.delayMinutes && !data.delayHours && !data.scheduledTime) {
           issues.push('Set a delay time or schedule');
         }
