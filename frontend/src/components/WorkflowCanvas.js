@@ -18,7 +18,7 @@ import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
 import DeletableEdge from './edges/DeletableEdge';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, Grid3x3, GitBranch, FileText } from 'lucide-react';
+import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, GitBranch, FileText } from 'lucide-react';
 import VariablePanel from './VariablePanel';
 import VariableInspector from './VariableInspector';
 import VariableManagementPanel from './VariableManagementPanel';
