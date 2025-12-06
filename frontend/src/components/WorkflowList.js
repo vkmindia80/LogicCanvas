@@ -262,6 +262,32 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
           )}
         </div>
 
+        {/* Welcome Banner for New Users */}
+        {showWelcomeBanner && workflows.length === 0 && !loading && (
+          <NewUserWelcome
+            onStartTour={() => {
+              // Trigger onboarding tour from App.js
+              window.dispatchEvent(new CustomEvent('startOnboardingTour'));
+              setShowWelcomeBanner(false);
+              localStorage.setItem('lc_welcome_dismissed', 'true');
+            }}
+            onQuickStart={() => {
+              setShowQuickStartWizard(true);
+              setShowWelcomeBanner(false);
+              localStorage.setItem('lc_welcome_dismissed', 'true');
+            }}
+            onTemplates={() => {
+              setShowTemplateLibrary(true);
+              setShowWelcomeBanner(false);
+              localStorage.setItem('lc_welcome_dismissed', 'true');
+            }}
+            onDismiss={() => {
+              setShowWelcomeBanner(false);
+              localStorage.setItem('lc_welcome_dismissed', 'true');
+            }}
+          />
+        )}
+
         {/* Status chips */}
         <div className="mb-6 flex flex-wrap gap-3 text-sm">
           <div className="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-2 font-medium text-yellow-700">
