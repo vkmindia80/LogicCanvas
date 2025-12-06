@@ -148,6 +148,37 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
   if (!node) return null;
 
   const config = NODE_CONFIGS[node.data.type];
+  
+  const toggleSection = (section) => {
+    setSectionsExpanded(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+  
+  const CollapsibleSection = ({ title, id, children, icon: Icon }) => (
+    <div className="border-2 border-slate-200 rounded-lg overflow-hidden bg-white">
+      <button
+        onClick={() => toggleSection(id)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200 transition-all"
+      >
+        <div className="flex items-center space-x-2">
+          {Icon && <Icon className="w-4 h-4 text-slate-600" />}
+          <span className="font-semibold text-slate-800">{title}</span>
+        </div>
+        {sectionsExpanded[id] ? (
+          <ChevronUp className="w-4 h-4 text-slate-600" />
+        ) : (
+          <ChevronDown className="w-4 h-4 text-slate-600" />
+        )}
+      </button>
+      {sectionsExpanded[id] && (
+        <div className="p-4 space-y-4 collapsible-enter">
+          {children}
+        </div>
+      )}
+    </div>
+  );
 
   const handleSave = () => {
     const updatedData = {
