@@ -672,14 +672,14 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
           </div>
         )}
 
-        {/* Action Node */}
+        {/* Action Node - Enhanced with Visual API Builder */}
         {resolvedNodeType === 'action' && (
           <div className="bg-white border-2 border-pink-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Action Configuration</h3>
-            <div className="bg-pink-50 border border-pink-200 rounded-lg p-3 mb-4">
+            <div className="bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-pink-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>Action nodes integrate with external systems via API calls, webhooks, or custom scripts.</span>
+                <span>Action nodes integrate with external systems via API calls, webhooks, or custom scripts. Use the visual builder for easy configuration.</span>
               </p>
             </div>
             <div>
@@ -689,7 +689,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               <select
                 value={actionType}
                 onChange={(e) => setActionType(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 data-testid="action-type"
               >
                 <option value="http">🌐 HTTP Request (REST API)</option>
@@ -699,96 +699,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             </div>
 
             {(actionType === 'http' || actionType === 'webhook') && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    URL <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm"
-                    placeholder="https://api.example.com/v1/users"
-                    data-testid="action-url"
-                  />
-                  <p className="mt-1 text-xs text-slate-500">
-                    💡 Tip: Use variables like <code className="bg-slate-100 px-1 rounded">{'{{userId}}'}</code> in your URL
-                  </p>
+              <div className="border-2 border-primary-200 rounded-xl p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+                  <h4 className="text-sm font-semibold text-primary-900">Visual API Builder</h4>
+                  <span className="text-xs bg-primary-500 text-white px-2 py-0.5 rounded-full">Enhanced</span>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Method
-                  </label>
-                  <select
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    data-testid="action-method"
-                  >
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="PATCH">PATCH</option>
-                    <option value="DELETE">DELETE</option>
-                  </select>
-                </div>
-
-                <KeyValueEditor
-                  value={headers}
-                  onChange={setHeaders}
-                  label="Request Headers"
-                  keyPlaceholder="Header name (e.g., Content-Type)"
-                  valuePlaceholder="Header value (e.g., application/json)"
-                  allowJSON={true}
-                  testId="action-headers"
+                <VisualAPIBuilder
+                  value={apiConfig}
+                  onChange={setApiConfig}
                 />
-
-                {method !== 'GET' && (
-                  <KeyValueEditor
-                    value={body}
-                    onChange={setBody}
-                    label="Request Body"
-                    keyPlaceholder="Field name"
-                    valuePlaceholder="Field value (use ${variable} for dynamic)"
-                    allowJSON={true}
-                    testId="action-body"
-                  />
-                )}
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Authentication
-                  </label>
-                  <select
-                    value={authType}
-                    onChange={(e) => setAuthType(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    data-testid="action-auth-type"
-                  >
-                    <option value="none">None</option>
-                    <option value="bearer">Bearer Token</option>
-                    <option value="basic">Basic Auth</option>
-                  </select>
-                </div>
-
-                {authType === 'bearer' && (
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Bearer Token
-                    </label>
-                    <input
-                      type="password"
-                      value={token}
-                      onChange={(e) => setToken(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
-                      placeholder="your-token-here"
-                      data-testid="action-token"
-                    />
-                  </div>
-                )}
-              </>
+              </div>
             )}
 
             {actionType === 'script' && (
