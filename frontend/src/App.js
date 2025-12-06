@@ -320,9 +320,10 @@ const AppShell = () => {
               setActiveTab('forms');
               setCurrentView('forms');
               setMobileSidebarOpen(false);
+              setActiveMenuItem('forms');
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
-              activeTab === 'forms'
+              activeMenuItem === 'forms'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
