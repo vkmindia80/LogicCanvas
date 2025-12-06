@@ -25,6 +25,133 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
     { label: 'Or condition', template: '${var1} or ${var2}', example: '${urgent} == true or ${vip} == true' },
   ];
 
+  // Operators and keywords for autocomplete
+  const operators = [
+    { value: '==', label: '== (equals)', description: 'Check if two values are equal' },
+    { value: '!=', label: '!= (not equals)', description: 'Check if two values are different' },
+    { value: '>', label: '> (greater than)', description: 'Check if left is greater than right' },
+    { value: '<', label: '< (less than)', description: 'Check if left is less than right' },
+    { value: '>=', label: '>= (greater or equal)', description: 'Greater than or equal to' },
+    { value: '<=', label: '<= (less or equal)', description: 'Less than or equal to' },
+    { value: 'and', label: 'and', description: 'Both conditions must be true' },
+    { value: 'or', label: 'or', description: 'At least one condition must be true' },
+    { value: 'not', label: 'not', description: 'Negate the condition' },
+    { value: 'in', label: 'in', description: 'Check if value exists in collection' },
+  ];
+
+  // Detect when to show autocomplete
+  useEffect(() => {
+    if (!value || cursorPosition === 0) {
+      setShowAutocomplete(false);
+      return;
+    }
+
+    const textBeforeCursor = value.substring(0, cursorPosition);
+    const lastWord = textBeforeCursor.split(/[\s()]+/).pop() || '';
+    
+    // Show autocomplete for ${
+    if (lastWord.startsWith('${') && !lastWord.includes('}')) {
+      const searchTerm = lastWord.substring(2).toLowerCase();
+      const varNames = Object.keys(variables);
+      const matches = varNames.filter(v => v.toLowerCase().includes(searchTerm));
+      
+      if (matches.length > 0) {
+        setAutocompleteOptions(matches.map(v => ({ 
+          type: 'variable', 
+          value: v, 
+          label: `\${${v}}`,
+          description: `Variable: ${variables[v]?.type || 'any'}`
+        })));
+        setShowAutocomplete(true);
+        setSelectedOption(0);
+        return;
+      }
+    }
+
+    // Show autocomplete for operators after a word
+    if (lastWord && /[a-zA-Z0-9}]$/.test(lastWord)) {
+      const nextChar = value[cursorPosition];
+      if (!nextChar || /[\s)]/.test(nextChar)) {
+        setAutocompleteOptions(operators);
+        setShowAutocomplete(true);
+        setSelectedOption(0);
+        return;
+      }
+    }
+
+    setShowAutocomplete(false);
+  }, [value, cursorPosition, variables]);
+
+  // Handle keyboard navigation in autocomplete
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!showAutocomplete || autocompleteOptions.length === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedOption((prev) => (prev + 1) % autocompleteOptions.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedOption((prev) => (prev - 1 + autocompleteOptions.length) % autocompleteOptions.length);
+      } else if (e.key === 'Enter' || e.key === 'Tab') {
+        if (showAutocomplete) {
+          e.preventDefault();
+          insertAutocomplete(autocompleteOptions[selectedOption]);
+        }
+      } else if (e.key === 'Escape') {
+        setShowAutocomplete(false);
+      }
+    };
+
+    if (textareaRef.current) {
+      textareaRef.current.addEventListener('keydown', handleKeyDown);
+      return () => {
+        if (textareaRef.current) {
+          textareaRef.current.removeEventListener('keydown', handleKeyDown);
+        }
+      };
+    }
+  }, [showAutocomplete, autocompleteOptions, selectedOption]);
+
+  const insertAutocomplete = (option) => {
+    if (!textareaRef.current) return;
+
+    const start = textareaRef.current.selectionStart;
+    const end = textareaRef.current.selectionEnd;
+    const textBefore = value.substring(0, start);
+    const textAfter = value.substring(end);
+
+    // Find the beginning of the current word/token
+    const lastSpaceIndex = Math.max(
+      textBefore.lastIndexOf(' '),
+      textBefore.lastIndexOf('('),
+      textBefore.lastIndexOf('\n')
+    );
+    const wordStart = lastSpaceIndex + 1;
+    
+    let newValue;
+    let newPosition;
+    
+    if (option.type === 'variable') {
+      // For variables, replace the ${... part
+      const beforeWord = textBefore.substring(0, wordStart);
+      newValue = beforeWord + option.label + ' ' + textAfter;
+      newPosition = beforeWord.length + option.label.length + 1;
+    } else {
+      // For operators, add after current word
+      newValue = textBefore + ' ' + option.value + ' ' + textAfter;
+      newPosition = start + option.value.length + 2;
+    }
+
+    onChange(newValue);
+    setShowAutocomplete(false);
+    
+    setTimeout(() => {
+      textareaRef.current.focus();
+      textareaRef.current.setSelectionRange(newPosition, newPosition);
+    }, 0);
+  };
+
   const handleTest = async () => {
     setTesting(true);
     try {
