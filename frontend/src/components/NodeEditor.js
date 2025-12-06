@@ -154,6 +154,31 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
 
   const config = NODE_CONFIGS[node.data.type];
   
+  // If config is not found, show error message
+  if (!config) {
+    return (
+      <div className="bg-white rounded-xl shadow-2xl border-2 border-red-500 overflow-hidden animate-slide-in">
+        <div className="p-5 bg-red-50">
+          <div className="flex items-center space-x-3 text-red-700">
+            <Info className="w-6 h-6" />
+            <div>
+              <h3 className="font-bold text-lg">Unknown Node Type</h3>
+              <p className="text-sm mt-1">Cannot edit node of type: {node.data.type}</p>
+            </div>
+          </div>
+        </div>
+        <div className="p-5">
+          <button
+            onClick={onClose}
+            className="w-full bg-red-500 text-white px-5 py-3 rounded-lg hover:bg-red-600 transition-all font-semibold"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
   const toggleSection = (section) => {
     setSectionsExpanded(prev => ({
       ...prev,
