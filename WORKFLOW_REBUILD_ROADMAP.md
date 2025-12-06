@@ -65,11 +65,14 @@
 - ✅ **Enhanced Validation**: Real-time feedback with quick-fix buttons
 - ✅ **Execution Engine**: Retry logic, error handling, state management
 
-### 🚀 Next Up (Phase 2 Completion)
-1. **Form-Based API Request Builder** - Replace JSON editors with visual forms
-2. **Expression Builder Enhancement** - Add autocomplete and syntax highlighting
-3. **Template Library Expansion** - Add 8+ more industry-specific templates
-4. **Advanced Snap-to-Align** - Smart alignment guides for professional layouts
+### 🚀 Next Up (Phase 3: Advanced Workflow Capabilities)
+**Priority Features to Implement:**
+
+1. **Enhanced Sub-Workflow Support** - Nested workflows with proper context and data passing
+2. **Data Transformation Engine** - Visual data mapper with built-in transformation functions
+3. **Advanced Looping & Branching** - Complex loop conditions, break/continue logic
+4. **Integration Enhancements** - Expand connector library (Salesforce, HubSpot, Jira, etc.)
+5. **Document Processing** - File upload, PDF extraction, document generation
 
 ---
 
