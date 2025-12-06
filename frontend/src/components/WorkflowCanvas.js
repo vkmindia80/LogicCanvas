@@ -682,7 +682,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
 
           <div className="flex items-center justify-between">
-            {/* Left: Undo/Redo + Template & AI Builder */}
+            {/* Left: Undo/Redo + Zoom + Grid + Template & AI Builder */}
             <div className="flex items-center space-x-2">
               {/* Undo/Redo */}
               <div className="flex items-center space-x-1 border-r border-slate-300 pr-2 mr-1">
@@ -705,6 +705,83 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                   <Redo2 className="w-4 h-4 text-slate-700" />
                 </button>
               </div>
+
+              {/* Zoom Controls */}
+              <div className="flex items-center space-x-1 border-r border-slate-300 pr-2 mr-1">
+                <button
+                  onClick={handleZoomOut}
+                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  title="Zoom Out"
+                  data-testid="zoom-out-btn"
+                >
+                  <ZoomOut className="w-4 h-4 text-slate-700" />
+                </button>
+                <div className="zoom-display min-w-[60px] text-center" title="Current zoom level">
+                  {zoomLevel}%
+                </div>
+                <button
+                  onClick={handleZoomIn}
+                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  title="Zoom In"
+                  data-testid="zoom-in-btn"
+                >
+                  <ZoomIn className="w-4 h-4 text-slate-700" />
+                </button>
+                <button
+                  onClick={handleFitView}
+                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  title="Fit to View"
+                  data-testid="fit-view-btn"
+                >
+                  <Maximize2 className="w-4 h-4 text-slate-700" />
+                </button>
+              </div>
+
+              {/* Grid Snap Toggle */}
+              <button
+                onClick={toggleGridSnap}
+                className={`p-2 rounded-lg transition-all ${
+                  snapToGrid 
+                    ? 'bg-primary-100 text-primary-700 hover:bg-primary-200' 
+                    : 'hover:bg-slate-100 text-slate-500'
+                }`}
+                title={snapToGrid ? 'Grid Snap: ON' : 'Grid Snap: OFF'}
+                data-testid="grid-snap-toggle"
+              >
+                {snapToGrid ? <Grid3x3 className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+              </button>
+
+              {/* Export Controls */}
+              <div className="relative group">
+                <button
+                  className="flex items-center space-x-1 p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  title="Export Workflow"
+                  data-testid="export-menu-btn"
+                  disabled={isExporting}
+                >
+                  <Download className="w-4 h-4 text-slate-700" />
+                </button>
+                <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white rounded-lg shadow-xl border border-slate-200 py-1 min-w-[140px] z-50 animate-slide-in">
+                  <button
+                    onClick={exportToPNG}
+                    disabled={isExporting}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+                    data-testid="export-png-btn"
+                  >
+                    Export as PNG
+                  </button>
+                  <button
+                    onClick={exportToPDF}
+                    disabled={isExporting}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+                    data-testid="export-pdf-btn"
+                  >
+                    Export as PDF
+                  </button>
+                </div>
+              </div>
+
+              <div className="border-r border-slate-300 pr-2 mr-1 h-8" />
 
               {showTemplates && (
                 <button
