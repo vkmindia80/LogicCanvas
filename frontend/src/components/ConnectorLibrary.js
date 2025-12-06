@@ -12,6 +12,8 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
   const [showBuilder, setShowBuilder] = useState(false);
   const [editingConnector, setEditingConnector] = useState(null);
   const [viewMode, setViewMode] = useState('saved'); // 'saved' or 'templates'
+  const [showOAuthBuilder, setShowOAuthBuilder] = useState(false);
+  const [showWebhookManager, setShowWebhookManager] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
