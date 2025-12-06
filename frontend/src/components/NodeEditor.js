@@ -681,9 +681,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
                   placeholder="// Your script here\nconsole.log('Hello World');"
                   data-testid="action-script"
                 />
+                <p className="mt-1 text-xs text-slate-500 flex items-center space-x-1">
+                  <Info className="w-3 h-3" />
+                  <span>JavaScript code to execute</span>
+                </p>
               </div>
             )}
-          </>
+          </div>
         )}
 
         {/* Timer Node */}
