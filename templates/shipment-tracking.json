@@ -1,0 +1,24 @@
+{
+  "id": "shipment-tracking",
+  "name": "Shipment Tracking Workflow",
+  "description": "Track shipments from pickup to delivery with real-time updates",
+  "category": "Transportation & Logistics",
+  "tags": ["logistics", "shipping", "tracking", "delivery"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 200, "y": 80}, "data": {"label": "Shipment Created"}},
+    {"id": "task-1", "type": "task", "position": {"x": 200, "y": 220}, "data": {"label": "Schedule Pickup", "assignmentStrategy": "role", "assignmentRole": "dispatcher", "dueInHours": 24}},
+    {"id": "task-2", "type": "task", "position": {"x": 200, "y": 360}, "data": {"label": "In Transit", "assignmentStrategy": "role", "assignmentRole": "driver", "dueInHours": 120}},
+    {"id": "notification-1", "type": "notification", "position": {"x": 200, "y": 500}, "data": {"label": "Update Customer", "notificationType": "sms"}},
+    {"id": "task-3", "type": "task", "position": {"x": 200, "y": 640}, "data": {"label": "Out for Delivery", "assignmentStrategy": "role", "assignmentRole": "driver", "dueInHours": 8}},
+    {"id": "task-4", "type": "task", "position": {"x": 200, "y": 780}, "data": {"label": "Confirm Delivery", "assignmentStrategy": "role", "assignmentRole": "driver", "dueInHours": 1}},
+    {"id": "end-1", "type": "end", "position": {"x": 200, "y": 920}, "data": {"label": "Delivered"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "task-1"},
+    {"id": "e2", "source": "task-1", "target": "task-2"},
+    {"id": "e3", "source": "task-2", "target": "notification-1"},
+    {"id": "e4", "source": "notification-1", "target": "task-3"},
+    {"id": "e5", "source": "task-3", "target": "task-4"},
+    {"id": "e6", "source": "task-4", "target": "end-1"}
+  ]
+}

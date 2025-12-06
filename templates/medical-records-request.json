@@ -1,0 +1,26 @@
+{
+  "id": "medical-records-request",
+  "name": "Medical Records Request",
+  "description": "Process patient or provider requests for medical records with HIPAA compliance",
+  "category": "Healthcare",
+  "tags": ["healthcare", "records", "hipaa", "privacy"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 200, "y": 80}, "data": {"label": "Records Request"}},
+    {"id": "form-1", "type": "form", "position": {"x": 200, "y": 220}, "data": {"label": "Request Form", "formId": "records-form"}},
+    {"id": "task-1", "type": "task", "position": {"x": 200, "y": 360}, "data": {"label": "Verify Identity", "assignmentStrategy": "role", "assignmentRole": "records-admin", "dueInHours": 24}},
+    {"id": "task-2", "type": "task", "position": {"x": 200, "y": 500}, "data": {"label": "Retrieve Records", "assignmentStrategy": "role", "assignmentRole": "records-clerk", "dueInHours": 48}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 200, "y": 640}, "data": {"label": "Privacy Review", "approvalType": "single"}},
+    {"id": "task-3", "type": "task", "position": {"x": 200, "y": 780}, "data": {"label": "Prepare Records", "assignmentStrategy": "role", "assignmentRole": "records-clerk", "dueInHours": 24}},
+    {"id": "notification-1", "type": "notification", "position": {"x": 200, "y": 920}, "data": {"label": "Notify Requester", "notificationType": "email"}},
+    {"id": "end-1", "type": "end", "position": {"x": 200, "y": 1060}, "data": {"label": "Request Complete"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "task-1"},
+    {"id": "e3", "source": "task-1", "target": "task-2"},
+    {"id": "e4", "source": "task-2", "target": "approval-1"},
+    {"id": "e5", "source": "approval-1", "target": "task-3"},
+    {"id": "e6", "source": "task-3", "target": "notification-1"},
+    {"id": "e7", "source": "notification-1", "target": "end-1"}
+  ]
+}
