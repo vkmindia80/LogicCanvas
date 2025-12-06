@@ -3466,6 +3466,203 @@ async def global_search(query: str, entity_types: Optional[str] = "all"):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ========== PHASE 8 SPRINT 3: VARIABLE MANAGEMENT ENDPOINTS ==========
+
+@app.get("/api/instances/{instance_id}/variables")
+async def get_instance_variables(
+    instance_id: str,
+    scope: Optional[str] = None,
+    type: Optional[str] = None,
+    search: Optional[str] = None
+):
+    """Get all variables for a workflow instance with optional filters"""
+    try:
+        # Parse scope filter
+        scope_filter = None
+        if scope:
+            try:
+                scope_filter = VariableScope(scope)
+            except ValueError:
+                raise HTTPException(status_code=400, detail=f"Invalid scope: {scope}")
+        
+        # Parse type filter
+        type_filter = None
+        if type:
+            try:
+                type_filter = VariableType(type)
+            except ValueError:
+                raise HTTPException(status_code=400, detail=f"Invalid type: {type}")
+        
+        # Get variables
+        variables = variable_manager.get_instance_variables(
+            instance_id,
+            scope=scope_filter,
+            variable_type=type_filter
+        )
+        
+        # Apply search filter if provided
+        if search:
+            search_lower = search.lower()
+            variables = [
+                v for v in variables
+                if search_lower in v["name"].lower() or search_lower in str(v["value"]).lower()
+            ]
+        
+        return {
+            "instance_id": instance_id,
+            "variables": variables,
+            "count": len(variables)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/instances/{instance_id}/variables/{variable_name}/history")
+async def get_variable_history(instance_id: str, variable_name: str):
+    """Get change history for a specific variable"""
+    try:
+        history = variable_manager.get_variable_history(instance_id, variable_name)
+        
+        return {
+            "instance_id": instance_id,
+            "variable_name": variable_name,
+            "history": history,
+            "count": len(history)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class WatchVariableRequest(BaseModel):
+    variable_name: str
+
+
+@app.post("/api/instances/{instance_id}/variables/watch")
+async def add_to_watch_list(instance_id: str, data: WatchVariableRequest):
+    """Add a variable to the watch list for debugging"""
+    try:
+        variable_manager.add_to_watch_list(instance_id, data.variable_name)
+        
+        return {
+            "message": f"Variable '{data.variable_name}' added to watch list",
+            "instance_id": instance_id,
+            "variable_name": data.variable_name
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/instances/{instance_id}/variables/watch/{variable_name}")
+async def remove_from_watch_list(instance_id: str, variable_name: str):
+    """Remove a variable from the watch list"""
+    try:
+        variable_manager.remove_from_watch_list(instance_id, variable_name)
+        
+        return {
+            "message": f"Variable '{variable_name}' removed from watch list",
+            "instance_id": instance_id,
+            "variable_name": variable_name
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/instances/{instance_id}/variables/watch")
+async def get_watch_list(instance_id: str):
+    """Get the watch list for an instance"""
+    try:
+        watch_list = variable_manager.get_variable_watch_list(instance_id)
+        
+        # Get current values for watched variables
+        all_variables = variable_manager.get_instance_variables(instance_id)
+        watched_variables = [
+            v for v in all_variables
+            if v["name"] in watch_list
+        ]
+        
+        return {
+            "instance_id": instance_id,
+            "watch_list": watch_list,
+            "watched_variables": watched_variables,
+            "count": len(watched_variables)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/global-variables")
+async def get_global_variables():
+    """Get all global variables"""
+    try:
+        global_vars = variable_manager.get_global_variables()
+        
+        return {
+            "global_variables": global_vars,
+            "count": len(global_vars)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class GlobalVariableRequest(BaseModel):
+    name: str
+    value: Any
+    description: Optional[str] = None
+
+
+@app.post("/api/global-variables")
+async def set_global_variable(data: GlobalVariableRequest):
+    """Set a global variable"""
+    try:
+        variable_manager.set_global_variable(
+            data.name,
+            data.value,
+            data.description
+        )
+        
+        return {
+            "message": f"Global variable '{data.name}' set successfully",
+            "name": data.name,
+            "value": data.value
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class VariableTypeConversionRequest(BaseModel):
+    value: Any
+    target_type: str
+
+
+@app.post("/api/variables/convert-type")
+async def convert_variable_type(data: VariableTypeConversionRequest):
+    """Convert a value to a target type"""
+    try:
+        # Parse target type
+        try:
+            target_type = VariableType(data.target_type)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid target type: {data.target_type}")
+        
+        # Convert
+        converted_value = variable_manager.convert_type(data.value, target_type)
+        
+        return {
+            "original_value": data.value,
+            "target_type": data.target_type,
+            "converted_value": converted_value,
+            "success": True
+        }
+    except Exception as e:
+        return {
+            "original_value": data.value,
+            "target_type": data.target_type,
+            "converted_value": data.value,
+            "success": False,
+            "error": str(e)
+        }
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
