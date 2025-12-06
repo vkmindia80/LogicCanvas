@@ -319,7 +319,10 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
         {/* Footer */}
         <div className="border-t border-gray-200 p-6 bg-gray-50 flex justify-between">
           <button
-            onClick={onClose}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
             className="px-6 py-2 text-gray-700 hover:text-gray-900 font-medium transition"
           >
             Cancel
