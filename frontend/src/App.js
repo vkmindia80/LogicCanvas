@@ -437,8 +437,15 @@ const AppShell = () => {
           <div className="my-3 border-t border-slate-700"></div>
 
           <button
-            onClick={() => setShowGlobalSearch(true)}
-            className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+            onClick={() => {
+              setShowGlobalSearch(true);
+              setActiveMenuItem('search');
+            }}
+            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              activeMenuItem === 'search'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+            }`}
             data-testid="sidebar-search"
           >
             <SearchIcon className="h-5 w-5 flex-shrink-0" />
