@@ -595,10 +595,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     }
   }, [workflowName]);
 
-  // Sprint 2: Export to PDF
+  // Sprint 2: Export to PDF with loading state
   const exportToPDF = useCallback(async () => {
     setIsExporting(true);
     try {
+      await new Promise(resolve => setTimeout(resolve, 300)); // Brief delay for UI feedback
       const canvasElement = reactFlowWrapper.current.querySelector('.react-flow');
       if (!canvasElement) {
         alert('Canvas not found');
