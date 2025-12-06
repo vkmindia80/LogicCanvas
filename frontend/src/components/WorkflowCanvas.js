@@ -20,6 +20,7 @@ import DeletableEdge from './edges/DeletableEdge';
 import { createNodeData } from '../utils/nodeTypes';
 import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, Grid3x3 } from 'lucide-react';
 import VariablePanel from './VariablePanel';
+import VariableInspector from './VariableInspector';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
