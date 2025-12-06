@@ -26,12 +26,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   
   // Action node states
   const [actionType, setActionType] = useState(node?.data?.actionType || 'http');
-  const [url, setUrl] = useState(node?.data?.url || '');
-  const [method, setMethod] = useState(node?.data?.method || 'GET');
-  const [headers, setHeaders] = useState(node?.data?.headers || {});
-  const [body, setBody] = useState(node?.data?.body || {});
-  const [authType, setAuthType] = useState(node?.data?.authType || 'none');
-  const [token, setToken] = useState(node?.data?.token || '');
+  const [apiConfig, setApiConfig] = useState(node?.data?.apiConfig || {
+    url: node?.data?.url || '',
+    method: node?.data?.method || 'GET',
+    headers: node?.data?.headers || [],
+    queryParams: [],
+    body: node?.data?.body || {},
+    auth: { 
+      type: node?.data?.authType || 'none',
+      token: node?.data?.token || ''
+    }
+  });
   const [script, setScript] = useState(node?.data?.script || '');
   
   // Timer node states
