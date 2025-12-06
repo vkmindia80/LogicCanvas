@@ -258,6 +258,14 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                 <BookOpen className="h-4 w-4" />
                 <span>Templates</span>
               </button>
+              <button
+                onClick={() => setShowAIWizard(true)}
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/30"
+                data-testid="ai-wizard-btn"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>AI Generate</span>
+              </button>
             </div>
           )}
         </div>
