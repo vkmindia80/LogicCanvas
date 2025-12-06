@@ -840,6 +840,7 @@ class NodeExecutor:
             "assignment": self.execute_assignment_node,
             "loop_for_each": self.execute_loop_for_each_node,
             "loop_while": self.execute_loop_while_node,
+            "loop_do_while": self.execute_loop_do_while_node,  # Phase 3.2: Do-While loop
             "loop_repeat": self.execute_loop_repeat_node,
             "loop_break": self.execute_loop_break_node,  # Phase 3.2: Break loop
             "loop_continue": self.execute_loop_continue_node,  # Phase 3.2: Continue loop
