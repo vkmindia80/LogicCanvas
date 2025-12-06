@@ -173,6 +173,58 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       setEventAction(node.data?.eventAction || 'send');
       setEventName(node.data?.eventName || '');
       setEventPayload(node.data?.eventPayload || {});
+      
+      // Data operations
+      setCollection(node.data?.collection || '');
+      setRecordId(node.data?.recordId || '');
+      setRecordData(node.data?.recordData || {});
+      setQueryFilters(node.data?.queryFilters || {});
+      setQueryLimit(node.data?.queryLimit || 100);
+      setQuerySortBy(node.data?.querySortBy || '');
+      setQuerySortOrder(node.data?.querySortOrder || 'asc');
+      
+      // Data transforms
+      setTransformMapping(node.data?.transformMapping || {});
+      setFilterCondition(node.data?.filterCondition || '');
+      setSortField(node.data?.sortField || '');
+      setSortOrder(node.data?.sortOrder || 'asc');
+      setAggregateField(node.data?.aggregateField || '');
+      setAggregateOperation(node.data?.aggregateOperation || 'sum');
+      setCalculateFormula(node.data?.calculateFormula || '');
+      setCalculateOutputVar(node.data?.calculateOutputVar || '');
+      
+      // Loops
+      setLoopCollection(node.data?.loopCollection || '');
+      setLoopItemVar(node.data?.loopItemVar || 'item');
+      setLoopIndexVar(node.data?.loopIndexVar || 'index');
+      setWhileCondition(node.data?.whileCondition || '');
+      setRepeatCount(node.data?.repeatCount || 1);
+      setMaxIterations(node.data?.maxIterations || 1000);
+      
+      // Switch/Case
+      setSwitchVariable(node.data?.switchVariable || '');
+      setSwitchCases(node.data?.switchCases || []);
+      
+      // Assignments
+      setAssignments(node.data?.assignments || []);
+      
+      // Email
+      setEmailTo(node.data?.emailTo || '');
+      setEmailSubject(node.data?.emailSubject || '');
+      setEmailBody(node.data?.emailBody || '');
+      setEmailTemplate(node.data?.emailTemplate || '');
+      
+      // Wait
+      setWaitForEvent(node.data?.waitForEvent || '');
+      setWaitCondition(node.data?.waitCondition || '');
+      
+      // Screen
+      setScreenContent(node.data?.screenContent || '');
+      setScreenTemplate(node.data?.screenTemplate || '');
+      
+      // Error handler
+      setErrorHandlerType(node.data?.errorHandlerType || 'catch');
+      setErrorHandlerAction(node.data?.errorHandlerAction || 'retry');
     }
   }, [node]);
 
