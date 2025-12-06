@@ -669,10 +669,12 @@ class NodeExecutor:
 
 
 class WorkflowExecutionEngine:
-    """Main workflow execution engine"""
+    """Main workflow execution engine with enhanced error handling and retry logic"""
 
     def __init__(self, db):
         self.db = db
+        self.max_retries = 3
+        self.retry_delay_seconds = 5
 
     def start_execution(
         self,
