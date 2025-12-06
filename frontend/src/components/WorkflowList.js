@@ -23,6 +23,11 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
   const [tagFilter, setTagFilter] = useState('');
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
   const [showQuickStartWizard, setShowQuickStartWizard] = useState(false);
+  const [showAIWizard, setShowAIWizard] = useState(false);
+  const [showWelcomeBanner, setShowWelcomeBanner] = useState(() => {
+    // Show welcome banner for new users
+    return localStorage.getItem('lc_welcome_dismissed') !== 'true';
+  });
 
   const { can } = useRole();
 
