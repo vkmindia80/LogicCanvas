@@ -1060,6 +1060,38 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                           Go to node
                         </button>
                       )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Variable Panels */}
+      {showVariablePanel && activeInstance && (
+        <VariablePanel
+          workflowId={workflow?.id}
+          instanceId={activeInstance}
+          onClose={() => setShowVariablePanel(false)}
+        />
+      )}
+
+      {showVariableInspector && activeInstance && (
+        <VariableInspector
+          instanceId={activeInstance}
+          currentNodeId={selectedNode?.id}
+          onClose={() => setShowVariableInspector(false)}
+        />
+      )}
+
+      {showVariableManagement && activeInstance && (
+        <VariableManagementPanel
+          instanceId={activeInstance}
+          onClose={() => setShowVariableManagement(false)}
+        />
+      )}
 
       {/* Export Loading Overlay */}
       {isExporting && (
