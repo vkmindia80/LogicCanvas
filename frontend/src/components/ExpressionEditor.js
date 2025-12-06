@@ -227,7 +227,48 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
           <div className="absolute bottom-2 right-2 text-xs text-slate-400">
             <Code className="w-4 h-4" />
           </div>
+          
+          {/* Autocomplete Dropdown */}
+          {showAutocomplete && autocompleteOptions.length > 0 && (
+            <div 
+              ref={autocompleteRef}
+              className="absolute z-50 mt-1 w-full bg-white border-2 border-primary-300 rounded-lg shadow-xl max-h-48 overflow-y-auto"
+              data-testid="autocomplete-dropdown"
+            >
+              {autocompleteOptions.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => insertAutocomplete(option)}
+                  className={`w-full text-left px-3 py-2 hover:bg-primary-50 transition-colors ${
+                    index === selectedOption ? 'bg-primary-100 border-l-4 border-primary-500' : ''
+                  }`}
+                  data-testid="autocomplete-option"
+                >
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                      index === selectedOption ? 'text-primary-600' : 'text-slate-400'
+                    }`} />
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-slate-800 font-mono">
+                        {option.label}
+                      </div>
+                      <div className="text-xs text-slate-600 mt-0.5">
+                        {option.description}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
+        
+        {showAutocomplete && (
+          <div className="text-xs text-slate-500 flex items-center space-x-2">
+            <Info className="w-3 h-3" />
+            <span>Press <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">↑</kbd> <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">↓</kbd> to navigate, <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">Enter</kbd> or <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">Tab</kbd> to select</span>
+          </div>
+        )}
       </div>
 
       {/* Expression Templates */}
