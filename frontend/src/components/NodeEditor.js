@@ -304,12 +304,14 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     // Action node
     if (currentNodeType === 'action' || currentNodeType === NODE_TYPES.ACTION) {
       updatedData.actionType = actionType;
-      updatedData.url = url;
-      updatedData.method = method;
-      updatedData.headers = headers;
-      updatedData.body = body;
-      updatedData.authType = authType;
-      updatedData.token = token;
+      updatedData.apiConfig = apiConfig;
+      // For backwards compatibility
+      updatedData.url = apiConfig.url;
+      updatedData.method = apiConfig.method;
+      updatedData.headers = apiConfig.headers;
+      updatedData.body = apiConfig.body;
+      updatedData.authType = apiConfig.auth?.type;
+      updatedData.token = apiConfig.auth?.token;
       updatedData.script = script;
     }
 
