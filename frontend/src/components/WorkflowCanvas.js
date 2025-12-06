@@ -887,13 +887,20 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             nodeTypes={nodeTypes}
             edgeTypes={{ deletable: DeletableEdge }}
             fitView
-            snapToGrid
+            snapToGrid={snapToGrid}
             snapGrid={[15, 15]}
             defaultEdgeOptions={{
               animated: true,
-              style: { stroke: '#94a3b8', strokeWidth: 2 },
+              type: 'smoothstep',
+              style: { 
+                stroke: '#94a3b8', 
+                strokeWidth: 2.5,
+              },
               markerEnd: {
-                type: 'arrowclosed',
+                type: MarkerType.ArrowClosed,
+                color: '#64748b',
+                width: 20,
+                height: 20,
               },
             }}
             data-testid="workflow-canvas"
@@ -904,7 +911,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               size={1}
               color="#cbd5e1"
             />
-            <Controls />
+            <Controls showInteractive={false} />
             <MiniMap
               nodeColor={(node) => {
                 const colors = {
@@ -920,7 +927,10 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 };
                 return colors[node.type] || '#94a3b8';
               }}
-              maskColor="rgba(0, 0, 0, 0.1)"
+              maskColor="rgba(0, 0, 0, 0.08)"
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+              }}
             />
           </ReactFlow>
         </div>
