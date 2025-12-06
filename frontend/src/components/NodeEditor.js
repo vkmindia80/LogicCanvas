@@ -152,30 +152,58 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
   if (!node) return null;
 
-  // Debug logging
-  console.log('NodeEditor received node:', node);
-  console.log('Node type:', node.type);
-  console.log('Node data:', node.data);
-  console.log('Node data.type:', node.data?.type);
-
-  const config = NODE_CONFIGS[node.data.type];
+  // ============ CRITICAL FIX: Robust Type Resolution ============
+  // Ensure we always have a valid node type, with multiple fallback strategies
+  const nodeType = node.data?.type || node.type;
   
-  // If config is not found, show error message with more details
+  // Debug logging for troubleshooting
+  console.log('🔍 NodeEditor - Type Resolution:', {
+    'node.data?.type': node.data?.type,
+    'node.type': node.type,
+    'resolved nodeType': nodeType,
+    'node object': node
+  });
+
+  const config = NODE_CONFIGS[nodeType];
+  
+  // If config is not found after fallback, show detailed error
   if (!config) {
+    console.error('❌ NodeEditor - Unknown node type:', {
+      'attempted type': nodeType,
+      'node.data.type': node.data?.type,
+      'node.type': node.type,
+      'available types': Object.keys(NODE_CONFIGS)
+    });
+    
     return (
       <div className="bg-white rounded-xl shadow-2xl border-2 border-red-500 overflow-hidden animate-slide-in">
         <div className="p-5 bg-red-50">
           <div className="flex items-center space-x-3 text-red-700">
             <Info className="w-6 h-6" />
             <div>
-              <h3 className="font-bold text-lg">Unknown Node Type</h3>
-              <p className="text-sm mt-1">Cannot edit node of type: {node.data.type || 'undefined'}</p>
-              <p className="text-xs mt-1">Node root type: {node.type}</p>
-              <p className="text-xs mt-1">Available types: {Object.keys(NODE_CONFIGS).join(', ')}</p>
+              <h3 className="font-bold text-lg">⚠️ Configuration Error</h3>
+              <p className="text-sm mt-1 font-medium">Cannot edit node: Type configuration not found</p>
+              <div className="mt-3 text-xs space-y-1 bg-white p-3 rounded border border-red-200">
+                <p><strong>Attempted Type:</strong> {nodeType || 'undefined'}</p>
+                <p><strong>Node Data Type:</strong> {node.data?.type || 'not set'}</p>
+                <p><strong>Node Root Type:</strong> {node.type || 'not set'}</p>
+                <p className="mt-2"><strong>Available Types:</strong></p>
+                <p className="text-slate-600 ml-2">{Object.keys(NODE_CONFIGS).join(', ')}</p>
+              </div>
+              <p className="text-xs mt-3 text-amber-700">💡 This node may need to be recreated from the palette.</p>
             </div>
           </div>
         </div>
-        <div className="p-5">
+        <div className="p-5 space-y-2">
+          <button
+            onClick={() => {
+              console.log('Full node object for debugging:', JSON.stringify(node, null, 2));
+              alert('Check browser console for full node details');
+            }}
+            className="w-full bg-amber-500 text-white px-5 py-2 rounded-lg hover:bg-amber-600 transition-all font-medium text-sm"
+          >
+            🐛 Show Debug Info
+          </button>
           <button
             onClick={onClose}
             className="w-full bg-red-500 text-white px-5 py-3 rounded-lg hover:bg-red-600 transition-all font-semibold"
@@ -186,6 +214,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       </div>
     );
   }
+  
+  // ============ END CRITICAL FIX ============
   
   const toggleSection = (section) => {
     setSectionsExpanded(prev => ({
