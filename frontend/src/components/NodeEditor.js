@@ -472,11 +472,12 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
                 placeholder="24"
                 data-testid="task-due-hours"
               />
-              <p className="mt-1 text-xs text-slate-500">
-                Task will be auto-escalated if not completed within this time
+              <p className="mt-1 text-xs text-slate-500 flex items-center space-x-1">
+                <Info className="w-3 h-3" />
+                <span>Task will be auto-escalated if not completed within this time</span>
               </p>
             </div>
-          </>
+          </div>
         )}
 
         {/* Approval Node */}
