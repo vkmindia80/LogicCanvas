@@ -639,7 +639,7 @@ const TaskInbox = ({ onClose, onNotify }) => {
                       className="flex-1 flex items-center justify-center space-x-2 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors"
                       data-testid="complete-task-btn"
                     >
-                      <CheckCircle className="w-5 h-5" />
+                      <CheckCircleIcon className="w-5 h-5" />
                       <span>Complete Task</span>
                     </button>
                   )}
