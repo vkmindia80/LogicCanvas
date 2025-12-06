@@ -292,6 +292,11 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                         <option value="communication">Communication</option>
                         <option value="storage">Storage</option>
                         <option value="ai">AI</option>
+                        <option value="crm">CRM</option>
+                        <option value="project_management">Project Management</option>
+                        <option value="itsm">ITSM</option>
+                        <option value="erp">ERP</option>
+                        <option value="database">Database</option>
                         <option value="custom">Custom</option>
                       </select>
                     </div>
