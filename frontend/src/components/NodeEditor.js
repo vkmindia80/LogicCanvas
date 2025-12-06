@@ -523,23 +523,30 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
 
         {/* Form Node */}
         {node.data.type === NODE_TYPES.FORM && (
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Select Form
-            </label>
-            <select
-              value={formId}
-              onChange={(e) => setFormId(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              data-testid="form-select"
-            >
-              <option value="">-- Select a form --</option>
-              {forms.map((form) => (
-                <option key={form.id} value={form.id}>
-                  {form.name}
-                </option>
-              ))}
-            </select>
+          <div className="bg-white border-2 border-indigo-200 rounded-lg p-4 shadow-sm">
+            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Form Selection</h3>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Select Form <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formId}
+                onChange={(e) => setFormId(e.target.value)}
+                className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                data-testid="form-select"
+              >
+                <option value="">-- Select a form --</option>
+                {forms.map((form) => (
+                  <option key={form.id} value={form.id}>
+                    {form.name}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-2 text-xs text-slate-500 flex items-center space-x-1">
+                <Info className="w-3 h-3" />
+                <span>Form will be displayed to users at this step</span>
+              </p>
+            </div>
           </div>
         )}
 
