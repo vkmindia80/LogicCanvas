@@ -111,6 +111,32 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
             </div>
           </div>
 
+          {/* View Mode Tabs */}
+          <div className="border-b">
+            <div className="flex px-6">
+              <button
+                onClick={() => setViewMode('saved')}
+                className={`px-4 py-3 font-medium transition-all ${
+                  viewMode === 'saved'
+                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                My Connectors ({connectors.length})
+              </button>
+              <button
+                onClick={() => setViewMode('templates')}
+                className={`px-4 py-3 font-medium transition-all ${
+                  viewMode === 'templates'
+                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Templates ({templates.length})
+              </button>
+            </div>
+          </div>
+
           {/* Filters */}
           <div className="p-4 border-b bg-gray-50">
             <div className="flex gap-4">
