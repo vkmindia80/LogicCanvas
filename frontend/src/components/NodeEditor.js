@@ -461,6 +461,12 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === NODE_TYPES.TASK && (
           <div className="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Task Configuration</h3>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-blue-800 flex items-start space-x-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Tasks create work items that users can complete from their inbox. Configure who should handle this task and set priority/SLA.</span>
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Assignment Strategy
@@ -477,10 +483,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 <option value="load_balanced">Load Balanced</option>
               </select>
               <p className="mt-1 text-xs text-slate-500">
-                {assignmentStrategy === 'direct' && 'Assign to a specific user'}
-                {assignmentStrategy === 'role' && 'Assign to first available user in role'}
-                {assignmentStrategy === 'round_robin' && 'Rotate assignments evenly among role members'}
-                {assignmentStrategy === 'load_balanced' && 'Assign to user with lowest workload'}
+                {assignmentStrategy === 'direct' && '👤 Assign to a specific user by email'}
+                {assignmentStrategy === 'role' && '👥 Assign to first available user in a role'}
+                {assignmentStrategy === 'round_robin' && '🔄 Rotate assignments evenly among role members'}
+                {assignmentStrategy === 'load_balanced' && '⚖️ Assign to user with lowest current workload'}
               </p>
             </div>
             
