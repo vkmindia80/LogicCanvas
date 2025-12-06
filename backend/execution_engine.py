@@ -548,6 +548,8 @@ class NodeExecutor:
         loop_data = node.get("data", {})
         count = loop_data.get("count", 1)
         counter_var = loop_data.get("counterVariable", "counter")
+        start_from = loop_data.get("startFrom", 0)  # Support starting from specific index
+        step = loop_data.get("step", 1)  # Support custom step increment
         
         # Evaluate count
         if isinstance(count, str):
@@ -555,17 +557,61 @@ class NodeExecutor:
         
         try:
             count = int(count)
+            start_from = int(start_from)
+            step = int(step)
         except (ValueError, TypeError):
             count = 1
+            start_from = 0
+            step = 1
         
         return {
             "status": "completed",
             "output": {
                 "loop_type": "repeat",
                 "count": count,
-                "counter_variable": counter_var
+                "counter_variable": counter_var,
+                "start_from": start_from,
+                "step": step
             },
             "loop": True
+        }
+    
+    def execute_loop_break_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute loop break node - exits current loop"""
+        break_data = node.get("data", {})
+        condition = break_data.get("condition", "")  # Optional condition for conditional break
+        
+        # If condition is provided, evaluate it
+        should_break = True
+        if condition:
+            should_break = bool(self.evaluator.evaluate(condition, self.variables))
+        
+        return {
+            "status": "completed" if not should_break else "break_loop",
+            "output": {
+                "loop_control": "break",
+                "condition_met": should_break
+            },
+            "break_loop": should_break
+        }
+    
+    def execute_loop_continue_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute loop continue node - skips to next iteration"""
+        continue_data = node.get("data", {})
+        condition = continue_data.get("condition", "")  # Optional condition for conditional continue
+        
+        # If condition is provided, evaluate it
+        should_continue = True
+        if condition:
+            should_continue = bool(self.evaluator.evaluate(condition, self.variables))
+        
+        return {
+            "status": "completed" if not should_continue else "continue_loop",
+            "output": {
+                "loop_control": "continue",
+                "condition_met": should_continue
+            },
+            "continue_loop": should_continue
         }
 
     def execute_lookup_record_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
