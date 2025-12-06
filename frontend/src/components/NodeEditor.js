@@ -255,13 +255,16 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       description
     };
 
+    // Use resolved nodeType for consistency
+    const currentNodeType = node.data?.type || node.type;
+    
     // Decision node
-    if (node.data.type === NODE_TYPES.DECISION) {
+    if (currentNodeType === NODE_TYPES.DECISION) {
       updatedData.condition = condition;
     }
 
     // Task node
-    if (node.data.type === NODE_TYPES.TASK) {
+    if (currentNodeType === NODE_TYPES.TASK) {
       updatedData.assignedTo = assignedTo;
       updatedData.assignmentStrategy = assignmentStrategy;
       updatedData.assignmentRole = assignmentRole;
@@ -270,18 +273,18 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     }
 
     // Approval node
-    if (node.data.type === NODE_TYPES.APPROVAL) {
+    if (currentNodeType === NODE_TYPES.APPROVAL) {
       updatedData.approvers = approvers.split(',').map(a => a.trim()).filter(a => a);
       updatedData.approvalType = approvalType;
     }
 
     // Form node
-    if (node.data.type === NODE_TYPES.FORM) {
+    if (currentNodeType === NODE_TYPES.FORM) {
       updatedData.formId = formId;
     }
 
     // Action node
-    if (node.data.type === 'action') {
+    if (currentNodeType === 'action' || currentNodeType === NODE_TYPES.ACTION) {
       updatedData.actionType = actionType;
       updatedData.url = url;
       updatedData.method = method;
@@ -298,7 +301,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     }
 
     // Timer node
-    if (node.data.type === NODE_TYPES.TIMER) {
+    if (currentNodeType === NODE_TYPES.TIMER) {
       updatedData.timerType = timerType;
       updatedData.delaySeconds = parseInt(delaySeconds) || 0;
       updatedData.delayMinutes = parseInt(delayMinutes) || 0;
@@ -308,7 +311,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     }
 
     // Subprocess node
-    if (node.data.type === NODE_TYPES.SUBPROCESS) {
+    if (currentNodeType === NODE_TYPES.SUBPROCESS) {
       updatedData.subprocessWorkflowId = subprocessWorkflowId;
       try {
         updatedData.inputMapping = JSON.parse(inputMapping);
@@ -320,7 +323,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     }
 
     // Event node
-    if (node.data.type === NODE_TYPES.EVENT) {
+    if (currentNodeType === NODE_TYPES.EVENT) {
       updatedData.eventType = eventType;
       updatedData.eventAction = eventAction;
       updatedData.eventName = eventName;
@@ -332,6 +335,9 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       }
       updatedData.timeoutHours = parseInt(timeoutHours) || 24;
     }
+    
+    // CRITICAL: Ensure type is always set in data
+    updatedData.type = currentNodeType;
 
     onUpdate(node.id, {
       data: updatedData
