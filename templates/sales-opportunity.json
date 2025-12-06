@@ -1,0 +1,122 @@
+{
+  "id": null,
+  "name": "Sales Opportunity Management",
+  "description": "Complete sales opportunity tracking with lead qualification, proposal generation, and deal closure",
+  "status": "draft",
+  "version": 1,
+  "tags": ["sales", "crm", "opportunity", "template"],
+  "features": [
+    "Automated lead scoring and qualification",
+    "Proposal generation and approval workflow",
+    "Customer relationship tracking",
+    "Deal closure automation with CRM integration"
+  ],
+  "useCases": [
+    "B2B sales pipeline management",
+    "Enterprise deal tracking",
+    "Sales team performance optimization"
+  ],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": { "x": 100, "y": 100 },
+      "data": {
+        "type": "start",
+        "label": "New Opportunity",
+        "description": "Sales opportunity created"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": { "x": 100, "y": 200 },
+      "data": {
+        "type": "form",
+        "label": "Capture Opportunity Details",
+        "description": "Collect customer info and opportunity details"
+      }
+    },
+    {
+      "id": "assignment-1",
+      "type": "assignment",
+      "position": { "x": 100, "y": 300 },
+      "data": {
+        "type": "assignment",
+        "label": "Calculate Opportunity Score",
+        "description": "Score based on deal size and probability"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": { "x": 100, "y": 400 },
+      "data": {
+        "type": "decision",
+        "label": "Qualified Lead?",
+        "description": "Check if opportunity meets qualification criteria"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": { "x": -50, "y": 500 },
+      "data": {
+        "type": "task",
+        "label": "Follow-up Call",
+        "description": "Schedule follow-up for low-score opportunities"
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": { "x": 250, "y": 500 },
+      "data": {
+        "type": "task",
+        "label": "Generate Proposal",
+        "description": "Create detailed proposal for qualified lead"
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": { "x": 250, "y": 600 },
+      "data": {
+        "type": "approval",
+        "label": "Manager Approval",
+        "description": "Manager reviews proposal"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": { "x": 250, "y": 700 },
+      "data": {
+        "type": "action",
+        "label": "Send Proposal Email",
+        "description": "Email proposal to customer"
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": { "x": 250, "y": 800 },
+      "data": {
+        "type": "end",
+        "label": "Opportunity Complete",
+        "description": "Sales opportunity workflow completed"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start-1", "target": "form-1" },
+    { "id": "e2", "source": "form-1", "target": "assignment-1" },
+    { "id": "e3", "source": "assignment-1", "target": "decision-1" },
+    { "id": "e4", "source": "decision-1", "sourceHandle": "no", "target": "task-1" },
+    { "id": "e5", "source": "decision-1", "sourceHandle": "yes", "target": "task-2" },
+    { "id": "e6", "source": "task-2", "target": "approval-1" },
+    { "id": "e7", "source": "approval-1", "target": "action-1" },
+    { "id": "e8", "source": "action-1", "target": "end-1" },
+    { "id": "e9", "source": "task-1", "target": "end-1" }
+  ]
+}
