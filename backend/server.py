@@ -5782,6 +5782,351 @@ Return as JSON object with recommended values and explanations."""
         raise HTTPException(status_code=500, detail=f"Configuration suggestion failed: {str(e)}")
 
 
+# =============================================================================
+# PHASE 2: Workflow Patterns & Components API
+# =============================================================================
+
+class WorkflowComponent(BaseModel):
+    id: Optional[str] = None
+    name: str
+    description: str
+    category: str  # 'approval', 'notification', 'data_processing', 'integration'
+    nodes: List[Dict[str, Any]]
+    edges: List[Dict[str, Any]]
+    input_variables: List[str] = []
+    output_variables: List[str] = []
+    tags: List[str] = []
+    usage_count: int = 0
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+
+@app.get("/api/components")
+async def get_workflow_components(
+    category: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = 50
+):
+    """
+    Get reusable workflow components/patterns.
+    These are pre-built node groups that can be inserted into workflows.
+    """
+    try:
+        query = {}
+        
+        if category:
+            query["category"] = category
+        
+        if search:
+            query["$or"] = [
+                {"name": {"$regex": search, "$options": "i"}},
+                {"description": {"$regex": search, "$options": "i"}},
+                {"tags": {"$in": [search]}}
+            ]
+        
+        components = list(components_collection.find(query).limit(limit))
+        
+        for component in components:
+            component["id"] = str(component.pop("_id"))
+        
+        return {
+            "components": components,
+            "count": len(components),
+            "categories": ["approval", "notification", "data_processing", "integration", "error_handling"]
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch components: {str(e)}")
+
+
+@app.post("/api/components")
+async def create_workflow_component(component: WorkflowComponent):
+    """
+    Save a reusable workflow component.
+    Users can save groups of nodes as reusable components.
+    """
+    try:
+        component_data = component.dict(exclude={"id"})
+        component_data["created_at"] = datetime.utcnow().isoformat()
+        component_data["updated_at"] = datetime.utcnow().isoformat()
+        component_data["usage_count"] = 0
+        
+        result = components_collection.insert_one(component_data)
+        component_data["id"] = str(result.inserted_id)
+        
+        return {
+            "message": "Component created successfully",
+            "component": component_data
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create component: {str(e)}")
+
+
+@app.get("/api/components/{component_id}")
+async def get_workflow_component(component_id: str):
+    """Get a specific workflow component by ID."""
+    try:
+        from bson import ObjectId
+        component = components_collection.find_one({"_id": ObjectId(component_id)})
+        
+        if not component:
+            raise HTTPException(status_code=404, detail="Component not found")
+        
+        component["id"] = str(component.pop("_id"))
+        
+        # Increment usage count
+        components_collection.update_one(
+            {"_id": ObjectId(component_id)},
+            {"$inc": {"usage_count": 1}}
+        )
+        
+        return component
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch component: {str(e)}")
+
+
+@app.delete("/api/components/{component_id}")
+async def delete_workflow_component(component_id: str):
+    """Delete a workflow component."""
+    try:
+        from bson import ObjectId
+        result = components_collection.delete_one({"_id": ObjectId(component_id)})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Component not found")
+        
+        return {"message": "Component deleted successfully"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete component: {str(e)}")
+
+
+@app.get("/api/patterns")
+async def get_workflow_patterns():
+    """
+    Get common workflow patterns with best practices.
+    These are pre-configured workflows demonstrating common patterns.
+    """
+    patterns = [
+        {
+            "id": "approval-chain",
+            "name": "Multi-Level Approval Chain",
+            "description": "Sequential approval flow with escalation and rejection handling",
+            "category": "approval",
+            "complexity": "medium",
+            "nodes_count": 8,
+            "use_cases": [
+                "Invoice approval (manager → finance → CFO)",
+                "Leave requests (supervisor → HR → department head)",
+                "Purchase orders based on amount thresholds"
+            ],
+            "features": [
+                "Conditional escalation based on amount/priority",
+                "Automatic rejection routing",
+                "Notification at each approval step",
+                "Timeout handling with reminders"
+            ]
+        },
+        {
+            "id": "parallel-approval",
+            "name": "Parallel Approval with Consensus",
+            "description": "Multiple approvers review simultaneously, requires all/majority approval",
+            "category": "approval",
+            "complexity": "medium",
+            "nodes_count": 6,
+            "use_cases": [
+                "Contract review (legal + finance + operations)",
+                "Design approval (UX + engineering + product)",
+                "Budget allocation (multiple department heads)"
+            ],
+            "features": [
+                "Parallel execution for speed",
+                "Configurable consensus rules (all, majority, any)",
+                "Individual approval tracking",
+                "Merge logic with decision routing"
+            ]
+        },
+        {
+            "id": "data-enrichment",
+            "name": "Data Collection & Enrichment",
+            "description": "Collect data via form, enrich with API calls, store in database",
+            "category": "data_processing",
+            "complexity": "medium",
+            "nodes_count": 7,
+            "use_cases": [
+                "Customer onboarding (form → CRM API → database)",
+                "Lead capture (form → lead scoring API → Salesforce)",
+                "Survey processing (form → analysis API → reporting)"
+            ],
+            "features": [
+                "Form data collection",
+                "External API integration for enrichment",
+                "Data transformation and validation",
+                "Database storage with error handling"
+            ]
+        },
+        {
+            "id": "error-retry",
+            "name": "Robust Error Handling & Retry",
+            "description": "API call with automatic retry, fallback, and error notifications",
+            "category": "error_handling",
+            "complexity": "low",
+            "nodes_count": 5,
+            "use_cases": [
+                "Payment processing with retry logic",
+                "Third-party API calls with fallbacks",
+                "Data synchronization with error tracking"
+            ],
+            "features": [
+                "Automatic retry with exponential backoff",
+                "Fallback to alternative service",
+                "Error logging and notifications",
+                "Circuit breaker pattern"
+            ]
+        },
+        {
+            "id": "scheduled-batch",
+            "name": "Scheduled Batch Processing",
+            "description": "Timer-triggered workflow that processes multiple records",
+            "category": "data_processing",
+            "complexity": "high",
+            "nodes_count": 10,
+            "use_cases": [
+                "Nightly report generation",
+                "Batch invoice processing",
+                "Daily data synchronization",
+                "Weekly reminder emails"
+            ],
+            "features": [
+                "Scheduled trigger (cron)",
+                "Loop through records",
+                "Parallel processing for performance",
+                "Success/failure reporting"
+            ]
+        },
+        {
+            "id": "notification-cascade",
+            "name": "Smart Notification Cascade",
+            "description": "Progressive notification with escalation based on response",
+            "category": "notification",
+            "complexity": "medium",
+            "nodes_count": 7,
+            "use_cases": [
+                "Task reminders (email → Slack → SMS)",
+                "Incident alerts with escalation",
+                "Overdue follow-ups"
+            ],
+            "features": [
+                "Multi-channel notifications",
+                "Wait for response with timeout",
+                "Automatic escalation",
+                "Response tracking"
+            ]
+        }
+    ]
+    
+    return {
+        "patterns": patterns,
+        "count": len(patterns),
+        "categories": ["approval", "data_processing", "error_handling", "notification", "integration"]
+    }
+
+
+@app.get("/api/patterns/{pattern_id}")
+async def get_workflow_pattern_details(pattern_id: str):
+    """Get detailed workflow structure for a specific pattern."""
+    
+    # This would load actual workflow definitions
+    # For now, returning a sample structure
+    
+    pattern_workflows = {
+        "approval-chain": {
+            "name": "Multi-Level Approval Chain",
+            "nodes": [
+                {
+                    "id": "start-1",
+                    "type": "start",
+                    "position": {"x": 200, "y": 50},
+                    "data": {"label": "Start", "type": "start"}
+                },
+                {
+                    "id": "form-1",
+                    "type": "form",
+                    "position": {"x": 200, "y": 150},
+                    "data": {
+                        "label": "Request Form",
+                        "description": "Collect request details",
+                        "formId": "",
+                        "type": "form"
+                    }
+                },
+                {
+                    "id": "decision-1",
+                    "type": "decision",
+                    "position": {"x": 200, "y": 270},
+                    "data": {
+                        "label": "Check Amount",
+                        "description": "Route based on request amount",
+                        "condition": "${amount} > 10000",
+                        "type": "decision"
+                    }
+                },
+                {
+                    "id": "approval-1",
+                    "type": "approval",
+                    "position": {"x": 100, "y": 400},
+                    "data": {
+                        "label": "Manager Approval",
+                        "approvers": [],
+                        "approvalType": "single",
+                        "type": "approval"
+                    }
+                },
+                {
+                    "id": "approval-2",
+                    "type": "approval",
+                    "position": {"x": 300, "y": 400},
+                    "data": {
+                        "label": "Senior Manager Approval",
+                        "approvers": [],
+                        "approvalType": "single",
+                        "type": "approval"
+                    }
+                },
+                {
+                    "id": "end-approved",
+                    "type": "end",
+                    "position": {"x": 200, "y": 550},
+                    "data": {"label": "Approved", "type": "end"}
+                },
+                {
+                    "id": "end-rejected",
+                    "type": "end",
+                    "position": {"x": 400, "y": 550},
+                    "data": {"label": "Rejected", "type": "end"}
+                }
+            ],
+            "edges": [
+                {"id": "e1", "source": "start-1", "target": "form-1"},
+                {"id": "e2", "source": "form-1", "target": "decision-1"},
+                {"id": "e3", "source": "decision-1", "target": "approval-1", "sourceHandle": "no", "label": "≤10K"},
+                {"id": "e4", "source": "decision-1", "target": "approval-2", "sourceHandle": "yes", "label": ">10K"},
+                {"id": "e5", "source": "approval-1", "target": "end-approved"},
+                {"id": "e6", "source": "approval-2", "target": "end-approved"}
+            ]
+        }
+    }
+    
+    pattern = pattern_workflows.get(pattern_id)
+    
+    if not pattern:
+        raise HTTPException(status_code=404, detail="Pattern not found")
+    
+    return pattern
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
