@@ -1162,64 +1162,103 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         </div>
       )}
 
-      {/* Validation Results Panel */}
+      {/* Validation Results Panel - Enhanced */}
       {validationRan && validationResults && (
-        <div className="fixed bottom-4 right-4 w-96 bg-white shadow-2xl border border-gray-200 rounded-lg z-50 max-h-80 overflow-y-auto">
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800">Validation Results</h3>
+        <div className="fixed bottom-4 right-4 w-[480px] bg-white shadow-2xl border-2 border-slate-300 rounded-xl z-50 max-h-[500px] overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between p-4 border-b-2 border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900">Validation Results</h3>
+              <p className="text-xs text-slate-600 mt-0.5">
+                {validationResults.length === 0 
+                  ? 'All checks passed!' 
+                  : `Found ${validationResults.length} issue${validationResults.length > 1 ? 's' : ''}`
+                }
+              </p>
+            </div>
             <button
               onClick={handleValidationPanelClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg p-2 transition-colors"
               data-testid="close-validation-panel"
             >
               ✕
             </button>
           </div>
-          <div className="p-4">
+          <div className="flex-1 overflow-y-auto p-4">
             {validationResults.length === 0 ? (
-              <div className="flex items-center space-x-2 text-green-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span>Workflow validation passed! No issues found.</span>
+              <div className="flex flex-col items-center justify-center py-8">
+                <div className="bg-green-100 rounded-full p-4 mb-4">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                <p className="text-green-800 font-semibold text-lg">Workflow is valid!</p>
+                <p className="text-slate-600 text-sm mt-1">No issues found. Ready to execute.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {validationResults.map((issue, index) => (
                   <div
                     key={`${issue.message}-${issue.nodeId || 'global'}-${index}`}
-                    className={`flex items-start space-x-2 p-3 rounded-lg ${
+                    className={`rounded-xl border-2 overflow-hidden ${
                       issue.type === 'error'
-                        ? 'bg-red-50 border border-red-200'
-                        : 'bg-yellow-50 border border-yellow-200'
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-amber-50 border-amber-200'
                     }`}
                   >
-                    <div
-                      className={`w-2 h-2 rounded-full mt-2 ${
-                        issue.type === 'error' ? 'bg-red-500' : 'bg-yellow-500'
-                      }`}
-                    />
-                    <div className="flex-1">
-                      <p
-                        className={`text-sm ${
-                          issue.type === 'error' ? 'text-red-800' : 'text-yellow-800'
-                        }`}
-                      >
-                        {issue.message}
-                      </p>
-                      {issue.nodeId && (
-                        <button
-                          onClick={() => {
-                            const node = nodes.find((n) => n.id === issue.nodeId);
-                            if (node) {
-                              setSelectedNode(node);
-                              handleValidationPanelClose();
-                            }
-                          }}
-                          className="text-xs text-blue-600 hover:text-blue-800 mt-1"
-                          data-testid="validation-go-to-node-btn"
-                        >
-                          Go to node
-                        </button>
-                      )}
+                    <div className="p-4">
+                      <div className="flex items-start space-x-3">
+                        <div className={`mt-1 ${
+                          issue.type === 'error' ? 'text-red-600' : 'text-amber-600'
+                        }`}>
+                          <AlertCircle className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm font-semibold ${
+                            issue.type === 'error' ? 'text-red-900' : 'text-amber-900'
+                          }`}>
+                            {issue.message}
+                          </p>
+                          {issue.suggestion && (
+                            <p className={`text-xs mt-1 ${
+                              issue.type === 'error' ? 'text-red-700' : 'text-amber-700'
+                            }`}>
+                              💡 {issue.suggestion}
+                            </p>
+                          )}
+                          
+                          {/* Action Buttons */}
+                          <div className="flex items-center space-x-2 mt-3">
+                            {issue.nodeId && (
+                              <button
+                                onClick={() => {
+                                  const node = nodes.find((n) => n.id === issue.nodeId);
+                                  if (node) {
+                                    setSelectedNode(node);
+                                    handleValidationPanelClose();
+                                  }
+                                }}
+                                className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                                  issue.type === 'error'
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'bg-amber-600 text-white hover:bg-amber-700'
+                                }`}
+                                data-testid="validation-go-to-node-btn"
+                              >
+                                View Node →
+                              </button>
+                            )}
+                            {issue.quickFix && (
+                              <button
+                                onClick={() => {
+                                  handleQuickFix(issue.quickFix);
+                                }}
+                                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                                data-testid="validation-quick-fix-btn"
+                              >
+                                {issue.quickFix.label}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
