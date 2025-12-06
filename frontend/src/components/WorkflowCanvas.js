@@ -765,7 +765,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 title={snapToGrid ? 'Grid Snap: ON' : 'Grid Snap: OFF'}
                 data-testid="grid-snap-toggle"
               >
-                {snapToGrid ? <Grid3x3 className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+                {snapToGrid ? <Grid className="w-4 h-4 opacity-100" /> : <Grid className="w-4 h-4 opacity-50" />}
               </button>
 
               {/* Export Controls */}
