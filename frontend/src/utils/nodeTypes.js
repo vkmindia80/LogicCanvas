@@ -18,6 +18,8 @@ export const NODE_TYPES = {
   LOOP_FOR_EACH: 'loop_for_each',
   LOOP_WHILE: 'loop_while',
   LOOP_REPEAT: 'loop_repeat',
+  LOOP_BREAK: 'loop_break',      // Phase 3.2: Break out of loop
+  LOOP_CONTINUE: 'loop_continue',  // Phase 3.2: Skip to next iteration
   
   // Approval & Review
   APPROVAL: 'approval',
