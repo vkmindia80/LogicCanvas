@@ -1,0 +1,45 @@
+{
+  "id": null,
+  "name": "Training Request & Enrollment",
+  "description": "Employee training request with manager approval, budget check, and automatic enrollment",
+  "status": "draft",
+  "version": 1,
+  "tags": ["training", "hr", "learning", "development", "template"],
+  "features": [
+    "Manager approval workflow",
+    "Budget availability check",
+    "Automatic course enrollment",
+    "Calendar invitation and reminders"
+  ],
+  "useCases": [
+    "Professional development requests",
+    "Mandatory compliance training",
+    "Skill development programs"
+  ],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 50}, "data": {"type": "start", "label": "Training Requested", "description": "Employee submits training request"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 150}, "data": {"type": "form", "label": "Training Details", "description": "Course name, provider, cost, and justification"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 100, "y": 250}, "data": {"type": "decision", "label": "Cost > $1000?", "description": "Route based on training cost"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": -50, "y": 350}, "data": {"type": "approval", "label": "Manager Approval", "description": "Direct manager reviews request"}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 250, "y": 350}, "data": {"type": "approval", "label": "Director Approval", "description": "Department director approves high-cost training"}},
+    {"id": "lookup-1", "type": "lookup_record", "position": {"x": 100, "y": 450}, "data": {"type": "lookup_record", "label": "Check Budget", "description": "Verify training budget availability"}},
+    {"id": "decision-2", "type": "decision", "position": {"x": 100, "y": 550}, "data": {"type": "decision", "label": "Budget Available?", "description": "Check if budget exists"}},
+    {"id": "create-1", "type": "create_record", "position": {"x": 250, "y": 650}, "data": {"type": "create_record", "label": "Create Enrollment", "description": "Enroll employee in course"}},
+    {"id": "action-1", "type": "action", "position": {"x": 250, "y": 750}, "data": {"type": "action", "label": "Send Calendar Invite", "description": "Send training schedule to employee"}},
+    {"id": "end-1", "type": "end", "position": {"x": 250, "y": 850}, "data": {"type": "end", "label": "Enrollment Complete", "description": "Employee enrolled in training"}},
+    {"id": "end-2", "type": "end", "position": {"x": -50, "y": 650}, "data": {"type": "end", "label": "Request Denied", "description": "Insufficient budget or not approved"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "sourceHandle": "no", "target": "approval-1"},
+    {"id": "e4", "source": "decision-1", "sourceHandle": "yes", "target": "approval-2"},
+    {"id": "e5", "source": "approval-1", "target": "lookup-1"},
+    {"id": "e6", "source": "approval-2", "target": "lookup-1"},
+    {"id": "e7", "source": "lookup-1", "target": "decision-2"},
+    {"id": "e8", "source": "decision-2", "sourceHandle": "yes", "target": "create-1"},
+    {"id": "e9", "source": "decision-2", "sourceHandle": "no", "target": "end-2"},
+    {"id": "e10", "source": "create-1", "target": "action-1"},
+    {"id": "e11", "source": "action-1", "target": "end-1"}
+  ]
+}
