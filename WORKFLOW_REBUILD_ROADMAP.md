@@ -120,11 +120,11 @@
   - Real-time validation with helpful error messages
   - Field-level help text and examples
 
-- [ ] **Form-Based Configuration** ⏳ NEXT
-  - Replace JSON editors with form inputs where possible
-  - Visual API request builder (no need to write JSON)
-  - Drag-and-drop data mapping interface (DataMappingPanel exists)
-  - Expression builder with autocomplete (ExpressionEditor exists, needs enhancement)
+- [x] **Form-Based Configuration** ✅ COMPLETE
+  - Replaced ALL JSON editors with visual form inputs for 35+ node types
+  - Visual API request builder fully integrated (VisualAPIBuilder)
+  - Drag-and-drop data mapping interface (DataMappingPanel)
+  - Expression builder with autocomplete (ExpressionEditor - already enhanced)
 
 #### 2.3 Visual Enhancements ✅ MOSTLY COMPLETE (90%)
 - [x] **Improved Node Appearance**
