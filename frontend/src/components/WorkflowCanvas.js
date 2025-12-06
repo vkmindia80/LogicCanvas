@@ -338,6 +338,31 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     [setNodes, setEdges],
   );
 
+  const duplicateNode = useCallback(
+    (nodeId) => {
+      const nodeToDuplicate = nodes.find((n) => n.id === nodeId);
+      if (!nodeToDuplicate) return;
+
+      const newNode = {
+        ...nodeToDuplicate,
+        id: `node-${nodeIdCounter.current++}`,
+        position: {
+          x: nodeToDuplicate.position.x + 50,
+          y: nodeToDuplicate.position.y + 50,
+        },
+        data: {
+          ...nodeToDuplicate.data,
+          label: `${nodeToDuplicate.data.label} (Copy)`,
+        },
+        selected: false,
+      };
+      
+      setNodes((nds) => [...nds, newNode]);
+      setSelectedNode(null);
+    },
+    [nodes, setNodes],
+  );
+
   const applyValidationToNodes = useCallback(
     (issues) => {
       setNodes((nds) =>
