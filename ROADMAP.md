@@ -350,19 +350,27 @@ Transform LogicCanvas workflow designer to match and exceed Salesforce Flow Buil
   - [ ] Node execution logs
   - [ ] Performance profiling
 
-**Deliverables:**
-- ✅ 20+ additional node types covering all workflow scenarios
-- ✅ Salesforce-style categorized node palette with search
-- ✅ Undo/Redo functionality with 50-step history
-- ✅ Debug mode with step-through execution
-- ✅ Variable Management Panel with full CRUD
-- ✅ Visual API Connector Builder
-- ✅ Enhanced NodeEditor with data mapping UI
+**Deliverables (Sprint 1 & 2):**
+- ✅ 10 essential new node types (loops, data ops, screen, switch)
+- ✅ Salesforce-style categorized node palette with search (34+ nodes)
+- ✅ Undo/Redo functionality with 50-step history + keyboard shortcuts
+- ✅ Zoom controls (In/Out/Fit-to-view) with visual zoom percentage
+- ✅ Grid snap toggle with visual indicator
+- ✅ Export to PNG/PDF with professional loading overlay
+- ✅ Enhanced NodeEditor with collapsible sections
+- ✅ Color-coded node configuration panels
+- ✅ Inline validation with visual feedback
 - ✅ Professional Salesforce-inspired visual design
-- ✅ Advanced debugging tools (breakpoints, watch panel)
-- ✅ Loop/iteration node support with nested loops
+- ✅ Enhanced edge styling (smooth curves, shadows, animations)
+- ✅ 10+ micro-animations for smooth UX
+- ✅ Loop/iteration node support (For Each, While, Repeat)
 - ✅ Full database CRUD operations via nodes
-- ✅ Testing validation via testing_agent
+- ✅ Backend execution support for all new node types
+
+**Optional Future Enhancements:**
+- 🔄 Variable Management Panel (advanced debugging)
+- 🔄 Visual API Connector Builder (advanced integrations)
+- 🔄 Advanced debugging tools (breakpoints, watch panel, step-through)
 
 ---
 
