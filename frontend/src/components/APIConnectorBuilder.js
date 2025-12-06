@@ -1,94 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import {
-  X, Plus, Trash2, Play, Save, Code, Key, Lock,
-  Globe, Send, Check, AlertCircle, Copy, FileJson
+  X, Save, Play, Code, Key, Settings, Globe,
+  Plus, Trash2, ChevronDown, ChevronRight, Info, Check
 } from 'lucide-react';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
-
-const APIConnectorBuilder = ({ isOpen, onClose, connectorId = null }) => {
+const APIConnectorBuilder = ({ onClose, connectorId = null, onSave }) => {
   const [connector, setConnector] = useState({
     name: '',
     description: '',
-    base_url: '',
-    auth_type: 'none',
-    auth_config: {},
-    headers: {},
-    endpoints: [],
-    tags: []
+    category: 'custom',
+    config: {
+      method: 'GET',
+      url: '',
+      headers: {},
+      query_params: {},
+      body: null,
+      auth: { type: 'none', config: {} }
+    },
+    response_mapping: [],
+    error_handling: {
+      retry_count: 3,
+      retry_delay: 1000,
+      timeout: 30000,
+      on_error: 'fail'
+    }
   });
 
+  const [activeTab, setActiveTab] = useState('request'); // request, auth, response, test
+  const [testVariables, setTestVariables] = useState({});
   const [testResult, setTestResult] = useState(null);
-  const [isT esting, setIsTesting] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [selectedEndpoint, setSelectedEndpoint] = useState(null);
+  const [isTesting, setIsTesting] = useState(false);
+  const [templates, setTemplates] = useState([]);
+  const [showTemplates, setShowTemplates] = useState(false);
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
   useEffect(() => {
+    fetchTemplates();
     if (connectorId) {
-      loadConnector();
+      fetchConnector();
     }
   }, [connectorId]);
 
-  const loadConnector = async () => {
+  const fetchTemplates = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/connectors/${connectorId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setConnector(data);
-      }
+      const response = await fetch(`${BACKEND_URL}/api/connectors/templates`);
+      const data = await response.json();
+      setTemplates(data.templates || []);
     } catch (error) {
-      console.error('Failed to load connector:', error);
+      console.error('Failed to fetch templates:', error);
     }
   };
 
-  const saveConnector = async () => {
-    setIsSaving(true);
+  const fetchConnector = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/connectors/${connectorId}`);
+      const data = await response.json();
+      setConnector(data);
+    } catch (error) {
+      console.error('Failed to fetch connector:', error);
+    }
+  };
+
+  const handleSave = async () => {
     try {
       const url = connectorId
         ? `${BACKEND_URL}/api/connectors/${connectorId}`
         : `${BACKEND_URL}/api/connectors`;
-      
+
       const method = connectorId ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(connector)
       });
 
-      if (response.ok) {
-        alert('Connector saved successfully!');
-        onClose();
-      } else {
-        alert('Failed to save connector');
-      }
+      const result = await response.json();
+      onSave?.(result);
+      onClose();
     } catch (error) {
-      console.error('Save error:', error);
-      alert('Error saving connector');
-    } finally {
-      setIsSaving(false);
+      console.error('Failed to save connector:', error);
+      alert('Failed to save connector');
     }
   };
 
-  const testEndpoint = async (endpoint) => {
+  const handleTest = async () => {
+    if (!connector.config.url) {
+      alert('Please enter a URL first');
+      return;
+    }
+
     setIsTesting(true);
     setTestResult(null);
-    setSelectedEndpoint(endpoint);
 
     try {
-      const testRequest = {
-        method: endpoint.method || 'GET',
-        url: `${connector.base_url}${endpoint.path || ''}`,
-        headers: { ...connector.headers },
-        body: endpoint.body || null,
-        auth_type: connector.auth_type,
-        auth_config: connector.auth_config
-      };
-
       const response = await fetch(`${BACKEND_URL}/api/connectors/test`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(testRequest)
+        body: JSON.stringify({
+          connector_id: connector.id || 'temp',
+          config: connector.config,
+          variables: testVariables
+        })
       });
 
       const result = await response.json();
@@ -103,25 +117,16 @@ const APIConnectorBuilder = ({ isOpen, onClose, connectorId = null }) => {
     }
   };
 
-  const addEndpoint = () => {
+  const loadTemplate = (template) => {
     setConnector({
       ...connector,
-      endpoints: [
-        ...connector.endpoints,
-        { method: 'GET', path: '/new-endpoint', description: 'New endpoint' }
-      ]
+      name: template.name,
+      description: template.description,
+      category: template.category,
+      config: template.config,
+      response_mapping: template.response_mapping || []
     });
-  };
-
-  const updateEndpoint = (index, field, value) => {
-    const updatedEndpoints = [...connector.endpoints];
-    updatedEndpoints[index] = { ...updatedEndpoints[index], [field]: value };
-    setConnector({ ...connector, endpoints: updatedEndpoints });
-  };
-
-  const removeEndpoint = (index) => {
-    const updatedEndpoints = connector.endpoints.filter((_, i) => i !== index);
-    setConnector({ ...connector, endpoints: updatedEndpoints });
+    setShowTemplates(false);
   };
 
   const addHeader = () => {
@@ -129,457 +134,482 @@ const APIConnectorBuilder = ({ isOpen, onClose, connectorId = null }) => {
     if (key) {
       setConnector({
         ...connector,
-        headers: { ...connector.headers, [key]: '' }
+        config: {
+          ...connector.config,
+          headers: { ...connector.config.headers, [key]: '' }
+        }
       });
     }
   };
 
-  const updateHeader = (key, value) => {
+  const removeHeader = (key) => {
+    const headers = { ...connector.config.headers };
+    delete headers[key];
     setConnector({
       ...connector,
-      headers: { ...connector.headers, [key]: value }
+      config: { ...connector.config, headers }
     });
   };
 
-  const removeHeader = (key) => {
-    const { [key]: removed, ...remainingHeaders } = connector.headers;
-    setConnector({ ...connector, headers: remainingHeaders });
+  const addResponseMapping = () => {
+    setConnector({
+      ...connector,
+      response_mapping: [
+        ...connector.response_mapping,
+        {
+          source_path: '$.', 
+          target_variable: '',
+          type: 'string',
+          transform: 'none'
+        }
+      ]
+    });
   };
 
-  if (!isOpen) return null;
+  const updateResponseMapping = (index, field, value) => {
+    const mappings = [...connector.response_mapping];
+    mappings[index][field] = value;
+    setConnector({ ...connector, response_mapping: mappings });
+  };
+
+  const removeResponseMapping = (index) => {
+    setConnector({
+      ...connector,
+      response_mapping: connector.response_mapping.filter((_, i) => i !== index)
+    });
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-              <Globe className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">
-                {connectorId ? 'Edit' : 'Create'} API Connector
-              </h2>
-              <p className="text-sm text-gray-600">Configure API endpoints and authentication</p>
-            </div>
+        <div className="flex items-center justify-between p-6 border-b">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {connectorId ? 'Edit' : 'Create'} API Connector
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Build and configure API integrations visually
+            </p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowTemplates(!showTemplates)}
+              className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            >
+              <Code size={18} className="inline mr-2" />
+              Templates
+            </button>
+            <button
+              onClick={handleTest}
+              disabled={isTesting}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+            >
+              <Play size={18} className="inline mr-2" />
+              {isTesting ? 'Testing...' : 'Test'}
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Save size={18} className="inline mr-2" />
+              Save
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-6">
-            {/* Basic Info */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Code className="w-4 h-4" />
-                Basic Information
-              </h3>
-              
-              <div className="space-y-4">
+        <div className="flex-1 overflow-auto p-6">
+          <div className="grid grid-cols-3 gap-6">
+            {/* Left: Templates or Basic Info */}
+            <div className="col-span-1 space-y-4">
+              {showTemplates ? (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Connector Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={connector.name}
-                    onChange={(e) => setConnector({ ...connector, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="My API Connector"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    value={connector.description}
-                    onChange={(e) => setConnector({ ...connector, description: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows="2"
-                    placeholder="Describe what this API connector does..."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Base URL *
-                  </label>
-                  <input
-                    type="url"
-                    value={connector.base_url}
-                    onChange={(e) => setConnector({ ...connector, base_url: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://api.example.com"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Authentication */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Lock className="w-4 h-4" />
-                Authentication
-              </h3>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Auth Type
-                  </label>
-                  <select
-                    value={connector.auth_type}
-                    onChange={(e) => setConnector({ ...connector, auth_type: e.target.value, auth_config: {} })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="none">None</option>
-                    <option value="api_key">API Key</option>
-                    <option value="bearer">Bearer Token</option>
-                    <option value="basic">Basic Auth</option>
-                    <option value="oauth">OAuth 2.0</option>
-                  </select>
-                </div>
-
-                {/* Auth Config Fields */}
-                {connector.auth_type === 'api_key' && (
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Key Name (Header)
-                      </label>
-                      <input
-                        type="text"
-                        value={connector.auth_config.key_name || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, key_name: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="X-API-Key"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        API Key Value
-                      </label>
-                      <input
-                        type="password"
-                        value={connector.auth_config.key_value || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, key_value: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="Enter API key..."
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {connector.auth_type === 'bearer' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Bearer Token
-                    </label>
-                    <input
-                      type="password"
-                      value={connector.auth_config.token || ''}
-                      onChange={(e) => setConnector({
-                        ...connector,
-                        auth_config: { ...connector.auth_config, token: e.target.value }
-                      })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                      placeholder="Enter bearer token..."
-                    />
-                  </div>
-                )}
-
-                {connector.auth_type === 'basic' && (
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        value={connector.auth_config.username || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, username: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="Username"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        value={connector.auth_config.password || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, password: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="Password"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {connector.auth_type === 'oauth' && (
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Client ID
-                      </label>
-                      <input
-                        type="text"
-                        value={connector.auth_config.client_id || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, client_id: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="Client ID"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Client Secret
-                      </label>
-                      <input
-                        type="password"
-                        value={connector.auth_config.client_secret || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, client_secret: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="Client Secret"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Token URL
-                      </label>
-                      <input
-                        type="url"
-                        value={connector.auth_config.token_url || ''}
-                        onChange={(e) => setConnector({
-                          ...connector,
-                          auth_config: { ...connector.auth_config, token_url: e.target.value }
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        placeholder="https://oauth.example.com/token"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Headers */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                  <Key className="w-4 h-4" />
-                  Request Headers
-                </h3>
-                <button
-                  onClick={addHeader}
-                  className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Header
-                </button>
-              </div>
-
-              <div className="space-y-2">
-                {Object.entries(connector.headers).map(([key, value]) => (
-                  <div key={key} className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={key}
-                      disabled
-                      className="flex-1 px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg"
-                    />
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) => updateHeader(key, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                      placeholder="Header value"
-                    />
-                    <button
-                      onClick={() => removeHeader(key)}
-                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-                {Object.keys(connector.headers).length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-2">
-                    No custom headers configured
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Endpoints */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                  <Send className="w-4 h-4" />
-                  Endpoints
-                </h3>
-                <button
-                  onClick={addEndpoint}
-                  className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Endpoint
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {connector.endpoints.map((endpoint, index) => (
-                  <div key={index} className="bg-white rounded-lg p-4 border border-gray-200">
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2">
-                        <select
-                          value={endpoint.method || 'GET'}
-                          onChange={(e) => updateEndpoint(index, 'method', e.target.value)}
-                          className="w-28 px-3 py-2 border border-gray-300 rounded-lg"
-                        >
-                          <option value="GET">GET</option>
-                          <option value="POST">POST</option>
-                          <option value="PUT">PUT</option>
-                          <option value="DELETE">DELETE</option>
-                          <option value="PATCH">PATCH</option>
-                        </select>
-                        <input
-                          type="text"
-                          value={endpoint.path || ''}
-                          onChange={(e) => updateEndpoint(index, 'path', e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                          placeholder="/api/endpoint"
-                        />
-                        <button
-                          onClick={() => testEndpoint(endpoint)}
-                          disabled={isTesting}
-                          className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50"
-                          title="Test endpoint"
-                        >
-                          <Play className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => removeEndpoint(index)}
-                          className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <input
-                        type="text"
-                        value={endpoint.description || ''}
-                        onChange={(e) => updateEndpoint(index, 'description', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                        placeholder="Endpoint description..."
-                      />
-                    </div>
-                  </div>
-                ))}
-                {connector.endpoints.length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-4">
-                    No endpoints configured. Add an endpoint to get started.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Test Result */}
-            {testResult && (
-              <div className={`rounded-lg p-4 border ${
-                testResult.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
-              }`}>
-                <div className="flex items-start gap-3">
-                  {testResult.success ? (
-                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  ) : (
-                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                  )}
-                  <div className="flex-1">
-                    <h4 className={`font-semibold ${
-                      testResult.success ? 'text-green-900' : 'text-red-900'
-                    } mb-2`}>
-                      {testResult.success ? 'Test Successful' : 'Test Failed'}
-                    </h4>
-                    {testResult.success && (
-                      <div className="space-y-2 text-sm">
-                        <p className="text-green-800">
-                          Status: {testResult.status_code} ({testResult.elapsed_ms?.toFixed(0)}ms)
-                        </p>
-                        <div className="bg-white rounded p-3 border border-green-200">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium text-gray-700">Response:</span>
-                            <button
-                              onClick={() => {
-                                navigator.clipboard.writeText(JSON.stringify(testResult.data, null, 2));
-                                alert('Copied to clipboard!');
-                              }}
-                              className="text-blue-600 hover:text-blue-700"
-                              title="Copy response"
-                            >
-                              <Copy className="w-4 h-4" />
-                            </button>
-                          </div>
-                          <pre className="text-xs text-gray-600 overflow-x-auto max-h-48">
-                            {JSON.stringify(testResult.data, null, 2)}
-                          </pre>
+                  <h3 className="text-lg font-semibold mb-3">Templates</h3>
+                  <div className="space-y-2">
+                    {templates.map((template) => (
+                      <div
+                        key={template.id}
+                        onClick={() => loadTemplate(template)}
+                        className="p-3 border rounded-lg hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all"
+                      >
+                        <div className="font-medium text-sm">{template.name}</div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {template.description}
+                        </div>
+                        <div className="text-xs text-blue-600 mt-1">
+                          {template.category}
                         </div>
                       </div>
-                    )}
-                    {!testResult.success && (
-                      <p className="text-sm text-red-800">
-                        {testResult.error || 'Unknown error occurred'}
-                      </p>
-                    )}
+                    ))}
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
+              ) : (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Basic Info</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={connector.name}
+                        onChange={(e) => setConnector({ ...connector, name: e.target.value })}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        placeholder="e.g., Stripe Payment"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Description
+                      </label>
+                      <textarea
+                        value={connector.description}
+                        onChange={(e) => setConnector({ ...connector, description: e.target.value })}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        rows="3"
+                        placeholder="What does this connector do?"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Category
+                      </label>
+                      <select
+                        value={connector.category}
+                        onChange={(e) => setConnector({ ...connector, category: e.target.value })}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="payment">Payment</option>
+                        <option value="communication">Communication</option>
+                        <option value="storage">Storage</option>
+                        <option value="ai">AI</option>
+                        <option value="custom">Custom</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={saveConnector}
-            disabled={isSaving || !connector.name || !connector.base_url}
-            className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <Save className="w-4 h-4" />
-            {isSaving ? 'Saving...' : 'Save Connector'}
-          </button>
+            {/* Right: Configuration */}
+            <div className="col-span-2">
+              {/* Tabs */}
+              <div className="flex border-b mb-4">
+                {['request', 'auth', 'response', 'test'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-2 font-medium capitalize ${
+                      activeTab === tab
+                        ? 'border-b-2 border-blue-600 text-blue-600'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+
+              {/* Request Tab */}
+              {activeTab === 'request' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-4 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Method
+                      </label>
+                      <select
+                        value={connector.config.method}
+                        onChange={(e) => setConnector({
+                          ...connector,
+                          config: { ...connector.config, method: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="PATCH">PATCH</option>
+                        <option value="DELETE">DELETE</option>
+                      </select>
+                    </div>
+                    <div className="col-span-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        URL *
+                      </label>
+                      <input
+                        type="text"
+                        value={connector.config.url}
+                        onChange={(e) => setConnector({
+                          ...connector,
+                          config: { ...connector.config, url: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        placeholder="https://api.example.com/endpoint"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Use ${'{variable}'} for dynamic values
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Headers */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Headers
+                      </label>
+                      <button
+                        onClick={addHeader}
+                        className="text-xs text-blue-600 hover:text-blue-700"
+                      >
+                        <Plus size={14} className="inline" /> Add Header
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      {Object.entries(connector.config.headers).map(([key, value]) => (
+                        <div key={key} className="flex gap-2">
+                          <input
+                            type="text"
+                            value={key}
+                            disabled
+                            className="w-1/3 px-3 py-2 border rounded-lg bg-gray-50"
+                          />
+                          <input
+                            type="text"
+                            value={value}
+                            onChange={(e) => setConnector({
+                              ...connector,
+                              config: {
+                                ...connector.config,
+                                headers: { ...connector.config.headers, [key]: e.target.value }
+                              }
+                            })}
+                            className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Value"
+                          />
+                          <button
+                            onClick={() => removeHeader(key)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  {['POST', 'PUT', 'PATCH'].includes(connector.config.method) && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Request Body (JSON)
+                      </label>
+                      <textarea
+                        value={typeof connector.config.body === 'string'
+                          ? connector.config.body
+                          : JSON.stringify(connector.config.body, null, 2)}
+                        onChange={(e) => {
+                          try {
+                            const parsed = JSON.parse(e.target.value);
+                            setConnector({
+                              ...connector,
+                              config: { ...connector.config, body: parsed }
+                            });
+                          } catch {
+                            setConnector({
+                              ...connector,
+                              config: { ...connector.config, body: e.target.value }
+                            });
+                          }
+                        }}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                        rows="8"
+                        placeholder='{\n  "key": "value"\n}'
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Auth Tab */}
+              {activeTab === 'auth' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Authentication Type
+                    </label>
+                    <select
+                      value={connector.config.auth.type}
+                      onChange={(e) => setConnector({
+                        ...connector,
+                        config: {
+                          ...connector.config,
+                          auth: { type: e.target.value, config: {} }
+                        }
+                      })}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="none">None</option>
+                      <option value="bearer">Bearer Token</option>
+                      <option value="api_key">API Key</option>
+                      <option value="basic">Basic Auth</option>
+                      <option value="oauth2">OAuth 2.0</option>
+                    </select>
+                  </div>
+
+                  {connector.config.auth.type !== 'none' && (
+                    <div className="p-4 bg-blue-50 rounded-lg">
+                      <p className="text-sm text-gray-700">
+                        <Info size={16} className="inline mr-1" />
+                        Configure authentication in headers using workflow variables.
+                        Example: Authorization: Bearer ${'{api_token}'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Response Tab */}
+              {activeTab === 'response' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Response Mapping
+                    </label>
+                    <button
+                      onClick={addResponseMapping}
+                      className="text-xs text-blue-600 hover:text-blue-700"
+                    >
+                      <Plus size={14} className="inline" /> Add Mapping
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {connector.response_mapping.map((mapping, index) => (
+                      <div key={index} className="p-3 border rounded-lg">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Source Path (JSONPath)
+                            </label>
+                            <input
+                              type="text"
+                              value={mapping.source_path}
+                              onChange={(e) => updateResponseMapping(index, 'source_path', e.target.value)}
+                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+                              placeholder="$.data.id"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Target Variable
+                            </label>
+                            <input
+                              type="text"
+                              value={mapping.target_variable}
+                              onChange={(e) => updateResponseMapping(index, 'target_variable', e.target.value)}
+                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+                              placeholder="user_id"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Type
+                            </label>
+                            <select
+                              value={mapping.type}
+                              onChange={(e) => updateResponseMapping(index, 'type', e.target.value)}
+                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+                            >
+                              <option value="string">String</option>
+                              <option value="number">Number</option>
+                              <option value="boolean">Boolean</option>
+                              <option value="array">Array</option>
+                              <option value="object">Object</option>
+                            </select>
+                          </div>
+                          <div className="flex items-end">
+                            <button
+                              onClick={() => removeResponseMapping(index)}
+                              className="w-full px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {connector.response_mapping.length === 0 && (
+                    <p className="text-sm text-gray-500 text-center py-8">
+                      No response mappings configured. Add mappings to extract data from API responses.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Test Tab */}
+              {activeTab === 'test' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Test Variables (JSON)
+                    </label>
+                    <textarea
+                      value={JSON.stringify(testVariables, null, 2)}
+                      onChange={(e) => {
+                        try {
+                          setTestVariables(JSON.parse(e.target.value));
+                        } catch {}
+                      }}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                      rows="6"
+                      placeholder='{\n  "api_key": "test-key",\n  "user_id": "123"\n}'
+                    />
+                  </div>
+
+                  {testResult && (
+                    <div className={`p-4 rounded-lg ${
+                      testResult.success ? 'bg-green-50' : 'bg-red-50'
+                    }`}>
+                      <div className="flex items-center mb-2">
+                        {testResult.success ? (
+                          <Check size={18} className="text-green-600 mr-2" />
+                        ) : (
+                          <X size={18} className="text-red-600 mr-2" />
+                        )}
+                        <span className={`font-medium ${
+                          testResult.success ? 'text-green-900' : 'text-red-900'
+                        }`}>
+                          {testResult.success ? 'Success' : 'Failed'}
+                        </span>
+                        {testResult.status_code && (
+                          <span className="ml-auto text-sm text-gray-600">
+                            Status: {testResult.status_code}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-2">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          Response:
+                        </label>
+                        <pre className="text-xs bg-white p-2 rounded border overflow-auto max-h-64">
+                          {JSON.stringify(testResult.response || testResult.error, null, 2)}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
