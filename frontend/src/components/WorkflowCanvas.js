@@ -823,6 +823,15 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 <span>Designer Capabilities</span>
               </button>
               <button
+                onClick={() => setShowVariablePanel(!showVariablePanel)}
+                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all font-medium"
+                data-testid="variables-btn"
+                title="Manage workflow variables"
+              >
+                <Variable className="w-4 h-4" />
+                <span>Variables</span>
+              </button>
+              <button
                 onClick={handleValidate}
                 className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all font-medium"
                 data-testid="validate-workflow-btn"
