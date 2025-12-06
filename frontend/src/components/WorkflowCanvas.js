@@ -1034,6 +1034,17 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                           Go to node
                         </button>
                       )}
+
+      {/* Export Loading Overlay */}
+      {isExporting && (
+        <div className="export-overlay">
+          <div className="text-center">
+            <div className="export-spinner mx-auto mb-4" />
+            <p className="text-white text-lg font-semibold">Exporting workflow...</p>
+          </div>
+        </div>
+      )}
+
       {/* Designer Capabilities Panel */}
       {showCapabilitiesPanel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
