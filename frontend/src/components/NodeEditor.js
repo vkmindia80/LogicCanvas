@@ -552,7 +552,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
 
         {/* Action Node */}
         {node.data.type === 'action' && (
-          <>
+          <div className="bg-white border-2 border-pink-200 rounded-lg p-4 shadow-sm space-y-4">
+            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Action Configuration</h3>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Action Type
