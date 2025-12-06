@@ -162,6 +162,24 @@ const CustomNode = ({ data, selected }) => {
 
   const nodeStyle = getNodeStyle();
 
+  // If config is not found, show a fallback error state
+  if (!config) {
+    return (
+      <div
+        className="relative px-4 py-3 rounded-xl border-2 border-red-500 bg-red-100 min-w-[160px]"
+        data-testid={`node-${data.type}`}
+      >
+        <div className="flex items-center space-x-2 text-red-700">
+          <AlertTriangle className="w-5 h-5" />
+          <div>
+            <div className="font-bold text-sm">Unknown Node Type</div>
+            <div className="text-xs mt-1">{data.type}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`
