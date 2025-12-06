@@ -14,15 +14,18 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
   const textareaRef = useRef(null);
   const autocompleteRef = useRef(null);
 
-  // Common expression patterns and examples
+  // Common expression patterns and examples - Enhanced
   const commonExpressions = [
-    { label: 'Greater than', template: '${variable} > value', example: '${amount} > 1000' },
-    { label: 'Less than', template: '${variable} < value', example: '${count} < 50' },
-    { label: 'Equals', template: '${variable} == value', example: '${status} == "approved"' },
-    { label: 'Not equals', template: '${variable} != value', example: '${type} != "guest"' },
-    { label: 'Contains text', template: '"text" in ${variable}', example: '"urgent" in ${priority}' },
-    { label: 'And condition', template: '${var1} and ${var2}', example: '${amount} > 1000 and ${approved} == true' },
-    { label: 'Or condition', template: '${var1} or ${var2}', example: '${urgent} == true or ${vip} == true' },
+    { label: 'Greater than', template: '${variable} > value', example: '${amount} > 1000', category: 'comparison' },
+    { label: 'Less than', template: '${variable} < value', example: '${count} < 50', category: 'comparison' },
+    { label: 'Equals', template: '${variable} == value', example: '${status} == "approved"', category: 'comparison' },
+    { label: 'Not equals', template: '${variable} != value', example: '${type} != "guest"', category: 'comparison' },
+    { label: 'Contains text', template: '"text" in ${variable}', example: '"urgent" in ${priority}', category: 'text' },
+    { label: 'And condition', template: '${var1} and ${var2}', example: '${amount} > 1000 and ${approved} == true', category: 'logical' },
+    { label: 'Or condition', template: '${var1} or ${var2}', example: '${urgent} == true or ${vip} == true', category: 'logical' },
+    { label: 'Between range', template: '${variable} >= min and ${variable} <= max', example: '${age} >= 18 and ${age} <= 65', category: 'comparison' },
+    { label: 'Is empty', template: '${variable} == "" or ${variable} == null', example: '${email} == "" or ${email} == null', category: 'validation' },
+    { label: 'Has value', template: '${variable} != "" and ${variable} != null', example: '${phone} != "" and ${phone} != null', category: 'validation' },
   ];
 
   // Operators and keywords for autocomplete
