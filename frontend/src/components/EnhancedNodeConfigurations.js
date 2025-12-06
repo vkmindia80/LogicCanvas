@@ -409,16 +409,23 @@ export const LoopConfig = ({
         </>
       )}
 
-      {isWhile && (
+      {(isWhile || isDoWhile) && (
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-2">
-            While Condition <span className="text-red-500">*</span>
+            {isWhile ? 'While Condition' : 'Do-While Condition'} <span className="text-red-500">*</span>
           </label>
           <ExpressionEditor
             value={whileCondition}
             onChange={setWhileCondition}
             variables={workflowVariables}
+            placeholder={isDoWhile ? "e.g., ${hasMoreData} === true" : "e.g., ${count} < 10"}
           />
+          {isDoWhile && (
+            <p className="text-xs text-indigo-600 mt-2 flex items-start space-x-1">
+              <span>💡</span>
+              <span>Do-While loops execute the body at least once before checking the condition</span>
+            </p>
+          )}
         </div>
       )}
 
