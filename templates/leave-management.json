@@ -1,0 +1,30 @@
+{
+  "id": "leave-management-template",
+  "name": "Leave Management",
+  "description": "Employee leave request with manager approval and calendar sync",
+  "category": "hr",
+  "tags": ["leave", "hr", "approval", "calendar"],
+  "complexity": "simple",
+  "setup_time": "~5 minutes",
+  "node_count": 8,
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "Request Leave", "type": "start"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 200}, "data": {"label": "Leave Request Form", "type": "form", "description": "Dates, type, reason"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 100, "y": 300}, "data": {"label": "Duration > 5 days?", "type": "decision"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 300, "y": 400}, "data": {"label": "HR Approval", "type": "approval"}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 100, "y": 500}, "data": {"label": "Manager Approval", "type": "approval"}},
+    {"id": "action-1", "type": "action", "position": {"x": 100, "y": 600}, "data": {"label": "Update Calendar", "type": "action"}},
+    {"id": "task-1", "type": "task", "position": {"x": 100, "y": 700}, "data": {"label": "Notify Team", "type": "task"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 800}, "data": {"label": "Leave Approved", "type": "end"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "target": "approval-1", "label": "yes"},
+    {"id": "e4", "source": "decision-1", "target": "approval-2", "label": "no"},
+    {"id": "e5", "source": "approval-1", "target": "approval-2"},
+    {"id": "e6", "source": "approval-2", "target": "action-1"},
+    {"id": "e7", "source": "action-1", "target": "task-1"},
+    {"id": "e8", "source": "task-1", "target": "end-1"}
+  ]
+}

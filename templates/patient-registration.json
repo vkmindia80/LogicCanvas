@@ -1,0 +1,32 @@
+{
+  "id": "patient-registration-template",
+  "name": "Patient Registration",
+  "description": "Healthcare patient registration with insurance verification and appointment scheduling",
+  "category": "healthcare",
+  "tags": ["healthcare", "patient", "registration", "medical"],
+  "complexity": "medium",
+  "setup_time": "~10 minutes",
+  "node_count": 9,
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "New Patient", "type": "start"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 200}, "data": {"label": "Patient Information", "type": "form"}},
+    {"id": "form-2", "type": "form", "position": {"x": 100, "y": 300}, "data": {"label": "Insurance Details", "type": "form"}},
+    {"id": "action-1", "type": "action", "position": {"x": 100, "y": 400}, "data": {"label": "Verify Insurance", "type": "action"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 100, "y": 500}, "data": {"label": "Insurance Valid?", "type": "decision"}},
+    {"id": "task-1", "type": "task", "position": {"x": 300, "y": 600}, "data": {"label": "Contact Patient", "type": "task"}},
+    {"id": "action-2", "type": "action", "position": {"x": 100, "y": 700}, "data": {"label": "Create Patient Record", "type": "action"}},
+    {"id": "task-2", "type": "task", "position": {"x": 100, "y": 800}, "data": {"label": "Schedule Appointment", "type": "task"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 900}, "data": {"label": "Registration Complete", "type": "end"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "form-2"},
+    {"id": "e3", "source": "form-2", "target": "action-1"},
+    {"id": "e4", "source": "action-1", "target": "decision-1"},
+    {"id": "e5", "source": "decision-1", "target": "task-1", "label": "no"},
+    {"id": "e6", "source": "decision-1", "target": "action-2", "label": "yes"},
+    {"id": "e7", "source": "task-1", "target": "end-1"},
+    {"id": "e8", "source": "action-2", "target": "task-2"},
+    {"id": "e9", "source": "task-2", "target": "end-1"}
+  ]
+}
