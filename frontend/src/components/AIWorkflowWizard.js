@@ -105,7 +105,13 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
                 <p className="text-purple-100 text-sm">Describe your process, we'll build the workflow</p>
               </div>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }} 
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition"
+            >
               <X className="w-6 h-6" />
             </button>
           </div>
