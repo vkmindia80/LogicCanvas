@@ -6633,6 +6633,283 @@ async def get_subprocess_tree(instance_id: str):
     return {"subprocess_tree": tree}
 
 
+# ========== PHASE 3.1: DATA TRANSFORMATION API ENDPOINTS ==========
+
+from transformation_engine import (
+    apply_transformation, 
+    get_function_metadata,
+    TRANSFORMATION_FUNCTIONS
+)
+
+
+@app.post("/api/transformations/test")
+async def test_transformation(request: Dict[str, Any]):
+    """
+    Test a transformation function with provided data
+    
+    Request body:
+    {
+        "function": "split",
+        "args": ["hello,world", ","],
+        "kwargs": {}
+    }
+    """
+    try:
+        function_name = request.get("function")
+        args = request.get("args", [])
+        kwargs = request.get("kwargs", {})
+        
+        if not function_name:
+            raise HTTPException(status_code=400, detail="Function name required")
+        
+        if function_name not in TRANSFORMATION_FUNCTIONS:
+            raise HTTPException(status_code=400, detail=f"Unknown function: {function_name}")
+        
+        result = apply_transformation(function_name, *args, **kwargs)
+        
+        return {
+            "success": True,
+            "function": function_name,
+            "input": {"args": args, "kwargs": kwargs},
+            "output": result,
+            "output_type": type(result).__name__
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "function": request.get("function"),
+            "input": {"args": request.get("args", []), "kwargs": request.get("kwargs", {})}
+        }
+
+
+@app.post("/api/transformations/apply")
+async def apply_transformations(request: Dict[str, Any]):
+    """
+    Apply multiple transformations in sequence
+    
+    Request body:
+    {
+        "data": {...},
+        "transformations": [
+            {"function": "split", "args": ["value", ","]},
+            {"function": "filter", "args": ["{previous_result}", "> 5"]}
+        ]
+    }
+    """
+    try:
+        data = request.get("data")
+        transformations = request.get("transformations", [])
+        
+        if not transformations:
+            return {"success": True, "result": data, "steps": []}
+        
+        result = data
+        steps = []
+        
+        for i, transform in enumerate(transformations):
+            function_name = transform.get("function")
+            args = transform.get("args", [])
+            kwargs = transform.get("kwargs", {})
+            
+            # Replace {previous_result} placeholder with actual result
+            args = [result if arg == "{previous_result}" else arg for arg in args]
+            
+            try:
+                result = apply_transformation(function_name, *args, **kwargs)
+                steps.append({
+                    "step": i + 1,
+                    "function": function_name,
+                    "success": True,
+                    "result": result
+                })
+            except Exception as e:
+                steps.append({
+                    "step": i + 1,
+                    "function": function_name,
+                    "success": False,
+                    "error": str(e)
+                })
+                return {
+                    "success": False,
+                    "error": f"Transformation failed at step {i + 1}: {str(e)}",
+                    "steps": steps,
+                    "partial_result": result
+                }
+        
+        return {
+            "success": True,
+            "result": result,
+            "steps": steps,
+            "transformation_count": len(transformations)
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+@app.get("/api/transformations/functions")
+async def get_transformation_functions():
+    """
+    Get list of all available transformation functions with metadata
+    """
+    try:
+        metadata = get_function_metadata()
+        
+        # Add function count summary
+        summary = {
+            "total_functions": sum(len(funcs) for funcs in metadata.values()),
+            "categories": list(metadata.keys()),
+            "category_counts": {category: len(funcs) for category, funcs in metadata.items()}
+        }
+        
+        return {
+            "success": True,
+            "summary": summary,
+            "functions": metadata
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching functions: {str(e)}")
+
+
+@app.post("/api/transformations/parse-json")
+async def parse_json_path(request: Dict[str, Any]):
+    """
+    Extract data using JSONPath expression
+    
+    Request body:
+    {
+        "data": {...},
+        "path": "$.users[*].name"
+    }
+    """
+    try:
+        data = request.get("data")
+        path = request.get("path")
+        
+        if not path:
+            raise HTTPException(status_code=400, detail="JSONPath expression required")
+        
+        result = apply_transformation("jsonpath", data, path)
+        
+        return {
+            "success": True,
+            "path": path,
+            "result": result,
+            "result_type": type(result).__name__
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "path": request.get("path")
+        }
+
+
+@app.post("/api/transformations/parse-xml")
+async def parse_xml(request: Dict[str, Any]):
+    """
+    Parse XML string to JSON
+    
+    Request body:
+    {
+        "xml": "<root>...</root>"
+    }
+    """
+    try:
+        xml_string = request.get("xml")
+        
+        if not xml_string:
+            raise HTTPException(status_code=400, detail="XML string required")
+        
+        result = apply_transformation("parse_xml", xml_string)
+        
+        return {
+            "success": True,
+            "result": result
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+@app.post("/api/transformations/parse-csv")
+async def parse_csv(request: Dict[str, Any]):
+    """
+    Parse CSV string to JSON array
+    
+    Request body:
+    {
+        "csv": "name,age\\nJohn,30\\nJane,25",
+        "delimiter": ",",
+        "has_header": true
+    }
+    """
+    try:
+        csv_string = request.get("csv")
+        delimiter = request.get("delimiter", ",")
+        has_header = request.get("has_header", True)
+        
+        if not csv_string:
+            raise HTTPException(status_code=400, detail="CSV string required")
+        
+        result = apply_transformation("parse_csv", csv_string, delimiter, has_header)
+        
+        return {
+            "success": True,
+            "result": result,
+            "row_count": len(result) if isinstance(result, list) else 0
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+@app.post("/api/transformations/to-csv")
+async def convert_to_csv(request: Dict[str, Any]):
+    """
+    Convert JSON array to CSV string
+    
+    Request body:
+    {
+        "data": [{...}, {...}],
+        "delimiter": ","
+    }
+    """
+    try:
+        data = request.get("data")
+        delimiter = request.get("delimiter", ",")
+        
+        if not data:
+            raise HTTPException(status_code=400, detail="Data required")
+        
+        result = apply_transformation("to_csv", data, delimiter)
+        
+        return {
+            "success": True,
+            "csv": result,
+            "row_count": len(data) if isinstance(data, list) else 0
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
