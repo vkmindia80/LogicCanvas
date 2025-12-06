@@ -321,6 +321,20 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
           }}
         />
       )}
+
+      {/* OAuth Flow Builder Modal */}
+      {showOAuthBuilder && (
+        <OAuthFlowBuilder
+          onClose={() => setShowOAuthBuilder(false)}
+        />
+      )}
+
+      {/* Webhook Manager Modal */}
+      {showWebhookManager && (
+        <WebhookManager
+          onClose={() => setShowWebhookManager(false)}
+        />
+      )}
     </>
   );
 };
