@@ -78,7 +78,7 @@ const iconMap = {
 
 const CustomNode = ({ data, selected }) => {
   const config = NODE_CONFIGS[data.type];
-  const IconComponent = iconMap[config.icon];
+  const IconComponent = config ? iconMap[config.icon] : null;
 
   // Execution state from data (if provided)
   const executionState = data.executionState; // 'running', 'completed', 'waiting', 'failed'
