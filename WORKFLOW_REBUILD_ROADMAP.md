@@ -126,7 +126,7 @@
   - Drag-and-drop data mapping interface (DataMappingPanel)
   - Expression builder with autocomplete (ExpressionEditor - already enhanced)
 
-#### 2.3 Visual Enhancements ✅ MOSTLY COMPLETE (90%)
+#### 2.3 Visual Enhancements ✅ COMPLETE (100%)
 - [x] **Improved Node Appearance**
   - Larger, more distinct node types (Salesforce-style)
   - Color-coded categories (8 categories)
