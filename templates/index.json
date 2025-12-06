@@ -326,6 +326,24 @@
       "name": "IT Support",
       "description": "Technical support and helpdesk processes",
       "icon": "headphones"
+    },
+    {
+      "id": "sales",
+      "name": "Sales",
+      "description": "Sales pipeline and opportunity management",
+      "icon": "trending-up"
+    },
+    {
+      "id": "operations",
+      "name": "Operations",
+      "description": "Operational and maintenance workflows",
+      "icon": "settings"
+    },
+    {
+      "id": "pmo",
+      "name": "PMO",
+      "description": "Project management and governance",
+      "icon": "briefcase"
     }
   ]
 }
