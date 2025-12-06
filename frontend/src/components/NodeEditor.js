@@ -429,33 +429,71 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
           </div>
         </div>
 
-        {/* Decision Node - Condition */}
+        {/* Decision Node - Enhanced with Visual Builder */}
         {resolvedNodeType === NODE_TYPES.DECISION && (
-          <div className="bg-white border-2 border-amber-200 rounded-lg p-4 shadow-sm">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Decision Logic</h3>
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Condition Expression <span className="text-red-500">*</span>
-              </label>
-              <ExpressionEditor
-                value={condition}
-                onChange={setCondition}
-                variables={{}}
-              />
-              <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-xs font-semibold text-blue-900 mb-1 flex items-center space-x-1">
-                  <Info className="w-3 h-3" />
-                  <span>Examples:</span>
-                </p>
-                <ul className="text-xs text-blue-800 space-y-1 ml-4">
-                  <li>• <code className="bg-blue-100 px-1 rounded">amount &gt; 1000</code> - Check if amount exceeds limit</li>
-                  <li>• <code className="bg-blue-100 px-1 rounded">status === "approved"</code> - Check exact status</li>
-                  <li>• <code className="bg-blue-100 px-1 rounded">priority === "high" && urgent === true</code> - Multiple conditions</li>
-                </ul>
-                <p className="text-xs text-blue-700 mt-2">
-                  💡 Use variables from previous nodes in your condition
-                </p>
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4 shadow-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="section-header font-bold text-amber-900 text-sm flex items-center space-x-2">
+                <span>Decision Logic</span>
+                <span className="text-xs bg-amber-500 text-white px-2 py-0.5 rounded-full">Enhanced</span>
+              </h3>
+              <div className="flex items-center space-x-2 bg-white rounded-lg p-1 border border-amber-200">
+                <button
+                  onClick={() => setConditionMode('visual')}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+                    conditionMode === 'visual'
+                      ? 'bg-amber-500 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-800'
+                  }`}
+                >
+                  🎨 Visual
+                </button>
+                <button
+                  onClick={() => setConditionMode('code')}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+                    conditionMode === 'code'
+                      ? 'bg-slate-700 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-800'
+                  }`}
+                >
+                  </> Code
+                </button>
               </div>
+            </div>
+            
+            <div>
+              {conditionMode === 'visual' ? (
+                <ConditionalBuilder
+                  value={condition}
+                  onChange={setCondition}
+                  variables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+                />
+              ) : (
+                <>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Condition Expression <span className="text-red-500">*</span>
+                  </label>
+                  <ExpressionEditor
+                    value={condition}
+                    onChange={setCondition}
+                    variables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
+                  />
+                  <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-xs font-semibold text-blue-900 mb-1 flex items-center space-x-1">
+                      <Info className="w-3 h-3" />
+                      <span>Examples:</span>
+                    </p>
+                    <ul className="text-xs text-blue-800 space-y-1 ml-4">
+                      <li>• <code className="bg-blue-100 px-1 rounded">amount &gt; 1000</code> - Check if amount exceeds limit</li>
+                      <li>• <code className="bg-blue-100 px-1 rounded">status === "approved"</code> - Check exact status</li>
+                      <li>• <code className="bg-blue-100 px-1 rounded">priority === "high" && urgent === true</code> - Multiple conditions</li>
+                    </ul>
+                    <p className="text-xs text-blue-700 mt-2">
+                      💡 Use variables from previous nodes in your condition
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
