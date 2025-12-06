@@ -646,15 +646,17 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
         />
 
         {/* AI Workflow Wizard */}
-        <AIWorkflowWizard
-          onClose={() => setShowAIWizard(false)}
-          onWorkflowCreated={(workflow) => {
-            onSelectWorkflow(workflow);
-            setShowAIWizard(false);
-            onNotify?.('AI-generated workflow created!', 'success');
-            loadWorkflows();
-          }}
-        />
+        {showAIWizard && (
+          <AIWorkflowWizard
+            onClose={() => setShowAIWizard(false)}
+            onWorkflowCreated={(workflow) => {
+              onSelectWorkflow(workflow);
+              setShowAIWizard(false);
+              onNotify?.('AI-generated workflow created!', 'success');
+              loadWorkflows();
+            }}
+          />
+        )}
       </div>
     </div>
   );
