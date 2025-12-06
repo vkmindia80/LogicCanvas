@@ -8,6 +8,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import os
 import uuid
+import json
+import requests
 from execution_engine import WorkflowExecutionEngine, ExpressionEvaluator
 from variable_manager import VariableManager, VariableType, VariableScope
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
