@@ -227,7 +227,7 @@ const TaskInbox = ({ onClose, onNotify }) => {
     if (diffHours < 0) return { status: 'overdue', color: 'text-red-500 bg-red-50', label: 'Overdue', icon: AlertTriangle };
     if (diffHours < 2) return { status: 'critical', color: 'text-orange-500 bg-orange-50', label: 'Critical', icon: AlertCircle };
     if (diffHours < 24) return { status: 'warning', color: 'text-yellow-600 bg-yellow-50', label: 'Due Soon', icon: Clock };
-    return { status: 'ok', color: 'text-green-500 bg-green-50', label: 'On Track', icon: CheckCircle };
+    return { status: 'ok', color: 'text-green-500 bg-green-50', label: 'On Track', icon: CheckCircleIcon };
   };
 
   const formatTimeRemaining = (dueDate) => {
