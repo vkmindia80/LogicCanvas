@@ -635,6 +635,12 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === NODE_TYPES.FORM && (
           <div className="bg-white border-2 border-indigo-200 rounded-lg p-4 shadow-sm">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Form Selection</h3>
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-indigo-800 flex items-start space-x-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Form nodes collect information from users. The workflow pauses here until the form is submitted.</span>
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Select Form <span className="text-red-500">*</span>
@@ -652,10 +658,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500 flex items-center space-x-1">
-                <Info className="w-3 h-3" />
-                <span>Form will be displayed to users at this step</span>
-              </p>
+              {!formId && (
+                <p className="mt-2 text-xs text-amber-700 flex items-center space-x-1 bg-amber-50 p-2 rounded">
+                  <Info className="w-3 h-3" />
+                  <span>Don't see your form? Create one in the Forms tab first</span>
+                </p>
+              )}
+              {formId && (
+                <p className="mt-2 text-xs text-green-700 flex items-center space-x-1 bg-green-50 p-2 rounded">
+                  ✅ <span>Form data will be available to subsequent nodes as variables</span>
+                </p>
+              )}
             </div>
           </div>
         )}
