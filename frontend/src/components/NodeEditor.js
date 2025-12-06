@@ -139,13 +139,16 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   };
 
   useEffect(() => {
-    if (node?.data?.type === NODE_TYPES.FORM) {
+    // Use resolved type for consistency
+    const currentType = node?.data?.type || node?.type;
+    
+    if (currentType === NODE_TYPES.FORM) {
       loadForms();
     }
-    if (node?.data?.type === NODE_TYPES.TASK) {
+    if (currentType === NODE_TYPES.TASK) {
       loadRolesAndUsers();
     }
-    if (node?.data?.type === NODE_TYPES.SUBPROCESS) {
+    if (currentType === NODE_TYPES.SUBPROCESS) {
       loadWorkflows();
     }
   }, [node]);
