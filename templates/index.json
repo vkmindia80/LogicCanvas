@@ -10,15 +10,7 @@
       "estimatedSetupTime": "10 minutes",
       "icon": "users",
       "file": "hr-onboarding.json",
-      "preview": "/templates/previews/hr-onboarding.png",
-      "features": [
-        "Manager approval workflow",
-        "Parallel IT and HR setup tasks",
-        "Director sign-off",
-        "Automated welcome email"
-      ],
-      "nodeCount": 12,
-      "useCases": ["New employee onboarding", "Contractor onboarding", "Intern programs"]
+      "nodeCount": 12
     },
     {
       "id": "invoice-approval",
@@ -30,15 +22,7 @@
       "estimatedSetupTime": "8 minutes",
       "icon": "dollar-sign",
       "file": "invoice-approval.json",
-      "preview": "/templates/previews/invoice-approval.png",
-      "features": [
-        "Amount-based conditional routing",
-        "Sequential multi-level approvals",
-        "Accounting system integration",
-        "Automated notifications"
-      ],
-      "nodeCount": 11,
-      "useCases": ["Invoice processing", "Expense reimbursement", "Payment approvals"]
+      "nodeCount": 11
     },
     {
       "id": "purchase-request",
@@ -50,15 +34,7 @@
       "estimatedSetupTime": "12 minutes",
       "icon": "shopping-cart",
       "file": "purchase-request.json",
-      "preview": "/templates/previews/purchase-request.png",
-      "features": [
-        "Budget availability check",
-        "Department head approval",
-        "Nested vendor selection subprocess",
-        "ERP system integration"
-      ],
-      "nodeCount": 12,
-      "useCases": ["Purchase requests", "Equipment procurement", "Software licenses"]
+      "nodeCount": 12
     },
     {
       "id": "contract-approval",
@@ -70,15 +46,7 @@
       "estimatedSetupTime": "10 minutes",
       "icon": "file-text",
       "file": "contract-approval.json",
-      "preview": "/templates/previews/contract-approval.png",
-      "features": [
-        "Parallel Legal and Finance review",
-        "Unanimous approval requirement",
-        "E-signature integration (DocuSign)",
-        "Contract repository storage"
-      ],
-      "nodeCount": 12,
-      "useCases": ["Vendor contracts", "Customer agreements", "Partnership contracts"]
+      "nodeCount": 12
     },
     {
       "id": "it-support-ticket",
@@ -90,15 +58,127 @@
       "estimatedSetupTime": "8 minutes",
       "icon": "headphones",
       "file": "it-support-ticket.json",
-      "preview": "/templates/previews/it-support-ticket.png",
-      "features": [
-        "Priority-based triage",
-        "SLA timer with escalation",
-        "Requester closure approval",
-        "Satisfaction survey automation"
-      ],
-      "nodeCount": 14,
-      "useCases": ["IT helpdesk tickets", "Bug reports", "Service requests"]
+      "nodeCount": 14
+    },
+    {
+      "id": "customer-onboarding",
+      "name": "Customer Onboarding Workflow",
+      "description": "Complete customer onboarding process with welcome email, account setup, and first purchase incentive",
+      "category": "Sales",
+      "tags": ["customer", "onboarding", "sales", "crm"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "user-plus",
+      "file": "customer-onboarding.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "expense-reimbursement",
+      "name": "Expense Reimbursement",
+      "description": "Employee expense reimbursement with receipt upload, manager approval, and payment processing",
+      "category": "Finance",
+      "tags": ["expense", "finance", "approval", "payment"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "receipt",
+      "file": "expense-reimbursement.json",
+      "nodeCount": 9
+    },
+    {
+      "id": "document-approval",
+      "name": "Document Approval Workflow",
+      "description": "Multi-level document review and approval process with version control",
+      "category": "General",
+      "tags": ["document", "approval", "review", "compliance"],
+      "complexity": "simple",
+      "estimatedSetupTime": "5 minutes",
+      "icon": "file-check",
+      "file": "document-approval.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "leave-management",
+      "name": "Leave Management",
+      "description": "Employee leave request with manager approval and calendar sync",
+      "category": "Human Resources",
+      "tags": ["leave", "hr", "approval", "calendar"],
+      "complexity": "simple",
+      "estimatedSetupTime": "5 minutes",
+      "icon": "calendar",
+      "file": "leave-management.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "vendor-onboarding",
+      "name": "Vendor Onboarding",
+      "description": "Complete vendor onboarding with compliance checks and contract setup",
+      "category": "Procurement",
+      "tags": ["vendor", "procurement", "compliance", "contract"],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "truck",
+      "file": "vendor-onboarding.json",
+      "nodeCount": 10
+    },
+    {
+      "id": "incident-response",
+      "name": "Incident Response",
+      "description": "IT incident management with priority routing and resolution tracking",
+      "category": "IT Support",
+      "tags": ["incident", "it", "support", "priority"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "alert-circle",
+      "file": "incident-response.json",
+      "nodeCount": 9
+    },
+    {
+      "id": "patient-registration",
+      "name": "Patient Registration",
+      "description": "Healthcare patient registration with insurance verification and appointment scheduling",
+      "category": "Healthcare",
+      "tags": ["healthcare", "patient", "registration", "medical"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "heart",
+      "file": "patient-registration.json",
+      "nodeCount": 9
+    },
+    {
+      "id": "quality-assurance",
+      "name": "Quality Assurance Review",
+      "description": "Product quality assurance with multi-stage testing and defect tracking",
+      "category": "Manufacturing",
+      "tags": ["quality", "qa", "testing", "manufacturing"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "check-circle",
+      "file": "quality-assurance.json",
+      "nodeCount": 10
+    },
+    {
+      "id": "marketing-campaign",
+      "name": "Marketing Campaign Launch",
+      "description": "End-to-end marketing campaign with content approval and multi-channel distribution",
+      "category": "Marketing",
+      "tags": ["marketing", "campaign", "content", "social-media"],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "megaphone",
+      "file": "marketing-campaign.json",
+      "nodeCount": 11
+    },
+    {
+      "id": "data-migration",
+      "name": "Data Migration Process",
+      "description": "Systematic data migration with validation, backup, and rollback capabilities",
+      "category": "IT",
+      "tags": ["data", "migration", "backup", "it"],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "database",
+      "file": "data-migration.json",
+      "nodeCount": 12
     }
   ],
   "categories": [
