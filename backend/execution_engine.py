@@ -1361,7 +1361,7 @@ class WorkflowExecutionEngine:
         return any(keyword in error_lower for keyword in retryable_keywords)
     
     def _update_instance_status(self, instance_id: str, status: str, error: Optional[str] = None) -> None:
-        """Update workflow instance status"""
+        """Update workflow instance status and notify parent if subprocess"""
         update_data: Dict[str, Any] = {
             "status": status,
             "updated_at": datetime.utcnow().isoformat(),
@@ -1376,6 +1376,10 @@ class WorkflowExecutionEngine:
             update_data["error_friendly"] = self._get_friendly_error_message(error)
 
         self.db["workflow_instances"].update_one({"id": instance_id}, {"$set": update_data})
+        
+        # Phase 3.1: If this is a subprocess, notify parent workflow
+        if status in ["completed", "failed"]:
+            self._notify_parent_of_subprocess_completion(instance_id)
     
     def _get_friendly_error_message(self, error: str) -> str:
         """Convert technical error messages to user-friendly messages"""
