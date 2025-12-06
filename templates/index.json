@@ -317,6 +317,114 @@
         "Compliance training",
         "Skill development"
       ]
+    },
+    {
+      "id": "patient-discharge",
+      "name": "Patient Discharge Workflow",
+      "description": "Streamlined patient discharge process with follow-up scheduling and care instructions",
+      "category": "Healthcare",
+      "tags": ["healthcare", "patient-care", "discharge", "medical-records"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "heart",
+      "file": "patient-discharge.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "student-enrollment",
+      "name": "Student Enrollment Workflow",
+      "description": "Complete student enrollment from application to class registration",
+      "category": "Education",
+      "tags": ["education", "enrollment", "registration"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "graduation-cap",
+      "file": "student-enrollment.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "production-order",
+      "name": "Production Order Workflow",
+      "description": "Manufacturing production order with resource allocation and quality checks",
+      "category": "Manufacturing",
+      "tags": ["manufacturing", "production", "quality"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "settings",
+      "file": "production-order.json",
+      "nodeCount": 6
+    },
+    {
+      "id": "return-processing",
+      "name": "Product Return Processing",
+      "description": "Customer product returns with inspection, refund, and inventory updates",
+      "category": "Retail",
+      "tags": ["retail", "returns", "refund", "customer-service"],
+      "complexity": "simple",
+      "estimatedSetupTime": "7 minutes",
+      "icon": "shopping-cart",
+      "file": "return-processing.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "property-showing",
+      "name": "Property Showing Workflow",
+      "description": "Schedule and manage property showings for buyers or renters",
+      "category": "Real Estate",
+      "tags": ["real-estate", "showing", "scheduling"],
+      "complexity": "simple",
+      "estimatedSetupTime": "7 minutes",
+      "icon": "home",
+      "file": "property-showing.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "shipment-tracking",
+      "name": "Shipment Tracking Workflow",
+      "description": "Track shipments from pickup to delivery with real-time updates",
+      "category": "Transportation & Logistics",
+      "tags": ["logistics", "shipping", "tracking", "delivery"],
+      "complexity": "simple",
+      "estimatedSetupTime": "7 minutes",
+      "icon": "truck",
+      "file": "shipment-tracking.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "loan-application",
+      "name": "Loan Application Workflow",
+      "description": "Process loan applications from submission to approval",
+      "category": "Banking & Finance",
+      "tags": ["banking", "loan", "credit", "approval"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "dollar-sign",
+      "file": "loan-application.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "medical-records-request",
+      "name": "Medical Records Request",
+      "description": "Process medical records requests with HIPAA compliance",
+      "category": "Healthcare",
+      "tags": ["healthcare", "records", "hipaa", "privacy"],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "heart",
+      "file": "medical-records-request.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "course-registration",
+      "name": "Course Registration Workflow",
+      "description": "Student course registration with prerequisite checks and capacity management",
+      "category": "Education",
+      "tags": ["education", "registration", "courses", "enrollment"],
+      "complexity": "simple",
+      "estimatedSetupTime": "7 minutes",
+      "icon": "book",
+      "file": "course-registration.json",
+      "nodeCount": 7
     }
   ],
   "categories": [
