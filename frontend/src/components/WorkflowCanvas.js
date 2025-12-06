@@ -1027,6 +1027,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             node={selectedNode}
             onUpdate={updateNode}
             onDelete={deleteNode}
+            onDuplicate={duplicateNode}
             onClose={() => setSelectedNode(null)}
           />
         </div>
