@@ -897,12 +897,14 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               style: { 
                 stroke: '#94a3b8', 
                 strokeWidth: 2.5,
+                strokeLinecap: 'round',
+                strokeLinejoin: 'round',
               },
               markerEnd: {
                 type: MarkerType.ArrowClosed,
                 color: '#64748b',
-                width: 20,
-                height: 20,
+                width: 22,
+                height: 22,
               },
             }}
             data-testid="workflow-canvas"
