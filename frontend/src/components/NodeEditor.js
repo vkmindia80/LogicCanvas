@@ -722,34 +722,26 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Headers (JSON)
-                  </label>
-                  <textarea
-                    value={headers}
-                    onChange={(e) => setHeaders(e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
-                    placeholder='{"Content-Type": "application/json"}'
-                    data-testid="action-headers"
-                  />
-                </div>
+                <KeyValueEditor
+                  value={headers}
+                  onChange={setHeaders}
+                  label="Request Headers"
+                  keyPlaceholder="Header name (e.g., Content-Type)"
+                  valuePlaceholder="Header value (e.g., application/json)"
+                  allowJSON={true}
+                  testId="action-headers"
+                />
 
                 {method !== 'GET' && (
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Body (JSON)
-                    </label>
-                    <textarea
-                      value={body}
-                      onChange={(e) => setBody(e.target.value)}
-                      rows={4}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
-                      placeholder='{"key": "value"}'
-                      data-testid="action-body"
-                    />
-                  </div>
+                  <KeyValueEditor
+                    value={body}
+                    onChange={setBody}
+                    label="Request Body"
+                    keyPlaceholder="Field name"
+                    valuePlaceholder="Field value (use ${variable} for dynamic)"
+                    allowJSON={true}
+                    testId="action-body"
+                  />
                 )}
 
                 <div>
