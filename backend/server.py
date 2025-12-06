@@ -2814,6 +2814,144 @@ async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
     }
 
 
+# ========== PHASE 3.2: ADVANCED LOOPING & BRANCHING ENDPOINTS ==========
+
+@app.get("/api/workflow-instances/{instance_id}/loop-status")
+async def get_loop_status(instance_id: str):
+    """Get current loop status and progress for a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    # Get loop context from instance variables
+    variables = instance.get("variables", {})
+    loop_contexts = []
+    
+    # Extract loop information from execution history
+    execution_history = instance.get("execution_history", [])
+    active_loops = {}
+    
+    for entry in execution_history:
+        node_type = entry.get("node_type", "")
+        if node_type in ["loop_for_each", "loop_while", "loop_do_while", "loop_repeat"]:
+            result = entry.get("result", {})
+            output = result.get("output", {})
+            loop_id = entry.get("node_id")
+            
+            if output:
+                active_loops[loop_id] = {
+                    "loop_id": loop_id,
+                    "loop_type": output.get("loop_type", node_type.replace("loop_", "")),
+                    "status": "active" if instance.get("status") == "running" else "completed",
+                    "current_iteration": variables.get(output.get("counter_variable", "loop_counter"), 0),
+                    "max_iterations": output.get("max_iterations", output.get("count", "unknown")),
+                    "total_items": output.get("total_iterations", output.get("count", 0)),
+                    "started_at": entry.get("timestamp")
+                }
+    
+    # Calculate progress percentage
+    for loop_id, loop_info in active_loops.items():
+        current = loop_info.get("current_iteration", 0)
+        total = loop_info.get("total_items", 0)
+        if total and total > 0:
+            loop_info["progress_percentage"] = min(100, (current / total) * 100)
+            loop_info["items_remaining"] = max(0, total - current)
+        else:
+            loop_info["progress_percentage"] = 0
+            loop_info["items_remaining"] = 0
+    
+    return {
+        "instance_id": instance_id,
+        "status": instance.get("status"),
+        "active_loops": list(active_loops.values()),
+        "loop_count": len(active_loops)
+    }
+
+@app.post("/api/workflow-instances/{instance_id}/loop/break")
+async def break_loop(instance_id: str, data: Dict[str, Any]):
+    """Manually break out of the current loop"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    if instance.get("status") != "running":
+        raise HTTPException(status_code=400, detail="Instance is not running")
+    
+    loop_id = data.get("loop_id")
+    reason = data.get("reason", "Manual break requested")
+    
+    # Add a break flag to the instance
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {
+            "loop_break_requested": True,
+            "loop_break_id": loop_id,
+            "loop_break_reason": reason,
+            "loop_break_timestamp": datetime.utcnow().isoformat()
+        }}
+    )
+    
+    return {
+        "message": "Loop break requested",
+        "instance_id": instance_id,
+        "loop_id": loop_id,
+        "reason": reason
+    }
+
+@app.get("/api/workflow-instances/{instance_id}/loop/statistics")
+async def get_loop_statistics(instance_id: str):
+    """Get detailed statistics for all loops in the workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    execution_history = instance.get("execution_history", [])
+    loop_stats = {}
+    
+    for entry in execution_history:
+        node_type = entry.get("node_type", "")
+        if node_type in ["loop_for_each", "loop_while", "loop_do_while", "loop_repeat"]:
+            node_id = entry.get("node_id")
+            result = entry.get("result", {})
+            output = result.get("output", {})
+            
+            if node_id not in loop_stats:
+                loop_stats[node_id] = {
+                    "loop_id": node_id,
+                    "loop_type": node_type.replace("loop_", ""),
+                    "total_iterations": 0,
+                    "successful_iterations": 0,
+                    "failed_iterations": 0,
+                    "breaks": 0,
+                    "continues": 0,
+                    "total_execution_time_ms": 0,
+                    "avg_iteration_time_ms": 0,
+                    "started_at": entry.get("timestamp")
+                }
+        
+        # Track break and continue
+        if node_type == "loop_break":
+            result = entry.get("result", {})
+            if result.get("break_loop"):
+                # Find the parent loop
+                for loop_id in loop_stats:
+                    loop_stats[loop_id]["breaks"] += 1
+                    break
+        
+        if node_type == "loop_continue":
+            result = entry.get("result", {})
+            if result.get("continue_loop"):
+                for loop_id in loop_stats:
+                    loop_stats[loop_id]["continues"] += 1
+                    break
+    
+    return {
+        "instance_id": instance_id,
+        "loop_statistics": list(loop_stats.values()),
+        "total_loops": len(loop_stats)
+    }
+
+
 # ========== PHASE 8 SPRINT 3: VARIABLE MANAGEMENT ENDPOINTS ==========
 
 @app.get("/api/instances/{instance_id}/variables")
