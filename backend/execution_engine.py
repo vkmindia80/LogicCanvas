@@ -848,6 +848,12 @@ class NodeExecutor:
             "create_record": self.execute_create_record_node,
             "update_record": self.execute_update_record_node,
             "delete_record": self.execute_delete_record_node,
+            # Phase 3.1: Data Transformation
+            "transform": self.execute_transform_node,
+            "filter": self.execute_filter_node,
+            "sort": self.execute_sort_node,
+            "aggregate": self.execute_aggregate_node,
+            "calculate": self.execute_calculate_node,
         }
 
         executor = executors.get(node_type)
