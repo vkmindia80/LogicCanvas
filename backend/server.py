@@ -1782,20 +1782,28 @@ async def get_at_risk_tasks():
 
 @app.post("/api/admin/generate-sample-data")
 async def generate_sample_data():
-    """Generate comprehensive sample data across the system for demo purposes.
-
-    This endpoint is idempotent-ish: it seeds core entities once and only
-    appends more workflows/instances/tasks on subsequent calls without
-    duplicating users/roles.
+    """Generate comprehensive sample data across ALL modules for demo purposes.
+    
+    Generates sample data for:
+    - Users & Roles
+    - Forms (multiple types)
+    - Workflows (with diverse node types)
+    - Workflow Instances
+    - Tasks & Approvals
+    - Form Submissions
+    - Notifications
+    - Audit Logs
+    - API Connectors
     """
-    now = datetime.utcnow().isoformat()
+    now = datetime.utcnow()
+    now_iso = now.isoformat()
 
-    # --- Seed users & roles (reuse existing demo users/roles) ---
-    # Users: admin/builder/approver already seeded via AUTO_USERS above.
-    # Ensure a few more execution users exist.
+    # ============ USERS & ROLES ============
     extra_users = [
         {"email": "requester@example.com", "name": "Requester User", "role": "builder"},
         {"email": "analyst@example.com", "name": "Analytics User", "role": "approver"},
+        {"email": "developer@example.com", "name": "Developer User", "role": "builder"},
+        {"email": "manager@example.com", "name": "Manager User", "role": "approver"},
     ]
     for u in extra_users:
         if not users_collection.find_one({"email": u["email"]}):
@@ -1806,19 +1814,20 @@ async def generate_sample_data():
                 "role": u["role"],
                 "password_hash": get_password_hash("password123"),
                 "workload": 0,
-                "created_at": now,
+                "created_at": now_iso,
             })
 
-    # Roles: ensure builder/approver/admin roles exist for UI RBAC demos
+    # Roles with comprehensive member lists
     base_roles = [
         {"name": "admin", "members": ["admin@example.com"]},
-        {"name": "builder", "members": ["builder@example.com", "requester@example.com"]},
-        {"name": "approver", "members": ["approver@example.com", "analyst@example.com"]},
+        {"name": "builder", "members": ["builder@example.com", "requester@example.com", "developer@example.com"]},
+        {"name": "approver", "members": ["approver@example.com", "analyst@example.com", "manager@example.com"]},
+        {"name": "finance", "members": ["analyst@example.com", "manager@example.com"]},
+        {"name": "hr", "members": ["approver@example.com", "manager@example.com"]},
     ]
     for r in base_roles:
         existing = roles_collection.find_one({"name": r["name"]})
         if existing:
-            # Merge members
             merged = sorted(list(set(existing.get("members", []) + r["members"])))
             roles_collection.update_one({"name": r["name"]}, {"$set": {"members": merged}})
         else:
@@ -1828,183 +1837,334 @@ async def generate_sample_data():
                 "members": r["members"],
             })
 
-    # --- Seed a couple of sample forms ---
-    if forms_collection.count_documents({}) == 0:
-        hiring_form_id = str(uuid.uuid4())
-        expense_form_id = str(uuid.uuid4())
-        forms_collection.insert_many([
-            {
-                "id": hiring_form_id,
-                "name": "Job Application Form",
-                "description": "Capture candidate details for the recruiting workflow.",
-                "fields": [
-                    {"id": "full_name", "label": "Full Name", "type": "text", "required": True},
-                    {"id": "email", "label": "Email", "type": "email", "required": True},
-                    {"id": "role", "label": "Role Applied For", "type": "text", "required": True},
-                    {"id": "experience", "label": "Years of Experience", "type": "number"},
-                ],
-                "tags": ["recruiting", "demo"],
-                "version": 1,
-                "created_at": now,
-                "updated_at": now,
-            },
-            {
-                "id": expense_form_id,
-                "name": "Expense Reimbursement Form",
-                "description": "Submit expenses for approval.",
-                "fields": [
-                    {"id": "employee", "label": "Employee Name", "type": "text", "required": True},
-                    {"id": "amount", "label": "Amount", "type": "number", "required": True},
-                    {"id": "category", "label": "Category", "type": "dropdown", "options": ["Travel", "Meals", "Office"], "required": True},
-                ],
-                "tags": ["finance", "demo"],
-                "version": 1,
-                "created_at": now,
-                "updated_at": now,
-            },
-        ])
+    # ============ FORMS ============
+    forms_to_create = []
+    
+    # Job Application Form
+    hiring_form_id = str(uuid.uuid4())
+    forms_to_create.append({
+        "id": hiring_form_id,
+        "name": "Job Application Form",
+        "description": "Capture candidate details for recruiting workflow",
+        "fields": [
+            {"id": "full_name", "label": "Full Name", "type": "text", "required": True},
+            {"id": "email", "label": "Email", "type": "email", "required": True},
+            {"id": "phone", "label": "Phone Number", "type": "text", "required": False},
+            {"id": "role", "label": "Role Applied For", "type": "text", "required": True},
+            {"id": "experience", "label": "Years of Experience", "type": "number", "required": True},
+            {"id": "resume", "label": "Resume URL", "type": "text", "required": False},
+        ],
+        "tags": ["recruiting", "hr", "demo"],
+        "version": 1,
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
 
-    # --- Seed a sample workflow with nodes & edges ---
-    sample_workflow = workflows_collection.find_one({"tags": {"$in": ["demo"]}})
-    if not sample_workflow:
-        wf_id = str(uuid.uuid4())
-        # Pick first form as attached form
-        form = forms_collection.find_one({}, {"_id": 0})
-        form_id = form["id"] if form else None
+    # Expense Reimbursement Form
+    expense_form_id = str(uuid.uuid4())
+    forms_to_create.append({
+        "id": expense_form_id,
+        "name": "Expense Reimbursement Form",
+        "description": "Submit expenses for approval",
+        "fields": [
+            {"id": "employee", "label": "Employee Name", "type": "text", "required": True},
+            {"id": "amount", "label": "Amount ($)", "type": "number", "required": True},
+            {"id": "category", "label": "Category", "type": "dropdown", "options": ["Travel", "Meals", "Office Supplies", "Software"], "required": True},
+            {"id": "receipt", "label": "Receipt URL", "type": "text", "required": False},
+            {"id": "description", "label": "Description", "type": "textarea", "required": True},
+        ],
+        "tags": ["finance", "expense", "demo"],
+        "version": 1,
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
 
-        nodes = [
-            {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "Start"}},
-            {
-                "id": "form-1",
-                "type": "form",
-                "position": {"x": 300, "y": 100},
-                "data": {"label": "Candidate Details", "formId": form_id},
-            },
-            {
-                "id": "task-1",
-                "type": "task",
-                "position": {"x": 500, "y": 100},
-                "data": {
-                    "label": "Initial Screening",
-                    "description": "Recruiter reviews application",
-                    "assignmentStrategy": "role",
-                    "assignmentRole": "builder",
-                    "priority": "medium",
-                    "dueInHours": 24,
-                },
-            },
-            {
-                "id": "approval-1",
-                "type": "approval",
-                "position": {"x": 700, "y": 100},
-                "data": {
-                    "label": "Hiring Manager Approval",
-                    "approvers": ["approver@example.com"],
-                    "approvalType": "single",
-                },
-            },
-            {"id": "end-1", "type": "end", "position": {"x": 900, "y": 100}, "data": {"label": "Hired"}},
-        ]
+    # Purchase Request Form
+    purchase_form_id = str(uuid.uuid4())
+    forms_to_create.append({
+        "id": purchase_form_id,
+        "name": "Purchase Request Form",
+        "description": "Request approval for purchases",
+        "fields": [
+            {"id": "requester", "label": "Requester Name", "type": "text", "required": True},
+            {"id": "item", "label": "Item Description", "type": "text", "required": True},
+            {"id": "vendor", "label": "Vendor", "type": "text", "required": True},
+            {"id": "amount", "label": "Amount ($)", "type": "number", "required": True},
+            {"id": "justification", "label": "Business Justification", "type": "textarea", "required": True},
+        ],
+        "tags": ["procurement", "finance", "demo"],
+        "version": 1,
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
 
-        edges = [
-            {"id": "e-start-form", "source": "start-1", "target": "form-1"},
-            {"id": "e-form-task", "source": "form-1", "target": "task-1"},
-            {"id": "e-task-approval", "source": "task-1", "target": "approval-1"},
-            {"id": "e-approval-end", "source": "approval-1", "target": "end-1"},
-        ]
+    # Feedback Form
+    feedback_form_id = str(uuid.uuid4())
+    forms_to_create.append({
+        "id": feedback_form_id,
+        "name": "Employee Feedback Form",
+        "description": "Collect employee feedback",
+        "fields": [
+            {"id": "employee_name", "label": "Employee Name", "type": "text", "required": True},
+            {"id": "department", "label": "Department", "type": "dropdown", "options": ["Engineering", "Sales", "Marketing", "HR", "Finance"], "required": True},
+            {"id": "rating", "label": "Overall Satisfaction (1-5)", "type": "number", "required": True},
+            {"id": "comments", "label": "Comments", "type": "textarea", "required": False},
+        ],
+        "tags": ["hr", "feedback", "demo"],
+        "version": 1,
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
 
-        workflows_collection.insert_one(
-            {
-                "id": wf_id,
-                "name": "Sample Recruiting Workflow",
-                "description": "End-to-end hiring example with form, task, and approval.",
-                "nodes": nodes,
-                "edges": edges,
-                "status": "published",
-                "version": 1,
-                "tags": ["recruiting", "demo"],
-                "created_at": now,
-                "updated_at": now,
-            }
-        )
-    else:
-        wf_id = sample_workflow["id"]
+    # Only insert forms if they don't exist
+    for form in forms_to_create:
+        if not forms_collection.find_one({"name": form["name"]}):
+            forms_collection.insert_one(form)
 
-    # --- Seed workflow instances, tasks, approvals, notifications ---
-    # Create a few instances in different states for analytics and inboxes
-    for i in range(3):
-        instance_id = str(uuid.uuid4())
-        status = "completed" if i == 0 else ("running" if i == 1 else "waiting")
-        started_at = datetime.utcnow() - timedelta(hours=48 - i * 12)
-        completed_at = started_at + timedelta(hours=4) if status == "completed" else None
+    # ============ WORKFLOWS ============
+    workflows_to_create = []
 
-        workflow_instances_collection.insert_one(
-            {
+    # Workflow 1: Recruiting Workflow (with Decision node)
+    recruiting_wf_id = str(uuid.uuid4())
+    workflows_to_create.append({
+        "id": recruiting_wf_id,
+        "name": "Employee Recruiting Workflow",
+        "description": "Complete hiring process with screening, interview, and approval",
+        "nodes": [
+            {"id": "start-1", "type": "start", "position": {"x": 100, "y": 150}, "data": {"label": "Start", "type": "start"}},
+            {"id": "form-1", "type": "form", "position": {"x": 250, "y": 150}, "data": {"label": "Job Application", "type": "form", "formId": hiring_form_id}},
+            {"id": "task-1", "type": "task", "position": {"x": 400, "y": 150}, "data": {"label": "Resume Screening", "type": "task", "description": "HR screens application", "assignmentStrategy": "role", "assignmentRole": "hr", "priority": "high", "dueInHours": 48}},
+            {"id": "decision-1", "type": "decision", "position": {"x": 550, "y": 150}, "data": {"label": "Qualified?", "type": "decision", "condition": "experience >= 2"}},
+            {"id": "task-2", "type": "task", "position": {"x": 700, "y": 100}, "data": {"label": "Schedule Interview", "type": "task", "description": "Coordinate interview", "assignmentStrategy": "role", "assignmentRole": "hr", "priority": "medium", "dueInHours": 24}},
+            {"id": "approval-1", "type": "approval", "position": {"x": 850, "y": 100}, "data": {"label": "Hiring Manager Approval", "type": "approval", "approvers": ["manager@example.com"], "approvalType": "single"}},
+            {"id": "email-1", "type": "email", "position": {"x": 700, "y": 200}, "data": {"label": "Rejection Email", "type": "email", "description": "Send rejection notification"}},
+            {"id": "end-1", "type": "end", "position": {"x": 1000, "y": 100}, "data": {"label": "Hired", "type": "end"}},
+            {"id": "end-2", "type": "end", "position": {"x": 850, "y": 200}, "data": {"label": "Rejected", "type": "end"}},
+        ],
+        "edges": [
+            {"id": "e1", "source": "start-1", "target": "form-1"},
+            {"id": "e2", "source": "form-1", "target": "task-1"},
+            {"id": "e3", "source": "task-1", "target": "decision-1"},
+            {"id": "e4", "source": "decision-1", "target": "task-2", "sourceHandle": "yes", "label": "Yes"},
+            {"id": "e5", "source": "decision-1", "target": "email-1", "sourceHandle": "no", "label": "No"},
+            {"id": "e6", "source": "task-2", "target": "approval-1"},
+            {"id": "e7", "source": "approval-1", "target": "end-1"},
+            {"id": "e8", "source": "email-1", "target": "end-2"},
+        ],
+        "status": "published",
+        "version": 1,
+        "tags": ["recruiting", "hr", "demo"],
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
+
+    # Workflow 2: Expense Approval Workflow (with parallel approvals)
+    expense_wf_id = str(uuid.uuid4())
+    workflows_to_create.append({
+        "id": expense_wf_id,
+        "name": "Expense Approval Workflow",
+        "description": "Multi-level expense approval process",
+        "nodes": [
+            {"id": "start-2", "type": "start", "position": {"x": 100, "y": 200}, "data": {"label": "Start", "type": "start"}},
+            {"id": "form-2", "type": "form", "position": {"x": 250, "y": 200}, "data": {"label": "Expense Form", "type": "form", "formId": expense_form_id}},
+            {"id": "decision-2", "type": "decision", "position": {"x": 400, "y": 200}, "data": {"label": "Amount > $1000?", "type": "decision", "condition": "amount > 1000"}},
+            {"id": "approval-2", "type": "approval", "position": {"x": 550, "y": 150}, "data": {"label": "Manager Approval", "type": "approval", "approvers": ["manager@example.com"], "approvalType": "single"}},
+            {"id": "approval-3", "type": "approval", "position": {"x": 700, "y": 150}, "data": {"label": "Finance Approval", "type": "approval", "approvers": ["analyst@example.com"], "approvalType": "single"}},
+            {"id": "task-3", "type": "task", "position": {"x": 550, "y": 250}, "data": {"label": "Auto Approve", "type": "task", "description": "Automatic approval for small amounts", "assignmentStrategy": "direct", "assignedTo": "analyst@example.com", "priority": "low", "dueInHours": 12}},
+            {"id": "end-3", "type": "end", "position": {"x": 850, "y": 200}, "data": {"label": "Processed", "type": "end"}},
+        ],
+        "edges": [
+            {"id": "e9", "source": "start-2", "target": "form-2"},
+            {"id": "e10", "source": "form-2", "target": "decision-2"},
+            {"id": "e11", "source": "decision-2", "target": "approval-2", "sourceHandle": "yes", "label": "Yes"},
+            {"id": "e12", "source": "decision-2", "target": "task-3", "sourceHandle": "no", "label": "No"},
+            {"id": "e13", "source": "approval-2", "target": "approval-3"},
+            {"id": "e14", "source": "approval-3", "target": "end-3"},
+            {"id": "e15", "source": "task-3", "target": "end-3"},
+        ],
+        "status": "published",
+        "version": 1,
+        "tags": ["finance", "expense", "demo"],
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
+
+    # Workflow 3: Purchase Request Workflow (with timer and API call)
+    purchase_wf_id = str(uuid.uuid4())
+    workflows_to_create.append({
+        "id": purchase_wf_id,
+        "name": "Purchase Request Workflow",
+        "description": "Purchase approval with timeout and notification",
+        "nodes": [
+            {"id": "start-3", "type": "start", "position": {"x": 100, "y": 180}, "data": {"label": "Start", "type": "start"}},
+            {"id": "form-3", "type": "form", "position": {"x": 250, "y": 180}, "data": {"label": "Purchase Request", "type": "form", "formId": purchase_form_id}},
+            {"id": "timer-1", "type": "timer", "position": {"x": 400, "y": 180}, "data": {"label": "Wait 1 Hour", "type": "timer", "timerType": "delay", "delayHours": 1}},
+            {"id": "approval-4", "type": "approval", "position": {"x": 550, "y": 180}, "data": {"label": "Procurement Approval", "type": "approval", "approvers": ["manager@example.com"], "approvalType": "single"}},
+            {"id": "api-1", "type": "api_call", "position": {"x": 700, "y": 180}, "data": {"label": "Update Inventory", "type": "api_call", "description": "Call inventory API"}},
+            {"id": "email-2", "type": "email", "position": {"x": 850, "y": 180}, "data": {"label": "Send Confirmation", "type": "email", "description": "Notify requester"}},
+            {"id": "end-4", "type": "end", "position": {"x": 1000, "y": 180}, "data": {"label": "Complete", "type": "end"}},
+        ],
+        "edges": [
+            {"id": "e16", "source": "start-3", "target": "form-3"},
+            {"id": "e17", "source": "form-3", "target": "timer-1"},
+            {"id": "e18", "source": "timer-1", "target": "approval-4"},
+            {"id": "e19", "source": "approval-4", "target": "api-1"},
+            {"id": "e20", "source": "api-1", "target": "email-2"},
+            {"id": "e21", "source": "email-2", "target": "end-4"},
+        ],
+        "status": "published",
+        "version": 1,
+        "tags": ["procurement", "demo"],
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    })
+
+    # Insert workflows if they don't exist
+    for wf in workflows_to_create:
+        if not workflows_collection.find_one({"name": wf["name"]}):
+            workflows_collection.insert_one(wf)
+
+    # ============ WORKFLOW INSTANCES, TASKS, APPROVALS ============
+    # Create instances for each workflow in various states
+    all_workflows = [recruiting_wf_id, expense_wf_id, purchase_wf_id]
+    statuses = ["completed", "running", "waiting", "running", "completed"]
+    
+    for wf_id in all_workflows:
+        for i, status in enumerate(statuses):
+            instance_id = str(uuid.uuid4())
+            started_at = now - timedelta(hours=72 - i * 15)
+            completed_at = started_at + timedelta(hours=6) if status == "completed" else None
+
+            workflow_instances_collection.insert_one({
                 "id": instance_id,
                 "workflow_id": wf_id,
                 "status": status,
                 "triggered_by": "sample_data",
                 "started_at": started_at.isoformat(),
-                "updated_at": (completed_at or datetime.utcnow()).isoformat(),
+                "updated_at": (completed_at or now).isoformat(),
                 "completed_at": completed_at.isoformat() if completed_at else None,
-                "current_node_id": "approval-1" if status != "completed" else "end-1",
-                "variables": {},
+                "current_node_id": f"task-{i+1}",
+                "variables": {"sample": True, "iteration": i},
                 "execution_history": [],
-                "execution_log": [],
+                "execution_log": [{"message": "Sample workflow instance", "timestamp": now_iso}],
                 "node_states": {},
-            }
-        )
+            })
 
-        # Create a task and approval tied to the instance
-        task_id = str(uuid.uuid4())
-        tasks_collection.insert_one(
-            {
+            # Create tasks
+            task_id = str(uuid.uuid4())
+            tasks_collection.insert_one({
                 "id": task_id,
                 "workflow_instance_id": instance_id,
-                "node_id": "task-1",
-                "title": "Initial Screening",
-                "description": "Review candidate application",
+                "node_id": f"task-{i+1}",
+                "title": f"Sample Task {i+1}",
+                "description": f"Sample task for demo purposes - Iteration {i+1}",
                 "assigned_to": "builder@example.com",
                 "assignment_strategy": "role",
                 "assignment_role": "builder",
-                "priority": "medium",
+                "priority": ["low", "medium", "high", "urgent"][i % 4],
                 "status": "completed" if status == "completed" else "pending",
                 "due_date": (started_at + timedelta(hours=24)).isoformat(),
                 "sla_hours": 24,
                 "created_at": started_at.isoformat(),
-                "updated_at": (completed_at or datetime.utcnow()).isoformat(),
-            }
-        )
+                "updated_at": (completed_at or now).isoformat(),
+            })
 
-        approval_id = str(uuid.uuid4())
-        approvals_collection.insert_one(
-            {
+            # Create approvals
+            approval_id = str(uuid.uuid4())
+            approvals_collection.insert_one({
                 "id": approval_id,
                 "workflow_instance_id": instance_id,
-                "node_id": "approval-1",
-                "title": "Hiring Manager Approval",
-                "description": "Approve or reject candidate",
-                "approvers": ["approver@example.com"],
-                "approval_type": "single",
+                "node_id": f"approval-{i+1}",
+                "title": f"Approval Request {i+1}",
+                "description": "Sample approval for demo",
+                "approvers": ["approver@example.com", "manager@example.com"],
+                "approval_type": ["single", "unanimous", "majority"][i % 3],
                 "status": "approved" if status == "completed" else "pending",
                 "decisions": [],
                 "created_at": started_at.isoformat(),
-                "updated_at": (completed_at or datetime.utcnow()).isoformat(),
-            }
-        )
+                "updated_at": (completed_at or now).isoformat(),
+            })
 
-        notifications_collection.insert_one(
-            {
+            # Create form submissions
+            form_submission_id = str(uuid.uuid4())
+            form_submissions_collection.insert_one({
+                "id": form_submission_id,
+                "form_id": hiring_form_id,
+                "workflow_instance_id": instance_id,
+                "submitted_by": "requester@example.com",
+                "data": {
+                    "full_name": f"Candidate {i+1}",
+                    "email": f"candidate{i+1}@example.com",
+                    "role": "Software Engineer",
+                    "experience": i + 2,
+                },
+                "submitted_at": started_at.isoformat(),
+            })
+
+            # Create notifications
+            notifications_collection.insert_one({
                 "id": str(uuid.uuid4()),
                 "user": "approver@example.com",
-                "type": "task_assigned",
-                "message": f"New approval request for instance {instance_id}",
-                "created_at": now,
-                "read": False,
-            }
-        )
+                "type": "approval_required",
+                "message": f"New approval request for workflow instance {instance_id[:8]}",
+                "created_at": now_iso,
+                "read": status == "completed",
+            })
 
-    return {"message": "Sample data generated successfully"}
+    # ============ AUDIT LOGS ============
+    audit_events = [
+        {"action": "workflow_created", "entity_type": "workflow", "entity_id": recruiting_wf_id, "user": "admin@example.com", "details": {"name": "Employee Recruiting Workflow"}},
+        {"action": "workflow_published", "entity_type": "workflow", "entity_id": expense_wf_id, "user": "builder@example.com", "details": {"version": 1}},
+        {"action": "form_created", "entity_type": "form", "entity_id": hiring_form_id, "user": "builder@example.com", "details": {"name": "Job Application Form"}},
+        {"action": "task_completed", "entity_type": "task", "entity_id": str(uuid.uuid4()), "user": "builder@example.com", "details": {"status": "completed"}},
+        {"action": "approval_granted", "entity_type": "approval", "entity_id": str(uuid.uuid4()), "user": "approver@example.com", "details": {"decision": "approved"}},
+    ]
+    
+    for event in audit_events:
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "timestamp": (now - timedelta(hours=24)).isoformat(),
+            "action": event["action"],
+            "entity_type": event["entity_type"],
+            "entity_id": event["entity_id"],
+            "user": event["user"],
+            "details": event["details"],
+        })
+
+    # ============ API CONNECTORS ============
+    connectors = [
+        {"name": "Slack Webhook", "type": "webhook", "description": "Send notifications to Slack", "config": {"url": "https://hooks.slack.com/services/example"}},
+        {"name": "GitHub API", "type": "rest", "description": "Integrate with GitHub", "config": {"base_url": "https://api.github.com", "auth_type": "bearer"}},
+        {"name": "Salesforce CRM", "type": "rest", "description": "Connect to Salesforce", "config": {"base_url": "https://api.salesforce.com", "auth_type": "oauth2"}},
+    ]
+    
+    for conn in connectors:
+        if not api_connectors_collection.find_one({"name": conn["name"]}):
+            api_connectors_collection.insert_one({
+                "id": str(uuid.uuid4()),
+                "name": conn["name"],
+                "type": conn["type"],
+                "description": conn["description"],
+                "config": conn["config"],
+                "enabled": True,
+                "created_at": now_iso,
+                "updated_at": now_iso,
+            })
+
+    return {
+        "message": "Comprehensive sample data generated successfully across all modules!",
+        "summary": {
+            "users": len(extra_users),
+            "roles": len(base_roles),
+            "forms": len(forms_to_create),
+            "workflows": len(workflows_to_create),
+            "workflow_instances": len(all_workflows) * len(statuses),
+            "tasks": len(all_workflows) * len(statuses),
+            "approvals": len(all_workflows) * len(statuses),
+            "audit_logs": len(audit_events),
+            "api_connectors": len(connectors),
+        }
+    }
 
     now_iso = now.isoformat()
     
