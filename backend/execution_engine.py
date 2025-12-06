@@ -1403,6 +1403,76 @@ class WorkflowExecutionEngine:
             return "The specified workflow could not be found. It may have been deleted."
         else:
             return "An error occurred. Please contact support if this persists."
+    
+    def _notify_parent_of_subprocess_completion(self, subprocess_instance_id: str) -> None:
+        """Notify parent workflow when subprocess completes (Phase 3.1)"""
+        try:
+            subprocess_instance = self.db["workflow_instances"].find_one(
+                {"id": subprocess_instance_id},
+                {"_id": 0}
+            )
+            
+            if not subprocess_instance:
+                return
+            
+            parent_instance_id = subprocess_instance.get("parent_instance_id")
+            if not parent_instance_id:
+                return  # Not a subprocess
+            
+            # Find the parent instance
+            parent_instance = self.db["workflow_instances"].find_one(
+                {"id": parent_instance_id},
+                {"_id": 0}
+            )
+            
+            if not parent_instance:
+                return
+            
+            # Find the subprocess node in parent that is waiting for this subprocess
+            parent_workflow_id = parent_instance.get("workflow_id")
+            parent_workflow = self.db["workflows"].find_one(
+                {"id": parent_workflow_id},
+                {"_id": 0}
+            )
+            
+            if not parent_workflow:
+                return
+            
+            # Look for waiting subprocess node
+            for node in parent_workflow.get("nodes", []):
+                if node.get("type") == "subprocess":
+                    # Check if this node is waiting for our subprocess
+                    node_state = parent_instance.get("node_states", {}).get(node["id"], {})
+                    if (node_state.get("status") == "waiting" and 
+                        node_state.get("waiting_for") == "subprocess" and
+                        node_state.get("subprocess_instance_id") == subprocess_instance_id):
+                        
+                        # Found the waiting node - prepare result data
+                        from subprocess_manager import SubprocessManager
+                        subprocess_manager = SubprocessManager(self.db)
+                        
+                        output_mapping = node_state.get("output_mapping", {})
+                        result_data = subprocess_manager.handle_subprocess_completion(
+                            subprocess_instance_id,
+                            parent_instance_id,
+                            node["id"],
+                            output_mapping
+                        )
+                        
+                        # Update parent instance variables with mapped outputs
+                        if result_data.get("mapped_outputs"):
+                            for parent_var, value in result_data["mapped_outputs"].items():
+                                self.db["workflow_instances"].update_one(
+                                    {"id": parent_instance_id},
+                                    {"$set": {f"variables.{parent_var}": value}}
+                                )
+                        
+                        # Resume parent execution from this node
+                        self.resume_execution(parent_instance_id, node["id"], result_data)
+                        break
+        
+        except Exception as e:
+            print(f"Error notifying parent of subprocess completion: {e}")
 
     def resume_execution(self, instance_id: str, node_id: str, result_data: Optional[Dict[str, Any]] = None) -> None:
         """Resume execution after waiting (task completed, approval given, form submitted)"""
