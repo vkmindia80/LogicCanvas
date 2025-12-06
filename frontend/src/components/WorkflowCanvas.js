@@ -83,9 +83,18 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isUndoRedoAction, setIsUndoRedoAction] = useState(false);
 
+  // New Sprint 2 features
+  const [snapToGrid, setSnapToGrid] = useState(true);
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [isExporting, setIsExporting] = useState(false);
+
   const reactFlowWrapper = useRef(null);
+  const reactFlowInstance = useRef(null);
   const nodeIdCounter = useRef(1);
   const autoSaveTimeoutRef = useRef(null);
+  
+  // Get React Flow instance
+  const { zoomIn, zoomOut, fitView, getZoom } = useReactFlow();
 
   // Sync local nodes/edges/name when the workflow prop changes
   useEffect(() => {
