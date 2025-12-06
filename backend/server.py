@@ -4547,6 +4547,218 @@ async def get_connector_templates():
                 {"source_path": "$.choices[0].message.content", "target_variable": "ai_response", "type": "string", "transform": "none"},
                 {"source_path": "$.usage.total_tokens", "target_variable": "tokens_used", "type": "number", "transform": "none"}
             ]
+        },
+        {
+            "id": "google-sheets-read",
+            "name": "Google Sheets - Read",
+            "description": "Read data from Google Sheets",
+            "category": "storage",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet_id}/values/${range}",
+                "headers": {
+                    "Authorization": "Bearer ${google_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "bearer", "config": {"token_variable": "google_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.values", "target_variable": "sheet_data", "type": "array", "transform": "none"},
+                {"source_path": "$.range", "target_variable": "data_range", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "google-sheets-write",
+            "name": "Google Sheets - Write",
+            "description": "Write data to Google Sheets",
+            "category": "storage",
+            "is_template": True,
+            "config": {
+                "method": "PUT",
+                "url": "https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet_id}/values/${range}?valueInputOption=RAW",
+                "headers": {
+                    "Authorization": "Bearer ${google_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "values": []
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "google_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.updatedCells", "target_variable": "cells_updated", "type": "number", "transform": "none"},
+                {"source_path": "$.updatedRange", "target_variable": "updated_range", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "stripe-customer",
+            "name": "Stripe - Create Customer",
+            "description": "Create a new customer in Stripe",
+            "category": "payment",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.stripe.com/v1/customers",
+                "headers": {
+                    "Authorization": "Bearer ${stripe_api_key}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "query_params": {},
+                "body": "email=${customer_email}&name=${customer_name}&description=${description}",
+                "auth": {"type": "bearer", "config": {"token_variable": "stripe_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "customer_id", "type": "string", "transform": "none"},
+                {"source_path": "$.email", "target_variable": "customer_email", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "stripe-invoice",
+            "name": "Stripe - Get Invoice",
+            "description": "Retrieve invoice details from Stripe",
+            "category": "payment",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://api.stripe.com/v1/invoices/${invoice_id}",
+                "headers": {
+                    "Authorization": "Bearer ${stripe_api_key}"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "bearer", "config": {"token_variable": "stripe_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "invoice_id", "type": "string", "transform": "none"},
+                {"source_path": "$.amount_due", "target_variable": "amount_due", "type": "number", "transform": "none"},
+                {"source_path": "$.status", "target_variable": "invoice_status", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "twilio-call",
+            "name": "Twilio - Make Call",
+            "description": "Initiate voice call via Twilio",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.twilio.com/2010-04-01/Accounts/${account_sid}/Calls.json",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "query_params": {},
+                "body": "To=${to_number}&From=${from_number}&Url=${twiml_url}",
+                "auth": {"type": "basic", "config": {"username_variable": "account_sid", "password_variable": "auth_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.sid", "target_variable": "call_sid", "type": "string", "transform": "none"},
+                {"source_path": "$.status", "target_variable": "call_status", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "slack-channel",
+            "name": "Slack - Create Channel",
+            "description": "Create new Slack channel",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://slack.com/api/conversations.create",
+                "headers": {
+                    "Authorization": "Bearer ${slack_bot_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "name": "${channel_name}",
+                    "is_private": False
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "slack_bot_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.ok", "target_variable": "success", "type": "boolean", "transform": "none"},
+                {"source_path": "$.channel.id", "target_variable": "channel_id", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "github-get-repo",
+            "name": "GitHub - Get Repository",
+            "description": "Get repository information",
+            "category": "custom",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://api.github.com/repos/${owner}/${repo}",
+                "headers": {
+                    "Authorization": "Bearer ${github_token}",
+                    "Accept": "application/vnd.github.v3+json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "bearer", "config": {"token_variable": "github_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.name", "target_variable": "repo_name", "type": "string", "transform": "none"},
+                {"source_path": "$.stargazers_count", "target_variable": "stars", "type": "number", "transform": "none"},
+                {"source_path": "$.html_url", "target_variable": "repo_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "github-create-pr",
+            "name": "GitHub - Create Pull Request",
+            "description": "Create pull request in repository",
+            "category": "custom",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.github.com/repos/${owner}/${repo}/pulls",
+                "headers": {
+                    "Authorization": "Bearer ${github_token}",
+                    "Accept": "application/vnd.github.v3+json",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "title": "${pr_title}",
+                    "body": "${pr_body}",
+                    "head": "${head_branch}",
+                    "base": "${base_branch}"
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "github_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.number", "target_variable": "pr_number", "type": "number", "transform": "none"},
+                {"source_path": "$.html_url", "target_variable": "pr_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "openai-embedding",
+            "name": "OpenAI - Create Embedding",
+            "description": "Generate embeddings using OpenAI",
+            "category": "ai",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/embeddings",
+                "headers": {
+                    "Authorization": "Bearer ${openai_api_key}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "model": "text-embedding-ada-002",
+                    "input": "${text_input}"
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "openai_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.data[0].embedding", "target_variable": "embedding_vector", "type": "array", "transform": "none"},
+                {"source_path": "$.usage.total_tokens", "target_variable": "tokens_used", "type": "number", "transform": "none"}
+            ]
         }
     ]
     return {"templates": templates, "count": len(templates)}
