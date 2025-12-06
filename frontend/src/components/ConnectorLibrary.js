@@ -86,6 +86,11 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
       case 'communication': return '📧';
       case 'storage': return '💾';
       case 'ai': return '🤖';
+      case 'crm': return '👥';
+      case 'project_management': return '📊';
+      case 'itsm': return '🔧';
+      case 'erp': return '🏢';
+      case 'database': return '🗄️';
       default: return '🔌';
     }
   };
