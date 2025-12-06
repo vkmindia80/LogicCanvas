@@ -35,7 +35,9 @@ import {
   Calculator,
   Cloud,
   Mail,
-  AlertTriangle
+  AlertTriangle,
+  Settings,
+  Info
 } from 'lucide-react';
 import { NODE_TYPES, NODE_CONFIGS } from '../../utils/nodeTypes';
 
