@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2 } from 'lucide-react';
+import { X, Save, Trash2, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { NODE_CONFIGS, NODE_TYPES } from '../utils/nodeTypes';
 import ExpressionEditor from './ExpressionEditor';
 
