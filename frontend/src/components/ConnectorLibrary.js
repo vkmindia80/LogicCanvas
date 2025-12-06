@@ -67,10 +67,14 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
     setShowBuilder(true);
   };
 
-  const filteredConnectors = connectors.filter(connector =>
-    connector.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    connector.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const displayItems = viewMode === 'saved' ? connectors : templates;
+  
+  const filteredItems = displayItems.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
 
   const getCategoryIcon = (category) => {
     switch (category) {
