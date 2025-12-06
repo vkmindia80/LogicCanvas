@@ -50,6 +50,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
   const [eventAction, setEventAction] = useState(node?.data?.eventAction || 'send');
   const [eventName, setEventName] = useState(node?.data?.eventName || '');
   const [eventPayload, setEventPayload] = useState(node?.data?.eventPayload ? JSON.stringify(node?.data?.eventPayload, null, 2) : '{}');
+  
+  // Collapsible sections state
+  const [sectionsExpanded, setSectionsExpanded] = useState({
+    basic: true,
+    advanced: false,
+    validation: false,
+  });
 
   useEffect(() => {
     if (node) {
