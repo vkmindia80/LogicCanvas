@@ -1,0 +1,37 @@
+{
+  "id": "marketing-campaign-template",
+  "name": "Marketing Campaign Launch",
+  "description": "End-to-end marketing campaign with content approval and multi-channel distribution",
+  "category": "marketing",
+  "tags": ["marketing", "campaign", "content", "social-media"],
+  "complexity": "complex",
+  "setup_time": "~15 minutes",
+  "node_count": 11,
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "Campaign Brief", "type": "start"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 200}, "data": {"label": "Campaign Details", "type": "form"}},
+    {"id": "task-1", "type": "task", "position": {"x": 100, "y": 300}, "data": {"label": "Create Content", "type": "task"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 100, "y": 400}, "data": {"label": "Creative Review", "type": "approval"}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 100, "y": 500}, "data": {"label": "Legal Approval", "type": "approval"}},
+    {"id": "parallel-1", "type": "parallel", "position": {"x": 100, "y": 600}, "data": {"label": "Multi-Channel Launch", "type": "parallel"}},
+    {"id": "action-1", "type": "action", "position": {"x": -50, "y": 700}, "data": {"label": "Email Campaign", "type": "action"}},
+    {"id": "action-2", "type": "action", "position": {"x": 150, "y": 700}, "data": {"label": "Social Media", "type": "action"}},
+    {"id": "action-3", "type": "action", "position": {"x": 350, "y": 700}, "data": {"label": "Paid Ads", "type": "action"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 100, "y": 800}, "data": {"label": "Campaign Live", "type": "merge"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 900}, "data": {"label": "Campaign Launched", "type": "end"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "task-1"},
+    {"id": "e3", "source": "task-1", "target": "approval-1"},
+    {"id": "e4", "source": "approval-1", "target": "approval-2"},
+    {"id": "e5", "source": "approval-2", "target": "parallel-1"},
+    {"id": "e6", "source": "parallel-1", "target": "action-1"},
+    {"id": "e7", "source": "parallel-1", "target": "action-2"},
+    {"id": "e8", "source": "parallel-1", "target": "action-3"},
+    {"id": "e9", "source": "action-1", "target": "merge-1"},
+    {"id": "e10", "source": "action-2", "target": "merge-1"},
+    {"id": "e11", "source": "action-3", "target": "merge-1"},
+    {"id": "e12", "source": "merge-1", "target": "end-1"}
+  ]
+}

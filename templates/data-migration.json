@@ -1,0 +1,39 @@
+{
+  "id": "data-migration-template",
+  "name": "Data Migration Process",
+  "description": "Systematic data migration with validation, backup, and rollback capabilities",
+  "category": "it",
+  "tags": ["data", "migration", "backup", "it"],
+  "complexity": "complex",
+  "setup_time": "~15 minutes",
+  "node_count": 12,
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "Migration Request", "type": "start"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 200}, "data": {"label": "Migration Plan", "type": "form"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 100, "y": 300}, "data": {"label": "Architecture Review", "type": "approval"}},
+    {"id": "task-1", "type": "task", "position": {"x": 100, "y": 400}, "data": {"label": "Create Backup", "type": "task"}},
+    {"id": "action-1", "type": "action", "position": {"x": 100, "y": 500}, "data": {"label": "Run Pre-Migration Tests", "type": "action"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 100, "y": 600}, "data": {"label": "Tests Passed?", "type": "decision"}},
+    {"id": "action-2", "type": "action", "position": {"x": 100, "y": 700}, "data": {"label": "Execute Migration", "type": "action"}},
+    {"id": "action-3", "type": "action", "position": {"x": 100, "y": 800}, "data": {"label": "Data Validation", "type": "action"}},
+    {"id": "decision-2", "type": "decision", "position": {"x": 100, "y": 900}, "data": {"label": "Validation OK?", "type": "decision"}},
+    {"id": "task-2", "type": "task", "position": {"x": 300, "y": 1000}, "data": {"label": "Rollback Migration", "type": "task"}},
+    {"id": "task-3", "type": "task", "position": {"x": 100, "y": 1100}, "data": {"label": "Update Documentation", "type": "task"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 1200}, "data": {"label": "Migration Complete", "type": "end"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "approval-1"},
+    {"id": "e3", "source": "approval-1", "target": "task-1"},
+    {"id": "e4", "source": "task-1", "target": "action-1"},
+    {"id": "e5", "source": "action-1", "target": "decision-1"},
+    {"id": "e6", "source": "decision-1", "target": "action-2", "label": "yes"},
+    {"id": "e7", "source": "decision-1", "target": "task-2", "label": "no"},
+    {"id": "e8", "source": "action-2", "target": "action-3"},
+    {"id": "e9", "source": "action-3", "target": "decision-2"},
+    {"id": "e10", "source": "decision-2", "target": "task-3", "label": "yes"},
+    {"id": "e11", "source": "decision-2", "target": "task-2", "label": "no"},
+    {"id": "e12", "source": "task-2", "target": "end-1"},
+    {"id": "e13", "source": "task-3", "target": "end-1"}
+  ]
+}
