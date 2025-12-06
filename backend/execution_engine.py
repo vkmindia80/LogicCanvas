@@ -654,6 +654,50 @@ class NodeExecutor:
             },
             "continue_loop": should_continue
         }
+    
+    # Phase 3.2: Enhanced Loop Management Methods
+    
+    def enter_loop(self, loop_id: str, loop_type: str) -> bool:
+        """Enter a new loop level - returns False if max nesting exceeded"""
+        if len(self.loop_stack) >= self.max_loop_nesting:
+            print(f"⚠️  Maximum loop nesting level ({self.max_loop_nesting}) exceeded!")
+            return False
+        
+        loop_context = {
+            "loop_id": loop_id,
+            "loop_type": loop_type,
+            "level": len(self.loop_stack),
+            "iteration": 0,
+            "start_time": datetime.utcnow().isoformat()
+        }
+        self.loop_stack.append(loop_context)
+        print(f"✅ Entered loop '{loop_id}' (type: {loop_type}, level: {loop_context['level']})")
+        return True
+    
+    def exit_loop(self, loop_id: str) -> None:
+        """Exit the current loop level"""
+        if self.loop_stack and self.loop_stack[-1]["loop_id"] == loop_id:
+            exited_loop = self.loop_stack.pop()
+            print(f"✅ Exited loop '{loop_id}' (completed {exited_loop['iteration']} iterations)")
+        else:
+            print(f"⚠️  Warning: Attempted to exit loop '{loop_id}' but it's not the current loop")
+    
+    def increment_loop_iteration(self) -> None:
+        """Increment the iteration count for the current loop"""
+        if self.loop_stack:
+            self.loop_stack[-1]["iteration"] += 1
+    
+    def get_current_loop_context(self) -> Optional[Dict[str, Any]]:
+        """Get the current loop context"""
+        return self.loop_stack[-1] if self.loop_stack else None
+    
+    def get_loop_nesting_level(self) -> int:
+        """Get current loop nesting level"""
+        return len(self.loop_stack)
+    
+    def is_in_loop(self) -> bool:
+        """Check if currently inside a loop"""
+        return len(self.loop_stack) > 0
 
     def execute_lookup_record_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute lookup record node - find record by criteria"""
