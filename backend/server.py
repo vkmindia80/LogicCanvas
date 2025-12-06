@@ -6295,6 +6295,204 @@ async def get_workflow_pattern_details(pattern_id: str):
     return pattern
 
 
+# ========== PHASE 3.1: ENHANCED SUB-WORKFLOW SUPPORT ==========
+
+@app.get("/api/workflow-components")
+async def get_workflow_components():
+    """Get list of reusable workflow components (Phase 3.1)"""
+    components = list(workflow_components_collection.find({}, {"_id": 0}))
+    return {"components": components, "count": len(components)}
+
+
+@app.post("/api/workflow-components")
+async def create_workflow_component(component_data: Dict[str, Any]):
+    """Create a new reusable workflow component (Phase 3.1)"""
+    component_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    component = {
+        "id": component_id,
+        "name": component_data.get("name", "New Component"),
+        "description": component_data.get("description", ""),
+        "category": component_data.get("category", "custom"),
+        "tags": component_data.get("tags", []),
+        "nodes": component_data.get("nodes", []),
+        "edges": component_data.get("edges", []),
+        "input_variables": component_data.get("input_variables", []),
+        "output_variables": component_data.get("output_variables", []),
+        "version": "1.0.0",
+        "created_at": now,
+        "updated_at": now,
+        "created_by": component_data.get("created_by", "system"),
+        "is_public": component_data.get("is_public", False),
+        "usage_count": 0
+    }
+    
+    workflow_components_collection.insert_one(component)
+    return {"message": "Component created", "component_id": component_id, "component": component}
+
+
+@app.get("/api/workflow-components/{component_id}")
+async def get_workflow_component(component_id: str):
+    """Get a specific workflow component (Phase 3.1)"""
+    component = workflow_components_collection.find_one({"id": component_id}, {"_id": 0})
+    if not component:
+        raise HTTPException(status_code=404, detail="Component not found")
+    
+    # Increment usage count
+    workflow_components_collection.update_one(
+        {"id": component_id},
+        {"$inc": {"usage_count": 1}}
+    )
+    
+    return component
+
+
+@app.put("/api/workflow-components/{component_id}")
+async def update_workflow_component(component_id: str, component_data: Dict[str, Any]):
+    """Update a workflow component (Phase 3.1)"""
+    existing = workflow_components_collection.find_one({"id": component_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Component not found")
+    
+    # Increment version
+    current_version = existing.get("version", "1.0.0")
+    version_parts = current_version.split(".")
+    version_parts[1] = str(int(version_parts[1]) + 1)
+    new_version = ".".join(version_parts)
+    
+    update_data = {
+        "name": component_data.get("name", existing.get("name")),
+        "description": component_data.get("description", existing.get("description")),
+        "category": component_data.get("category", existing.get("category")),
+        "tags": component_data.get("tags", existing.get("tags")),
+        "nodes": component_data.get("nodes", existing.get("nodes")),
+        "edges": component_data.get("edges", existing.get("edges")),
+        "input_variables": component_data.get("input_variables", existing.get("input_variables")),
+        "output_variables": component_data.get("output_variables", existing.get("output_variables")),
+        "version": new_version,
+        "updated_at": datetime.utcnow().isoformat()
+    }
+    
+    workflow_components_collection.update_one(
+        {"id": component_id},
+        {"$set": update_data}
+    )
+    
+    return {"message": "Component updated", "component_id": component_id, "version": new_version}
+
+
+@app.delete("/api/workflow-components/{component_id}")
+async def delete_workflow_component(component_id: str):
+    """Delete a workflow component (Phase 3.1)"""
+    result = workflow_components_collection.delete_one({"id": component_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Component not found")
+    
+    return {"message": "Component deleted", "component_id": component_id}
+
+
+@app.get("/api/workflows/{workflow_id}/versions")
+async def get_workflow_versions(workflow_id: str):
+    """Get all versions of a workflow for subprocess version management (Phase 3.1)"""
+    versions = list(workflow_versions_collection.find(
+        {"workflow_id": workflow_id},
+        {"_id": 0}
+    ).sort("version_number", -1))
+    
+    return {"workflow_id": workflow_id, "versions": versions, "count": len(versions)}
+
+
+@app.post("/api/workflows/{workflow_id}/use-as-subprocess")
+async def mark_workflow_as_subprocess(workflow_id: str, metadata: Dict[str, Any] = None):
+    """Mark a workflow as suitable for use as a subprocess (Phase 3.1)"""
+    if metadata is None:
+        metadata = {}
+    
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    update_data = {
+        "is_subprocess_compatible": True,
+        "subprocess_metadata": {
+            "input_schema": metadata.get("input_schema", {}),
+            "output_schema": metadata.get("output_schema", {}),
+            "required_inputs": metadata.get("required_inputs", []),
+            "expected_outputs": metadata.get("expected_outputs", []),
+            "max_execution_time": metadata.get("max_execution_time", 3600),
+            "can_run_in_parallel": metadata.get("can_run_in_parallel", True),
+            "marked_at": datetime.utcnow().isoformat()
+        }
+    }
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {"$set": update_data}
+    )
+    
+    return {
+        "message": "Workflow marked as subprocess-compatible",
+        "workflow_id": workflow_id,
+        "metadata": update_data["subprocess_metadata"]
+    }
+
+
+@app.get("/api/workflows/subprocess-compatible")
+async def get_subprocess_compatible_workflows():
+    """Get all workflows that can be used as subprocesses (Phase 3.1)"""
+    workflows = list(workflows_collection.find(
+        {"is_subprocess_compatible": True},
+        {"_id": 0, "id": 1, "name": 1, "description": 1, "subprocess_metadata": 1, "lifecycle_state": 1}
+    ))
+    
+    return {"workflows": workflows, "count": len(workflows)}
+
+
+@app.get("/api/workflow-instances/{instance_id}/subprocess-tree")
+async def get_subprocess_tree(instance_id: str):
+    """Get the complete subprocess execution tree for an instance (Phase 3.1)"""
+    
+    def build_tree(inst_id: str, depth: int = 0) -> Dict[str, Any]:
+        """Recursively build subprocess tree"""
+        if depth > 10:  # Prevent infinite recursion
+            return {"error": "Max depth exceeded"}
+        
+        instance = workflow_instances_collection.find_one({"id": inst_id}, {"_id": 0})
+        if not instance:
+            return {"error": "Instance not found"}
+        
+        # Get child instances
+        children = list(workflow_instances_collection.find(
+            {"parent_instance_id": inst_id},
+            {"_id": 0, "id": 1, "workflow_id": 1, "status": 1, "started_at": 1, "completed_at": 1, "nesting_level": 1}
+        ))
+        
+        # Build tree recursively
+        child_trees = []
+        for child in children:
+            child_tree = build_tree(child["id"], depth + 1)
+            child_trees.append(child_tree)
+        
+        workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0, "name": 1})
+        
+        return {
+            "instance_id": inst_id,
+            "workflow_id": instance["workflow_id"],
+            "workflow_name": workflow.get("name", "Unknown") if workflow else "Unknown",
+            "status": instance.get("status"),
+            "nesting_level": instance.get("nesting_level", 0),
+            "started_at": instance.get("started_at"),
+            "completed_at": instance.get("completed_at"),
+            "parent_instance_id": instance.get("parent_instance_id"),
+            "children": child_trees,
+            "child_count": len(child_trees)
+        }
+    
+    tree = build_tree(instance_id)
+    return {"subprocess_tree": tree}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
