@@ -22,7 +22,7 @@ import { ToastContainer } from './components/Toast';
 import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage';
 import ConnectorLibrary from './components/ConnectorLibrary';
-import DebugControlPanel from './components/DebugControlPanel';
+import DebugPanel from './components/DebugPanel';
 
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
