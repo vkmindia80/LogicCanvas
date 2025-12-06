@@ -297,6 +297,662 @@ async def delete_workflow(workflow_id: str):
     return {"message": "Workflow deleted successfully"}
 
 
+# ========== PHASE 8 SPRINT 3: LIFECYCLE MANAGEMENT ENDPOINTS ==========
+
+class LifecycleTransition(BaseModel):
+    comment: Optional[str] = None
+    changed_by: Optional[str] = "system"
+
+@app.post("/api/workflows/{workflow_id}/lifecycle/review")
+async def request_review(workflow_id: str, data: LifecycleTransition):
+    """Transition workflow from Draft to In Review"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state != "draft":
+        raise HTTPException(status_code=400, detail=f"Can only request review from draft state. Current state: {current_state}")
+    
+    now = datetime.utcnow().isoformat()
+    
+    # Initialize lifecycle_history if it doesn't exist
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    lifecycle_history.append({
+        "from_state": current_state,
+        "to_state": "in_review",
+        "changed_by": data.changed_by,
+        "comment": data.comment,
+        "timestamp": now
+    })
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "in_review",
+                "lifecycle_history": lifecycle_history,
+                "updated_at": now
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "lifecycle_transition",
+        "user": data.changed_by,
+        "details": {"from": current_state, "to": "in_review", "comment": data.comment},
+        "timestamp": now
+    })
+    
+    return {"message": "Workflow moved to review", "new_state": "in_review"}
+
+@app.post("/api/workflows/{workflow_id}/lifecycle/approve")
+async def approve_workflow(workflow_id: str, data: LifecycleTransition):
+    """Approve workflow and publish it"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state not in ["in_review", "draft"]:
+        raise HTTPException(status_code=400, detail=f"Can only approve from in_review or draft state. Current state: {current_state}")
+    
+    now = datetime.utcnow().isoformat()
+    
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    lifecycle_history.append({
+        "from_state": current_state,
+        "to_state": "published",
+        "changed_by": data.changed_by,
+        "comment": data.comment or "Workflow approved for publishing",
+        "timestamp": now
+    })
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "published",
+                "status": "published",  # Keep legacy status in sync
+                "lifecycle_history": lifecycle_history,
+                "published_at": now,
+                "published_by": data.changed_by,
+                "updated_at": now
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "lifecycle_transition",
+        "user": data.changed_by,
+        "details": {"from": current_state, "to": "published", "comment": data.comment},
+        "timestamp": now
+    })
+    
+    # Create notification for workflow owner
+    notifications_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "type": "workflow_published",
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "title": f"Workflow Published: {workflow.get('name')}",
+        "message": "Your workflow has been approved and published",
+        "read": False,
+        "created_at": now
+    })
+    
+    return {"message": "Workflow approved and published", "new_state": "published"}
+
+@app.post("/api/workflows/{workflow_id}/lifecycle/reject")
+async def reject_workflow(workflow_id: str, data: LifecycleTransition):
+    """Reject workflow and return to draft"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state != "in_review":
+        raise HTTPException(status_code=400, detail=f"Can only reject from in_review state. Current state: {current_state}")
+    
+    now = datetime.utcnow().isoformat()
+    
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    lifecycle_history.append({
+        "from_state": current_state,
+        "to_state": "draft",
+        "changed_by": data.changed_by,
+        "comment": data.comment or "Changes requested",
+        "timestamp": now
+    })
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "draft",
+                "status": "draft",  # Keep legacy status in sync
+                "lifecycle_history": lifecycle_history,
+                "updated_at": now
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "lifecycle_transition",
+        "user": data.changed_by,
+        "details": {"from": current_state, "to": "draft", "comment": data.comment},
+        "timestamp": now
+    })
+    
+    return {"message": "Workflow rejected, returned to draft", "new_state": "draft"}
+
+@app.post("/api/workflows/{workflow_id}/lifecycle/pause")
+async def pause_workflow(workflow_id: str, data: LifecycleTransition):
+    """Pause a published workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state != "published":
+        raise HTTPException(status_code=400, detail=f"Can only pause published workflows. Current state: {current_state}")
+    
+    now = datetime.utcnow().isoformat()
+    
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    lifecycle_history.append({
+        "from_state": current_state,
+        "to_state": "paused",
+        "changed_by": data.changed_by,
+        "comment": data.comment or "Workflow paused",
+        "timestamp": now
+    })
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "paused",
+                "status": "paused",  # Keep legacy status in sync
+                "lifecycle_history": lifecycle_history,
+                "paused_at": now,
+                "updated_at": now
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "lifecycle_transition",
+        "user": data.changed_by,
+        "details": {"from": current_state, "to": "paused", "comment": data.comment},
+        "timestamp": now
+    })
+    
+    return {"message": "Workflow paused", "new_state": "paused"}
+
+@app.post("/api/workflows/{workflow_id}/lifecycle/resume")
+async def resume_workflow(workflow_id: str, data: LifecycleTransition):
+    """Resume a paused workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state != "paused":
+        raise HTTPException(status_code=400, detail=f"Can only resume paused workflows. Current state: {current_state}")
+    
+    now = datetime.utcnow().isoformat()
+    
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    lifecycle_history.append({
+        "from_state": current_state,
+        "to_state": "published",
+        "changed_by": data.changed_by,
+        "comment": data.comment or "Workflow resumed",
+        "timestamp": now
+    })
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "published",
+                "status": "published",  # Keep legacy status in sync
+                "lifecycle_history": lifecycle_history,
+                "resumed_at": now,
+                "updated_at": now
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "lifecycle_transition",
+        "user": data.changed_by,
+        "details": {"from": current_state, "to": "published", "comment": data.comment},
+        "timestamp": now
+    })
+    
+    return {"message": "Workflow resumed", "new_state": "published"}
+
+@app.post("/api/workflows/{workflow_id}/lifecycle/archive")
+async def archive_workflow(workflow_id: str, data: LifecycleTransition):
+    """Archive a workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    
+    now = datetime.utcnow().isoformat()
+    
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    lifecycle_history.append({
+        "from_state": current_state,
+        "to_state": "archived",
+        "changed_by": data.changed_by,
+        "comment": data.comment or "Workflow archived",
+        "timestamp": now
+    })
+    
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "archived",
+                "status": "archived",  # Keep legacy status in sync
+                "lifecycle_history": lifecycle_history,
+                "archived_at": now,
+                "archived_by": data.changed_by,
+                "updated_at": now
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "lifecycle_transition",
+        "user": data.changed_by,
+        "details": {"from": current_state, "to": "archived", "comment": data.comment},
+        "timestamp": now
+    })
+    
+    return {"message": "Workflow archived", "new_state": "archived"}
+
+@app.get("/api/workflows/{workflow_id}/lifecycle/history")
+async def get_lifecycle_history(workflow_id: str):
+    """Get lifecycle history for a workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    lifecycle_history = workflow.get("lifecycle_history", [])
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    
+    return {
+        "workflow_id": workflow_id,
+        "current_state": current_state,
+        "history": lifecycle_history,
+        "history_count": len(lifecycle_history)
+    }
+
+# ========== VERSION MANAGEMENT & COMPARISON ENDPOINTS ==========
+
+@app.get("/api/workflows/{workflow_id}/versions")
+async def get_workflow_versions(workflow_id: str):
+    """Get all versions of a workflow"""
+    # Find all workflows with the same base ID or name pattern
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    # Get all versions (stored as version_history in the workflow document)
+    version_history = workflow.get("version_history", [])
+    
+    # If no version_history, create one from current state
+    if not version_history:
+        version_history = [{
+            "version": workflow.get("version", 1),
+            "created_at": workflow.get("updated_at", workflow.get("created_at")),
+            "created_by": workflow.get("updated_by", "system"),
+            "change_notes": "Initial version",
+            "snapshot": {
+                "nodes": workflow.get("nodes", []),
+                "edges": workflow.get("edges", []),
+                "name": workflow.get("name"),
+                "description": workflow.get("description"),
+                "tags": workflow.get("tags", [])
+            }
+        }]
+    
+    return {
+        "workflow_id": workflow_id,
+        "current_version": workflow.get("version", 1),
+        "versions": version_history,
+        "version_count": len(version_history)
+    }
+
+@app.get("/api/workflows/{workflow_id}/versions/{version}")
+async def get_workflow_version(workflow_id: str, version: int):
+    """Get a specific version of a workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    version_history = workflow.get("version_history", [])
+    
+    # Find the requested version
+    version_data = next((v for v in version_history if v.get("version") == version), None)
+    
+    if not version_data:
+        raise HTTPException(status_code=404, detail=f"Version {version} not found")
+    
+    return {
+        "workflow_id": workflow_id,
+        "version": version,
+        "version_data": version_data
+    }
+
+@app.post("/api/workflows/{workflow_id}/versions/compare")
+async def compare_workflow_versions(workflow_id: str, data: Dict[str, Any]):
+    """Compare two versions of a workflow"""
+    version_a = data.get("version_a", 1)
+    version_b = data.get("version_b", 2)
+    
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    version_history = workflow.get("version_history", [])
+    
+    # Get version snapshots
+    v_a_data = next((v for v in version_history if v.get("version") == version_a), None)
+    v_b_data = next((v for v in version_history if v.get("version") == version_b), None)
+    
+    if not v_a_data or not v_b_data:
+        raise HTTPException(status_code=404, detail="One or both versions not found")
+    
+    snapshot_a = v_a_data.get("snapshot", {})
+    snapshot_b = v_b_data.get("snapshot", {})
+    
+    # Calculate diff
+    diff = _calculate_workflow_diff(snapshot_a, snapshot_b)
+    
+    return {
+        "workflow_id": workflow_id,
+        "version_a": version_a,
+        "version_b": version_b,
+        "diff": diff,
+        "version_a_data": v_a_data,
+        "version_b_data": v_b_data
+    }
+
+def _calculate_workflow_diff(snapshot_a: Dict[str, Any], snapshot_b: Dict[str, Any]) -> Dict[str, Any]:
+    """Calculate differences between two workflow snapshots"""
+    diff = {
+        "metadata_changes": {},
+        "nodes_added": [],
+        "nodes_removed": [],
+        "nodes_modified": [],
+        "edges_added": [],
+        "edges_removed": []
+    }
+    
+    # Metadata changes
+    for key in ["name", "description", "tags"]:
+        val_a = snapshot_a.get(key)
+        val_b = snapshot_b.get(key)
+        if val_a != val_b:
+            diff["metadata_changes"][key] = {"from": val_a, "to": val_b}
+    
+    # Node changes
+    nodes_a = {n.get("id"): n for n in snapshot_a.get("nodes", [])}
+    nodes_b = {n.get("id"): n for n in snapshot_b.get("nodes", [])}
+    
+    # Nodes added
+    for node_id, node in nodes_b.items():
+        if node_id not in nodes_a:
+            diff["nodes_added"].append(node)
+    
+    # Nodes removed
+    for node_id, node in nodes_a.items():
+        if node_id not in nodes_b:
+            diff["nodes_removed"].append(node)
+    
+    # Nodes modified
+    for node_id in set(nodes_a.keys()) & set(nodes_b.keys()):
+        node_a = nodes_a[node_id]
+        node_b = nodes_b[node_id]
+        if node_a != node_b:
+            diff["nodes_modified"].append({
+                "id": node_id,
+                "before": node_a,
+                "after": node_b
+            })
+    
+    # Edge changes
+    edges_a = {e.get("id"): e for e in snapshot_a.get("edges", [])}
+    edges_b = {e.get("id"): e for e in snapshot_b.get("edges", [])}
+    
+    # Edges added
+    for edge_id, edge in edges_b.items():
+        if edge_id not in edges_a:
+            diff["edges_added"].append(edge)
+    
+    # Edges removed
+    for edge_id, edge in edges_a.items():
+        if edge_id not in edges_b:
+            diff["edges_removed"].append(edge)
+    
+    return diff
+
+@app.post("/api/workflows/{workflow_id}/versions/{version}/rollback")
+async def rollback_to_version(workflow_id: str, version: int, data: LifecycleTransition):
+    """Rollback workflow to a previous version"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    # Check if workflow is published - if so, need to create new version
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state == "published":
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot rollback published workflow directly. Please pause it first or create a new version."
+        )
+    
+    version_history = workflow.get("version_history", [])
+    target_version = next((v for v in version_history if v.get("version") == version), None)
+    
+    if not target_version:
+        raise HTTPException(status_code=404, detail=f"Version {version} not found")
+    
+    snapshot = target_version.get("snapshot", {})
+    now = datetime.utcnow().isoformat()
+    current_version = workflow.get("version", 1)
+    
+    # Create new version entry for the rollback
+    new_version = current_version + 1
+    version_history.append({
+        "version": new_version,
+        "created_at": now,
+        "created_by": data.changed_by,
+        "change_notes": data.comment or f"Rolled back to version {version}",
+        "is_rollback": True,
+        "rolled_back_from_version": current_version,
+        "rolled_back_to_version": version,
+        "snapshot": {
+            "nodes": workflow.get("nodes", []),
+            "edges": workflow.get("edges", []),
+            "name": workflow.get("name"),
+            "description": workflow.get("description"),
+            "tags": workflow.get("tags", [])
+        }
+    })
+    
+    # Apply the snapshot
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "nodes": snapshot.get("nodes", []),
+                "edges": snapshot.get("edges", []),
+                "name": snapshot.get("name", workflow.get("name")),
+                "description": snapshot.get("description", workflow.get("description")),
+                "tags": snapshot.get("tags", []),
+                "version": new_version,
+                "version_history": version_history,
+                "updated_at": now,
+                "updated_by": data.changed_by
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "version_rollback",
+        "user": data.changed_by,
+        "details": {
+            "from_version": current_version,
+            "to_version": version,
+            "new_version": new_version,
+            "comment": data.comment
+        },
+        "timestamp": now
+    })
+    
+    return {
+        "message": f"Workflow rolled back to version {version}",
+        "previous_version": current_version,
+        "rolled_back_to": version,
+        "new_version": new_version
+    }
+
+# ========== EDIT PROTECTION & GUARDRAILS ==========
+
+@app.post("/api/workflows/{workflow_id}/create-draft-version")
+async def create_draft_version(workflow_id: str, data: LifecycleTransition):
+    """Create a new draft version from a published workflow for editing"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    if current_state != "published":
+        raise HTTPException(status_code=400, detail="Can only create draft versions from published workflows")
+    
+    now = datetime.utcnow().isoformat()
+    current_version = workflow.get("version", 1)
+    new_version = current_version + 1
+    
+    # Save current state to version history
+    version_history = workflow.get("version_history", [])
+    version_history.append({
+        "version": current_version,
+        "created_at": workflow.get("updated_at", now),
+        "created_by": workflow.get("updated_by", "system"),
+        "change_notes": f"Published version {current_version}",
+        "snapshot": {
+            "nodes": workflow.get("nodes", []),
+            "edges": workflow.get("edges", []),
+            "name": workflow.get("name"),
+            "description": workflow.get("description"),
+            "tags": workflow.get("tags", [])
+        }
+    })
+    
+    # Update to draft state with new version
+    workflows_collection.update_one(
+        {"id": workflow_id},
+        {
+            "$set": {
+                "lifecycle_state": "draft",
+                "status": "draft",
+                "version": new_version,
+                "version_history": version_history,
+                "draft_from_published": True,
+                "previous_published_version": current_version,
+                "updated_at": now,
+                "updated_by": data.changed_by
+            }
+        }
+    )
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow",
+        "entity_id": workflow_id,
+        "action": "create_draft_version",
+        "user": data.changed_by,
+        "details": {
+            "from_version": current_version,
+            "new_version": new_version,
+            "comment": data.comment
+        },
+        "timestamp": now
+    })
+    
+    return {
+        "message": "Draft version created for editing",
+        "previous_version": current_version,
+        "new_version": new_version,
+        "lifecycle_state": "draft"
+    }
+
+@app.get("/api/workflows/{workflow_id}/can-edit")
+async def check_can_edit(workflow_id: str):
+    """Check if workflow can be edited directly or needs new version"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    current_state = workflow.get("lifecycle_state", workflow.get("status", "draft"))
+    can_edit_directly = current_state in ["draft", "in_review"]
+    needs_new_version = current_state in ["published", "paused"]
+    
+    # Check for active instances
+    active_instances = workflow_instances_collection.count_documents({
+        "workflow_id": workflow_id,
+        "status": {"$in": ["running", "waiting", "paused"]}
+    })
+    
+    return {
+        "workflow_id": workflow_id,
+        "current_state": current_state,
+        "can_edit_directly": can_edit_directly,
+        "needs_new_version": needs_new_version,
+        "active_instances": active_instances,
+        "warning": "Editing this workflow will create a new draft version. Active instances will continue on the current version." if needs_new_version else None
+    }
+
+
+
 # ========== WORKFLOW VALIDATION ENDPOINT ==========
 
 def _validate_workflow_document(workflow: Dict[str, Any]) -> List[Dict[str, Any]]:
