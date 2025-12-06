@@ -128,19 +128,21 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
         </div>
       )}
 
-      {/* Variable Helpers */}
+      {/* Variable Helpers - Enhanced */}
       {Object.keys(variables).length > 0 && (
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2">
-            Available Variables:
+        <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-4">
+          <label className="block text-xs font-semibold text-slate-700 mb-3 flex items-center space-x-2">
+            <span>Available Variables</span>
+            <span className="text-slate-500 font-normal">(click to insert)</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {Object.keys(variables).map((varName) => (
               <button
                 key={varName}
                 onClick={() => insertVariable(varName)}
-                className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded border border-blue-200 hover:bg-blue-100"
+                className="text-xs bg-white text-blue-700 px-3 py-2 rounded-lg border-2 border-blue-200 hover:bg-blue-50 hover:border-blue-400 transition-all font-mono font-semibold shadow-sm hover:shadow-md"
                 data-testid={`insert-variable-${varName}`}
+                title={`Insert ${varName} variable`}
               >
                 {'${' + varName + '}'}
               </button>
