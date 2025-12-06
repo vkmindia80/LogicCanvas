@@ -699,6 +699,28 @@ const AppShell = () => {
           }}
         />
       )}
+      <GettingStartedChecklist
+        isOpen={showGettingStarted}
+        onClose={() => setShowGettingStarted(false)}
+        onAction={(action) => {
+          switch (action) {
+            case 'tour':
+              setShowOnboarding(true);
+              break;
+            case 'wizard':
+              setShowQuickStartWizard(true);
+              break;
+            case 'template':
+              setShowTemplateLibrary(true);
+              break;
+            case 'videos':
+              addToast('Video tutorials coming soon!', 'info');
+              break;
+            default:
+              break;
+          }
+        }}
+      />
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
