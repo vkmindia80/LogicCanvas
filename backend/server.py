@@ -6634,6 +6634,143 @@ async def resume_from_subprocess(instance_id: str, data: Dict[str, Any]):
     }
 
 
+@app.post("/api/workflows/{workflow_id}/create-version-snapshot")
+async def create_version_snapshot(workflow_id: str, data: Dict[str, Any]):
+    """Create a version snapshot for subprocess pinning (Phase 3.1)"""
+    from subprocess_manager import SubprocessManager
+    subprocess_manager = SubprocessManager(db)
+    
+    version_number = data.get("version", "1.0.0")
+    comment = data.get("comment", "")
+    
+    try:
+        version_id = subprocess_manager.create_version_snapshot(
+            workflow_id=workflow_id,
+            version_number=version_number,
+            comment=comment
+        )
+        
+        return {
+            "message": "Version snapshot created",
+            "version_id": version_id,
+            "workflow_id": workflow_id,
+            "version": version_number
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@app.get("/api/workflows/{workflow_id}/versions/list")
+async def list_workflow_versions(workflow_id: str):
+    """List all version snapshots for a workflow (Phase 3.1)"""
+    versions = list(workflow_versions_collection.find(
+        {"workflow_id": workflow_id},
+        {"_id": 0}
+    ).sort("created_at", -1))
+    
+    return {
+        "workflow_id": workflow_id,
+        "versions": versions,
+        "count": len(versions)
+    }
+
+
+@app.post("/api/workflows/{workflow_id}/validate-subprocess")
+async def validate_subprocess_workflow(workflow_id: str, data: Dict[str, Any]):
+    """Validate if a workflow can be used as subprocess (Phase 3.1)"""
+    from subprocess_manager import SubprocessManager
+    subprocess_manager = SubprocessManager(db)
+    
+    version = data.get("version", "latest")
+    
+    validation = subprocess_manager.validate_subprocess_compatibility(workflow_id, version)
+    
+    return {
+        "workflow_id": workflow_id,
+        "version": version,
+        **validation
+    }
+
+
+@app.post("/api/workflow-components/from-selection")
+async def create_component_from_selection(data: Dict[str, Any]):
+    """Create reusable component from workflow selection (Phase 3.1)"""
+    component_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    component = {
+        "id": component_id,
+        "name": data.get("name", "New Component"),
+        "description": data.get("description", ""),
+        "category": data.get("category", "custom"),
+        "tags": data.get("tags", []),
+        "nodes": data.get("nodes", []),
+        "edges": data.get("edges", []),
+        "input_variables": data.get("input_variables", []),
+        "output_variables": data.get("output_variables", []),
+        "version": "1.0.0",
+        "created_at": now,
+        "updated_at": now,
+        "created_by": data.get("created_by", "system"),
+        "is_public": data.get("is_public", False),
+        "usage_count": 0,
+        "source_workflow_id": data.get("source_workflow_id"),
+        "thumbnail": data.get("thumbnail")
+    }
+    
+    workflow_components_collection.insert_one(component)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "workflow_component",
+        "entity_id": component_id,
+        "action": "created",
+        "details": {"name": component["name"], "category": component["category"]},
+        "timestamp": now
+    })
+    
+    return {
+        "message": "Component created successfully",
+        "component_id": component_id,
+        "component": component
+    }
+
+
+@app.get("/api/workflow-components/search")
+async def search_workflow_components(
+    query: Optional[str] = None,
+    category: Optional[str] = None,
+    tags: Optional[str] = None
+):
+    """Search and filter reusable components (Phase 3.1)"""
+    search_filter = {}
+    
+    if query:
+        search_filter["$or"] = [
+            {"name": {"$regex": query, "$options": "i"}},
+            {"description": {"$regex": query, "$options": "i"}}
+        ]
+    
+    if category and category != "all":
+        search_filter["category"] = category
+    
+    if tags:
+        tag_list = tags.split(",")
+        search_filter["tags"] = {"$in": tag_list}
+    
+    components = list(workflow_components_collection.find(search_filter, {"_id": 0}).sort("usage_count", -1))
+    
+    # Get categories for filtering
+    all_categories = workflow_components_collection.distinct("category")
+    
+    return {
+        "components": components,
+        "count": len(components),
+        "categories": all_categories
+    }
+
+
 # ========== PHASE 3.1: DATA TRANSFORMATION API ENDPOINTS ==========
 
 from transformation_engine import (
