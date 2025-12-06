@@ -950,3 +950,44 @@ class WorkflowExecutionEngine:
     def cancel_execution(self, instance_id: str) -> None:
         """Cancel workflow execution"""
         self._update_instance_status(instance_id, "cancelled")
+
+    def execute_single_node(self, instance_id: str, node_id: str, workflow: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a single node for step-by-step debugging"""
+        instance = self.db["workflow_instances"].find_one({"id": instance_id}, {"_id": 0})
+        if not instance:
+            return {"status": "error", "message": "Instance not found"}
+        
+        # Find the node
+        node = None
+        for n in workflow.get("nodes", []):
+            if n["id"] == node_id:
+                node = n
+                break
+        
+        if not node:
+            return {"status": "error", "message": "Node not found"}
+        
+        # Execute the node
+        try:
+            result = self._execute_node(instance_id, node, workflow)
+            
+            # Get next nodes
+            next_nodes = self._get_next_nodes(node, workflow)
+            next_node_ids = [n["id"] for n in next_nodes]
+            
+            # Get updated variables
+            updated_instance = self.db["workflow_instances"].find_one({"id": instance_id}, {"_id": 0})
+            
+            return {
+                "status": "success",
+                "node_id": node_id,
+                "result": result,
+                "next_nodes": next_node_ids,
+                "variables": updated_instance.get("variables", {})
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": str(e),
+                "node_id": node_id
+            }
