@@ -953,6 +953,15 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
           </>
         )}
 
+        {/* Data Mapping - Collapsible */}
+        <CollapsibleSection title="Data Mapping" id="dataMapping" icon={Link}>
+          <DataMappingPanel 
+            node={node}
+            workflowVariables={workflowVariables}
+            onUpdate={onUpdate}
+          />
+        </CollapsibleSection>
+
         {/* Node Metadata - Collapsible */}
         <CollapsibleSection title="Node Metadata" id="metadata" icon={Info}>
           <div className="space-y-3">
