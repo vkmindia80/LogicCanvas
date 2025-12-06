@@ -729,6 +729,13 @@ const AppShell = () => {
         isOpen={showVideoTutorials}
         onClose={() => setShowVideoTutorials(false)}
       />
+      <SubworkflowPatternLibrary
+        isOpen={showPatternLibrary}
+        onClose={() => setShowPatternLibrary(false)}
+        onUsePattern={(pattern) => {
+          addToast(`Pattern "${pattern.name}" guide copied! You can now implement it in your workflow.`, 'success', 5000);
+        }}
+      />
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
