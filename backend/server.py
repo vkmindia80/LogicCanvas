@@ -1270,6 +1270,114 @@ async def validate_workflow(workflow_id: str):
     return {"workflow_id": workflow_id, "issues": issues, "issue_count": len(issues)}
 
 
+@app.get("/api/workflows/{workflow_id}/health")
+async def get_workflow_health(workflow_id: str):
+    """Get comprehensive health score and metrics for a workflow"""
+    workflow = workflows_collection.find_one({"id": workflow_id}, {"_id": 0})
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    # Run validation
+    issues = _validate_workflow_document(workflow)
+    error_count = len([i for i in issues if i.get("type") == "error"])
+    warning_count = len([i for i in issues if i.get("type") == "warning"])
+    
+    # Get execution statistics
+    total_instances = workflow_instances_collection.count_documents({"workflow_id": workflow_id})
+    completed_instances = workflow_instances_collection.count_documents({
+        "workflow_id": workflow_id,
+        "status": "completed"
+    })
+    failed_instances = workflow_instances_collection.count_documents({
+        "workflow_id": workflow_id,
+        "status": "failed"
+    })
+    
+    # Calculate success rate
+    success_rate = (completed_instances / total_instances * 100) if total_instances > 0 else 0
+    
+    # Calculate health score (0-100)
+    health_score = 100
+    
+    # Deduct points for validation issues
+    health_score -= (error_count * 15)  # Each error: -15 points
+    health_score -= (warning_count * 5)  # Each warning: -5 points
+    
+    # Deduct points for low success rate
+    if total_instances >= 5:  # Only consider if enough executions
+        if success_rate < 50:
+            health_score -= 30
+        elif success_rate < 70:
+            health_score -= 20
+        elif success_rate < 90:
+            health_score -= 10
+    
+    # Ensure score is between 0-100
+    health_score = max(0, min(100, health_score))
+    
+    # Determine health status
+    if health_score >= 90:
+        health_status = "excellent"
+        health_color = "green"
+    elif health_score >= 70:
+        health_status = "good"
+        health_color = "blue"
+    elif health_score >= 50:
+        health_status = "fair"
+        health_color = "yellow"
+    elif health_score >= 30:
+        health_status = "poor"
+        health_color = "orange"
+    else:
+        health_status = "critical"
+        health_color = "red"
+    
+    # Generate recommendations
+    recommendations = []
+    if error_count > 0:
+        recommendations.append({
+            "priority": "high",
+            "message": f"Fix {error_count} critical error(s) in workflow configuration",
+            "action": "validate"
+        })
+    if warning_count > 3:
+        recommendations.append({
+            "priority": "medium",
+            "message": f"Address {warning_count} warning(s) to improve workflow quality",
+            "action": "validate"
+        })
+    if total_instances >= 5 and success_rate < 70:
+        recommendations.append({
+            "priority": "high",
+            "message": f"Success rate is low ({success_rate:.1f}%). Review failed executions",
+            "action": "review_logs"
+        })
+    if total_instances == 0:
+        recommendations.append({
+            "priority": "low",
+            "message": "Workflow has not been executed yet. Test it to ensure it works correctly",
+            "action": "test"
+        })
+    
+    return {
+        "workflow_id": workflow_id,
+        "workflow_name": workflow.get("name", "Untitled"),
+        "health_score": round(health_score, 1),
+        "health_status": health_status,
+        "health_color": health_color,
+        "metrics": {
+            "validation_errors": error_count,
+            "validation_warnings": warning_count,
+            "total_executions": total_instances,
+            "completed_executions": completed_instances,
+            "failed_executions": failed_instances,
+            "success_rate": round(success_rate, 1)
+        },
+        "recommendations": recommendations,
+        "last_updated": workflow.get("updated_at")
+    }
+
+
 # Form Endpoints
 @app.get("/api/forms")
 async def get_forms():
