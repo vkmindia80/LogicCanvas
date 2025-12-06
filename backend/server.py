@@ -2644,6 +2644,136 @@ async def cancel_execution_endpoint(instance_id: str):
     return {"message": "Workflow execution cancelled"}
 
 
+# ========== PHASE 3: ENHANCED SUB-WORKFLOW & LOOPING ENDPOINTS ==========
+
+@app.get("/api/workflow-instances/{instance_id}/children")
+async def get_child_instances(instance_id: str):
+    """Get all child subprocess instances for a parent workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    # Find all child instances
+    child_instances = list(workflow_instances_collection.find(
+        {"parent_instance_id": instance_id},
+        {"_id": 0}
+    ).sort("started_at", 1))
+    
+    return {
+        "instance_id": instance_id,
+        "child_count": len(child_instances),
+        "children": child_instances
+    }
+
+@app.get("/api/workflow-instances/{instance_id}/hierarchy")
+async def get_instance_hierarchy(instance_id: str):
+    """Get complete parent-child hierarchy for a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    # Build hierarchy tree
+    def build_hierarchy(inst_id: str, depth: int = 0) -> Dict[str, Any]:
+        inst = workflow_instances_collection.find_one({"id": inst_id}, {"_id": 0})
+        if not inst:
+            return None
+        
+        children = list(workflow_instances_collection.find(
+            {"parent_instance_id": inst_id},
+            {"_id": 0}
+        ))
+        
+        return {
+            "instance_id": inst_id,
+            "workflow_id": inst.get("workflow_id"),
+            "workflow_name": db["workflows"].find_one({"id": inst.get("workflow_id")}, {"_id": 0, "name": 1}).get("name") if inst.get("workflow_id") else "Unknown",
+            "status": inst.get("status"),
+            "nesting_level": inst.get("nesting_level", 0),
+            "depth": depth,
+            "started_at": inst.get("started_at"),
+            "completed_at": inst.get("completed_at"),
+            "children": [build_hierarchy(child["id"], depth + 1) for child in children]
+        }
+    
+    # Find root instance (top-most parent)
+    root_id = instance_id
+    current = instance
+    while current.get("parent_instance_id"):
+        root_id = current["parent_instance_id"]
+        current = workflow_instances_collection.find_one({"id": root_id}, {"_id": 0})
+        if not current:
+            break
+    
+    hierarchy = build_hierarchy(root_id)
+    
+    return {
+        "root_instance_id": root_id,
+        "hierarchy": hierarchy
+    }
+
+@app.post("/api/workflow-instances/{instance_id}/complete-subprocess")
+async def complete_subprocess(instance_id: str, data: Dict[str, Any] = None):
+    """Complete a subprocess execution and return output to parent"""
+    if data is None:
+        data = {}
+    
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    parent_id = instance.get("parent_instance_id")
+    if not parent_id:
+        raise HTTPException(status_code=400, detail="Instance is not a subprocess")
+    
+    # Get output data from subprocess
+    output_data = data.get("output", {})
+    
+    # Update subprocess status
+    now = datetime.utcnow().isoformat()
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {
+            "status": "completed",
+            "completed_at": now,
+            "output_data": output_data
+        }}
+    )
+    
+    # Update parent instance - map subprocess output to parent variables
+    parent_instance = workflow_instances_collection.find_one({"id": parent_id}, {"_id": 0})
+    if parent_instance:
+        # Find the subprocess node in parent's execution history
+        for history_entry in reversed(parent_instance.get("execution_history", [])):
+            result = history_entry.get("result", {})
+            if (result.get("subprocess_instance_id") == instance_id and 
+                result.get("status") == "waiting"):
+                
+                # Get output mapping from subprocess node
+                output_mapping = result.get("output_mapping", {})
+                parent_variables = parent_instance.get("variables", {})
+                
+                # Map subprocess output to parent variables
+                for parent_var, subprocess_var in output_mapping.items():
+                    if subprocess_var in output_data:
+                        parent_variables[parent_var] = output_data[subprocess_var]
+                
+                # Update parent variables
+                workflow_instances_collection.update_one(
+                    {"id": parent_id},
+                    {"$set": {"variables": parent_variables}}
+                )
+                
+                # TODO: Resume parent execution from subprocess node
+                break
+    
+    return {
+        "message": "Subprocess completed",
+        "instance_id": instance_id,
+        "parent_instance_id": parent_id,
+        "output_data": output_data
+    }
+
+
 # ========== PHASE 8 SPRINT 3: VARIABLE MANAGEMENT ENDPOINTS ==========
 
 @app.get("/api/instances/{instance_id}/variables")
