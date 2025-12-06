@@ -352,7 +352,8 @@ export const LoopConfig = ({
           <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
           <span>
             {isForEach && 'Iterate over each item in a collection or array'}
-            {isWhile && 'Repeat while a condition remains true'}
+            {isWhile && 'Repeat while a condition remains true (checks condition first)'}
+            {isDoWhile && 'Execute at least once, then repeat while condition is true (checks condition after)'}
             {isRepeat && 'Repeat a fixed number of times'}
           </span>
         </p>
