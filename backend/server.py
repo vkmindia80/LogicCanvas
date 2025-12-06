@@ -322,6 +322,13 @@ async def update_workflow(workflow_id: str, workflow: Workflow):
     workflow_dict["id"] = workflow_id
     workflow_dict["created_at"] = existing.get("created_at")
     workflow_dict["updated_at"] = now
+    workflow_dict["last_modified_by"] = "current_user"  # TODO: get from auth context
+    
+    # Auto-validate on save
+    issues = _validate_workflow_document(workflow_dict)
+    workflow_dict["validation_issues"] = issues
+    workflow_dict["validation_status"] = "valid" if len([i for i in issues if i.get("type") == "error"]) == 0 else "invalid"
+    workflow_dict["last_validated_at"] = now
     
     workflows_collection.replace_one({"id": workflow_id}, workflow_dict)
     
@@ -331,10 +338,21 @@ async def update_workflow(workflow_id: str, workflow: Workflow):
         "entity_type": "workflow",
         "entity_id": workflow_id,
         "action": "updated",
+        "details": {
+            "validation_status": workflow_dict["validation_status"],
+            "issue_count": len(issues)
+        },
         "timestamp": now
     })
     
-    return {"message": "Workflow updated successfully"}
+    return {
+        "message": "Workflow updated successfully",
+        "validation": {
+            "status": workflow_dict["validation_status"],
+            "issues": issues,
+            "issue_count": len(issues)
+        }
+    }
 
 @app.delete("/api/workflows/{workflow_id}")
 async def delete_workflow(workflow_id: str):
