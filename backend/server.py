@@ -122,6 +122,9 @@ audit_logs_collection = db['audit_logs']
 # Initialize Execution Engine
 execution_engine = WorkflowExecutionEngine(db)
 
+# Initialize Variable Manager
+variable_manager = VariableManager(db)
+
 # Initialize Scheduler
 scheduler = BackgroundScheduler()
 scheduler.start()
