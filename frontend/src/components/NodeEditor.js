@@ -369,7 +369,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
 
         {/* Task Node - Assignment */}
         {node.data.type === NODE_TYPES.TASK && (
-          <>
+          <div className="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm space-y-4">
+            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Task Configuration</h3>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Assignment Strategy
