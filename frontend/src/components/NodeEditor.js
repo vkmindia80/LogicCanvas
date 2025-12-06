@@ -84,12 +84,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       setApprovalType(node.data?.approvalType || 'single');
       setFormId(node.data?.formId || '');
       setActionType(node.data?.actionType || 'http');
-      setUrl(node.data?.url || '');
-      setMethod(node.data?.method || 'GET');
-      setHeaders(node.data?.headers || {});
-      setBody(node.data?.body || {});
-      setAuthType(node.data?.authType || 'none');
-      setToken(node.data?.token || '');
+      setApiConfig(node.data?.apiConfig || {
+        url: node.data?.url || '',
+        method: node.data?.method || 'GET',
+        headers: node.data?.headers || [],
+        queryParams: [],
+        body: node.data?.body || {},
+        auth: { 
+          type: node.data?.authType || 'none',
+          token: node.data?.token || ''
+        }
+      });
       setScript(node.data?.script || '');
       
       setTimerType(node.data?.timerType || 'delay');
