@@ -416,12 +416,12 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 resize-none"
-              placeholder="Describe what this node does..."
+              placeholder="Example: This step reviews the invoice and checks if approval is needed..."
               data-testid="node-editor-description"
             />
             <p className="text-xs text-slate-500 flex items-center space-x-1">
               <Info className="w-3 h-3" />
-              <span>Help others understand this node's purpose</span>
+              <span>Add context to help team members understand what this step does</span>
             </p>
           </div>
         </div>
