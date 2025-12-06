@@ -936,6 +936,16 @@ class WorkflowExecutionEngine:
 
         return next_nodes
 
+    def _is_retryable_error(self, error_msg: str) -> bool:
+        """Determine if an error is retryable (network, timeout, 5xx)"""
+        error_lower = error_msg.lower()
+        retryable_keywords = [
+            "timeout", "connection", "network", "unavailable", 
+            "503", "502", "500", "504", "429",  # HTTP status codes
+            "temporarily", "transient"
+        ]
+        return any(keyword in error_lower for keyword in retryable_keywords)
+    
     def _update_instance_status(self, instance_id: str, status: str, error: Optional[str] = None) -> None:
         """Update workflow instance status"""
         update_data: Dict[str, Any] = {
@@ -948,8 +958,33 @@ class WorkflowExecutionEngine:
 
         if error:
             update_data["error"] = error
+            # Add friendly error message
+            update_data["error_friendly"] = self._get_friendly_error_message(error)
 
         self.db["workflow_instances"].update_one({"id": instance_id}, {"$set": update_data})
+    
+    def _get_friendly_error_message(self, error: str) -> str:
+        """Convert technical error messages to user-friendly messages"""
+        error_lower = error.lower()
+        
+        if "timeout" in error_lower:
+            return "The operation took too long to complete. Please try again."
+        elif "connection" in error_lower or "network" in error_lower:
+            return "Unable to connect to the service. Please check your connection and try again."
+        elif "404" in error_lower:
+            return "The requested resource was not found. Please check your configuration."
+        elif "401" in error_lower or "403" in error_lower:
+            return "Authentication failed. Please check your credentials."
+        elif "500" in error_lower or "502" in error_lower or "503" in error_lower:
+            return "The service is temporarily unavailable. Please try again in a few moments."
+        elif "no form configured" in error_lower:
+            return "This form node is not properly configured. Please select a form."
+        elif "no collection specified" in error_lower:
+            return "Database collection not specified. Please configure the collection name."
+        elif "workflow not found" in error_lower:
+            return "The specified workflow could not be found. It may have been deleted."
+        else:
+            return "An error occurred. Please contact support if this persists."
 
     def resume_execution(self, instance_id: str, node_id: str, result_data: Optional[Dict[str, Any]] = None) -> None:
         """Resume execution after waiting (task completed, approval given, form submitted)"""
