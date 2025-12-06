@@ -732,13 +732,14 @@ class WorkflowExecutionEngine:
         self._execute_node(instance_id, start_node, workflow)
 
     def _execute_node(self, instance_id: str, node: Dict[str, Any], workflow: Dict[str, Any]) -> None:
-        """Execute a single node and continue to next"""
+        """Execute a single node with retry logic and enhanced error handling"""
         instance = self.db["workflow_instances"].find_one({"id": instance_id}, {"_id": 0})
         if not instance:
             return
 
         node_id = node["id"]
         node_type = node.get("type")
+        node_label = node.get("data", {}).get("label", node_type)
 
         # Mark current node on instance
         now_iso = datetime.utcnow().isoformat()
@@ -747,13 +748,56 @@ class WorkflowExecutionEngine:
             {"$set": {"current_node_id": node_id, "updated_at": now_iso}},
         )
 
-        # Execute node and measure timing for analytics
+        # Execute node with retry logic for transient failures
         started_at = datetime.utcnow().isoformat()
         executor = NodeExecutor(self.db, instance_id, instance.get("variables", {}))
-        result = executor.execute_node(node)
+        
+        result = None
+        retry_count = 0
+        last_error = None
+        
+        # Retry logic for action nodes (HTTP, webhook, script)
+        should_retry = node_type in ["action", "lookup_record", "create_record", "update_record"]
+        max_attempts = self.max_retries if should_retry else 1
+        
+        for attempt in range(max_attempts):
+            try:
+                result = executor.execute_node(node)
+                
+                # If result is failed but recoverable, retry
+                if result.get("status") == "failed" and should_retry and attempt < max_attempts - 1:
+                    error_msg = result.get("error", "")
+                    # Check if error is retryable (network, timeout, 5xx errors)
+                    if self._is_retryable_error(error_msg):
+                        retry_count = attempt + 1
+                        last_error = error_msg
+                        print(f"⚠️  Retrying node {node_label} (attempt {retry_count + 1}/{max_attempts}): {error_msg}")
+                        import time
+                        time.sleep(self.retry_delay_seconds)
+                        continue
+                
+                # Success or non-retryable error, break out
+                break
+                
+            except Exception as e:
+                # Unexpected exception during execution
+                result = {"status": "failed", "error": f"Execution exception: {str(e)}"}
+                if should_retry and attempt < max_attempts - 1:
+                    retry_count = attempt + 1
+                    last_error = str(e)
+                    print(f"⚠️  Retrying node {node_label} after exception (attempt {retry_count + 1}/{max_attempts}): {str(e)}")
+                    import time
+                    time.sleep(self.retry_delay_seconds)
+                    continue
+                break
+        
         completed_at = datetime.utcnow().isoformat()
-
         status = result.get("status")
+        
+        # Add retry information to result if retries occurred
+        if retry_count > 0:
+            result["retry_count"] = retry_count
+            result["retried"] = True
 
         # Record execution history (back-compat) and normalized execution_log
         history_entry = {
