@@ -475,6 +475,48 @@
       "name": "PMO",
       "description": "Project management and governance",
       "icon": "briefcase"
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare",
+      "description": "Medical and patient management workflows",
+      "icon": "heart"
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "description": "Academic and educational institution processes",
+      "icon": "graduation-cap"
+    },
+    {
+      "id": "manufacturing",
+      "name": "Manufacturing",
+      "description": "Production and quality control workflows",
+      "icon": "settings"
+    },
+    {
+      "id": "retail",
+      "name": "Retail",
+      "description": "Customer service and retail operations",
+      "icon": "shopping-bag"
+    },
+    {
+      "id": "real-estate",
+      "name": "Real Estate",
+      "description": "Property management and sales workflows",
+      "icon": "home"
+    },
+    {
+      "id": "transportation",
+      "name": "Transportation & Logistics",
+      "description": "Shipping and logistics management",
+      "icon": "truck"
+    },
+    {
+      "id": "banking",
+      "name": "Banking & Finance",
+      "description": "Banking and financial services workflows",
+      "icon": "dollar-sign"
     }
   ]
 }
