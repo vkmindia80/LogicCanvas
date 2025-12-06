@@ -677,6 +677,12 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === 'action' && (
           <div className="bg-white border-2 border-pink-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Action Configuration</h3>
+            <div className="bg-pink-50 border border-pink-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-pink-800 flex items-start space-x-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Action nodes integrate with external systems via API calls, webhooks, or custom scripts.</span>
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Action Type
@@ -687,9 +693,9 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="action-type"
               >
-                <option value="http">HTTP Request</option>
-                <option value="webhook">Webhook</option>
-                <option value="script">Script</option>
+                <option value="http">🌐 HTTP Request (REST API)</option>
+                <option value="webhook">🔗 Webhook (Send notification)</option>
+                <option value="script">⚙️ Script (Custom JavaScript)</option>
               </select>
             </div>
 
