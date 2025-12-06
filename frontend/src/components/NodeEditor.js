@@ -3,6 +3,7 @@ import { X, Save, Trash2, Copy, ChevronDown, ChevronUp, Info, Link } from 'lucid
 import { NODE_CONFIGS, NODE_TYPES } from '../utils/nodeTypes';
 import ExpressionEditor from './ExpressionEditor';
 import DataMappingPanel from './DataMappingPanel';
+import KeyValueEditor from './KeyValueEditor';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
