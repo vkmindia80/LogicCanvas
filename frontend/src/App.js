@@ -24,6 +24,7 @@ import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage';
 import ConnectorLibrary from './components/ConnectorLibrary';
 import DebugPanel from './components/DebugPanel';
+import VideoTutorials from './components/VideoTutorials';
 
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
