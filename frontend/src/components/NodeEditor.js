@@ -580,18 +580,27 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === NODE_TYPES.APPROVAL && (
           <div className="bg-white border-2 border-purple-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Approval Configuration</h3>
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-purple-800 flex items-start space-x-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Approval nodes require one or more people to review and approve/reject before workflow continues.</span>
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Approvers (comma-separated)
+                Approvers (comma-separated) <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={approvers}
                 onChange={(e) => setApprovers(e.target.value)}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                placeholder="user1@example.com, user2@example.com"
+                placeholder="manager@example.com, director@example.com"
                 data-testid="approval-approvers"
               />
+              <p className="mt-1 text-xs text-slate-500">
+                💡 Tip: Enter email addresses separated by commas
+              </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -603,16 +612,21 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="approval-type"
               >
-                <option value="single">Single Approver</option>
-                <option value="sequential">Sequential</option>
-                <option value="parallel">Parallel</option>
-                <option value="unanimous">Unanimous</option>
-                <option value="majority">Majority</option>
+                <option value="single">Single Approver (any one can approve)</option>
+                <option value="sequential">Sequential (approve in order)</option>
+                <option value="parallel">Parallel (all approve at once)</option>
+                <option value="unanimous">Unanimous (all must approve)</option>
+                <option value="majority">Majority (more than 50% must approve)</option>
               </select>
-              <p className="mt-1 text-xs text-slate-500 flex items-center space-x-1">
-                <Info className="w-3 h-3" />
-                <span>Defines how multiple approvers must respond</span>
-              </p>
+              <div className="mt-2 bg-slate-50 rounded p-2">
+                <p className="text-xs text-slate-600">
+                  {approvalType === 'single' && '✅ First person to respond determines outcome'}
+                  {approvalType === 'sequential' && '📋 Each person must approve before next person can review'}
+                  {approvalType === 'parallel' && '⚡ Everyone reviews at the same time'}
+                  {approvalType === 'unanimous' && '👥 All approvers must approve (any rejection stops workflow)'}
+                  {approvalType === 'majority' && '🗳️ More than half of approvers must approve'}
+                </p>
+              </div>
             </div>
           </div>
         )}
