@@ -8,6 +8,7 @@ import ReactFlow, {
   useEdgesState,
   BackgroundVariant,
   MarkerType,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
@@ -17,8 +18,10 @@ import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
 import DeletableEdge from './edges/DeletableEdge';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable } from 'lucide-react';
+import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, Grid3x3 } from 'lucide-react';
 import VariablePanel from './VariablePanel';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
