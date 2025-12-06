@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2, Copy, ChevronDown, ChevronUp, Info, Link } from 'lucide-react';
+import { X, Save, Trash2, Copy, ChevronDown, ChevronUp, Info, Link, CheckCircle } from 'lucide-react';
 import { NODE_CONFIGS, NODE_TYPES } from '../utils/nodeTypes';
 import ExpressionEditor from './ExpressionEditor';
 import DataMappingPanel from './DataMappingPanel';
 import KeyValueEditor from './KeyValueEditor';
 import VisualAPIBuilder from './VisualAPIBuilder';
 import ConditionalBuilder from './ConditionalBuilder';
+import { validators, ValidationFeedback } from './FormValidator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
