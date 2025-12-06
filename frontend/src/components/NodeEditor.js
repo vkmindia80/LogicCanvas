@@ -1025,6 +1025,19 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             <Save className="w-5 h-5" />
             <span>Save Changes</span>
           </button>
+          {onDuplicate && (
+            <button
+              onClick={() => {
+                onDuplicate(node.id);
+              }}
+              className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all font-semibold toolbar-btn"
+              data-testid="node-editor-copy"
+              title="Duplicate this node"
+            >
+              <Copy className="w-5 h-5" />
+              <span className="hidden sm:inline">Copy</span>
+            </button>
+          )}
           <button
             onClick={() => {
               if (window.confirm(`Are you sure you want to delete "${label || 'this node'}"?`)) {
