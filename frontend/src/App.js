@@ -572,24 +572,26 @@ const AppShell = () => {
           )}
 
           {currentView === 'canvas' && (
-            <div className="relative">
-              <button
-                onClick={handleBackToList}
-                className="absolute left-4 top-4 z-10 flex items-center space-x-2 rounded-lg border-2 border-slate-300 bg-white px-4 py-2 text-slate-700 shadow-lg hover:shadow-xl transition-all hover:bg-slate-50 font-medium"
-                data-testid="back-to-list-btn"
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span>Back to Workflows</span>
-              </button>
-              <WorkflowCanvas 
-                workflow={currentWorkflow} 
-                onSave={handleSaveWorkflow}
-                showTemplates={() => setShowTemplateLibrary(true)}
-                showWizard={() => setShowQuickStartWizard(true)}
-              />
-            </div>
+            <ReactFlowProvider>
+              <div className="relative">
+                <button
+                  onClick={handleBackToList}
+                  className="absolute left-4 top-4 z-10 flex items-center space-x-2 rounded-lg border-2 border-slate-300 bg-white px-4 py-2 text-slate-700 shadow-lg hover:shadow-xl transition-all hover:bg-slate-50 font-medium"
+                  data-testid="back-to-list-btn"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  <span>Back to Workflows</span>
+                </button>
+                <WorkflowCanvas 
+                  workflow={currentWorkflow} 
+                  onSave={handleSaveWorkflow}
+                  showTemplates={() => setShowTemplateLibrary(true)}
+                  showWizard={() => setShowQuickStartWizard(true)}
+                />
+              </div>
+            </ReactFlowProvider>
           )}
 
           {currentView === 'form-builder' && <FormBuilder form={currentForm} onBack={handleBackToForms} />}
