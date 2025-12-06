@@ -233,23 +233,34 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden">
-      {/* Header */}
-      <div className={`${config.color} ${config.borderColor} border-b-2 p-4 text-white`}>
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold">Edit {config.label} Node</h3>
+    <div className="bg-white rounded-xl shadow-2xl border-2 border-slate-300 overflow-hidden animate-slide-in">
+      {/* Enhanced Header with Gradient */}
+      <div 
+        className="p-5 text-white relative overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${config.color.replace('bg-', '#')} 0%, ${config.color.replace('bg-', '#')} 100%)`
+        }}
+      >
+        {/* Shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50" />
+        
+        <div className="flex items-center justify-between relative z-10">
+          <div>
+            <h3 className="font-bold text-lg drop-shadow-md">Edit {config.label} Node</h3>
+            <p className="text-xs opacity-90 mt-1">Configure node properties and behavior</p>
+          </div>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-white/20 rounded transition-colors"
+            className="p-2 hover:bg-white/20 rounded-lg transition-all hover:scale-110"
             data-testid="node-editor-close"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+      {/* Content with improved spacing */}
+      <div className="p-5 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
         {/* Label */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
