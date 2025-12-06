@@ -1205,14 +1205,6 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
         </div>
       )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Designer Capabilities Panel */}
       {showCapabilitiesPanel && (
