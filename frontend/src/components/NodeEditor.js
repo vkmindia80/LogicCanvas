@@ -1007,19 +1007,15 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             </div>
 
             {(eventAction === 'send' || eventAction === 'throw') && (
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Event Payload (JSON)
-                </label>
-                <textarea
-                  value={eventPayload}
-                  onChange={(e) => setEventPayload(e.target.value)}
-                  rows={4}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
-                  placeholder='{"key": "value"}'
-                  data-testid="event-payload"
-                />
-              </div>
+              <KeyValueEditor
+                value={eventPayload}
+                onChange={setEventPayload}
+                label="Event Payload"
+                keyPlaceholder="Property name"
+                valuePlaceholder="Property value (use ${variable})"
+                allowJSON={true}
+                testId="event-payload"
+              />
             )}
 
             {(eventAction === 'receive' || eventAction === 'catch') && (
