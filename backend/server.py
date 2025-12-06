@@ -6009,6 +6009,386 @@ async def get_connector_templates():
                 {"source_path": "$.data[0].embedding", "target_variable": "embedding_vector", "type": "array", "transform": "none"},
                 {"source_path": "$.usage.total_tokens", "target_variable": "tokens_used", "type": "number", "transform": "none"}
             ]
+        },
+        # ========== PHASE 3.4: ENTERPRISE CONNECTOR TEMPLATES ==========
+        {
+            "id": "salesforce-create-lead",
+            "name": "Salesforce - Create Lead",
+            "description": "Create a new lead in Salesforce CRM",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${instance_url}/services/data/v58.0/sobjects/Lead",
+                "headers": {
+                    "Authorization": "Bearer ${salesforce_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "FirstName": "${first_name}",
+                    "LastName": "${last_name}",
+                    "Company": "${company}",
+                    "Email": "${email}",
+                    "Phone": "${phone}",
+                    "Status": "Open - Not Contacted"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "salesforce_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "lead_id", "type": "string", "transform": "none"},
+                {"source_path": "$.success", "target_variable": "success", "type": "boolean", "transform": "none"}
+            ]
+        },
+        {
+            "id": "salesforce-get-account",
+            "name": "Salesforce - Get Account",
+            "description": "Retrieve account details from Salesforce",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${instance_url}/services/data/v58.0/sobjects/Account/${account_id}",
+                "headers": {
+                    "Authorization": "Bearer ${salesforce_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "oauth2", "config": {"token_variable": "salesforce_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.Id", "target_variable": "account_id", "type": "string", "transform": "none"},
+                {"source_path": "$.Name", "target_variable": "account_name", "type": "string", "transform": "none"},
+                {"source_path": "$.Type", "target_variable": "account_type", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "hubspot-create-contact",
+            "name": "HubSpot - Create Contact",
+            "description": "Create a new contact in HubSpot CRM",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+                "headers": {
+                    "Authorization": "Bearer ${hubspot_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "properties": {
+                        "email": "${email}",
+                        "firstname": "${first_name}",
+                        "lastname": "${last_name}",
+                        "phone": "${phone}",
+                        "company": "${company}"
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "hubspot_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "contact_id", "type": "string", "transform": "none"},
+                {"source_path": "$.properties.email", "target_variable": "contact_email", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "hubspot-create-deal",
+            "name": "HubSpot - Create Deal",
+            "description": "Create a new deal in HubSpot",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.hubapi.com/crm/v3/objects/deals",
+                "headers": {
+                    "Authorization": "Bearer ${hubspot_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "properties": {
+                        "dealname": "${deal_name}",
+                        "dealstage": "${deal_stage}",
+                        "amount": "${amount}",
+                        "pipeline": "${pipeline}"
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "hubspot_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "deal_id", "type": "string", "transform": "none"},
+                {"source_path": "$.properties.dealname", "target_variable": "deal_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "jira-create-issue",
+            "name": "Jira - Create Issue",
+            "description": "Create a new issue in Jira",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${jira_domain}.atlassian.net/rest/api/3/issue",
+                "headers": {
+                    "Authorization": "Bearer ${jira_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "fields": {
+                        "project": {"key": "${project_key}"},
+                        "summary": "${summary}",
+                        "description": {
+                            "type": "doc",
+                            "version": 1,
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [{"type": "text", "text": "${description}"}]
+                                }
+                            ]
+                        },
+                        "issuetype": {"name": "${issue_type}"}
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "jira_api_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "issue_id", "type": "string", "transform": "none"},
+                {"source_path": "$.key", "target_variable": "issue_key", "type": "string", "transform": "none"},
+                {"source_path": "$.self", "target_variable": "issue_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "jira-update-issue",
+            "name": "Jira - Update Issue",
+            "description": "Update an existing Jira issue",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "PUT",
+                "url": "https://${jira_domain}.atlassian.net/rest/api/3/issue/${issue_key}",
+                "headers": {
+                    "Authorization": "Bearer ${jira_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "fields": {
+                        "summary": "${summary}",
+                        "description": {
+                            "type": "doc",
+                            "version": 1,
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [{"type": "text", "text": "${description}"}]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "jira_api_token"}}
+            },
+            "response_mapping": []
+        },
+        {
+            "id": "servicenow-create-incident",
+            "name": "ServiceNow - Create Incident",
+            "description": "Create a new incident in ServiceNow",
+            "category": "itsm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${instance}.service-now.com/api/now/table/incident",
+                "headers": {
+                    "Authorization": "Bearer ${servicenow_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "short_description": "${short_description}",
+                    "description": "${description}",
+                    "urgency": "${urgency}",
+                    "impact": "${impact}",
+                    "category": "${category}",
+                    "caller_id": "${caller_id}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "servicenow_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.result.sys_id", "target_variable": "incident_id", "type": "string", "transform": "none"},
+                {"source_path": "$.result.number", "target_variable": "incident_number", "type": "string", "transform": "none"},
+                {"source_path": "$.result.state", "target_variable": "incident_state", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "servicenow-update-ticket",
+            "name": "ServiceNow - Update Ticket",
+            "description": "Update ServiceNow ticket status",
+            "category": "itsm",
+            "is_template": True,
+            "config": {
+                "method": "PATCH",
+                "url": "https://${instance}.service-now.com/api/now/table/incident/${sys_id}",
+                "headers": {
+                    "Authorization": "Bearer ${servicenow_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "state": "${state}",
+                    "work_notes": "${work_notes}",
+                    "close_code": "${close_code}",
+                    "close_notes": "${close_notes}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "servicenow_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.result.sys_id", "target_variable": "ticket_id", "type": "string", "transform": "none"},
+                {"source_path": "$.result.state", "target_variable": "ticket_state", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "sap-create-sales-order",
+            "name": "SAP - Create Sales Order",
+            "description": "Create sales order in SAP ERP",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${sap_host}/sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder",
+                "headers": {
+                    "Authorization": "Basic ${sap_credentials}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "SalesOrderType": "${order_type}",
+                    "SalesOrganization": "${sales_org}",
+                    "DistributionChannel": "${distribution_channel}",
+                    "OrganizationDivision": "${division}",
+                    "SoldToParty": "${customer_id}",
+                    "PurchaseOrderByCustomer": "${po_number}"
+                },
+                "auth": {"type": "basic", "config": {"credentials_variable": "sap_credentials"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.d.SalesOrder", "target_variable": "sales_order_number", "type": "string", "transform": "none"},
+                {"source_path": "$.d.TotalNetAmount", "target_variable": "total_amount", "type": "number", "transform": "none"}
+            ]
+        },
+        {
+            "id": "sap-get-material",
+            "name": "SAP - Get Material Details",
+            "description": "Retrieve material information from SAP",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${sap_host}/sap/opu/odata/sap/API_MATERIAL_STOCK_SRV/A_MatlStkInAcctMod(Material='${material_id}')",
+                "headers": {
+                    "Authorization": "Basic ${sap_credentials}",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "basic", "config": {"credentials_variable": "sap_credentials"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.d.Material", "target_variable": "material_id", "type": "string", "transform": "none"},
+                {"source_path": "$.d.MatlWrhsStkQtyInMatlBaseUnit", "target_variable": "stock_quantity", "type": "number", "transform": "none"}
+            ]
+        },
+        {
+            "id": "oracle-execute-query",
+            "name": "Oracle - Execute Query",
+            "description": "Execute SQL query against Oracle database via REST API",
+            "category": "database",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${oracle_rest_host}/ords/${schema}/_/sql",
+                "headers": {
+                    "Authorization": "Bearer ${oracle_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "statementText": "${sql_query}",
+                    "offset": 0,
+                    "limit": 100
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "oracle_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.items", "target_variable": "query_results", "type": "array", "transform": "none"},
+                {"source_path": "$.count", "target_variable": "result_count", "type": "number", "transform": "none"}
+            ]
+        },
+        {
+            "id": "dynamics365-create-account",
+            "name": "Microsoft Dynamics 365 - Create Account",
+            "description": "Create new account in Dynamics 365 CRM",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${org_url}/api/data/v9.2/accounts",
+                "headers": {
+                    "Authorization": "Bearer ${dynamics_access_token}",
+                    "Content-Type": "application/json",
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0"
+                },
+                "query_params": {},
+                "body": {
+                    "name": "${account_name}",
+                    "telephone1": "${phone}",
+                    "emailaddress1": "${email}",
+                    "address1_city": "${city}",
+                    "address1_country": "${country}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "dynamics_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.accountid", "target_variable": "account_id", "type": "string", "transform": "none"},
+                {"source_path": "$.name", "target_variable": "account_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "dynamics365-create-lead",
+            "name": "Microsoft Dynamics 365 - Create Lead",
+            "description": "Create new lead in Dynamics 365",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${org_url}/api/data/v9.2/leads",
+                "headers": {
+                    "Authorization": "Bearer ${dynamics_access_token}",
+                    "Content-Type": "application/json",
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0"
+                },
+                "query_params": {},
+                "body": {
+                    "subject": "${subject}",
+                    "firstname": "${first_name}",
+                    "lastname": "${last_name}",
+                    "emailaddress1": "${email}",
+                    "companyname": "${company}",
+                    "mobilephone": "${phone}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "dynamics_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.leadid", "target_variable": "lead_id", "type": "string", "transform": "none"},
+                {"source_path": "$.fullname", "target_variable": "lead_name", "type": "string", "transform": "none"}
+            ]
         }
     ]
     return {"templates": templates, "count": len(templates)}
