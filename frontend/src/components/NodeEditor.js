@@ -315,13 +315,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     // Subprocess node
     if (currentNodeType === NODE_TYPES.SUBPROCESS) {
       updatedData.subprocessWorkflowId = subprocessWorkflowId;
-      try {
-        updatedData.inputMapping = JSON.parse(inputMapping);
-        updatedData.outputMapping = JSON.parse(outputMapping);
-      } catch (e) {
-        alert('Invalid JSON in input/output mapping');
-        return;
-      }
+      updatedData.inputMapping = inputMapping;
+      updatedData.outputMapping = outputMapping;
     }
 
     // Event node
@@ -329,12 +324,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       updatedData.eventType = eventType;
       updatedData.eventAction = eventAction;
       updatedData.eventName = eventName;
-      try {
-        updatedData.eventPayload = JSON.parse(eventPayload);
-      } catch (e) {
-        alert('Invalid JSON in event payload');
-        return;
-      }
+      updatedData.eventPayload = eventPayload;
       updatedData.timeoutHours = parseInt(timeoutHours) || 24;
     }
     
