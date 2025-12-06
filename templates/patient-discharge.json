@@ -1,0 +1,112 @@
+{
+  "id": "patient-discharge",
+  "name": "Patient Discharge Workflow",
+  "description": "Streamlined process for safely discharging patients from hospital or clinic with all necessary documentation and follow-up care instructions.",
+  "category": "Healthcare",
+  "tags": ["healthcare", "patient-care", "discharge", "medical-records"],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": { "x": 200, "y": 80 },
+      "data": {
+        "label": "Start Discharge Process",
+        "description": "Initiated when patient is medically cleared for discharge"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": { "x": 200, "y": 220 },
+      "data": {
+        "label": "Medical Review",
+        "description": "Doctor reviews patient status and approves discharge",
+        "assignmentStrategy": "role",
+        "assignmentRole": "doctor",
+        "priority": "high",
+        "dueInHours": 4
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": { "x": 200, "y": 360 },
+      "data": {
+        "label": "Requires Follow-up?",
+        "description": "Determine if patient needs follow-up appointments",
+        "condition": "${requiresFollowUp} == true"
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": { "x": 480, "y": 500 },
+      "data": {
+        "label": "Schedule Follow-up",
+        "description": "Schedule follow-up appointments and notify patient",
+        "assignmentStrategy": "role",
+        "assignmentRole": "scheduler",
+        "priority": "medium",
+        "dueInHours": 24
+      }
+    },
+    {
+      "id": "task-3",
+      "type": "task",
+      "position": { "x": 200, "y": 500 },
+      "data": {
+        "label": "Prepare Discharge Papers",
+        "description": "Generate discharge summary, prescriptions, and care instructions",
+        "assignmentStrategy": "role",
+        "assignmentRole": "nurse",
+        "priority": "high",
+        "dueInHours": 2
+      }
+    },
+    {
+      "id": "notification-1",
+      "type": "notification",
+      "position": { "x": 200, "y": 640 },
+      "data": {
+        "label": "Notify Patient & Family",
+        "description": "Send discharge instructions and follow-up details",
+        "notificationType": "email",
+        "recipients": ["${patientEmail}", "${familyEmail}"],
+        "subject": "Discharge Instructions - ${patientName}",
+        "message": "You have been discharged. Please review attached instructions."
+      }
+    },
+    {
+      "id": "task-4",
+      "type": "task",
+      "position": { "x": 200, "y": 780 },
+      "data": {
+        "label": "Update Medical Records",
+        "description": "Update patient records with discharge information",
+        "assignmentStrategy": "role",
+        "assignmentRole": "medical-records",
+        "priority": "medium",
+        "dueInHours": 8
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": { "x": 200, "y": 920 },
+      "data": {
+        "label": "Discharge Complete",
+        "description": "Patient successfully discharged"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start-1", "target": "task-1" },
+    { "id": "e2", "source": "task-1", "target": "decision-1" },
+    { "id": "e3", "source": "decision-1", "target": "task-2", "sourceHandle": "yes", "label": "Yes" },
+    { "id": "e4", "source": "decision-1", "target": "task-3", "sourceHandle": "no", "label": "No" },
+    { "id": "e5", "source": "task-2", "target": "task-3" },
+    { "id": "e6", "source": "task-3", "target": "notification-1" },
+    { "id": "e7", "source": "notification-1", "target": "task-4" },
+    { "id": "e8", "source": "task-4", "target": "end-1" }
+  ]
+}
