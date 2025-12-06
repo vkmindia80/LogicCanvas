@@ -18,6 +18,7 @@ import {
   ErrorHandlerConfig,
   SwitchConfig
 } from './EnhancedNodeConfigurations';
+import EnhancedSubprocessConfig from './EnhancedSubprocessConfig';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
