@@ -503,7 +503,7 @@ export const LoopConfig = ({
           <p className="text-xs text-slate-500 mt-1">Exit loop early when condition becomes true</p>
         </div>
 
-        {isWhile && (
+        {(isWhile || isDoWhile) && (
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Counter Variable
