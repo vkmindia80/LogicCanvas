@@ -94,13 +94,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       setTimeoutHours(node.data?.timeoutHours || 24);
       
       setSubprocessWorkflowId(node.data?.subprocessWorkflowId || '');
-      setInputMapping(node.data?.inputMapping ? JSON.stringify(node.data?.inputMapping, null, 2) : '{}');
-      setOutputMapping(node.data?.outputMapping ? JSON.stringify(node.data?.outputMapping, null, 2) : '{}');
+      setInputMapping(node.data?.inputMapping || {});
+      setOutputMapping(node.data?.outputMapping || {});
       
       setEventType(node.data?.eventType || 'message');
       setEventAction(node.data?.eventAction || 'send');
       setEventName(node.data?.eventName || '');
-      setEventPayload(node.data?.eventPayload ? JSON.stringify(node.data?.eventPayload, null, 2) : '{}');
+      setEventPayload(node.data?.eventPayload || {});
     }
   }, [node]);
 
