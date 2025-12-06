@@ -756,6 +756,8 @@ class NodeExecutor:
             "loop_for_each": self.execute_loop_for_each_node,
             "loop_while": self.execute_loop_while_node,
             "loop_repeat": self.execute_loop_repeat_node,
+            "loop_break": self.execute_loop_break_node,  # Phase 3.2: Break loop
+            "loop_continue": self.execute_loop_continue_node,  # Phase 3.2: Continue loop
             "lookup_record": self.execute_lookup_record_node,
             "create_record": self.execute_create_record_node,
             "update_record": self.execute_update_record_node,
