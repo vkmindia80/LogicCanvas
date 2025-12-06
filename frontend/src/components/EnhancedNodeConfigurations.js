@@ -968,10 +968,87 @@ export const SwitchConfig = ({ switchVariable, setSwitchVariable, switchCases, s
   );
 };
 
+// Loop Control Configuration (Break/Continue)
+export const LoopControlConfig = ({ 
+  nodeType,
+  breakCondition, setBreakCondition,
+  continueCondition, setContinueCondition,
+  workflowVariables
+}) => {
+  const isBreak = nodeType === 'loop_break';
+  const isContinue = nodeType === 'loop_continue';
+
+  return (
+    <div className={`bg-white border-2 ${isBreak ? 'border-rose-200' : 'border-pink-200'} rounded-lg p-4 shadow-sm space-y-4`}>
+      <h3 className="section-header font-bold text-slate-900 text-sm mb-3 flex items-center space-x-2">
+        {isBreak && <span className="text-2xl">⛔</span>}
+        {isContinue && <span className="text-2xl">⏭️</span>}
+        <span>{isBreak ? 'Break Loop' : 'Continue Loop'}</span>
+      </h3>
+
+      <div className={`${isBreak ? 'bg-rose-50 border-rose-200' : 'bg-pink-50 border-pink-200'} border rounded-lg p-3 mb-4`}>
+        <p className={`text-xs ${isBreak ? 'text-rose-800' : 'text-pink-800'} flex items-start space-x-2`}>
+          <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <span>
+            {isBreak && 'Immediately exit the current loop and continue execution after the loop. Useful for early termination when a condition is met.'}
+            {isContinue && 'Skip the rest of the current iteration and move to the next iteration. Useful for skipping specific items in a loop.'}
+          </span>
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-700 mb-2">
+          Condition (Optional)
+        </label>
+        <ExpressionEditor
+          value={isBreak ? breakCondition : continueCondition}
+          onChange={isBreak ? setBreakCondition : setContinueCondition}
+          variables={workflowVariables}
+          placeholder={isBreak ? "e.g., ${errorCount} > 5" : "e.g., ${status} === 'skip'"}
+        />
+        <p className="text-xs text-slate-500 mt-1">
+          {isBreak ? 'Break only if this condition is true. Leave empty to always break.' : 'Continue only if this condition is true. Leave empty to always continue.'}
+        </p>
+      </div>
+
+      <div className={`${isBreak ? 'bg-rose-50 border-rose-200' : 'bg-pink-50 border-pink-200'} border rounded-lg p-3`}>
+        <h4 className="text-xs font-semibold text-slate-700 mb-2">💡 Example Use Cases:</h4>
+        <ul className="text-xs text-slate-600 space-y-1 ml-4 list-disc">
+          {isBreak && (
+            <>
+              <li>Exit loop when processing finds the target item</li>
+              <li>Stop on critical error: <code className="bg-white px-1 py-0.5 rounded text-rose-600">{'${error} !== null'}</code></li>
+              <li>Limit processing: <code className="bg-white px-1 py-0.5 rounded text-rose-600">{'${processedCount} >= ${maxItems}'}</code></li>
+            </>
+          )}
+          {isContinue && (
+            <>
+              <li>Skip invalid or null items in a collection</li>
+              <li>Skip already processed items: <code className="bg-white px-1 py-0.5 rounded text-pink-600">{'${item.processed} === true'}</code></li>
+              <li>Filter by status: <code className="bg-white px-1 py-0.5 rounded text-pink-600">{'${item.status} !== "active"'}</code></li>
+            </>
+          )}
+        </ul>
+      </div>
+
+      <div className={`${isBreak ? 'bg-yellow-50 border-yellow-200' : 'bg-blue-50 border-blue-200'} border rounded-lg p-3`}>
+        <p className="text-xs text-slate-700 flex items-start space-x-2">
+          <span className="text-lg">⚠️</span>
+          <span>
+            <strong>Note:</strong> This node only works inside loop nodes (For Each, While, or Repeat loops). 
+            It will have no effect if placed outside a loop.
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
 export default {
   DataOperationConfig,
   DataTransformConfig,
   LoopConfig,
+  LoopControlConfig,
   AssignmentConfig,
   EmailConfig,
   WaitConfig,
