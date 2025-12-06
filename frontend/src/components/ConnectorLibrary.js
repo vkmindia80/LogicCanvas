@@ -171,37 +171,47 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
 
           {/* Connectors Grid */}
           <div className="flex-1 overflow-auto p-6">
-            {filteredConnectors.length === 0 ? (
+            {filteredItems.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <Code size={48} className="mx-auto mb-4 opacity-30" />
                 <p className="text-lg">No connectors found</p>
                 <p className="text-sm mt-2">
-                  {searchQuery ? 'Try a different search term' : 'Create your first connector to get started'}
+                  {searchQuery ? 'Try a different search term' : viewMode === 'saved' ? 'Create your first connector to get started' : 'No templates available'}
                 </p>
-                <button
-                  onClick={handleCreate}
-                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <Plus size={18} className="inline mr-2" />
-                  Create Connector
-                </button>
+                {viewMode === 'saved' && (
+                  <button
+                    onClick={handleCreate}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <Plus size={18} className="inline mr-2" />
+                    Create Connector
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredConnectors.map((connector) => (
+                {filteredItems.map((item) => (
                   <div
-                    key={connector.id}
+                    key={item.id}
                     className="border rounded-lg p-4 hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group"
-                    onClick={() => onSelect?.(connector)}
+                    onClick={() => {
+                      if (viewMode === 'templates') {
+                        // For templates, open builder with template data
+                        setEditingConnector({ ...item, id: null, is_template: false });
+                        setShowBuilder(true);
+                      } else {
+                        onSelect?.(item);
+                      }
+                    }}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl">{getCategoryIcon(connector.category)}</span>
+                        <span className="text-2xl">{getCategoryIcon(item.category)}</span>
                         <div>
                           <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
-                            {connector.name}
+                            {item.name}
                           </h3>
-                          {connector.is_template && (
+                          {item.is_template && (
                             <span className="text-xs px-2 py-0.5 bg-purple-100 text-purple-700 rounded">
                               Template
                             </span>
@@ -211,40 +221,54 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
                     </div>
 
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {connector.description || 'No description'}
+                      {item.description || 'No description'}
                     </p>
 
                     <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                       <span className="px-2 py-1 bg-gray-100 rounded">
-                        {connector.config.method}
+                        {item.config.method}
                       </span>
-                      <span className="truncate ml-2" title={connector.config.url}>
+                      <span className="truncate ml-2" title={item.config.url}>
                         <Globe size={12} className="inline mr-1" />
-                        {new URL(connector.config.url.split('${')[0] + (connector.config.url.includes('${') ? 'example' : '')).hostname}
+                        {new URL(item.config.url.split('${')[0] + (item.config.url.includes('${') ? 'example' : '')).hostname}
                       </span>
                     </div>
 
                     <div className="flex gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEdit(connector);
-                        }}
-                        className="flex-1 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors"
-                      >
-                        <Edit size={14} className="inline mr-1" />
-                        Edit
-                      </button>
-                      {!connector.is_template && (
+                      {viewMode === 'templates' ? (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDelete(connector.id);
+                            setEditingConnector({ ...item, id: null, is_template: false });
+                            setShowBuilder(true);
                           }}
-                          className="px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+                          className="flex-1 px-3 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded transition-colors"
                         >
-                          <Trash2 size={14} />
+                          <Plus size={14} className="inline mr-1" />
+                          Use Template
                         </button>
+                      ) : (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEdit(item);
+                            }}
+                            className="flex-1 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+                          >
+                            <Edit size={14} className="inline mr-1" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(item.id);
+                            }}
+                            className="px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>
