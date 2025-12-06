@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
-import { Code, Play } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Code, Play, Info, Lightbulb } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 const ExpressionEditor = ({ value, onChange, variables = {} }) => {
   const [testResult, setTestResult] = useState(null);
   const [testing, setTesting] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(0);
+  const textareaRef = useRef(null);
+
+  // Common expression patterns and examples
+  const commonExpressions = [
+    { label: 'Greater than', template: '${variable} > value', example: '${amount} > 1000' },
+    { label: 'Less than', template: '${variable} < value', example: '${count} < 50' },
+    { label: 'Equals', template: '${variable} == value', example: '${status} == "approved"' },
+    { label: 'Not equals', template: '${variable} != value', example: '${type} != "guest"' },
+    { label: 'Contains text', template: '"text" in ${variable}', example: '"urgent" in ${priority}' },
+    { label: 'And condition', template: '${var1} and ${var2}', example: '${amount} > 1000 and ${approved} == true' },
+    { label: 'Or condition', template: '${var1} or ${var2}', example: '${urgent} == true or ${vip} == true' },
+  ];
 
   const handleTest = async () => {
     setTesting(true);
