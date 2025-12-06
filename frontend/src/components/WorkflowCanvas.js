@@ -121,6 +121,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [canEditDirectly, setCanEditDirectly] = useState(true);
   const [activeInstances, setActiveInstances] = useState(0);
 
+  // Phase 2: Business User Experience Enhancements
+  const [showValidationPanel, setShowValidationPanel] = useState(false);
+
   const reactFlowWrapper = useRef(null);
   const reactFlowInstance = useRef(null);
   const nodeIdCounter = useRef(1);
