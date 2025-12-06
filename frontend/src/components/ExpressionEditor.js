@@ -41,27 +41,92 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
   };
 
   const insertVariable = (varName) => {
-    const newValue = value + `\${${varName}}`;
-    onChange(newValue);
+    if (textareaRef.current) {
+      const start = textareaRef.current.selectionStart;
+      const end = textareaRef.current.selectionEnd;
+      const textBefore = value.substring(0, start);
+      const textAfter = value.substring(end);
+      const newValue = textBefore + `\${${varName}}` + textAfter;
+      onChange(newValue);
+      
+      // Set cursor after inserted variable
+      setTimeout(() => {
+        const newPosition = start + varName.length + 3; // ${} = 3 chars
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(newPosition, newPosition);
+      }, 0);
+    }
+  };
+
+  const insertTemplate = (template) => {
+    onChange(template);
+    setShowSuggestions(false);
   };
 
   return (
     <div className="space-y-3">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Expression
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-semibold text-slate-800">
+            Expression
+          </label>
+          <button
+            onClick={() => setShowSuggestions(!showSuggestions)}
+            className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center space-x-1"
+          >
+            <Lightbulb className="w-3 h-3" />
+            <span>{showSuggestions ? 'Hide' : 'Show'} Examples</span>
+          </button>
+        </div>
         <div className="relative">
           <textarea
+            ref={textareaRef}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="e.g., ${amount} > 1000"
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+            onChange={(e) => {
+              onChange(e.target.value);
+              setCursorPosition(e.target.selectionStart);
+            }}
+            onClick={(e) => setCursorPosition(e.target.selectionStart)}
+            onKeyUp={(e) => setCursorPosition(e.target.selectionStart)}
+            placeholder="e.g., ${amount} > 1000 or ${status} == 'approved'"
+            rows={4}
+            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm transition-all"
             data-testid="expression-input"
           />
+          <div className="absolute bottom-2 right-2 text-xs text-slate-400">
+            <Code className="w-4 h-4" />
+          </div>
         </div>
       </div>
+
+      {/* Expression Templates */}
+      {showSuggestions && (
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4">
+          <div className="flex items-center space-x-2 mb-3">
+            <Lightbulb className="w-4 h-4 text-blue-600" />
+            <h4 className="text-sm font-semibold text-blue-900">Common Expression Patterns</h4>
+          </div>
+          <div className="space-y-2">
+            {commonExpressions.map((expr, idx) => (
+              <button
+                key={idx}
+                onClick={() => insertTemplate(expr.example)}
+                className="w-full text-left p-2 bg-white hover:bg-blue-50 rounded-lg border border-blue-200 transition-colors group"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-slate-700 mb-1">{expr.label}</div>
+                    <code className="text-xs text-blue-700 font-mono">{expr.example}</code>
+                  </div>
+                  <span className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Use →
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Variable Helpers */}
       {Object.keys(variables).length > 0 && (
