@@ -45,6 +45,10 @@ const AppShell = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
   const [showQuickStartWizard, setShowQuickStartWizard] = useState(false);
+  const [showGettingStarted, setShowGettingStarted] = useState(() => {
+    // Show checklist for first-time users
+    return localStorage.getItem('lc_checklist_dismissed') !== 'true';
+  });
   const [showConnectorLibrary, setShowConnectorLibrary] = useState(false);
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   const [debugInstanceId, setDebugInstanceId] = useState(null);
