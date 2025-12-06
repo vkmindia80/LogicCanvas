@@ -161,18 +161,26 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
                   setError(data.detail || 'Failed to generate sample data');
                   return;
                 }
-                // Surface a lightweight toast-like message inline
-                alert(data.message || 'Sample data generated successfully');
+                // Show detailed summary if available
+                const summary = data.summary || {};
+                const message = data.message || 'Sample data generated successfully';
+                const details = Object.keys(summary).length > 0 
+                  ? `\n\nGenerated:\n${Object.entries(summary).map(([k, v]) => `• ${k}: ${v}`).join('\n')}`
+                  : '';
+                alert(message + details);
               } catch (e) {
                 console.error('Sample data generation failed', e);
                 setError('Sample data generation failed.');
               }
             }}
-            className="mt-3 inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-dashed border-emerald-400 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-200 hover:bg-emerald-500/20"
+            className="mt-3 inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-dashed border-emerald-400 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-200 hover:bg-emerald-500/20 transition-all"
             data-testid="generate-sample-data-btn"
           >
-            <span>Generate rich sample data (workflows, forms, tasks, approvals)</span>
+            <span>🎲 Generate Sample Data (All Modules)</span>
           </button>
+          <p className="mt-2 text-[10px] text-slate-400 text-center">
+            Creates workflows, forms, tasks, approvals, users, roles, audit logs & more
+          </p>
 
         </form>
 
