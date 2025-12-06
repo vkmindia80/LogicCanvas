@@ -870,31 +870,32 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
         )}
 
         {/* Node ID */}
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
+        <div className="bg-slate-100 rounded-lg p-4 border-2 border-slate-200">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Node ID
           </label>
-          <div className="text-xs text-slate-500 font-mono bg-slate-50 p-2 rounded">
+          <div className="text-xs text-slate-600 font-mono bg-white p-3 rounded border border-slate-200 select-all">
             {node.id}
           </div>
+          <p className="text-xs text-slate-500 mt-2">Unique identifier for this node</p>
         </div>
 
         {/* Actions */}
-        <div className="flex space-x-2 pt-2">
+        <div className="flex space-x-3 pt-4 border-t-2 border-slate-200">
           <button
             onClick={handleSave}
-            className="flex-1 flex items-center justify-center space-x-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
+            className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-3 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-semibold toolbar-btn"
             data-testid="node-editor-save"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-5 h-5" />
             <span>Save Changes</span>
           </button>
           <button
             onClick={() => onDelete(node.id)}
-            className="flex items-center justify-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-5 py-3 rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all font-semibold toolbar-btn"
             data-testid="node-editor-delete"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-5 h-5" />
           </button>
         </div>
       </div>
