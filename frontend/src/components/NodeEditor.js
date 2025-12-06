@@ -513,8 +513,12 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
                 <option value="unanimous">Unanimous</option>
                 <option value="majority">Majority</option>
               </select>
+              <p className="mt-1 text-xs text-slate-500 flex items-center space-x-1">
+                <Info className="w-3 h-3" />
+                <span>Defines how multiple approvers must respond</span>
+              </p>
             </div>
-          </>
+          </div>
         )}
 
         {/* Form Node */}
