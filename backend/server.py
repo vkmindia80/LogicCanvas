@@ -4381,6 +4381,587 @@ async def get_execution_timeline(instance_id: str):
     }
 
 
+# ============================================================================
+# SPRINT 4: API CONNECTOR BUILDER ENDPOINTS
+# ============================================================================
+
+@app.get("/api/connectors")
+async def get_connectors(category: Optional[str] = None, is_template: Optional[bool] = None):
+    """Get all API connectors with optional filtering"""
+    query = {}
+    if category:
+        query["category"] = category
+    if is_template is not None:
+        query["is_template"] = is_template
+    
+    connectors = list(api_connectors_collection.find(query, {"_id": 0}))
+    return {"connectors": connectors, "count": len(connectors)}
+
+
+@app.get("/api/connectors/templates")
+async def get_connector_templates():
+    """Get pre-built connector templates"""
+    templates = [
+        {
+            "id": "stripe-payment",
+            "name": "Stripe Payment",
+            "description": "Process payments using Stripe API",
+            "category": "payment",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.stripe.com/v1/charges",
+                "headers": {
+                    "Authorization": "Bearer ${stripe_api_key}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "query_params": {},
+                "body": "amount=${amount}&currency=${currency}&source=${token}",
+                "auth": {"type": "bearer", "config": {"token_variable": "stripe_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "charge_id", "type": "string", "transform": "none"},
+                {"source_path": "$.status", "target_variable": "payment_status", "type": "string", "transform": "none"},
+                {"source_path": "$.amount", "target_variable": "charged_amount", "type": "number", "transform": "none"}
+            ]
+        },
+        {
+            "id": "twilio-sms",
+            "name": "Twilio SMS",
+            "description": "Send SMS messages via Twilio",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.twilio.com/2010-04-01/Accounts/${account_sid}/Messages.json",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "query_params": {},
+                "body": "To=${to_number}&From=${from_number}&Body=${message}",
+                "auth": {"type": "basic", "config": {"username_variable": "account_sid", "password_variable": "auth_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.sid", "target_variable": "message_sid", "type": "string", "transform": "none"},
+                {"source_path": "$.status", "target_variable": "sms_status", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "sendgrid-email",
+            "name": "SendGrid Email",
+            "description": "Send emails using SendGrid",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.sendgrid.com/v3/mail/send",
+                "headers": {
+                    "Authorization": "Bearer ${sendgrid_api_key}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "personalizations": [{"to": [{"email": "${to_email}"}]}],
+                    "from": {"email": "${from_email}"},
+                    "subject": "${subject}",
+                    "content": [{"type": "text/html", "value": "${html_content}"}]
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "sendgrid_api_key"}}
+            },
+            "response_mapping": []
+        },
+        {
+            "id": "slack-message",
+            "name": "Slack Message",
+            "description": "Post message to Slack channel",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://slack.com/api/chat.postMessage",
+                "headers": {
+                    "Authorization": "Bearer ${slack_bot_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "channel": "${channel_id}",
+                    "text": "${message_text}"
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "slack_bot_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.ok", "target_variable": "success", "type": "boolean", "transform": "none"},
+                {"source_path": "$.ts", "target_variable": "message_timestamp", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "github-create-issue",
+            "name": "GitHub Create Issue",
+            "description": "Create issue in GitHub repository",
+            "category": "custom",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.github.com/repos/${owner}/${repo}/issues",
+                "headers": {
+                    "Authorization": "Bearer ${github_token}",
+                    "Accept": "application/vnd.github.v3+json",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "title": "${issue_title}",
+                    "body": "${issue_body}",
+                    "labels": []
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "github_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.number", "target_variable": "issue_number", "type": "number", "transform": "none"},
+                {"source_path": "$.html_url", "target_variable": "issue_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "openai-completion",
+            "name": "OpenAI Completion",
+            "description": "Generate text using OpenAI API",
+            "category": "ai",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer ${openai_api_key}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "model": "gpt-4",
+                    "messages": [{"role": "user", "content": "${prompt}"}],
+                    "temperature": 0.7
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "openai_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.choices[0].message.content", "target_variable": "ai_response", "type": "string", "transform": "none"},
+                {"source_path": "$.usage.total_tokens", "target_variable": "tokens_used", "type": "number", "transform": "none"}
+            ]
+        }
+    ]
+    return {"templates": templates, "count": len(templates)}
+
+
+@app.get("/api/connectors/{connector_id}")
+async def get_connector(connector_id: str):
+    """Get connector by ID"""
+    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    return connector
+
+
+@app.post("/api/connectors")
+async def create_connector(connector: APIConnector):
+    """Create new API connector"""
+    connector_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    connector_dict = connector.dict()
+    connector_dict["id"] = connector_id
+    connector_dict["created_at"] = now
+    connector_dict["updated_at"] = now
+    
+    api_connectors_collection.insert_one(connector_dict)
+    
+    return {"message": "Connector created successfully", "id": connector_id}
+
+
+@app.put("/api/connectors/{connector_id}")
+async def update_connector(connector_id: str, connector: APIConnector):
+    """Update existing connector"""
+    existing = api_connectors_collection.find_one({"id": connector_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    now = datetime.utcnow().isoformat()
+    connector_dict = connector.dict()
+    connector_dict["id"] = connector_id
+    connector_dict["created_at"] = existing.get("created_at")
+    connector_dict["updated_at"] = now
+    
+    api_connectors_collection.replace_one({"id": connector_id}, connector_dict)
+    
+    return {"message": "Connector updated successfully"}
+
+
+@app.delete("/api/connectors/{connector_id}")
+async def delete_connector(connector_id: str):
+    """Delete connector"""
+    result = api_connectors_collection.delete_one({"id": connector_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    return {"message": "Connector deleted successfully"}
+
+
+@app.post("/api/connectors/{connector_id}/test")
+async def test_connector(connector_id: str, variables: Dict[str, Any]):
+    """Test connector with provided variables"""
+    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    try:
+        config = connector.get("config", {})
+        
+        # Substitute variables in URL
+        url = config.get("url", "")
+        for key, value in variables.items():
+            url = url.replace(f"${{{key}}}", str(value))
+        
+        # Substitute variables in headers
+        headers = {}
+        for key, value in config.get("headers", {}).items():
+            header_value = value
+            for var_key, var_value in variables.items():
+                header_value = header_value.replace(f"${{{var_key}}}", str(var_value))
+            headers[key] = header_value
+        
+        # Substitute variables in body
+        body = config.get("body")
+        if isinstance(body, str):
+            for key, value in variables.items():
+                body = body.replace(f"${{{key}}}", str(value))
+        elif isinstance(body, dict):
+            body = json.loads(json.dumps(body))  # Deep copy
+            def replace_vars(obj):
+                if isinstance(obj, str):
+                    for key, value in variables.items():
+                        obj = obj.replace(f"${{{key}}}", str(value))
+                    return obj
+                elif isinstance(obj, dict):
+                    return {k: replace_vars(v) for k, v in obj.items()}
+                elif isinstance(obj, list):
+                    return [replace_vars(item) for item in obj]
+                return obj
+            body = replace_vars(body)
+        
+        # Make request
+        method = config.get("method", "GET").upper()
+        timeout = connector.get("error_handling", {}).get("timeout", 30000) / 1000
+        
+        if method == "GET":
+            response = requests.get(url, headers=headers, timeout=timeout)
+        elif method == "POST":
+            if isinstance(body, str):
+                response = requests.post(url, headers=headers, data=body, timeout=timeout)
+            else:
+                response = requests.post(url, headers=headers, json=body, timeout=timeout)
+        elif method == "PUT":
+            response = requests.put(url, headers=headers, json=body, timeout=timeout)
+        elif method == "PATCH":
+            response = requests.patch(url, headers=headers, json=body, timeout=timeout)
+        elif method == "DELETE":
+            response = requests.delete(url, headers=headers, timeout=timeout)
+        else:
+            raise HTTPException(status_code=400, detail=f"Unsupported HTTP method: {method}")
+        
+        # Parse response
+        try:
+            response_data = response.json()
+        except:
+            response_data = response.text
+        
+        return {
+            "success": response.status_code >= 200 and response.status_code < 300,
+            "status_code": response.status_code,
+            "response": response_data,
+            "headers": dict(response.headers)
+        }
+    
+    except requests.exceptions.Timeout:
+        raise HTTPException(status_code=408, detail="Request timeout")
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Request failed: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Test failed: {str(e)}")
+
+
+@app.post("/api/connectors/execute")
+async def execute_connector(connector_id: str, variables: Dict[str, Any]):
+    """Execute connector in workflow context and map response"""
+    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    # First test the connector
+    test_result = await test_connector(connector_id, variables)
+    
+    if not test_result["success"]:
+        return {
+            "success": False,
+            "error": "Connector execution failed",
+            "status_code": test_result["status_code"],
+            "response": test_result["response"]
+        }
+    
+    # Map response to variables
+    mapped_variables = {}
+    response_data = test_result["response"]
+    
+    for mapping in connector.get("response_mapping", []):
+        source_path = mapping.get("source_path", "")
+        target_variable = mapping.get("target_variable", "")
+        
+        # Simple JSON path extraction ($.field.subfield)
+        value = response_data
+        if source_path.startswith("$."):
+            path_parts = source_path[2:].split(".")
+            for part in path_parts:
+                if isinstance(value, dict):
+                    value = value.get(part)
+                else:
+                    value = None
+                    break
+        
+        # Apply transformation
+        transform = mapping.get("transform", "none")
+        if transform == "uppercase" and isinstance(value, str):
+            value = value.upper()
+        elif transform == "lowercase" and isinstance(value, str):
+            value = value.lower()
+        
+        mapped_variables[target_variable] = value
+    
+    return {
+        "success": True,
+        "mapped_variables": mapped_variables,
+        "raw_response": response_data
+    }
+
+
+# ============================================================================
+# SPRINT 4: ADVANCED DEBUGGING ENDPOINTS
+# ============================================================================
+
+@app.post("/api/instances/{instance_id}/breakpoints")
+async def add_breakpoint(instance_id: str, breakpoint: Breakpoint):
+    """Add breakpoint to workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("breakpoints", [])
+    
+    # Check if breakpoint already exists for this node
+    existing_idx = next((i for i, bp in enumerate(breakpoints) if bp["node_id"] == breakpoint.node_id), None)
+    
+    if existing_idx is not None:
+        # Update existing breakpoint
+        breakpoints[existing_idx] = breakpoint.dict()
+    else:
+        # Add new breakpoint
+        breakpoints.append(breakpoint.dict())
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint added successfully", "breakpoints": breakpoints}
+
+
+@app.delete("/api/instances/{instance_id}/breakpoints/{node_id}")
+async def remove_breakpoint(instance_id: str, node_id: str):
+    """Remove breakpoint from workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("breakpoints", [])
+    breakpoints = [bp for bp in breakpoints if bp["node_id"] != node_id]
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint removed successfully", "breakpoints": breakpoints}
+
+
+@app.put("/api/instances/{instance_id}/breakpoints/{node_id}")
+async def update_breakpoint(instance_id: str, node_id: str, breakpoint: Breakpoint):
+    """Update breakpoint (enable/disable or change condition)"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("breakpoints", [])
+    
+    # Find and update breakpoint
+    for bp in breakpoints:
+        if bp["node_id"] == node_id:
+            bp["enabled"] = breakpoint.enabled
+            bp["condition"] = breakpoint.condition
+            break
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint updated successfully", "breakpoints": breakpoints}
+
+
+@app.get("/api/instances/{instance_id}/breakpoints")
+async def get_breakpoints(instance_id: str):
+    """List all breakpoints for workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    return {"breakpoints": instance.get("breakpoints", [])}
+
+
+@app.post("/api/instances/{instance_id}/debug/step")
+async def debug_step(instance_id: str):
+    """Step to next node in debug mode"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    # Set debug_mode flag
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_mode": True, "debug_action": "step"}}
+    )
+    
+    return {"message": "Stepping to next node", "debug_mode": True}
+
+
+@app.post("/api/instances/{instance_id}/debug/continue")
+async def debug_continue(instance_id: str):
+    """Continue execution until next breakpoint"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_mode": True, "debug_action": "continue"}}
+    )
+    
+    return {"message": "Continuing execution", "debug_mode": True}
+
+
+@app.post("/api/instances/{instance_id}/debug/pause")
+async def debug_pause(instance_id: str):
+    """Pause execution"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_mode": True, "debug_action": "pause"}}
+    )
+    
+    return {"message": "Execution paused", "debug_mode": True}
+
+
+@app.get("/api/instances/{instance_id}/debug/state")
+async def get_debug_state(instance_id: str):
+    """Get current debug state"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    return {
+        "debug_mode": instance.get("debug_mode", False),
+        "debug_action": instance.get("debug_action"),
+        "current_node": instance.get("current_node"),
+        "breakpoints": instance.get("breakpoints", []),
+        "status": instance.get("status")
+    }
+
+
+@app.get("/api/instances/{instance_id}/logs")
+async def get_execution_logs(instance_id: str, level: Optional[str] = None):
+    """Get execution logs with optional level filtering"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    logs = instance.get("execution_logs", [])
+    
+    if level:
+        logs = [log for log in logs if log.get("level") == level]
+    
+    return {"logs": logs, "count": len(logs)}
+
+
+@app.post("/api/instances/{instance_id}/logs")
+async def add_execution_log(instance_id: str, log: ExecutionLog):
+    """Add log entry to workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    logs = instance.get("execution_logs", [])
+    logs.append(log.dict())
+    
+    # Keep only last 1000 logs to prevent bloat
+    if len(logs) > 1000:
+        logs = logs[-1000:]
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"execution_logs": logs}}
+    )
+    
+    return {"message": "Log added successfully"}
+
+
+@app.get("/api/instances/{instance_id}/performance")
+async def get_performance_profile(instance_id: str):
+    """Get performance profiling data"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    execution_history = instance.get("execution_history", [])
+    
+    # Calculate performance metrics
+    total_duration_ms = 0
+    node_performance = []
+    
+    for entry in execution_history:
+        if entry.get("started_at") and entry.get("completed_at"):
+            try:
+                start = datetime.fromisoformat(entry["started_at"])
+                end = datetime.fromisoformat(entry["completed_at"])
+                duration_ms = int((end - start).total_seconds() * 1000)
+                total_duration_ms += duration_ms
+                
+                node_performance.append({
+                    "node_id": entry.get("node_id"),
+                    "duration_ms": duration_ms,
+                    "status": entry.get("status")
+                })
+            except:
+                pass
+    
+    # Sort by duration (slowest first)
+    node_performance.sort(key=lambda x: x["duration_ms"], reverse=True)
+    
+    return {
+        "total_duration_ms": total_duration_ms,
+        "nodes": node_performance,
+        "slowest_nodes": node_performance[:5]
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
