@@ -25,6 +25,7 @@ import VariableManagementPanel from './VariableManagementPanel';
 import LifecyclePanel from './LifecyclePanel';
 import VersionComparison from './VersionComparison';
 import EditProtectionModal from './EditProtectionModal';
+import ZoomControls from './ZoomControls';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
