@@ -486,6 +486,78 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       updatedData.timeoutHours = parseInt(timeoutHours) || 24;
     }
     
+    // Data Operations nodes
+    if ([NODE_TYPES.CREATE_RECORD, NODE_TYPES.UPDATE_RECORD, NODE_TYPES.DELETE_RECORD, 
+         NODE_TYPES.LOOKUP_RECORD, NODE_TYPES.QUERY_RECORDS, NODE_TYPES.GET_RECORD].includes(currentNodeType)) {
+      updatedData.collection = collection;
+      updatedData.recordId = recordId;
+      updatedData.recordData = recordData;
+      updatedData.queryFilters = queryFilters;
+      updatedData.queryLimit = parseInt(queryLimit) || 100;
+      updatedData.querySortBy = querySortBy;
+      updatedData.querySortOrder = querySortOrder;
+    }
+    
+    // Data Transform nodes
+    if ([NODE_TYPES.TRANSFORM, NODE_TYPES.FILTER, NODE_TYPES.SORT, 
+         NODE_TYPES.AGGREGATE, NODE_TYPES.CALCULATE].includes(currentNodeType)) {
+      updatedData.transformMapping = transformMapping;
+      updatedData.filterCondition = filterCondition;
+      updatedData.sortField = sortField;
+      updatedData.sortOrder = sortOrder;
+      updatedData.aggregateField = aggregateField;
+      updatedData.aggregateOperation = aggregateOperation;
+      updatedData.calculateFormula = calculateFormula;
+      updatedData.calculateOutputVar = calculateOutputVar;
+    }
+    
+    // Loop nodes
+    if ([NODE_TYPES.LOOP_FOR_EACH, NODE_TYPES.LOOP_WHILE, NODE_TYPES.LOOP_REPEAT].includes(currentNodeType)) {
+      updatedData.loopCollection = loopCollection;
+      updatedData.loopItemVar = loopItemVar;
+      updatedData.loopIndexVar = loopIndexVar;
+      updatedData.whileCondition = whileCondition;
+      updatedData.repeatCount = parseInt(repeatCount) || 1;
+      updatedData.maxIterations = parseInt(maxIterations) || 1000;
+    }
+    
+    // Switch node
+    if (currentNodeType === NODE_TYPES.SWITCH) {
+      updatedData.switchVariable = switchVariable;
+      updatedData.switchCases = switchCases;
+    }
+    
+    // Assignment node
+    if (currentNodeType === NODE_TYPES.ASSIGNMENT) {
+      updatedData.assignments = assignments;
+    }
+    
+    // Email node
+    if (currentNodeType === NODE_TYPES.EMAIL) {
+      updatedData.emailTo = emailTo;
+      updatedData.emailSubject = emailSubject;
+      updatedData.emailBody = emailBody;
+      updatedData.emailTemplate = emailTemplate;
+    }
+    
+    // Wait node
+    if (currentNodeType === NODE_TYPES.WAIT) {
+      updatedData.waitForEvent = waitForEvent;
+      updatedData.waitCondition = waitCondition;
+    }
+    
+    // Screen node
+    if (currentNodeType === NODE_TYPES.SCREEN) {
+      updatedData.screenContent = screenContent;
+      updatedData.screenTemplate = screenTemplate;
+    }
+    
+    // Error Handler node
+    if (currentNodeType === NODE_TYPES.ERROR_HANDLER) {
+      updatedData.errorHandlerType = errorHandlerType;
+      updatedData.errorHandlerAction = errorHandlerAction;
+    }
+    
     // CRITICAL: Ensure type is always set in data
     updatedData.type = currentNodeType;
 
