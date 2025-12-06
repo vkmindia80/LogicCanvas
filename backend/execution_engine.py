@@ -546,6 +546,44 @@ class NodeExecutor:
             "continue_loop": bool(result)
         }
 
+    def execute_loop_do_while_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute do-while loop node - executes at least once, then checks condition"""
+        loop_data = node.get("data", {})
+        condition = loop_data.get("condition", "false")
+        max_iterations = loop_data.get("maxIterations", 100)
+        counter_var = loop_data.get("counterVariable", "loop_counter")
+        break_on_error = loop_data.get("breakOnError", True)
+        
+        # Set counter variable to 0 if not exists
+        if counter_var not in self.variables:
+            self.variables[counter_var] = 0
+        
+        # Do-while always executes at least once, so we return with continue_loop=True
+        # The condition is checked AFTER the first iteration
+        is_first_iteration = self.variables.get(f"__{counter_var}_first_iteration", True)
+        
+        if is_first_iteration:
+            self.variables[f"__{counter_var}_first_iteration"] = False
+            condition_result = True  # Always true for first iteration
+        else:
+            # Evaluate condition after first iteration
+            condition_result = bool(self.evaluator.evaluate(condition, self.variables))
+        
+        return {
+            "status": "completed",
+            "output": {
+                "loop_type": "do_while",
+                "condition": condition,
+                "condition_result": condition_result,
+                "max_iterations": max_iterations,
+                "counter_variable": counter_var,
+                "break_on_error": break_on_error,
+                "is_first_iteration": is_first_iteration
+            },
+            "loop": True,
+            "continue_loop": condition_result
+        }
+
     def execute_loop_repeat_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute repeat loop node"""
         loop_data = node.get("data", {})
