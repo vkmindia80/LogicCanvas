@@ -27,6 +27,8 @@ import DebugPanel from './components/DebugPanel';
 import VideoTutorials from './components/VideoTutorials';
 import SubworkflowPatternLibrary from './components/SubworkflowPatternLibrary';
 import TransformationPlayground from './components/TransformationPlayground';
+import ComponentLibrary from './components/ComponentLibrary';
+import SubprocessConfig from './components/SubprocessConfig';
 
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
