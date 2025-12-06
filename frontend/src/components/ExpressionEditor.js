@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Code, Play, Info, Lightbulb } from 'lucide-react';
+import { Code, Play, Info, Lightbulb, CheckCircle } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -8,7 +8,11 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
   const [testing, setTesting] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [autocompleteOptions, setAutocompleteOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(0);
   const textareaRef = useRef(null);
+  const autocompleteRef = useRef(null);
 
   // Common expression patterns and examples
   const commonExpressions = [
