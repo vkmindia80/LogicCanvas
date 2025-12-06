@@ -9,6 +9,7 @@ from apscheduler.triggers.cron import CronTrigger
 import os
 import uuid
 from execution_engine import WorkflowExecutionEngine, ExpressionEvaluator
+from variable_manager import VariableManager, VariableType, VariableScope
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
