@@ -817,6 +817,206 @@ class NodeExecutor:
         except Exception as e:
             return {"status": "failed", "error": f"Delete failed: {str(e)}"}
 
+    def execute_transform_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute transform node - Phase 3.1: Apply data transformations"""
+        from transformation_engine import apply_transformation
+        
+        transform_data = node.get("data", {})
+        transform_mapping = transform_data.get("transformMapping", {})
+        transformations = transform_mapping.get("transformations", [])
+        field_mapping = transform_mapping.get("fieldMapping", {})
+        
+        try:
+            result_data = {}
+            
+            # Apply advanced transformations pipeline
+            if transformations:
+                # Get initial data from variables
+                initial_data = self.variables.get("input_data", {})
+                
+                # Apply each transformation in sequence
+                result = initial_data
+                for transform in transformations:
+                    function_name = transform.get("function")
+                    args = transform.get("args", [])
+                    kwargs = transform.get("kwargs", {})
+                    
+                    # Replace {previous_result} placeholder
+                    args = [result if arg == "{previous_result}" else arg for arg in args]
+                    
+                    # Evaluate variables in args
+                    evaluated_args = []
+                    for arg in args:
+                        if isinstance(arg, str) and "${" in arg:
+                            evaluated_args.append(self.evaluator.evaluate(arg, self.variables))
+                        else:
+                            evaluated_args.append(arg)
+                    
+                    result = apply_transformation(function_name, *evaluated_args, **kwargs)
+                
+                result_data["transformed_data"] = result
+            
+            # Apply simple field mapping (legacy support)
+            if field_mapping:
+                mapped_data = {}
+                for target_field, source_expression in field_mapping.items():
+                    if isinstance(source_expression, str):
+                        mapped_data[target_field] = self.evaluator.evaluate(source_expression, self.variables)
+                    else:
+                        mapped_data[target_field] = source_expression
+                result_data["mapped_data"] = mapped_data
+            
+            # Store result in variables
+            self.variables["transform_result"] = result_data.get("transformed_data", result_data.get("mapped_data", {}))
+            
+            return {
+                "status": "completed",
+                "output": result_data
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Transform failed: {str(e)}"}
+    
+    def execute_filter_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute filter node - filter collection by condition"""
+        filter_data = node.get("data", {})
+        filter_condition = filter_data.get("filterCondition", "")
+        input_collection = self.variables.get("items", [])
+        
+        if not isinstance(input_collection, list):
+            return {"status": "failed", "error": "Input is not a collection"}
+        
+        try:
+            filtered_items = []
+            for item in input_collection:
+                # Evaluate condition with item as context
+                item_vars = {**self.variables, "item": item}
+                if self.evaluator.evaluate(filter_condition, item_vars):
+                    filtered_items.append(item)
+            
+            self.variables["filtered_items"] = filtered_items
+            return {
+                "status": "completed",
+                "output": {
+                    "items": filtered_items,
+                    "count": len(filtered_items),
+                    "original_count": len(input_collection)
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Filter failed: {str(e)}"}
+    
+    def execute_sort_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute sort node - sort collection by field"""
+        sort_data = node.get("data", {})
+        sort_field = sort_data.get("sortField", "")
+        sort_order = sort_data.get("sortOrder", "asc")
+        input_collection = self.variables.get("items", [])
+        
+        if not isinstance(input_collection, list):
+            return {"status": "failed", "error": "Input is not a collection"}
+        
+        if not sort_field:
+            return {"status": "failed", "error": "Sort field not specified"}
+        
+        try:
+            reverse = (sort_order == "desc")
+            sorted_items = sorted(
+                input_collection,
+                key=lambda x: x.get(sort_field) if isinstance(x, dict) else x,
+                reverse=reverse
+            )
+            
+            self.variables["sorted_items"] = sorted_items
+            return {
+                "status": "completed",
+                "output": {
+                    "items": sorted_items,
+                    "count": len(sorted_items),
+                    "sorted_by": sort_field,
+                    "order": sort_order
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Sort failed: {str(e)}"}
+    
+    def execute_aggregate_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute aggregate node - calculate aggregations"""
+        agg_data = node.get("data", {})
+        aggregate_field = agg_data.get("aggregateField", "")
+        aggregate_operation = agg_data.get("aggregateOperation", "sum")
+        input_collection = self.variables.get("items", [])
+        
+        if not isinstance(input_collection, list):
+            return {"status": "failed", "error": "Input is not a collection"}
+        
+        try:
+            # Extract values
+            values = []
+            for item in input_collection:
+                if isinstance(item, dict):
+                    val = item.get(aggregate_field)
+                else:
+                    val = item
+                
+                if val is not None:
+                    try:
+                        values.append(float(val))
+                    except (ValueError, TypeError):
+                        pass
+            
+            # Calculate aggregation
+            result = 0
+            if aggregate_operation == "sum":
+                result = sum(values)
+            elif aggregate_operation == "average" or aggregate_operation == "avg":
+                result = sum(values) / len(values) if values else 0
+            elif aggregate_operation == "min":
+                result = min(values) if values else 0
+            elif aggregate_operation == "max":
+                result = max(values) if values else 0
+            elif aggregate_operation == "count":
+                result = len(values)
+            
+            self.variables["aggregate_result"] = result
+            return {
+                "status": "completed",
+                "output": {
+                    "result": result,
+                    "operation": aggregate_operation,
+                    "field": aggregate_field,
+                    "count": len(values)
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Aggregation failed: {str(e)}"}
+    
+    def execute_calculate_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute calculate node - perform calculations"""
+        calc_data = node.get("data", {})
+        formula = calc_data.get("calculateFormula", "")
+        output_var = calc_data.get("calculateOutputVar", "result")
+        
+        if not formula:
+            return {"status": "failed", "error": "Formula not specified"}
+        
+        try:
+            # Evaluate formula with variables
+            result = self.evaluator.evaluate(formula, self.variables)
+            
+            # Store in specified variable
+            self.variables[output_var] = result
+            
+            return {
+                "status": "completed",
+                "output": {
+                    "result": result,
+                    "output_variable": output_var,
+                    "formula": formula
+                }
+            }
+        except Exception as e:
+            return {"status": "failed", "error": f"Calculation failed: {str(e)}"}
+
     def execute_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a node based on its type"""
         node_type = node.get("type", "")
