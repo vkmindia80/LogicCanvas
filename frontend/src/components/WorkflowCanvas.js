@@ -93,6 +93,14 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [zoomLevel, setZoomLevel] = useState(100);
   const [isExporting, setIsExporting] = useState(false);
 
+  // Sprint 3: Lifecycle & Version Management
+  const [showLifecyclePanel, setShowLifecyclePanel] = useState(false);
+  const [showVersionComparison, setShowVersionComparison] = useState(false);
+  const [showEditProtection, setShowEditProtection] = useState(false);
+  const [workflowState, setWorkflowState] = useState(workflow?.lifecycle_state || workflow?.status || 'draft');
+  const [canEditDirectly, setCanEditDirectly] = useState(true);
+  const [activeInstances, setActiveInstances] = useState(0);
+
   const reactFlowWrapper = useRef(null);
   const reactFlowInstance = useRef(null);
   const nodeIdCounter = useRef(1);
