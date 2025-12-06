@@ -439,10 +439,20 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 onChange={setCondition}
                 variables={{}}
               />
-              <p className="text-xs text-slate-500 mt-2 flex items-center space-x-1">
-                <Info className="w-3 h-3" />
-                <span>Expression evaluated to determine Yes/No branch</span>
-              </p>
+              <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs font-semibold text-blue-900 mb-1 flex items-center space-x-1">
+                  <Info className="w-3 h-3" />
+                  <span>Examples:</span>
+                </p>
+                <ul className="text-xs text-blue-800 space-y-1 ml-4">
+                  <li>• <code className="bg-blue-100 px-1 rounded">amount &gt; 1000</code> - Check if amount exceeds limit</li>
+                  <li>• <code className="bg-blue-100 px-1 rounded">status === "approved"</code> - Check exact status</li>
+                  <li>• <code className="bg-blue-100 px-1 rounded">priority === "high" && urgent === true</code> - Multiple conditions</li>
+                </ul>
+                <p className="text-xs text-blue-700 mt-2">
+                  💡 Use variables from previous nodes in your condition
+                </p>
+              </div>
             </div>
           </div>
         )}
