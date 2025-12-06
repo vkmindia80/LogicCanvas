@@ -808,6 +808,10 @@ class WorkflowExecutionEngine:
             "execution_log": [],
             # Per-node status map
             "node_states": {},
+            # Parent-child relationship tracking (Phase 3.1)
+            "parent_instance_id": parent_instance_id,
+            "nesting_level": nesting_level,
+            "child_instances": [],  # Track child subprocess instances
         }
 
         self.db["workflow_instances"].insert_one(instance)
