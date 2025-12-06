@@ -207,15 +207,42 @@ export const DataTransformConfig = ({
       </div>
 
       {isTransform && (
-        <KeyValueEditor
-          value={transformMapping}
-          onChange={setTransformMapping}
-          label="Field Mapping"
-          keyPlaceholder="Target field"
-          valuePlaceholder="Source field (use ${variable})"
-          allowJSON={true}
-          testId="transform-mapping-editor"
-        />
+        <div className="space-y-4">
+          {/* Phase 3.1: Advanced Data Transformation Mapper */}
+          <DataTransformationMapper
+            value={transformMapping?.transformations || []}
+            onChange={(transformations) => {
+              setTransformMapping({
+                ...transformMapping,
+                transformations
+              });
+            }}
+            variables={workflowVariables || {}}
+          />
+          
+          {/* Legacy field mapping for backward compatibility */}
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+            <summary className="cursor-pointer text-sm font-medium text-slate-700 hover:text-slate-900">
+              Legacy Field Mapping (Optional)
+            </summary>
+            <div className="mt-3">
+              <KeyValueEditor
+                value={transformMapping?.fieldMapping || {}}
+                onChange={(fieldMapping) => {
+                  setTransformMapping({
+                    ...transformMapping,
+                    fieldMapping
+                  });
+                }}
+                label="Simple Field Mapping"
+                keyPlaceholder="Target field"
+                valuePlaceholder="Source field (use ${variable})"
+                allowJSON={true}
+                testId="transform-mapping-editor"
+              />
+            </div>
+          </details>
+        </div>
       )}
 
       {isFilter && (
