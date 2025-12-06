@@ -2190,6 +2190,168 @@ async def cancel_execution_endpoint(instance_id: str):
     execution_engine.cancel_execution(instance_id)
     return {"message": "Workflow execution cancelled"}
 
+
+# ========== PHASE 8 SPRINT 3: VARIABLE MANAGEMENT ENDPOINTS ==========
+
+@app.get("/api/instances/{instance_id}/variables")
+async def get_instance_variables(
+    instance_id: str,
+    scope: Optional[str] = None,
+    variable_type: Optional[str] = None
+):
+    """Get all variables for a workflow instance with optional filters"""
+    from variable_manager import VariableType, VariableScope
+    
+    # Validate filters
+    scope_filter = None
+    if scope:
+        try:
+            scope_filter = VariableScope(scope)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid scope: {scope}")
+    
+    type_filter = None
+    if variable_type:
+        try:
+            type_filter = VariableType(variable_type)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid type: {variable_type}")
+    
+    variables = variable_manager.get_instance_variables(
+        instance_id=instance_id,
+        scope=scope_filter,
+        variable_type=type_filter
+    )
+    
+    return {
+        "instance_id": instance_id,
+        "variables": variables,
+        "count": len(variables),
+        "filters": {
+            "scope": scope,
+            "type": variable_type
+        }
+    }
+
+
+@app.get("/api/instances/{instance_id}/variables/{variable_name}/history")
+async def get_variable_history(instance_id: str, variable_name: str):
+    """Get change history for a specific variable"""
+    history = variable_manager.get_variable_history(
+        instance_id=instance_id,
+        variable_name=variable_name
+    )
+    
+    return {
+        "instance_id": instance_id,
+        "variable_name": variable_name,
+        "history": history,
+        "change_count": len(history)
+    }
+
+
+@app.post("/api/instances/{instance_id}/variables/watch")
+async def add_to_watch_list(instance_id: str, data: Dict[str, Any]):
+    """Add a variable to the watch list for debugging"""
+    variable_name = data.get("variable_name")
+    if not variable_name:
+        raise HTTPException(status_code=400, detail="variable_name is required")
+    
+    # Verify instance exists
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    variable_manager.add_to_watch_list(instance_id, variable_name)
+    
+    return {
+        "message": f"Variable '{variable_name}' added to watch list",
+        "instance_id": instance_id,
+        "variable_name": variable_name
+    }
+
+
+@app.delete("/api/instances/{instance_id}/variables/watch/{variable_name}")
+async def remove_from_watch_list(instance_id: str, variable_name: str):
+    """Remove a variable from the watch list"""
+    variable_manager.remove_from_watch_list(instance_id, variable_name)
+    
+    return {
+        "message": f"Variable '{variable_name}' removed from watch list",
+        "instance_id": instance_id,
+        "variable_name": variable_name
+    }
+
+
+@app.get("/api/instances/{instance_id}/variables/watch")
+async def get_watch_list(instance_id: str):
+    """Get the watch list for an instance"""
+    watch_list = variable_manager.get_variable_watch_list(instance_id)
+    
+    # Get current values for watched variables
+    watched_variables = []
+    if watch_list:
+        all_variables = variable_manager.get_instance_variables(instance_id)
+        watched_variables = [v for v in all_variables if v["name"] in watch_list]
+    
+    return {
+        "instance_id": instance_id,
+        "watch_list": watch_list,
+        "watched_variables": watched_variables,
+        "count": len(watch_list)
+    }
+
+
+@app.get("/api/global-variables")
+async def get_global_variables():
+    """Get all global variables shared across workflows"""
+    global_vars = variable_manager.get_global_variables()
+    
+    return {
+        "global_variables": global_vars,
+        "count": len(global_vars)
+    }
+
+
+@app.post("/api/global-variables")
+async def set_global_variable(data: Dict[str, Any]):
+    """Set or update a global variable"""
+    variable_name = data.get("name")
+    value = data.get("value")
+    description = data.get("description")
+    
+    if not variable_name:
+        raise HTTPException(status_code=400, detail="name is required")
+    if value is None:
+        raise HTTPException(status_code=400, detail="value is required")
+    
+    variable_manager.set_global_variable(
+        variable_name=variable_name,
+        value=value,
+        description=description
+    )
+    
+    return {
+        "message": f"Global variable '{variable_name}' set successfully",
+        "name": variable_name,
+        "value": value
+    }
+
+
+@app.delete("/api/global-variables/{variable_name}")
+async def delete_global_variable(variable_name: str):
+    """Delete a global variable"""
+    result = db["global_variables"].delete_one({"name": variable_name})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Global variable not found")
+    
+    return {
+        "message": f"Global variable '{variable_name}' deleted successfully",
+        "name": variable_name
+    }
+
+
 # Task Completion (resumes workflow)
 @app.post("/api/tasks/{task_id}/complete")
 async def complete_task(task_id: str, result_data: Optional[Dict[str, Any]] = None):
