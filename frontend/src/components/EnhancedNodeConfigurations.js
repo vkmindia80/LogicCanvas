@@ -545,6 +545,23 @@ export const LoopConfig = ({
           </div>
         )}
       </div>
+
+      {/* Phase 3.2: Nested Loop Information */}
+      <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-indigo-900 mb-2 flex items-center space-x-2">
+          <span>🔄</span>
+          <span>Nested Loops Support (Phase 3.2)</span>
+        </h4>
+        <ul className="text-xs text-indigo-800 space-y-1 ml-4 list-disc">
+          <li>Supports up to <strong>3 levels</strong> of nested loops</li>
+          <li>Each loop has its own variable scope</li>
+          <li>Break/Continue nodes affect only the current loop level</li>
+          <li>Performance monitoring available for each loop level</li>
+        </ul>
+        <p className="text-xs text-indigo-600 mt-3 italic">
+          💡 Tip: Use Break and Continue nodes inside loops to control iteration flow
+        </p>
+      </div>
     </div>
   );
 };
