@@ -173,15 +173,36 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
         </div>
       )}
 
-      {/* Help Text */}
-      <div className="text-xs text-gray-500">
-        <div className="font-medium mb-1">Expression Syntax:</div>
-        <ul className="list-disc list-inside space-y-0.5">
-          <li>Variables: ${'{'}variable_name{'}'}</li>
-          <li>Comparisons: ==, !=, {'>'}, {'<'}, {'>='}, {'<='}</li>
-          <li>Logic: and, or, not</li>
-          <li>Examples: ${'{'}amount{'}'} {'>'} 1000, ${'{'}status{'}'} == {'"approved"'}</li>
-        </ul>
+      {/* Help Text - Enhanced */}
+      <div className="bg-slate-100 border border-slate-300 rounded-lg p-3">
+        <div className="flex items-start space-x-2">
+          <Info className="w-4 h-4 text-slate-500 mt-0.5 flex-shrink-0" />
+          <div className="text-xs text-slate-700 space-y-2">
+            <div>
+              <span className="font-semibold text-slate-800">Quick Reference:</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <div className="font-medium text-slate-700 mb-1">Comparisons</div>
+                <div className="space-y-0.5 text-slate-600">
+                  <div><code className="bg-white px-1 py-0.5 rounded">==</code> equals</div>
+                  <div><code className="bg-white px-1 py-0.5 rounded">!=</code> not equals</div>
+                  <div><code className="bg-white px-1 py-0.5 rounded">{'>'}</code> greater than</div>
+                  <div><code className="bg-white px-1 py-0.5 rounded">{'<'}</code> less than</div>
+                </div>
+              </div>
+              <div>
+                <div className="font-medium text-slate-700 mb-1">Logical</div>
+                <div className="space-y-0.5 text-slate-600">
+                  <div><code className="bg-white px-1 py-0.5 rounded">and</code> both true</div>
+                  <div><code className="bg-white px-1 py-0.5 rounded">or</code> either true</div>
+                  <div><code className="bg-white px-1 py-0.5 rounded">not</code> negate</div>
+                  <div><code className="bg-white px-1 py-0.5 rounded">in</code> contains</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
