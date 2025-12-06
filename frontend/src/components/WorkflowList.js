@@ -7,6 +7,8 @@ import EmptyState from './EmptyState';
 import Tooltip from './Tooltip';
 import { SkeletonCard } from './Skeleton';
 import { useRole } from '../contexts/RoleContext';
+import NewUserWelcome from './NewUserWelcome';
+import AIWorkflowWizard from './AIWorkflowWizard';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
