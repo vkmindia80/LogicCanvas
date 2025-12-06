@@ -4,7 +4,7 @@ import {
   Plus, Trash2, ChevronDown, ChevronRight, Info, Check
 } from 'lucide-react';
 
-const APIConnectorBuilder = ({ onClose, connectorId = null, onSave }) => {
+const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, onSave }) => {
   const [connector, setConnector] = useState({
     name: '',
     description: '',
@@ -39,8 +39,10 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, onSave }) => {
     fetchTemplates();
     if (connectorId) {
       fetchConnector();
+    } else if (initialData) {
+      setConnector(initialData);
     }
-  }, [connectorId]);
+  }, [connectorId, initialData]);
 
   const fetchTemplates = async () => {
     try {
