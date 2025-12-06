@@ -427,7 +427,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         </div>
 
         {/* Decision Node - Condition */}
-        {node.data.type === NODE_TYPES.DECISION && (
+        {resolvedNodeType === NODE_TYPES.DECISION && (
           <div className="bg-white border-2 border-amber-200 rounded-lg p-4 shadow-sm">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Decision Logic</h3>
             <div>
