@@ -311,37 +311,32 @@ class NodeExecutor:
         return {"status": "completed", "output": {"timer_executed": True}}
 
     def execute_subprocess_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute subprocess node - enhanced nested workflow execution with version support"""
+        """Execute subprocess node - enhanced nested workflow execution with version support (Phase 3.1)"""
         subprocess_data = node.get("data", {})
         subprocess_workflow_id = subprocess_data.get("subprocessWorkflowId")
+        subprocess_version = subprocess_data.get("subprocessVersion", "latest")  # Phase 3.1: Version pinning
+        context_isolation = subprocess_data.get("contextIsolation", True)  # Phase 3.1: Context control
         
         if not subprocess_workflow_id:
             return {"status": "failed", "error": "No subprocess workflow configured"}
         
-        # Get subprocess workflow and check if it exists
-        subprocess_workflow = self.db["workflows"].find_one({"id": subprocess_workflow_id}, {"_id": 0})
+        # Phase 3.1: Use SubprocessManager for enhanced management
+        from subprocess_manager import SubprocessManager
+        subprocess_manager = SubprocessManager(self.db)
+        
+        # Validate subprocess compatibility
+        validation = subprocess_manager.validate_subprocess_compatibility(subprocess_workflow_id, subprocess_version)
+        if not validation["valid"]:
+            errors = ", ".join(validation["errors"])
+            return {"status": "failed", "error": f"Subprocess validation failed: {errors}"}
+        
+        # Get subprocess workflow with version support
+        subprocess_workflow = subprocess_manager.get_subprocess_workflow(subprocess_workflow_id, subprocess_version)
         if not subprocess_workflow:
-            return {"status": "failed", "error": f"Subprocess workflow '{subprocess_workflow_id}' not found"}
+            return {"status": "failed", "error": f"Subprocess workflow '{subprocess_workflow_id}' version '{subprocess_version}' not found"}
         
-        # Check workflow status - only published workflows can be used as subprocesses
-        workflow_status = subprocess_workflow.get("lifecycle_state", subprocess_workflow.get("status", "draft"))
-        if workflow_status not in ["published", "draft"]:
-            return {"status": "failed", "error": f"Subprocess workflow must be published (current: {workflow_status})"}
-        
-        # Get input mapping
+        # Get input/output mapping
         input_mapping = subprocess_data.get("inputMapping", {})
-        subprocess_input = {}
-        
-        # Map parent variables to subprocess input
-        for key, parent_var in input_mapping.items():
-            if parent_var in self.variables:
-                subprocess_input[key] = self.variables[parent_var]
-            else:
-                # Try to evaluate as expression
-                evaluated_value = self.evaluator.evaluate(str(parent_var), self.variables)
-                subprocess_input[key] = evaluated_value
-        
-        # Get output mapping for later use
         output_mapping = subprocess_data.get("outputMapping", {})
         
         # Get current instance to check nesting level
@@ -352,12 +347,29 @@ class NodeExecutor:
         if current_nesting_level >= 5:
             return {"status": "failed", "error": "Maximum subprocess nesting level (5) exceeded"}
         
+        # Phase 3.1: Prepare subprocess context with proper isolation
+        subprocess_input = subprocess_manager.prepare_subprocess_context(
+            parent_instance_id=self.instance_id,
+            subprocess_workflow_id=subprocess_workflow_id,
+            input_mapping=input_mapping,
+            parent_variables=self.variables if not context_isolation else {}
+        ) if context_isolation else self.variables.copy()
+        
+        # Map additional inputs
+        for key, parent_var in input_mapping.items():
+            if parent_var in self.variables:
+                subprocess_input[key] = self.variables[parent_var]
+            else:
+                # Try to evaluate as expression
+                evaluated_value = self.evaluator.evaluate(str(parent_var), self.variables)
+                subprocess_input[key] = evaluated_value
+        
         # Start subprocess execution
         from server import execution_engine as global_engine
         try:
             subprocess_instance_id = global_engine.start_execution(
                 subprocess_workflow_id,
-                triggered_by=f"subprocess:{self.instance_id}",
+                triggered_by=f"subprocess:{self.instance_id}:{node.get('id')}",
                 input_data=subprocess_input,
                 parent_instance_id=self.instance_id,
                 nesting_level=current_nesting_level + 1
@@ -368,7 +380,9 @@ class NodeExecutor:
                 "waiting_for": "subprocess",
                 "subprocess_instance_id": subprocess_instance_id,
                 "subprocess_workflow_id": subprocess_workflow_id,
+                "subprocess_version": subprocess_version,  # Phase 3.1: Track version used
                 "output_mapping": output_mapping,  # Store for when subprocess completes
+                "context_isolation": context_isolation,
                 "nesting_level": current_nesting_level + 1
             }
         except Exception as e:
