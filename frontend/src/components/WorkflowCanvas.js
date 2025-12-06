@@ -83,6 +83,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const [lastSavedAt, setLastSavedAt] = useState(null);
   const [showVariablePanel, setShowVariablePanel] = useState(false);
   const [showVariableInspector, setShowVariableInspector] = useState(false);
+  const [showVariableManagement, setShowVariableManagement] = useState(false);
   
   // Undo/Redo state
   const [history, setHistory] = useState([]);
