@@ -58,6 +58,7 @@ const AppShell = () => {
   const [debugInstanceId, setDebugInstanceId] = useState(null);
   const [showVideoTutorials, setShowVideoTutorials] = useState(false);
   const [showPatternLibrary, setShowPatternLibrary] = useState(false);
+  const [showTransformationPlayground, setShowTransformationPlayground] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('lc_token') || '');
   const [currentUser, setCurrentUser] = useState(() => {
