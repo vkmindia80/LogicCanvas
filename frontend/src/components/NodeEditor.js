@@ -80,8 +80,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       setActionType(node.data?.actionType || 'http');
       setUrl(node.data?.url || '');
       setMethod(node.data?.method || 'GET');
-      setHeaders(node.data?.headers ? JSON.stringify(node.data?.headers, null, 2) : '{}');
-      setBody(node.data?.body ? JSON.stringify(node.data?.body, null, 2) : '{}');
+      setHeaders(node.data?.headers || {});
+      setBody(node.data?.body || {});
       setAuthType(node.data?.authType || 'none');
       setToken(node.data?.token || '');
       setScript(node.data?.script || '');
