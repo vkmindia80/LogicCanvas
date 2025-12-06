@@ -337,6 +337,7 @@ export const LoopConfig = ({
 }) => {
   const isForEach = nodeType === 'loop_for_each';
   const isWhile = nodeType === 'loop_while';
+  const isDoWhile = nodeType === 'loop_do_while';
   const isRepeat = nodeType === 'loop_repeat';
 
   return (
