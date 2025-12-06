@@ -61,6 +61,58 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   const [eventName, setEventName] = useState(node?.data?.eventName || '');
   const [eventPayload, setEventPayload] = useState(node?.data?.eventPayload || {});
   
+  // Data operation states
+  const [collection, setCollection] = useState(node?.data?.collection || '');
+  const [recordId, setRecordId] = useState(node?.data?.recordId || '');
+  const [recordData, setRecordData] = useState(node?.data?.recordData || {});
+  const [queryFilters, setQueryFilters] = useState(node?.data?.queryFilters || {});
+  const [queryLimit, setQueryLimit] = useState(node?.data?.queryLimit || 100);
+  const [querySortBy, setQuerySortBy] = useState(node?.data?.querySortBy || '');
+  const [querySortOrder, setQuerySortOrder] = useState(node?.data?.querySortOrder || 'asc');
+  
+  // Data transform states
+  const [transformMapping, setTransformMapping] = useState(node?.data?.transformMapping || {});
+  const [filterCondition, setFilterCondition] = useState(node?.data?.filterCondition || '');
+  const [sortField, setSortField] = useState(node?.data?.sortField || '');
+  const [sortOrder, setSortOrder] = useState(node?.data?.sortOrder || 'asc');
+  const [aggregateField, setAggregateField] = useState(node?.data?.aggregateField || '');
+  const [aggregateOperation, setAggregateOperation] = useState(node?.data?.aggregateOperation || 'sum');
+  const [calculateFormula, setCalculateFormula] = useState(node?.data?.calculateFormula || '');
+  const [calculateOutputVar, setCalculateOutputVar] = useState(node?.data?.calculateOutputVar || '');
+  
+  // Loop states
+  const [loopCollection, setLoopCollection] = useState(node?.data?.loopCollection || '');
+  const [loopItemVar, setLoopItemVar] = useState(node?.data?.loopItemVar || 'item');
+  const [loopIndexVar, setLoopIndexVar] = useState(node?.data?.loopIndexVar || 'index');
+  const [whileCondition, setWhileCondition] = useState(node?.data?.whileCondition || '');
+  const [repeatCount, setRepeatCount] = useState(node?.data?.repeatCount || 1);
+  const [maxIterations, setMaxIterations] = useState(node?.data?.maxIterations || 1000);
+  
+  // Switch/Case states
+  const [switchVariable, setSwitchVariable] = useState(node?.data?.switchVariable || '');
+  const [switchCases, setSwitchCases] = useState(node?.data?.switchCases || []);
+  
+  // Assignment states
+  const [assignments, setAssignments] = useState(node?.data?.assignments || []);
+  
+  // Email states
+  const [emailTo, setEmailTo] = useState(node?.data?.emailTo || '');
+  const [emailSubject, setEmailSubject] = useState(node?.data?.emailSubject || '');
+  const [emailBody, setEmailBody] = useState(node?.data?.emailBody || '');
+  const [emailTemplate, setEmailTemplate] = useState(node?.data?.emailTemplate || '');
+  
+  // Wait states
+  const [waitForEvent, setWaitForEvent] = useState(node?.data?.waitForEvent || '');
+  const [waitCondition, setWaitCondition] = useState(node?.data?.waitCondition || '');
+  
+  // Screen states
+  const [screenContent, setScreenContent] = useState(node?.data?.screenContent || '');
+  const [screenTemplate, setScreenTemplate] = useState(node?.data?.screenTemplate || '');
+  
+  // Error handler states
+  const [errorHandlerType, setErrorHandlerType] = useState(node?.data?.errorHandlerType || 'catch');
+  const [errorHandlerAction, setErrorHandlerAction] = useState(node?.data?.errorHandlerAction || 'retry');
+  
   // Collapsible sections state
   const [sectionsExpanded, setSectionsExpanded] = useState({
     basic: true,
