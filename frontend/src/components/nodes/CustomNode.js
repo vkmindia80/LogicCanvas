@@ -96,6 +96,97 @@ const CustomNode = ({ data, selected }) => {
   const hasValidationError = validationStatus === 'error';
   const hasValidationWarning = validationStatus === 'warning';
 
+  // Configuration status check
+  const isConfigured = checkNodeConfiguration(data);
+  const configStatus = getConfigurationStatus(data);
+
+  // Helper function to check if node is properly configured
+  function checkNodeConfiguration(nodeData) {
+    if (!nodeData) return false;
+    
+    // Basic checks that apply to all nodes
+    if (!nodeData.label || nodeData.label.trim() === '' || nodeData.label === 'New Node') {
+      return false;
+    }
+
+    // Type-specific configuration checks
+    switch (nodeData.type) {
+      case NODE_TYPES.TASK:
+        return !!(nodeData.assignedTo || nodeData.assignmentRole);
+      case NODE_TYPES.FORM:
+        return !!nodeData.formId;
+      case NODE_TYPES.DECISION:
+        return !!nodeData.condition;
+      case NODE_TYPES.APPROVAL:
+        return !!(nodeData.approvers && nodeData.approvers.length > 0);
+      case NODE_TYPES.ACTION:
+        return !!nodeData.url;
+      case NODE_TYPES.SUBPROCESS:
+        return !!nodeData.subprocessWorkflowId;
+      case NODE_TYPES.TIMER:
+        return !!(nodeData.delaySeconds || nodeData.delayMinutes || nodeData.delayHours || nodeData.scheduledTime);
+      default:
+        return true; // Assume configured for nodes without specific requirements
+    }
+  }
+
+  // Get detailed configuration status
+  function getConfigurationStatus(nodeData) {
+    if (!nodeData) return { status: 'incomplete', message: 'No data' };
+
+    const issues = [];
+    
+    // Check label
+    if (!nodeData.label || nodeData.label.trim() === '' || nodeData.label === 'New Node') {
+      issues.push('Missing label');
+    }
+
+    // Type-specific checks
+    switch (nodeData.type) {
+      case NODE_TYPES.TASK:
+        if (!nodeData.assignedTo && !nodeData.assignmentRole) {
+          issues.push('No assignee configured');
+        }
+        break;
+      case NODE_TYPES.FORM:
+        if (!nodeData.formId) {
+          issues.push('No form selected');
+        }
+        break;
+      case NODE_TYPES.DECISION:
+        if (!nodeData.condition) {
+          issues.push('No condition defined');
+        }
+        break;
+      case NODE_TYPES.APPROVAL:
+        if (!nodeData.approvers || nodeData.approvers.length === 0) {
+          issues.push('No approvers assigned');
+        }
+        break;
+      case NODE_TYPES.ACTION:
+        if (!nodeData.url) {
+          issues.push('No URL configured');
+        }
+        break;
+      case NODE_TYPES.SUBPROCESS:
+        if (!nodeData.subprocessWorkflowId) {
+          issues.push('No subprocess selected');
+        }
+        break;
+      case NODE_TYPES.TIMER:
+        if (!nodeData.delaySeconds && !nodeData.delayMinutes && !nodeData.delayHours && !nodeData.scheduledTime) {
+          issues.push('No timer configured');
+        }
+        break;
+    }
+
+    if (issues.length === 0) {
+      return { status: 'complete', message: 'Fully configured' };
+    } else {
+      return { status: 'incomplete', message: issues.join(', ') };
+    }
+  }
+
   // Enhanced Salesforce-style color scheme with gradients
   const getNodeStyle = () => {
     const baseStyles = {
