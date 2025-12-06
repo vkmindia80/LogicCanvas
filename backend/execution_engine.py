@@ -515,13 +515,19 @@ class NodeExecutor:
         }
 
     def execute_loop_while_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute while loop node"""
+        """Execute while loop node with enhanced control"""
         loop_data = node.get("data", {})
         condition = loop_data.get("condition", "false")
         max_iterations = loop_data.get("maxIterations", 100)
+        counter_var = loop_data.get("counterVariable", "loop_counter")
+        break_on_error = loop_data.get("breakOnError", True)  # Stop loop if node inside fails
         
         # Evaluate condition
         result = self.evaluator.evaluate(condition, self.variables)
+        
+        # Set counter variable to 0 if not exists
+        if counter_var not in self.variables:
+            self.variables[counter_var] = 0
         
         return {
             "status": "completed",
@@ -529,7 +535,9 @@ class NodeExecutor:
                 "loop_type": "while",
                 "condition": condition,
                 "condition_result": bool(result),
-                "max_iterations": max_iterations
+                "max_iterations": max_iterations,
+                "counter_variable": counter_var,
+                "break_on_error": break_on_error
             },
             "loop": True,
             "continue_loop": bool(result)
