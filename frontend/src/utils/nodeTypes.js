@@ -164,6 +164,22 @@ export const NODE_CONFIGS = {
     icon: 'repeat-1',
     description: 'Repeat fixed number of times'
   },
+  [NODE_TYPES.LOOP_BREAK]: {
+    label: 'Break Loop',
+    category: 'Logic',
+    color: 'bg-rose-500',
+    borderColor: 'border-rose-600',
+    icon: 'x-circle',
+    description: 'Exit current loop immediately'
+  },
+  [NODE_TYPES.LOOP_CONTINUE]: {
+    label: 'Continue Loop',
+    category: 'Logic',
+    color: 'bg-pink-500',
+    borderColor: 'border-pink-600',
+    icon: 'skip-forward',
+    description: 'Skip to next loop iteration'
+  },
 
   // ========== APPROVAL ==========
   [NODE_TYPES.APPROVAL]: {
