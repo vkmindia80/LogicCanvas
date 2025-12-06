@@ -36,6 +36,7 @@ const AppShell = () => {
   const [currentWorkflow, setCurrentWorkflow] = useState(null);
   const [currentForm, setCurrentForm] = useState(null);
   const [activeTab, setActiveTab] = useState('workflows');
+  const [activeMenuItem, setActiveMenuItem] = useState('workflows');
   const [loading, setLoading] = useState(true);
   const [showTaskInbox, setShowTaskInbox] = useState(false);
   const [showApprovalQueue, setShowApprovalQueue] = useState(false);
