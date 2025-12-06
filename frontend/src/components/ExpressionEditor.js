@@ -42,6 +42,20 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
     { value: 'in', label: 'in', description: 'Check if value exists in collection' },
   ];
 
+  // Function library for advanced operations
+  const functionLibrary = [
+    { name: 'len()', description: 'Get length of string or array', example: 'len(${items}) > 5' },
+    { name: 'upper()', description: 'Convert to uppercase', example: 'upper(${name}) == "JOHN"' },
+    { name: 'lower()', description: 'Convert to lowercase', example: 'lower(${email}).endsWith("@company.com")' },
+    { name: 'trim()', description: 'Remove whitespace', example: 'trim(${input}) != ""' },
+    { name: 'startsWith()', description: 'Check if starts with text', example: '${code}.startsWith("PRE")' },
+    { name: 'endsWith()', description: 'Check if ends with text', example: '${file}.endsWith(".pdf")' },
+    { name: 'contains()', description: 'Check if contains text', example: '${message}.contains("urgent")' },
+    { name: 'abs()', description: 'Absolute value', example: 'abs(${difference}) < 10' },
+    { name: 'round()', description: 'Round number', example: 'round(${price}) == 100' },
+    { name: 'now()', description: 'Current timestamp', example: '${date} < now()' },
+  ];
+
   // Detect when to show autocomplete
   useEffect(() => {
     if (!value || cursorPosition === 0) {
