@@ -1,0 +1,28 @@
+{
+  "id": "document-approval-template",
+  "name": "Document Approval Workflow",
+  "description": "Multi-level document review and approval process with version control",
+  "category": "general",
+  "tags": ["document", "approval", "review", "compliance"],
+  "complexity": "simple",
+  "setup_time": "~5 minutes",
+  "node_count": 7,
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 100}, "data": {"label": "Submit Document", "type": "start"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 200}, "data": {"label": "Document Upload", "type": "form"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 100, "y": 300}, "data": {"label": "Reviewer Approval", "type": "approval", "approvalType": "sequential"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 100, "y": 400}, "data": {"label": "Approved?", "type": "decision"}},
+    {"id": "task-1", "type": "task", "position": {"x": 300, "y": 500}, "data": {"label": "Request Revisions", "type": "task"}},
+    {"id": "task-2", "type": "task", "position": {"x": 100, "y": 600}, "data": {"label": "Publish Document", "type": "task"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 700}, "data": {"label": "Process Complete", "type": "end"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "approval-1"},
+    {"id": "e3", "source": "approval-1", "target": "decision-1"},
+    {"id": "e4", "source": "decision-1", "target": "task-1", "label": "rejected"},
+    {"id": "e5", "source": "decision-1", "target": "task-2", "label": "approved"},
+    {"id": "e6", "source": "task-1", "target": "form-1"},
+    {"id": "e7", "source": "task-2", "target": "end-1"}
+  ]
+}
