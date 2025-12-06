@@ -4,27 +4,40 @@ import APIConnectorBuilder from './APIConnectorBuilder';
 
 const ConnectorLibrary = ({ onClose, onSelect }) => {
   const [connectors, setConnectors] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [showBuilder, setShowBuilder] = useState(false);
   const [editingConnector, setEditingConnector] = useState(null);
+  const [viewMode, setViewMode] = useState('saved'); // 'saved' or 'templates'
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
   useEffect(() => {
     fetchConnectors();
+    fetchTemplates();
   }, [categoryFilter]);
 
   const fetchConnectors = async () => {
     try {
       const url = categoryFilter !== 'all'
-        ? `${BACKEND_URL}/api/connectors?category=${categoryFilter}`
-        : `${BACKEND_URL}/api/connectors`;
+        ? `${BACKEND_URL}/api/connectors?category=${categoryFilter}&is_template=false`
+        : `${BACKEND_URL}/api/connectors?is_template=false`;
       const response = await fetch(url);
       const data = await response.json();
       setConnectors(data.connectors || []);
     } catch (error) {
       console.error('Failed to fetch connectors:', error);
+    }
+  };
+
+  const fetchTemplates = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/connectors/templates`);
+      const data = await response.json();
+      setTemplates(data.templates || []);
+    } catch (error) {
+      console.error('Failed to fetch templates:', error);
     }
   };
 
