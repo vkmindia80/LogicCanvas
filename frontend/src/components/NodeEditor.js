@@ -7,6 +7,17 @@ import KeyValueEditor from './KeyValueEditor';
 import VisualAPIBuilder from './VisualAPIBuilder';
 import ConditionalBuilder from './ConditionalBuilder';
 import { validators, ValidationFeedback } from './FormValidator';
+import {
+  DataOperationConfig,
+  DataTransformConfig,
+  LoopConfig,
+  AssignmentConfig,
+  EmailConfig,
+  WaitConfig,
+  ScreenConfig,
+  ErrorHandlerConfig,
+  SwitchConfig
+} from './EnhancedNodeConfigurations';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
