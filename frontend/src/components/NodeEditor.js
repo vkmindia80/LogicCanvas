@@ -680,7 +680,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                       : 'text-slate-600 hover:text-slate-800'
                   }`}
                 >
-                  </> Code
+                  &lt;/&gt; Code
                 </button>
               </div>
             </div>
