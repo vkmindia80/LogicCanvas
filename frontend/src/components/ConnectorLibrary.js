@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Search, Trash2, Edit, Play, Code, Globe } from 'lucide-react';
+import { X, Plus, Search, Trash2, Edit, Play, Code, Globe, Key, Webhook } from 'lucide-react';
 import APIConnectorBuilder from './APIConnectorBuilder';
+import OAuthFlowBuilder from './OAuthFlowBuilder';
+import WebhookManager from './WebhookManager';
 
 const ConnectorLibrary = ({ onClose, onSelect }) => {
   const [connectors, setConnectors] = useState([]);
