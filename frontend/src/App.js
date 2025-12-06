@@ -53,6 +53,7 @@ const AppShell = () => {
   const [showConnectorLibrary, setShowConnectorLibrary] = useState(false);
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   const [debugInstanceId, setDebugInstanceId] = useState(null);
+  const [showVideoTutorials, setShowVideoTutorials] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('lc_token') || '');
   const [currentUser, setCurrentUser] = useState(() => {
