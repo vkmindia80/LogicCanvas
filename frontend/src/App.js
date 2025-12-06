@@ -716,7 +716,7 @@ const AppShell = () => {
               setShowTemplateLibrary(true);
               break;
             case 'videos':
-              addToast('Video tutorials coming soon!', 'info');
+              setShowVideoTutorials(true);
               break;
             default:
               break;
