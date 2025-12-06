@@ -295,13 +295,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       updatedData.actionType = actionType;
       updatedData.url = url;
       updatedData.method = method;
-      try {
-        updatedData.headers = JSON.parse(headers);
-        updatedData.body = JSON.parse(body);
-      } catch (e) {
-        alert('Invalid JSON in headers or body');
-        return;
-      }
+      updatedData.headers = headers;
+      updatedData.body = body;
       updatedData.authType = authType;
       updatedData.token = token;
       updatedData.script = script;
