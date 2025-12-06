@@ -836,10 +836,16 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 <span>Designer Capabilities</span>
               </button>
               <button
-                onClick={() => setShowVariablePanel(!showVariablePanel)}
-                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all font-medium"
+                onClick={() => {
+                  if (activeInstance) {
+                    setShowVariableManagement(!showVariableManagement);
+                  } else {
+                    alert('Please start a workflow instance to manage variables');
+                  }
+                }}
+                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all font-medium disabled:opacity-50"
                 data-testid="variables-btn"
-                title="Manage workflow variables"
+                title="Manage workflow variables (requires active instance)"
               >
                 <Variable className="w-4 h-4" />
                 <span>Variables</span>
