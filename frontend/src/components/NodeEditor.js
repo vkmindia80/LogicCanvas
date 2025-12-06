@@ -299,36 +299,51 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
 
       {/* Content with improved spacing */}
       <div className="p-5 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
-        {/* Label */}
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-slate-800 mb-2">
-            Label <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-            className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300"
-            placeholder="Enter node label"
-            data-testid="node-editor-label"
-          />
-          {!label && <p className="text-xs text-red-500 mt-1">Label is required</p>}
-        </div>
+        {/* Basic Information Section */}
+        <div className="bg-white border-2 border-slate-200 rounded-lg p-4 space-y-4 shadow-sm">
+          <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Basic Information</h3>
+          
+          {/* Label */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-slate-800">
+              Label <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 ${
+                !label ? 'border-red-300 bg-red-50' : 'border-slate-200'
+              }`}
+              placeholder="Enter node label"
+              data-testid="node-editor-label"
+            />
+            {!label && (
+              <div className="flex items-center space-x-1 text-xs text-red-600">
+                <Info className="w-3 h-3" />
+                <span>Label is required to identify this node</span>
+              </div>
+            )}
+          </div>
 
-        {/* Description */}
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-slate-800 mb-2">
-            Description
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 resize-none"
-            placeholder="Enter node description (optional)"
-            data-testid="node-editor-description"
-          />
-          <p className="text-xs text-slate-500">Provide a brief description of what this node does</p>
+          {/* Description */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-slate-800">
+              Description <span className="text-slate-400 text-xs font-normal">(optional)</span>
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 resize-none"
+              placeholder="Describe what this node does..."
+              data-testid="node-editor-description"
+            />
+            <p className="text-xs text-slate-500 flex items-center space-x-1">
+              <Info className="w-3 h-3" />
+              <span>Help others understand this node's purpose</span>
+            </p>
+          </div>
         </div>
 
         {/* Decision Node - Condition */}
