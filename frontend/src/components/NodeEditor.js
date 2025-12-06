@@ -948,22 +948,30 @@ const NodeEditor = ({ node, onUpdate, onDelete, onClose }) => {
           </div>
         </CollapsibleSection>
 
-        {/* Actions */}
-        <div className="flex space-x-3 pt-4 border-t-2 border-slate-200">
+        {/* Actions - Enhanced with tooltips */}
+        <div className="flex space-x-3 pt-5 mt-5 border-t-2 border-slate-200">
           <button
             onClick={handleSave}
-            className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-3 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-semibold toolbar-btn"
+            disabled={!label}
+            className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed toolbar-btn"
             data-testid="node-editor-save"
+            title="Save node configuration"
           >
             <Save className="w-5 h-5" />
             <span>Save Changes</span>
           </button>
           <button
-            onClick={() => onDelete(node.id)}
-            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-5 py-3 rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all font-semibold toolbar-btn"
+            onClick={() => {
+              if (window.confirm(`Are you sure you want to delete "${label || 'this node'}"?`)) {
+                onDelete(node.id);
+              }
+            }}
+            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all font-semibold toolbar-btn"
             data-testid="node-editor-delete"
+            title="Delete this node"
           >
             <Trash2 className="w-5 h-5" />
+            <span className="hidden sm:inline">Delete</span>
           </button>
         </div>
       </div>
