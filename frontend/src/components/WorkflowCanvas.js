@@ -553,7 +553,15 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       });
       const data = await response.json();
       if (data.nodes) {
-        setNodes(data.nodes);
+        // Normalize nodes to ensure data.type exists
+        const normalizedNodes = data.nodes.map(node => ({
+          ...node,
+          data: {
+            ...node.data,
+            type: node.data?.type || node.type
+          }
+        }));
+        setNodes(normalizedNodes);
         // eslint-disable-next-line no-alert
         alert('Auto-layout applied');
       }
