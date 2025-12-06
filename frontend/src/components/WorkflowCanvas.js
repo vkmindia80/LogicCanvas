@@ -729,11 +729,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   const handleQuickFix = useCallback((quickFix) => {
     switch (quickFix.action) {
       case 'addStartNode':
-        addNode(NODE_TYPES.START);
+        addNode('start');
         handleValidationPanelClose();
         break;
       case 'addEndNode':
-        addNode(NODE_TYPES.END);
+        addNode('end');
         handleValidationPanelClose();
         break;
       case 'editNode':
