@@ -1109,51 +1109,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
           </>
         )}
 
-        {/* Subprocess Node */}
+        {/* Subprocess Node - Enhanced with Phase 3.1 features */}
         {resolvedNodeType === NODE_TYPES.SUBPROCESS && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Select Subprocess Workflow
-              </label>
-              <select
-                value={subprocessWorkflowId}
-                onChange={(e) => setSubprocessWorkflowId(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                data-testid="subprocess-workflow-id"
-              >
-                <option value="">-- Select a workflow --</option>
-                {workflows.map((wf) => (
-                  <option key={wf.id} value={wf.id}>
-                    {wf.name}
-                  </option>
-                ))}
-              </select>
-              <p className="mt-1 text-xs text-slate-500">
-                This workflow will be executed as a subprocess
-              </p>
-            </div>
-
-            <KeyValueEditor
-              value={inputMapping}
-              onChange={setInputMapping}
-              label="Input Mapping"
-              keyPlaceholder="Subprocess variable"
-              valuePlaceholder="Parent variable (use ${variable})"
-              allowJSON={true}
-              testId="subprocess-input-mapping"
-            />
-
-            <KeyValueEditor
-              value={outputMapping}
-              onChange={setOutputMapping}
-              label="Output Mapping"
-              keyPlaceholder="Parent variable"
-              valuePlaceholder="Subprocess output variable"
-              allowJSON={true}
-              testId="subprocess-output-mapping"
-            />
-          </>
+          <EnhancedSubprocessConfig
+            subprocessWorkflowId={subprocessWorkflowId}
+            onSubprocessWorkflowChange={setSubprocessWorkflowId}
+            inputMapping={inputMapping}
+            onInputMappingChange={setInputMapping}
+            outputMapping={outputMapping}
+            onOutputMappingChange={setOutputMapping}
+            workflows={workflows}
+          />
         )}
 
         {/* Event Node */}
