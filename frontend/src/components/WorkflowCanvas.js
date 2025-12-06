@@ -550,6 +550,96 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     return `Last saved at ${lastSavedAt.toLocaleTimeString()}`;
   };
 
+  // Sprint 2: Zoom Controls
+  const handleZoomIn = useCallback(() => {
+    zoomIn({ duration: 200 });
+    setTimeout(() => setZoomLevel(Math.round(getZoom() * 100)), 250);
+  }, [zoomIn, getZoom]);
+
+  const handleZoomOut = useCallback(() => {
+    zoomOut({ duration: 200 });
+    setTimeout(() => setZoomLevel(Math.round(getZoom() * 100)), 250);
+  }, [zoomOut, getZoom]);
+
+  const handleFitView = useCallback(() => {
+    fitView({ duration: 200, padding: 0.2 });
+    setTimeout(() => setZoomLevel(Math.round(getZoom() * 100)), 250);
+  }, [fitView, getZoom]);
+
+  // Sprint 2: Export to PNG
+  const exportToPNG = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      const canvasElement = reactFlowWrapper.current.querySelector('.react-flow');
+      if (!canvasElement) {
+        alert('Canvas not found');
+        return;
+      }
+
+      const canvas = await html2canvas(canvasElement, {
+        backgroundColor: '#f8fafc',
+        scale: 2,
+        logging: false,
+      });
+
+      const link = document.createElement('a');
+      link.download = `${workflowName.replace(/\s+/g, '_')}_workflow.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error('Failed to export PNG:', error);
+      alert('Failed to export PNG. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  }, [workflowName]);
+
+  // Sprint 2: Export to PDF
+  const exportToPDF = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      const canvasElement = reactFlowWrapper.current.querySelector('.react-flow');
+      if (!canvasElement) {
+        alert('Canvas not found');
+        return;
+      }
+
+      const canvas = await html2canvas(canvasElement, {
+        backgroundColor: '#f8fafc',
+        scale: 2,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height],
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`${workflowName.replace(/\s+/g, '_')}_workflow.pdf`);
+    } catch (error) {
+      console.error('Failed to export PDF:', error);
+      alert('Failed to export PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  }, [workflowName]);
+
+  // Sprint 2: Grid snap toggle
+  const toggleGridSnap = useCallback(() => {
+    setSnapToGrid(!snapToGrid);
+  }, [snapToGrid]);
+
+  // Update zoom level on viewport change
+  useEffect(() => {
+    const updateZoom = () => {
+      setZoomLevel(Math.round(getZoom() * 100));
+    };
+    updateZoom();
+  }, [getZoom]);
+
   return (
     <div className="flex h-screen bg-slate-50">
       {/* Left Sidebar - Node Palette */}
