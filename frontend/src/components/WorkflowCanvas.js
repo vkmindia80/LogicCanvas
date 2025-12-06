@@ -414,7 +414,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     const issues = [];
 
     if (!nodes || nodes.length === 0) {
-      issues.push({ type: 'error', message: 'Workflow has no nodes configured.' });
+      issues.push({ 
+        type: 'error', 
+        message: 'Your workflow needs at least one node to get started.',
+        suggestion: 'Drag a Start node from the palette on the left.',
+        quickFix: null
+      });
       return issues;
     }
 
@@ -433,21 +438,46 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
     const endNodes = nodes.filter((n) => n.type === 'end');
 
     if (startNodes.length === 0) {
-      issues.push({ type: 'error', message: 'No Start node found. Add a Start node to begin the workflow.' });
+      issues.push({ 
+        type: 'error', 
+        message: 'Every workflow needs a Start node to begin execution.',
+        suggestion: 'Add a Start node from the Flow Components section in the palette.',
+        quickFix: { action: 'addStartNode', label: '+ Add Start Node' },
+        priority: 'high'
+      });
     }
     if (startNodes.length > 1) {
       issues.push({
         type: 'warning',
-        message: `Multiple Start nodes detected (${startNodes.length}). Ensure this is intentional.`,
+        message: `Found ${startNodes.length} Start nodes. Workflows typically have only one.`,
+        suggestion: 'Consider removing extra Start nodes or review if this is intentional for your use case.',
+        priority: 'medium'
       });
     }
     if (endNodes.length === 0) {
       issues.push({
         type: 'warning',
-        message:
-          'No End node found. Add at least one End node to properly terminate the workflow.',
+        message: 'Missing End node to properly close your workflow.',
+        suggestion: 'Add at least one End node to mark workflow completion.',
+        quickFix: { action: 'addEndNode', label: '+ Add End Node' },
+        priority: 'medium'
       });
     }
+
+    // Check for incomplete node configurations
+    nodes.forEach((node) => {
+      const configIssues = getNodeConfigurationIssues(node);
+      if (configIssues.length > 0) {
+        issues.push({
+          type: 'warning',
+          message: `"${node.data?.label || 'Unnamed node'}" needs configuration`,
+          suggestion: configIssues[0],
+          nodeId: node.id,
+          quickFix: { action: 'editNode', label: 'Configure Node', nodeId: node.id },
+          priority: 'high'
+        });
+      }
+    });
 
     // Nodes with no outgoing edges (excluding End nodes)
     nodes.forEach((node) => {
@@ -455,8 +485,10 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       if (outgoing.length === 0 && node.type !== 'end') {
         issues.push({
           type: 'warning',
-          message: `Node "${node.data?.label || node.id}" has no outgoing connections.`,
+          message: `"${node.data?.label || 'Unnamed node'}" has no next step`,
+          suggestion: 'Connect this node to another node or add an End node.',
           nodeId: node.id,
+          priority: 'low'
         });
       }
     });
@@ -475,15 +507,19 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         if (!handles.has('yes')) {
           issues.push({
             type: 'warning',
-            message: `Decision node "${node.data?.label || node.id}" is missing a 'Yes' branch.`,
+            message: `Decision "${node.data?.label || 'Unnamed'}" missing 'Yes' branch`,
+            suggestion: 'Connect the Yes handle to define what happens when the condition is true.',
             nodeId: node.id,
+            priority: 'high'
           });
         }
         if (!handles.has('no')) {
           issues.push({
             type: 'warning',
-            message: `Decision node "${node.data?.label || node.id}" is missing a 'No' branch.`,
+            message: `Decision "${node.data?.label || 'Unnamed'}" missing 'No' branch`,
+            suggestion: 'Connect the No handle to define what happens when the condition is false.',
             nodeId: node.id,
+            priority: 'high'
           });
         }
       });
@@ -506,11 +542,13 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       }
 
       nodes.forEach((node) => {
-        if (!visited.has(node.id)) {
+        if (!visited.has(node.id) && node.type !== 'start') {
           issues.push({
             type: 'warning',
-            message: `Node "${node.data?.label || node.id}" is unreachable from the Start node.`,
+            message: `"${node.data?.label || 'Unnamed node'}" can't be reached`,
+            suggestion: 'This node is isolated. Connect it to your workflow or remove it.',
             nodeId: node.id,
+            priority: 'medium'
           });
         }
       });
@@ -518,6 +556,56 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
     return issues;
   }, [nodes, edges]);
+
+  // Helper function to check node configuration issues
+  const getNodeConfigurationIssues = (node) => {
+    const issues = [];
+    const data = node.data;
+
+    if (!data.label || data.label.trim() === '' || data.label === 'New Node') {
+      issues.push('Add a descriptive label to identify this step');
+    }
+
+    switch (node.type) {
+      case NODE_TYPES.TASK:
+        if (!data.assignedTo && !data.assignmentRole) {
+          issues.push('Assign this task to a user or role');
+        }
+        break;
+      case NODE_TYPES.FORM:
+        if (!data.formId) {
+          issues.push('Select a form to collect data');
+        }
+        break;
+      case NODE_TYPES.DECISION:
+        if (!data.condition) {
+          issues.push('Define the condition to evaluate');
+        }
+        break;
+      case NODE_TYPES.APPROVAL:
+        if (!data.approvers || data.approvers.length === 0) {
+          issues.push('Add at least one approver');
+        }
+        break;
+      case NODE_TYPES.ACTION:
+        if (!data.url) {
+          issues.push('Configure the API endpoint URL');
+        }
+        break;
+      case NODE_TYPES.SUBPROCESS:
+        if (!data.subprocessWorkflowId) {
+          issues.push('Select a workflow to execute as subprocess');
+        }
+        break;
+      case NODE_TYPES.TIMER:
+        if (!data.delaySeconds && !data.delayMinutes && !data.delayHours && !data.scheduledTime) {
+          issues.push('Set a delay time or schedule');
+        }
+        break;
+    }
+
+    return issues;
+  };
 
   const handleValidate = useCallback(async () => {
     const localIssues = computeLocalValidationIssues();
