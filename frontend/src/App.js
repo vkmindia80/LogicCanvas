@@ -411,6 +411,38 @@ const AppShell = () => {
             </button>
           )}
 
+          <div className="my-3 border-t border-slate-700"></div>
+
+          <button
+            onClick={() => {
+              setActiveTab('connectors');
+              setCurrentView('connectors');
+              setMobileSidebarOpen(false);
+            }}
+            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              activeTab === 'connectors'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+            }`}
+            data-testid="sidebar-connectors"
+          >
+            <Globe className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>API Connectors</span>}
+          </button>
+
+          {can('accessAnalytics') && (
+            <button
+              onClick={() => setShowDebugPanel(true)}
+              className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
+              data-testid="sidebar-debug"
+            >
+              <Bug className="h-5 w-5 flex-shrink-0" />
+              {!sidebarCollapsed && <span>Debug Console</span>}
+            </button>
+          )}
+
+          <div className="my-3 border-t border-slate-700"></div>
+
           <button
             onClick={() => setShowOnboarding(true)}
             className="flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white"
