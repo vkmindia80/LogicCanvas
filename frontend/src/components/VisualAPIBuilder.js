@@ -340,6 +340,25 @@ const VisualAPIBuilder = ({ value, onChange }) => {
         </div>
       )}
 
+      {/* Response Mapping (Optional) */}
+      <div className="border-t pt-3">
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-semibold text-gray-700">Response Mapping (Optional)</label>
+          <span className="text-xs text-gray-500">Extract data from API response</span>
+        </div>
+        <textarea
+          value={config.responseMapping || ''}
+          onChange={(e) => updateConfig({ responseMapping: e.target.value })}
+          placeholder='Example:\nuserId = response.data.id\nuserName = response.data.name\nemail = response.data.email'
+          rows={3}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          data-testid="response-mapping"
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Map response fields to workflow variables (one per line)
+        </p>
+      </div>
+
       {/* Help Text */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
         <div className="flex items-start space-x-2">
@@ -347,6 +366,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
           <div className="text-xs text-blue-800">
             <p className="font-medium mb-1">Dynamic Variables</p>
             <p>Use ${'{variableName}'} to reference workflow variables in URL, headers, query params, or body.</p>
+            <p className="mt-1">The API response will be stored in <code className="bg-blue-100 px-1 py-0.5 rounded">response</code> variable.</p>
           </div>
         </div>
       </div>
