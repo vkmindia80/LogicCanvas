@@ -1,0 +1,39 @@
+{
+  "id": null,
+  "name": "Project Request & Approval",
+  "description": "New project initiation with business case review, budget approval, and resource allocation",
+  "status": "draft",
+  "version": 1,
+  "tags": ["project", "pmo", "approval", "template"],
+  "features": [
+    "Business case submission and review",
+    "Multi-level budget approval routing",
+    "Resource availability check",
+    "Project kickoff automation"
+  ],
+  "useCases": [
+    "IT project approval process",
+    "Capital expenditure requests",
+    "New initiative evaluation"
+  ],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 50}, "data": {"type": "start", "label": "Project Requested", "description": "New project request submitted"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 150}, "data": {"type": "form", "label": "Business Case", "description": "Submit project details and justification"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 100, "y": 250}, "data": {"type": "decision", "label": "Budget > $50K?", "description": "Route based on budget amount"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": -50, "y": 350}, "data": {"type": "approval", "label": "Director Approval", "description": "Department director reviews"}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 250, "y": 350}, "data": {"type": "approval", "label": "Executive Approval", "description": "CFO and CEO review required"}},
+    {"id": "task-1", "type": "task", "position": {"x": 100, "y": 450}, "data": {"type": "task", "label": "Resource Allocation", "description": "PMO assigns team and resources"}},
+    {"id": "action-1", "type": "action", "position": {"x": 100, "y": 550}, "data": {"type": "action", "label": "Create Project", "description": "Setup project in PM tool"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 650}, "data": {"type": "end", "label": "Project Approved", "description": "Project ready to start"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "sourceHandle": "no", "target": "approval-1"},
+    {"id": "e4", "source": "decision-1", "sourceHandle": "yes", "target": "approval-2"},
+    {"id": "e5", "source": "approval-1", "target": "task-1"},
+    {"id": "e6", "source": "approval-2", "target": "task-1"},
+    {"id": "e7", "source": "task-1", "target": "action-1"},
+    {"id": "e8", "source": "action-1", "target": "end-1"}
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": null,
+  "name": "Asset Maintenance Workflow",
+  "description": "Preventive maintenance scheduling with work order creation, technician assignment, and completion tracking",
+  "status": "draft",
+  "version": 1,
+  "tags": ["maintenance", "facilities", "operations", "template"],
+  "features": [
+    "Priority-based routing and assignment",
+    "Asset lookup and history tracking",
+    "Parts procurement subprocess integration",
+    "Manager sign-off and quality control"
+  ],
+  "useCases": [
+    "Facility maintenance management",
+    "Equipment preventive maintenance",
+    "Work order tracking and completion"
+  ],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 50}, "data": {"type": "start", "label": "Maintenance Request", "description": "New maintenance request created"}},
+    {"id": "form-1", "type": "form", "position": {"x": 100, "y": 150}, "data": {"type": "form", "label": "Asset & Issue Details", "description": "Capture asset ID, issue type, and priority"}},
+    {"id": "task-1", "type": "task", "position": {"x": 100, "y": 250}, "data": {"type": "task", "label": "Assign Technician", "description": "Assign to maintenance team"}},
+    {"id": "form-2", "type": "form", "position": {"x": 100, "y": 350}, "data": {"type": "form", "label": "Work Completion Report", "description": "Technician submits completion details"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 100, "y": 450}, "data": {"type": "approval", "label": "Manager Sign-off", "description": "Facilities manager approves completion"}},
+    {"id": "end-1", "type": "end", "position": {"x": 100, "y": 550}, "data": {"type": "end", "label": "Maintenance Complete", "description": "Work order closed"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "task-1"},
+    {"id": "e3", "source": "task-1", "target": "form-2"},
+    {"id": "e4", "source": "form-2", "target": "approval-1"},
+    {"id": "e5", "source": "approval-1", "target": "end-1"}
+  ]
+}
