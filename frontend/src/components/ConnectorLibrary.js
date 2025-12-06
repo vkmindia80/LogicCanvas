@@ -289,7 +289,8 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
       {/* API Connector Builder Modal */}
       {showBuilder && (
         <APIConnectorBuilder
-          connectorId={editingConnector}
+          connectorId={typeof editingConnector === 'string' ? editingConnector : null}
+          initialData={typeof editingConnector === 'object' ? editingConnector : null}
           onClose={() => {
             setShowBuilder(false);
             setEditingConnector(null);
