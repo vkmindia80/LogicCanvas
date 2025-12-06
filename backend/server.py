@@ -208,6 +208,56 @@ class Approval(BaseModel):
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 
+# Sprint 4: API Connector Models
+class AuthConfig(BaseModel):
+    type: str  # none, oauth2, api_key, basic, bearer, custom
+    config: Dict[str, Any] = {}
+
+class ResponseMapping(BaseModel):
+    source_path: str
+    target_variable: str
+    type: str  # string, number, boolean, array, object, date
+    transform: str = "none"  # none, uppercase, lowercase, parse_json, format_date
+
+class ErrorHandling(BaseModel):
+    retry_count: int = 3
+    retry_delay: int = 1000
+    timeout: int = 30000
+    on_error: str = "fail"  # fail, continue, retry
+
+class ConnectorConfig(BaseModel):
+    method: str  # GET, POST, PUT, PATCH, DELETE
+    url: str
+    headers: Dict[str, str] = {}
+    query_params: Dict[str, str] = {}
+    body: Optional[Any] = None
+    auth: AuthConfig
+
+class APIConnector(BaseModel):
+    id: Optional[str] = None
+    name: str
+    description: Optional[str] = ""
+    category: str = "custom"  # payment, communication, storage, ai, custom
+    is_template: bool = False
+    config: ConnectorConfig
+    response_mapping: List[ResponseMapping] = []
+    error_handling: ErrorHandling = ErrorHandling()
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+# Sprint 4: Debugging Models
+class Breakpoint(BaseModel):
+    node_id: str
+    enabled: bool = True
+    condition: Optional[str] = None
+
+class ExecutionLog(BaseModel):
+    timestamp: str
+    node_id: str
+    level: str  # debug, info, warning, error
+    message: str
+    data: Dict[str, Any] = {}
+
 # Health Check
 @app.get("/api/health")
 async def health_check():
