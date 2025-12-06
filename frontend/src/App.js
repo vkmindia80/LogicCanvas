@@ -26,6 +26,7 @@ import ConnectorLibrary from './components/ConnectorLibrary';
 import DebugPanel from './components/DebugPanel';
 import VideoTutorials from './components/VideoTutorials';
 import SubworkflowPatternLibrary from './components/SubworkflowPatternLibrary';
+import TransformationPlayground from './components/TransformationPlayground';
 
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
