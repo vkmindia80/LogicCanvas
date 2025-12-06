@@ -561,7 +561,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         )}
 
         {/* Approval Node */}
-        {node.data.type === NODE_TYPES.APPROVAL && (
+        {resolvedNodeType === NODE_TYPES.APPROVAL && (
           <div className="bg-white border-2 border-purple-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Approval Configuration</h3>
             <div>
@@ -602,7 +602,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         )}
 
         {/* Form Node */}
-        {node.data.type === NODE_TYPES.FORM && (
+        {resolvedNodeType === NODE_TYPES.FORM && (
           <div className="bg-white border-2 border-indigo-200 rounded-lg p-4 shadow-sm">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Form Selection</h3>
             <div>
@@ -631,7 +631,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         )}
 
         {/* Action Node */}
-        {node.data.type === 'action' && (
+        {resolvedNodeType === 'action' && (
           <div className="bg-white border-2 border-pink-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Action Configuration</h3>
             <div>
@@ -771,7 +771,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         )}
 
         {/* Timer Node */}
-        {node.data.type === NODE_TYPES.TIMER && (
+        {resolvedNodeType === NODE_TYPES.TIMER && (
           <>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -879,7 +879,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         )}
 
         {/* Subprocess Node */}
-        {node.data.type === NODE_TYPES.SUBPROCESS && (
+        {resolvedNodeType === NODE_TYPES.SUBPROCESS && (
           <>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -940,7 +940,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         )}
 
         {/* Event Node */}
-        {node.data.type === NODE_TYPES.EVENT && (
+        {resolvedNodeType === NODE_TYPES.EVENT && (
           <>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
