@@ -6592,45 +6592,46 @@ async def get_subprocess_compatible_workflows():
 @app.get("/api/workflow-instances/{instance_id}/subprocess-tree")
 async def get_subprocess_tree(instance_id: str):
     """Get the complete subprocess execution tree for an instance (Phase 3.1)"""
+    from subprocess_manager import SubprocessManager
+    subprocess_manager = SubprocessManager(db)
     
-    def build_tree(inst_id: str, depth: int = 0) -> Dict[str, Any]:
-        """Recursively build subprocess tree"""
-        if depth > 10:  # Prevent infinite recursion
-            return {"error": "Max depth exceeded"}
-        
-        instance = workflow_instances_collection.find_one({"id": inst_id}, {"_id": 0})
-        if not instance:
-            return {"error": "Instance not found"}
-        
-        # Get child instances
-        children = list(workflow_instances_collection.find(
-            {"parent_instance_id": inst_id},
-            {"_id": 0, "id": 1, "workflow_id": 1, "status": 1, "started_at": 1, "completed_at": 1, "nesting_level": 1}
-        ))
-        
-        # Build tree recursively
-        child_trees = []
-        for child in children:
-            child_tree = build_tree(child["id"], depth + 1)
-            child_trees.append(child_tree)
-        
-        workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0, "name": 1})
-        
-        return {
-            "instance_id": inst_id,
-            "workflow_id": instance["workflow_id"],
-            "workflow_name": workflow.get("name", "Unknown") if workflow else "Unknown",
-            "status": instance.get("status"),
-            "nesting_level": instance.get("nesting_level", 0),
-            "started_at": instance.get("started_at"),
-            "completed_at": instance.get("completed_at"),
-            "parent_instance_id": instance.get("parent_instance_id"),
-            "children": child_trees,
-            "child_count": len(child_trees)
-        }
-    
-    tree = build_tree(instance_id)
+    tree = subprocess_manager.get_subprocess_tree(instance_id)
     return {"subprocess_tree": tree}
+
+
+@app.post("/api/workflow-instances/{instance_id}/resume-from-subprocess")
+async def resume_from_subprocess(instance_id: str, data: Dict[str, Any]):
+    """Resume parent workflow after subprocess completion (Phase 3.1)"""
+    from subprocess_manager import SubprocessManager
+    subprocess_manager = SubprocessManager(db)
+    
+    subprocess_instance_id = data.get("subprocess_instance_id")
+    node_id = data.get("node_id")
+    output_mapping = data.get("output_mapping", {})
+    
+    if not subprocess_instance_id or not node_id:
+        raise HTTPException(status_code=400, detail="Missing required parameters")
+    
+    # Handle subprocess completion and get mapped outputs
+    result_data = subprocess_manager.handle_subprocess_completion(
+        subprocess_instance_id=subprocess_instance_id,
+        parent_instance_id=instance_id,
+        parent_node_id=node_id,
+        output_mapping=output_mapping
+    )
+    
+    # Resume parent workflow execution
+    execution_engine.resume_execution(
+        instance_id=instance_id,
+        node_id=node_id,
+        result_data=result_data
+    )
+    
+    return {
+        "message": "Parent workflow resumed",
+        "instance_id": instance_id,
+        "result_data": result_data
+    }
 
 
 # ========== PHASE 3.1: DATA TRANSFORMATION API ENDPOINTS ==========
