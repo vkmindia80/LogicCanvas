@@ -825,6 +825,11 @@ const AppShell = () => {
           addToast(`Pattern "${pattern.name}" guide copied! You can now implement it in your workflow.`, 'success', 5000);
         }}
       />
+      {showTransformationPlayground && (
+        <TransformationPlayground
+          onClose={() => setShowTransformationPlayground(false)}
+        />
+      )}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
