@@ -129,9 +129,9 @@ export const inputStyles = {
  * Consistent badge design for status indicators
  */
 export const badgeStyles = {
-  draft: 'inline-flex items-center space-x-1 rounded-full border-2 border-yellow-300 bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800',
+  draft: 'inline-flex items-center space-x-1 rounded-full border-2 border-gold-300 bg-gold-100 px-3 py-1 text-xs font-semibold text-gold-800',
   published: 'inline-flex items-center space-x-1 rounded-full border-2 border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-800',
-  pending: 'inline-flex items-center space-x-1 rounded-full border-2 border-yellow-300 bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800',
+  pending: 'inline-flex items-center space-x-1 rounded-full border-2 border-gold-300 bg-gold-100 px-3 py-1 text-xs font-semibold text-gold-800',
   completed: 'inline-flex items-center space-x-1 rounded-full border-2 border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-800',
   approved: 'inline-flex items-center space-x-1 rounded-full border-2 border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-800',
   rejected: 'inline-flex items-center space-x-1 rounded-full border-2 border-red-300 bg-red-100 px-3 py-1 text-xs font-semibold text-red-800',
