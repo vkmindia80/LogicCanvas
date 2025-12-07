@@ -984,7 +984,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             onNodeClick={onNodeClick}
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
-            edgeTypes={{ deletable: DeletableEdge }}
+            edgeTypes={{ deletable: DeletableEdgeModern }}
             fitView
             snapToGrid={snapToGrid}
             snapGrid={[15, 15]}
