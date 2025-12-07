@@ -637,20 +637,6 @@ const AppShell = () => {
           </button>
         </div>
 
-        {/* Collapse Toggle - Chevron Icon */}
-        <button
-          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="sidebar-collapse-btn fixed left-[276px] top-24 z-50 hidden lg:flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg transition-all hover:bg-slate-600 hover:scale-110 hover:shadow-xl border-2 border-slate-600"
-          style={{ left: sidebarCollapsed ? '68px' : '276px' }}
-          title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          data-testid="sidebar-collapse-toggle"
-        >
-          {sidebarCollapsed ? (
-            <ChevronRight className="h-5 w-5" />
-          ) : (
-            <ChevronLeft className="h-5 w-5" />
-          )}
-        </button>
       </aside>
 
       {/* Mobile Sidebar */}
