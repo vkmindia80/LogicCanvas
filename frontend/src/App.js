@@ -640,11 +640,11 @@ const AppShell = () => {
         {/* Collapse Toggle - Hamburger Menu */}
         <button
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="absolute -right-3 top-20 flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg transition-all hover:bg-slate-600 hover:scale-110"
+          className="sidebar-collapse-btn absolute -right-3 top-20 flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg transition-all hover:bg-slate-600 hover:scale-110 hover:shadow-xl"
           title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           data-testid="sidebar-collapse-toggle"
         >
-          <Menu className="h-4 w-4" />
+          <Menu className="h-5 w-5" />
         </button>
       </aside>
 
