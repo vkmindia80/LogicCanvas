@@ -249,8 +249,8 @@ const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
         </div>
       )}
 
-        {/* Tabs */}
-        <div className="flex border-b px-4">
+      {/* Tabs */}
+      <div className="flex border-b px-4">
           {[
             { id: 'breakpoints', label: 'Breakpoints', icon: Circle },
             { id: 'timeline', label: 'Timeline', icon: Activity },
