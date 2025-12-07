@@ -362,7 +362,7 @@ const AppShell = () => {
             {<span>Forms</span>}
           </button>
 
-          <div className="my-3 border-t border-slate-700"></div>
+          <div className="my-3 border-t border-primary-700"></div>
 
           {can('accessTasks') && (
             <button
@@ -460,7 +460,7 @@ const AppShell = () => {
             {<span>Audit Trail</span>}
           </button>
 
-          <div className="my-3 border-t border-slate-700"></div>
+          <div className="my-3 border-t border-primary-700"></div>
 
           <button
             onClick={() => {
@@ -494,7 +494,7 @@ const AppShell = () => {
             </button>
           )}
 
-          <div className="my-3 border-t border-slate-700"></div>
+          <div className="my-3 border-t border-primary-700"></div>
 
           <button
             onClick={() => {
@@ -558,7 +558,7 @@ const AppShell = () => {
             {<span>Transformations</span>}
           </button>
 
-          <div className="my-3 border-t border-slate-700"></div>
+          <div className="my-3 border-t border-primary-700"></div>
 
           <button
             onClick={() => {
@@ -578,7 +578,7 @@ const AppShell = () => {
         </nav>
 
         {/* User Section */}
-        <div className="border-t border-slate-700 p-4 flex-shrink-0">
+        <div className="border-t border-primary-700 p-4 flex-shrink-0">
           {/* Role Switcher */}
           <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
             <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
@@ -624,7 +624,7 @@ const AppShell = () => {
         <div className="fixed inset-0 z-[9999] lg:hidden">
           <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)}></div>
           <aside className="absolute left-0 top-0 h-full w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl flex flex-col overflow-hidden">
-            <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4 flex-shrink-0">
+            <div className="flex h-16 items-center justify-between border-b border-primary-700 px-4 flex-shrink-0">
               <div className="flex items-center space-x-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
                   <Activity className="h-6 w-6 text-white" />
@@ -676,7 +676,7 @@ const AppShell = () => {
                 <span>Forms</span>
               </button>
 
-              <div className="my-3 border-t border-slate-700"></div>
+              <div className="my-3 border-t border-primary-700"></div>
 
               {can('accessTasks') && (
                 <button
@@ -784,7 +784,7 @@ const AppShell = () => {
                 <span>Audit Trail</span>
               </button>
 
-              <div className="my-3 border-t border-slate-700"></div>
+              <div className="my-3 border-t border-primary-700"></div>
 
               <button
                 onClick={() => {
@@ -822,7 +822,7 @@ const AppShell = () => {
                 </button>
               )}
 
-              <div className="my-3 border-t border-slate-700"></div>
+              <div className="my-3 border-t border-primary-700"></div>
 
               <button
                 onClick={() => {
@@ -894,7 +894,7 @@ const AppShell = () => {
                 <span>Transformations</span>
               </button>
 
-              <div className="my-3 border-t border-slate-700"></div>
+              <div className="my-3 border-t border-primary-700"></div>
 
               <button
                 onClick={() => {
@@ -916,7 +916,7 @@ const AppShell = () => {
             </nav>
 
             {/* User Section */}
-            <div className="border-t border-slate-700 p-4 flex-shrink-0">
+            <div className="border-t border-primary-700 p-4 flex-shrink-0">
               {/* Role Switcher */}
               <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
                 <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
