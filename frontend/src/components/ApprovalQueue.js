@@ -189,16 +189,14 @@ const ApprovalQueue = ({ onClose, onNotify, sidebarCollapsed = false }) => {
               <p className={modalHeaderStyles.subtitle}>Review and approve workflow requests</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={loadApprovals}
-              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
-              data-testid="refresh-approvals-btn"
-            >
-              <RefreshCw className="w-4 h-4 mr-2 inline" />
-              <span>Refresh</span>
-            </button>
-          </div>
+          <button
+            onClick={loadApprovals}
+            className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
+            data-testid="refresh-approvals-btn"
+          >
+            <RefreshCw className="w-4 h-4 mr-2 inline" />
+            <span>Refresh</span>
+          </button>
         </div>
       </div>
 
