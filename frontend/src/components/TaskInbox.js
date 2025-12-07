@@ -248,29 +248,29 @@ const TaskInbox = ({ onClose, onNotify }) => {
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50 z-50 flex flex-col" data-testid="task-inbox">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-5 shadow-xl">
+      <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
               <CheckSquare className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Task Inbox</h1>
-              <p className="text-blue-100 text-sm">Manage your assigned tasks and track progress</p>
+              <h1 className={modalHeaderStyles.title}>Task Inbox</h1>
+              <p className={modalHeaderStyles.subtitle}>Manage your assigned tasks and track progress</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <button
               onClick={() => { loadTasks(); loadSlaMetrics(); }}
-              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition-all hover:shadow-lg font-medium"
+              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
               data-testid="refresh-tasks-btn"
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className="w-4 h-4 mr-2 inline" />
               <span>Refresh</span>
             </button>
             <button
               onClick={onClose}
-              className="text-white hover:bg-white/20 px-4 py-2 rounded-xl transition-all hover:shadow-lg font-medium"
+              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
               data-testid="close-task-inbox-btn"
             >
               Close
