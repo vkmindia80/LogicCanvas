@@ -1119,7 +1119,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               ✕
             </button>
           </div>
-          <TriggerConfig workflowId={workflow.id} />
+          <TriggerConfigModern workflowId={workflow.id} />
         </div>
       )}
 
