@@ -369,7 +369,6 @@ const AppShell = () => {
             <button
               onClick={() => {
                 setShowApprovalQueue(true);
-                setMobileSidebarOpen(false);
                 setActiveMenuItem('approvals');
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
