@@ -106,29 +106,21 @@ const IntegrationHub = ({ onClose, sidebarCollapsed = false }) => {
   };
 
   return (
-    <div className={modalOverlayStyles.base}>
-      <div className="relative flex h-[90vh] w-[95vw] max-w-7xl flex-col rounded-2xl bg-white shadow-2xl">
-        {/* Header */}
-        <div className={modalHeaderStyles.base}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <Globe className="w-7 h-7" />
-              </div>
-              <div>
-                <h2 className={modalHeaderStyles.title}>Integration Hub</h2>
-                <p className={modalHeaderStyles.subtitle}>Manage your external service integrations</p>
-              </div>
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
+      {/* Header */}
+      <div className={modalHeaderStyles.base}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <Globe className="w-7 h-7" />
             </div>
-            <button
-              onClick={onClose}
-              className={modalHeaderStyles.closeButton}
-              data-testid="close-integration-hub"
-            >
-              <X className="h-6 w-6" />
-            </button>
+            <div>
+              <h2 className={modalHeaderStyles.title}>Integration Hub</h2>
+              <p className={modalHeaderStyles.subtitle}>Manage your external service integrations</p>
+            </div>
           </div>
         </div>
+      </div>
 
         {/* Toolbar */}
         <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-4">
