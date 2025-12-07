@@ -1,6 +1,48 @@
-/* LogicCanvas - Enhanced Animations & Styles */
+/* LogicCanvas - Modern Indigo/Blue Design System */
 
-/* Salesforce-style animations */
+/* Modern CSS Variables for Indigo/Blue Theme */
+:root {
+  /* Primary - Indigo */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+  
+  /* Secondary - Purple */
+  --color-secondary-500: #a855f7;
+  --color-secondary-600: #9333ea;
+  
+  /* Accent - Cyan */
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+  
+  /* Neutral - Slate */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  
+  /* Modern Shadows */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-indigo: 0 10px 30px -5px rgba(99, 102, 241, 0.3);
+  
+  /* Modern Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+}
+
+/* Modern animations */
 @keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
@@ -77,6 +119,79 @@
   }
 }
 
+/* Modern Scrollbar Styles - Indigo Theme */
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: rgba(71, 85, 105, 0.1);
+  border-radius: 10px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+/* Modern Card Hover Effects */
+.node-enhanced {
+  transition: all var(--transition-normal);
+}
+
+.node-enhanced:hover {
+  filter: brightness(1.05);
+}
+
+/* Modern Focus Styles */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions for All Interactive Elements */
+button, a, input, select, textarea {
+  transition: all var(--transition-fast);
+}
+
+/* Modern Loading States */
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-neutral-100) 0%,
+    var(--color-neutral-200) 50%,
+    var(--color-neutral-100) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 /* Apply animations */
 .animate-pulse-slow {
   animation: pulse-slow 2s ease-in-out infinite;
@@ -92,6 +207,18 @@
 
 .animate-slide-in {
   animation: slide-in 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.3s ease-out;
 }
 
 /* Snap-to-align guide styles */
