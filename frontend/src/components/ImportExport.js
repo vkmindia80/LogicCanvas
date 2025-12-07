@@ -263,7 +263,6 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
