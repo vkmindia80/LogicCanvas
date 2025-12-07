@@ -685,6 +685,7 @@ const AppShell = () => {
                 <FileText className="h-5 w-5 flex-shrink-0" />
                 <span>Forms</span>
               </button>
+              </div>
             </nav>
           </aside>
         </div>
