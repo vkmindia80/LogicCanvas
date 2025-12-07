@@ -127,12 +127,6 @@ const AnalyticsDashboard = ({ onClose, sidebarCollapsed = false }) => {
                 <p className={modalHeaderStyles.subtitle}>Real-time insights and performance metrics</p>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className={modalHeaderStyles.closeButton}
-            >
-              <X className="w-6 h-6" />
-            </button>
           </div>
 
           {/* Tab Navigation */}
