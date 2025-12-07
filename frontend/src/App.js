@@ -580,25 +580,23 @@ const AppShell = () => {
         {/* User Section */}
         <div className="border-t border-slate-700 p-4 flex-shrink-0">
           {/* Role Switcher */}
-          {(
-            <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
-              <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
-                <Shield className="h-3.5 w-3.5" />
-                <span>Current Role</span>
-              </div>
-              <select
-                value={currentRole}
-                onChange={(e) => setCurrentRole(e.target.value)}
-                className="w-full rounded-md border border-slate-600 bg-slate-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                data-testid="sidebar-role-switcher"
-              >
-                <option value="admin">Admin</option>
-                <option value="builder">Builder</option>
-                <option value="approver">Approver</option>
-                <option value="viewer">Viewer</option>
-              </select>
+          <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+            <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
+              <Shield className="h-3.5 w-3.5" />
+              <span>Current Role</span>
             </div>
-          )}
+            <select
+              value={currentRole}
+              onChange={(e) => setCurrentRole(e.target.value)}
+              className="w-full rounded-md border border-slate-600 bg-slate-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              data-testid="sidebar-role-switcher"
+            >
+              <option value="admin">Admin</option>
+              <option value="builder">Builder</option>
+              <option value="approver">Approver</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
 
           {/* User Info */}
           {currentUser && (
