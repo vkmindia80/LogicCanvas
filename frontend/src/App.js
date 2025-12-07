@@ -311,14 +311,14 @@ const AppShell = () => {
         className="fixed left-0 top-0 z-40 h-screen w-72 bg-gradient-to-b from-primary-900 via-primary-800 to-primary-900 shadow-2xl transition-all duration-300 flex flex-col hidden lg:block"
       >
         {/* Logo Section */}
-        <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4 flex-shrink-0">
+        <div className="flex h-16 items-center justify-between border-b border-primary-700 px-4 flex-shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-gold-500 to-gold-700 shadow-lg">
               <Activity className="h-6 w-6 text-white" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-white">LogicCanvas</h1>
-              <p className="text-xs text-slate-400">Workflow Builder</p>
+              <p className="text-xs text-green-200">Workflow Builder</p>
             </div>
           </div>
         </div>
