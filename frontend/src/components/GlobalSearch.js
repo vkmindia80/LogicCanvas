@@ -64,6 +64,15 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
         <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-4 shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
+              {/* Hamburger Menu for Mobile */}
+              <button 
+                onClick={onOpenMobileSidebar}
+                className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+                data-testid="mobile-menu-btn"
+                aria-label="Open Menu"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                 <Search className="w-7 h-7" />
               </div>
@@ -72,6 +81,14 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                 <p className="text-primary-100 text-sm">Search workflows, forms, tasks, and approvals</p>
               </div>
             </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="close-search-btn"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
           </div>
         </div>
 
