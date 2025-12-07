@@ -6,7 +6,7 @@ import WebhookManager from './WebhookManager';
 import RateLimitingManager from './RateLimitingManager';
 import ConnectionPoolMonitor from './ConnectionPoolMonitor';
 
-const ConnectorLibrary = ({ onClose, onSelect }) => {
+const ConnectorLibrary = ({ onClose, onSelect, sidebarCollapsed = false }) => {
   const [connectors, setConnectors] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
