@@ -1139,7 +1139,7 @@ const AppShell = () => {
       {showTransformationPlayground && (
         <TransformationPlayground
           onClose={() => { setShowTransformationPlayground(false); setActiveMenuItem(activeTab); }}
-         
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
