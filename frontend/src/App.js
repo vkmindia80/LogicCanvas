@@ -781,6 +781,7 @@ const AppShell = () => {
             }
           }}
           onNotify={addToast}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       <OnboardingTour isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
