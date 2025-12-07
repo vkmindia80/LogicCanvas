@@ -760,15 +760,15 @@ const AppShell = () => {
       </main>
 
       {/* Modals */}
-      {showTaskInbox && <TaskInbox onClose={() => setShowTaskInbox(false)} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
-      {showApprovalQueue && <ApprovalQueue onClose={() => setShowApprovalQueue(false)} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} sidebarCollapsed={sidebarCollapsed} />}
-      {showAuditTrail && <AuditTrail onClose={() => setShowAuditTrail(false)} sidebarCollapsed={sidebarCollapsed} />}
-      {showAnalytics && <AnalyticsDashboard onClose={() => setShowAnalytics(false)} sidebarCollapsed={sidebarCollapsed} />}
+      {showTaskInbox && <TaskInbox onClose={() => { setShowTaskInbox(false); setActiveMenuItem(activeTab); }} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
+      {showApprovalQueue && <ApprovalQueue onClose={() => { setShowApprovalQueue(false); setActiveMenuItem(activeTab); }} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
+      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setActiveMenuItem(activeTab); }} sidebarCollapsed={sidebarCollapsed} />}
+      {showAuditTrail && <AuditTrail onClose={() => { setShowAuditTrail(false); setActiveMenuItem(activeTab); }} sidebarCollapsed={sidebarCollapsed} />}
+      {showAnalytics && <AnalyticsDashboard onClose={() => { setShowAnalytics(false); setActiveMenuItem(activeTab); }} sidebarCollapsed={sidebarCollapsed} />}
       {showGlobalSearch && (
         <GlobalSearch
           isOpen={showGlobalSearch}
-          onClose={() => setShowGlobalSearch(false)}
+          onClose={() => { setShowGlobalSearch(false); setActiveMenuItem(activeTab); }}
           onSelectWorkflow={handleSelectWorkflow}
           onSelectForm={handleSelectForm}
           sidebarCollapsed={sidebarCollapsed}
@@ -777,7 +777,7 @@ const AppShell = () => {
       {showImportExport && (
         <ImportExport
           isOpen={showImportExport}
-          onClose={() => setShowImportExport(false)}
+          onClose={() => { setShowImportExport(false); setActiveMenuItem(activeTab); }}
           onImportComplete={() => {
             addToast('Workflows imported successfully!', 'success');
             if (currentView === 'workflows') {
