@@ -136,7 +136,7 @@ const AnalyticsDashboard = ({ onClose }) => {
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex space-x-1 mt-4 border-b border-gray-200">
+          <div className="flex space-x-1 mt-4 border-b-2 border-white/20">
             {[
               { id: 'overview', label: 'Overview', icon: Activity },
               { id: 'workflows', label: 'Workflows', icon: Workflow },
@@ -147,14 +147,14 @@ const AnalyticsDashboard = ({ onClose }) => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-2 border-b-2 transition-colors ${
+                className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-all font-medium ${
                   activeTab === tab.id
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                    ? 'border-white text-white bg-white/10'
+                    : 'border-transparent text-blue-100 hover:text-white hover:bg-white/5'
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
-                <span className="font-medium">{tab.label}</span>
+                <span>{tab.label}</span>
               </button>
             ))}
           </div>
