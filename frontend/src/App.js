@@ -795,8 +795,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'search'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <SearchIcon className="h-5 w-5 flex-shrink-0" />
@@ -813,8 +813,8 @@ const AppShell = () => {
                   }}
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'import-export'
-                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                      ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                   }`}
                 >
                   <Download className="h-5 w-5 flex-shrink-0" />
@@ -833,8 +833,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'integration-hub'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <Globe className="h-5 w-5 flex-shrink-0" />
@@ -850,8 +850,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'connectors'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <Zap className="h-5 w-5 flex-shrink-0" />
@@ -868,8 +868,8 @@ const AppShell = () => {
                   }}
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'debug'
-                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                      ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                   }`}
                 >
                   <Bug className="h-5 w-5 flex-shrink-0" />
@@ -886,8 +886,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'transformations'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <Sparkles className="h-5 w-5 flex-shrink-0" />
@@ -905,8 +905,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'tour'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <Home className="h-5 w-5 flex-shrink-0" />
