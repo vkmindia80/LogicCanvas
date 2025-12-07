@@ -623,7 +623,7 @@ const AppShell = () => {
       {mobileSidebarOpen && (
         <div className="fixed inset-0 z-[9999] lg:hidden">
           <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)}></div>
-          <aside className="absolute left-0 top-0 h-full w-72 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 shadow-2xl flex flex-col overflow-hidden">
+          <aside className="absolute left-0 top-0 h-full w-72 bg-gradient-to-b from-indigo-950 via-indigo-900 to-slate-950 shadow-2xl flex flex-col overflow-hidden">
             <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4 flex-shrink-0">
               <div className="flex items-center space-x-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-lg">
@@ -650,8 +650,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'workflows'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <Workflow className="h-5 w-5 flex-shrink-0" />
@@ -668,8 +668,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'forms'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <FileText className="h-5 w-5 flex-shrink-0" />
@@ -688,8 +688,8 @@ const AppShell = () => {
                   }}
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'tasks'
-                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                      ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                   }`}
                 >
                   <CheckSquare className="h-5 w-5 flex-shrink-0" />
@@ -712,8 +712,8 @@ const AppShell = () => {
                   }}
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'approvals'
-                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                      ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                   }`}
                 >
                   <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
@@ -735,8 +735,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'notifications'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <Bell className="h-5 w-5 flex-shrink-0" />
@@ -758,8 +758,8 @@ const AppShell = () => {
                   }}
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'analytics'
-                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                      ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                   }`}
                 >
                   <BarChart3 className="h-5 w-5 flex-shrink-0" />
@@ -776,8 +776,8 @@ const AppShell = () => {
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'audit'
-                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                    ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                 }`}
               >
                 <History className="h-5 w-5 flex-shrink-0" />
