@@ -377,8 +377,7 @@ const AppShell = () => {
           {can('accessTasks') && (
             <button
               onClick={() => {
-                setShowTaskInbox(true);
-                setActiveMenuItem('tasks');
+                handleNavigate('tasks', () => setShowTaskInbox(true));
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'tasks'
@@ -400,8 +399,7 @@ const AppShell = () => {
           {can('accessApprovals') && (
             <button
               onClick={() => {
-                setShowApprovalQueue(true);
-                setActiveMenuItem('approvals');
+                handleNavigate('approvals', () => setShowApprovalQueue(true));
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'approvals'
@@ -422,8 +420,7 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setShowNotifications(true);
-              setActiveMenuItem('notifications');
+              handleNavigate('notifications', () => setShowNotifications(true));
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'notifications'
@@ -444,8 +441,7 @@ const AppShell = () => {
           {can('accessAnalytics') && (
             <button
               onClick={() => {
-                setShowAnalytics(true);
-                setActiveMenuItem('analytics');
+                handleNavigate('analytics', () => setShowAnalytics(true));
               }}
               className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'analytics'
@@ -461,8 +457,7 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setShowAuditTrail(true);
-              setActiveMenuItem('audit');
+              handleNavigate('audit', () => setShowAuditTrail(true));
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'audit'
