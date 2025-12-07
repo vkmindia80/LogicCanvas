@@ -665,14 +665,14 @@ const AppShell = () => {
                 <X className="h-6 w-6" />
               </button>
             </div>
-            <nav className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0 }}>
+            <nav className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0, maxHeight: 'calc(100vh - 16rem)' }}>
               <div className="space-y-1">
               <button
                 onClick={() => {
-                  setActiveTab('workflows');
-                  setCurrentView('workflows');
-                  setMobileSidebarOpen(false);
-                  setActiveMenuItem('workflows');
+                  handleNavigate('workflows', () => {
+                    setActiveTab('workflows');
+                    setCurrentView('workflows');
+                  });
                 }}
                 className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'workflows'
@@ -685,10 +685,10 @@ const AppShell = () => {
               </button>
               <button
                 onClick={() => {
-                  setActiveTab('forms');
-                  setCurrentView('forms');
-                  setMobileSidebarOpen(false);
-                  setActiveMenuItem('forms');
+                  handleNavigate('forms', () => {
+                    setActiveTab('forms');
+                    setCurrentView('forms');
+                  });
                 }}
                 className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'forms'
