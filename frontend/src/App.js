@@ -1028,11 +1028,11 @@ const AppShell = () => {
       </main>
 
       {/* Modals */}
-      {showTaskInbox && <TaskInbox onClose={() => { setShowTaskInbox(false); setActiveMenuItem(activeTab); }} onNotify={addToast} />}
-      {showApprovalQueue && <ApprovalQueue onClose={() => { setShowApprovalQueue(false); setActiveMenuItem(activeTab); }} onNotify={addToast} />}
-      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setActiveMenuItem(activeTab); }} />}
-      {showAuditTrail && <AuditTrail onClose={() => { setShowAuditTrail(false); setActiveMenuItem(activeTab); }} />}
-      {showAnalytics && <AnalyticsDashboard onClose={() => { setShowAnalytics(false); setActiveMenuItem(activeTab); }} />}
+      {showTaskInbox && <TaskInbox onClose={() => { setShowTaskInbox(false); setActiveMenuItem(activeTab); }} onNotify={addToast} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />}
+      {showApprovalQueue && <ApprovalQueue onClose={() => { setShowApprovalQueue(false); setActiveMenuItem(activeTab); }} onNotify={addToast} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />}
+      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setActiveMenuItem(activeTab); }} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />}
+      {showAuditTrail && <AuditTrail onClose={() => { setShowAuditTrail(false); setActiveMenuItem(activeTab); }} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />}
+      {showAnalytics && <AnalyticsDashboard onClose={() => { setShowAnalytics(false); setActiveMenuItem(activeTab); }} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />}
       {showGlobalSearch && (
         <GlobalSearch
           isOpen={showGlobalSearch}
