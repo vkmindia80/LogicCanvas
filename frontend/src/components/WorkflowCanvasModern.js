@@ -12,13 +12,22 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
-import NodePaletteSalesforce from './NodePaletteSalesforce';
+import NodePaletteModern from './NodePaletteModern';
 import NodeEditor from './NodeEditor';
 import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
-import DeletableEdge from './edges/DeletableEdge';
+import DeletableEdgeModern from './edges/DeletableEdgeModern';
 import { createNodeData } from '../utils/nodeTypes';
 import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, GitBranch, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { 
+  UndoRedoGroup, 
+  ZoomControlsGroup, 
+  GridSnapToggle, 
+  ExportMenu, 
+  ActionButtonsGroup,
+  TemplateAndAIButtons 
+} from './CanvasToolbarButtons';
+import { modernButtonStyles, modernInputStyles, modernBadgeStyles } from '../utils/modernDesignSystem';
 import VariablePanel from './VariablePanel';
 import VariableInspector from './VariableInspector';
 import VariableManagementPanel from './VariableManagementPanel';
