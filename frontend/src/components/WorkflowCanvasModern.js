@@ -851,8 +851,8 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
   return (
     <div className="flex h-screen bg-slate-50">
-      {/* Left Sidebar - Node Palette */}
-      <div className="w-72 bg-white border-r border-slate-200 shadow-sm overflow-hidden">
+      {/* Left Sidebar - Node Palette - Modernized */}
+      <div className="w-72 bg-white border-r border-slate-200 shadow-lg overflow-hidden">
         <NodePaletteModern 
           onAddNode={addNode} 
           lastNodeType={nodes[nodes.length - 1]?.type}
