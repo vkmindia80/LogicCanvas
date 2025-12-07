@@ -653,7 +653,7 @@ const AppShell = () => {
                 <X className="h-6 w-6" />
               </button>
             </div>
-            <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0 }}>
+            <nav className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0 }}>
               <div className="space-y-1">
               <button
                 onClick={() => {
