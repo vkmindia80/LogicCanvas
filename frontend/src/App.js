@@ -809,16 +809,17 @@ const AppShell = () => {
       />
       {showIntegrationHub && (
         <IntegrationHub
-          onClose={() => setShowIntegrationHub(false)}
+          onClose={() => { setShowIntegrationHub(false); setActiveMenuItem(activeTab); }}
           sidebarCollapsed={sidebarCollapsed}
         />
       )}
       {showConnectorLibrary && (
         <ConnectorLibrary
-          onClose={() => setShowConnectorLibrary(false)}
+          onClose={() => { setShowConnectorLibrary(false); setActiveMenuItem(activeTab); }}
           onSelect={(connector) => {
             addToast(`Connector "${connector.name}" selected!`, 'success');
             setShowConnectorLibrary(false);
+            setActiveMenuItem(activeTab);
           }}
           sidebarCollapsed={sidebarCollapsed}
         />
@@ -829,6 +830,7 @@ const AppShell = () => {
           onClose={() => {
             setShowDebugPanel(false);
             setDebugInstanceId(null);
+            setActiveMenuItem(activeTab);
           }}
           sidebarCollapsed={sidebarCollapsed}
         />
