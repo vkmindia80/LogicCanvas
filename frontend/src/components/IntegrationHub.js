@@ -159,8 +159,8 @@ const IntegrationHub = ({ onClose, sidebarCollapsed = false }) => {
           </button>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6">
           {loading ? (
             <div className="flex h-64 items-center justify-center">
               <div className="text-center">
