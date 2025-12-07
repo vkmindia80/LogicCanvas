@@ -1125,13 +1125,20 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         </div>
       )}
 
-      {/* Validation Results Panel - Enhanced */}
+      {/* Validation Results Panel - Modernized */}
       {validationRan && validationResults && (
-        <div className="fixed bottom-4 right-4 w-[480px] bg-white shadow-2xl border border-slate-200 rounded-2xl z-50 max-h-[500px] overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-white">
+        <div className="fixed bottom-6 right-6 w-[480px] bg-white shadow-2xl border border-slate-200 rounded-2xl z-50 max-h-[500px] overflow-hidden flex flex-col animate-slide-in-up">
+          <div className="flex items-center justify-between p-5 border-b border-slate-200 bg-gradient-to-r from-white to-slate-50">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">Validation Results</h3>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                {validationResults.length === 0 ? (
+                  <CheckCircle className="w-5 h-5 text-emerald-600" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-amber-600" />
+                )}
+                Validation Results
+              </h3>
+              <p className="text-sm text-slate-600 mt-1">
                 {validationResults.length === 0 
                   ? 'All checks passed!' 
                   : `Found ${validationResults.length} issue${validationResults.length > 1 ? 's' : ''}`
