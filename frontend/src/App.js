@@ -306,9 +306,9 @@ const AppShell = () => {
 
   return (
     <div className="flex min-h-screen bg-white">
-      {/* Left Sidebar - Modernized */}
+      {/* Left Sidebar - Modern Indigo Theme */}
       <aside
-        className="fixed left-0 top-0 z-40 h-screen w-72 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 shadow-2xl transition-all duration-300 flex flex-col hidden lg:block"
+        className="fixed left-0 top-0 z-40 h-screen w-72 bg-gradient-to-b from-indigo-950 via-indigo-900 to-slate-950 shadow-2xl transition-all duration-300 flex flex-col hidden lg:block"
       >
         {/* Logo Section */}
         <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4 flex-shrink-0">
@@ -371,8 +371,8 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'tasks'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                  ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-tasks"
             >
@@ -393,8 +393,8 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'approvals'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                  ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-approvals"
             >
@@ -435,8 +435,8 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'analytics'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                  ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-analytics"
             >
@@ -484,8 +484,8 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'import-export'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                  ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-import-export"
             >
@@ -533,8 +533,8 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'debug'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                  ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-debug"
             >
