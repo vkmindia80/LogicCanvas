@@ -242,19 +242,19 @@
 - [x] DataTransformationMapper component with pipeline builder
 - [x] DataMappingPanel with drag-and-drop variable mapping
 
-#### 3.4 Integration Enhancements
-- [ ] Pre-built connector library expansion
-  - Salesforce
-  - HubSpot
-  - Jira
-  - ServiceNow
-  - SAP
-  - Oracle
-  - Microsoft Dynamics
-- [ ] OAuth 2.0 flow builder
-- [ ] API rate limiting & retry
-- [ ] Connection pooling
-- [ ] Webhook management UI
+#### 3.4 Integration Enhancements ✅ COMPLETE
+- [x] Pre-built connector library expansion (35+ templates)
+  - Salesforce (4 operations: Create Lead, Get Account, Update Opportunity, SOQL Query)
+  - HubSpot (5 operations: Create Contact, Create Deal, Get Contact, Create Company, Create Ticket)
+  - Jira (4 operations: Create Issue, Update Issue, Get Issue, Add Comment, Transition Issue)
+  - ServiceNow (3 operations: Create Incident, Update Ticket, Get Incident, Create Change Request)
+  - SAP (3 operations: Create Sales Order, Get Material, Get Business Partner, Create Purchase Order)
+  - Oracle (2 operations: Execute Query, Create Customer, Get Invoice)
+  - Microsoft Dynamics 365 (5 operations: Create Account, Create Lead, Get Account, Create Opportunity, Create Case)
+- [x] OAuth 2.0 flow builder (with 5 providers)
+- [x] API rate limiting & retry (with RateLimitingManager UI)
+- [x] Connection pooling (with ConnectionPoolMonitor UI)
+- [x] Webhook management UI (WebhookManager component)
 
 #### 3.5 Document Processing
 - [ ] File upload nodes
