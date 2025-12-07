@@ -193,9 +193,20 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-slate-700 to-slate-800 text-white">
-        <div>
-          <h2 className="text-xl font-bold">Debug Panel</h2>
-          <p className="text-sm text-slate-300">Instance: {instanceId}</p>
+        <div className="flex items-center space-x-3">
+          {/* Hamburger Menu for Mobile */}
+          <button 
+            onClick={onOpenMobileSidebar}
+            className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+            data-testid="mobile-menu-btn"
+            aria-label="Open Menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+          <div>
+            <h2 className="text-xl font-bold">Debug Panel</h2>
+            <p className="text-sm text-slate-300">Instance: {instanceId}</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {/* Debug Controls */}
@@ -221,6 +232,14 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
             title="Step to next node"
           >
             <SkipForward size={16} />
+          </button>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+            data-testid="close-debug-panel-btn"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6" />
           </button>
         </div>
       </div>
