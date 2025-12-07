@@ -3,6 +3,7 @@ import {
   X, Search, Filter, Package, Users, DollarSign, ShoppingCart,
   FileText, Headphones, Clock, Layers, CheckCircle, Star
 } from 'lucide-react';
+import { modalHeaderStyles, modalOverlayStyles, cardStyles, buttonStyles } from '../utils/designSystem';
 
 const iconMap = {
   'users': Users,
