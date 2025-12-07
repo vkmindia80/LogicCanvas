@@ -146,26 +146,18 @@ const TransformationPlayground = ({ onClose, sidebarCollapsed = false }) => {
 
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-slate-800">Transformation Playground</h2>
-              <p className="text-sm text-slate-600">Test and build data transformations interactively</p>
-            </div>
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <Sparkles className="w-6 h-6" />
           </div>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div>
+            <h2 className="text-2xl font-bold">Transformation Playground</h2>
+            <p className="text-sm text-indigo-100">Test and build data transformations interactively</p>
+          </div>
         </div>
+      </div>
 
         {/* Tabs */}
         <div className="flex border-b border-slate-200 px-6">
