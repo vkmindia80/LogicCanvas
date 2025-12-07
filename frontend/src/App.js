@@ -645,6 +645,7 @@ const AppShell = () => {
                   handleNavigate('workflows', () => {
                     setActiveTab('workflows');
                     setCurrentView('workflows');
+                    setMobileSidebarOpen(false);
                   });
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
@@ -656,11 +657,13 @@ const AppShell = () => {
                 <Workflow className="h-5 w-5 flex-shrink-0" />
                 <span>Workflows</span>
               </button>
+
               <button
                 onClick={() => {
                   handleNavigate('forms', () => {
                     setActiveTab('forms');
                     setCurrentView('forms');
+                    setMobileSidebarOpen(false);
                   });
                 }}
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
@@ -671,6 +674,243 @@ const AppShell = () => {
               >
                 <FileText className="h-5 w-5 flex-shrink-0" />
                 <span>Forms</span>
+              </button>
+
+              <div className="my-3 border-t border-slate-700"></div>
+
+              {can('accessTasks') && (
+                <button
+                  onClick={() => {
+                    handleNavigate('tasks', () => {
+                      setShowTaskInbox(true);
+                      setMobileSidebarOpen(false);
+                    });
+                  }}
+                  className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                    activeMenuItem === 'tasks'
+                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  }`}
+                >
+                  <CheckSquare className="h-5 w-5 flex-shrink-0" />
+                  <span>Tasks</span>
+                  {taskCount > 0 && (
+                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                      {taskCount > 9 ? '9+' : taskCount}
+                    </span>
+                  )}
+                </button>
+              )}
+
+              {can('accessApprovals') && (
+                <button
+                  onClick={() => {
+                    handleNavigate('approvals', () => {
+                      setShowApprovalQueue(true);
+                      setMobileSidebarOpen(false);
+                    });
+                  }}
+                  className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                    activeMenuItem === 'approvals'
+                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  }`}
+                >
+                  <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
+                  <span>Approvals</span>
+                  {approvalCount > 0 && (
+                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
+                      {approvalCount > 9 ? '9+' : approvalCount}
+                    </span>
+                  )}
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  handleNavigate('notifications', () => {
+                    setShowNotifications(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'notifications'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <Bell className="h-5 w-5 flex-shrink-0" />
+                <span>Notifications</span>
+                {notificationCount > 0 && (
+                  <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
+                    {notificationCount > 9 ? '9+' : notificationCount}
+                  </span>
+                )}
+              </button>
+
+              {can('accessAnalytics') && (
+                <button
+                  onClick={() => {
+                    handleNavigate('analytics', () => {
+                      setShowAnalytics(true);
+                      setMobileSidebarOpen(false);
+                    });
+                  }}
+                  className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                    activeMenuItem === 'analytics'
+                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  }`}
+                >
+                  <BarChart3 className="h-5 w-5 flex-shrink-0" />
+                  <span>Analytics</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  handleNavigate('audit', () => {
+                    setShowAuditTrail(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'audit'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <History className="h-5 w-5 flex-shrink-0" />
+                <span>Audit Trail</span>
+              </button>
+
+              <div className="my-3 border-t border-slate-700"></div>
+
+              <button
+                onClick={() => {
+                  handleNavigate('search', () => {
+                    setShowGlobalSearch(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'search'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <SearchIcon className="h-5 w-5 flex-shrink-0" />
+                <span>Search</span>
+              </button>
+
+              {can('accessImportExport') && (
+                <button
+                  onClick={() => {
+                    handleNavigate('import-export', () => {
+                      setShowImportExport(true);
+                      setMobileSidebarOpen(false);
+                    });
+                  }}
+                  className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                    activeMenuItem === 'import-export'
+                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  }`}
+                >
+                  <Download className="h-5 w-5 flex-shrink-0" />
+                  <span>Import/Export</span>
+                </button>
+              )}
+
+              <div className="my-3 border-t border-slate-700"></div>
+
+              <button
+                onClick={() => {
+                  handleNavigate('integration-hub', () => {
+                    setShowIntegrationHub(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'integration-hub'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <Globe className="h-5 w-5 flex-shrink-0" />
+                <span>Integration Hub</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  handleNavigate('connectors', () => {
+                    setShowConnectorLibrary(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'connectors'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <Zap className="h-5 w-5 flex-shrink-0" />
+                <span>API Connectors</span>
+              </button>
+
+              {can('accessAnalytics') && (
+                <button
+                  onClick={() => {
+                    handleNavigate('debug', () => {
+                      setShowDebugPanel(true);
+                      setMobileSidebarOpen(false);
+                    });
+                  }}
+                  className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                    activeMenuItem === 'debug'
+                      ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  }`}
+                >
+                  <Bug className="h-5 w-5 flex-shrink-0" />
+                  <span>Debug Console</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  handleNavigate('transformations', () => {
+                    setShowTransformationPlayground(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'transformations'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <Sparkles className="h-5 w-5 flex-shrink-0" />
+                <span>Transformations</span>
+              </button>
+
+              <div className="my-3 border-t border-slate-700"></div>
+
+              <button
+                onClick={() => {
+                  handleNavigate('tour', () => {
+                    setShowOnboarding(true);
+                    setMobileSidebarOpen(false);
+                  });
+                }}
+                className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                  activeMenuItem === 'tour'
+                    ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
+                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                }`}
+              >
+                <Home className="h-5 w-5 flex-shrink-0" />
+                <span>Take a Tour</span>
               </button>
               </div>
             </nav>
