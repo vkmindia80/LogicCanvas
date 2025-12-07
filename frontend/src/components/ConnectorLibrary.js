@@ -210,6 +210,9 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
                 <option value="itsm">🔧 ITSM</option>
                 <option value="erp">🏢 ERP</option>
                 <option value="database">🗄️ Database</option>
+                <option value="ecommerce">🛒 E-commerce</option>
+                <option value="social_media">📱 Social Media</option>
+                <option value="monitoring">📊 Monitoring</option>
                 <option value="custom">🔌 Custom</option>
               </select>
             </div>
