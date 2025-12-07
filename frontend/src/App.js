@@ -600,17 +600,9 @@ const AppShell = () => {
 
           {/* User Info */}
           {currentUser && (
-            <div className={`mb-3 rounded-lg bg-slate-800/50 p-3 ${sidebarCollapsed ? 'text-center' : ''}`}>
-              {!sidebarCollapsed ? (
-                <>
-                  <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
-                  <div className="text-xs text-slate-400">{currentUser.role}</div>
-                </>
-              ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white">
-                  {(currentUser.name || currentUser.email).charAt(0).toUpperCase()}
-                </div>
-              )}
+            <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+              <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
+              <div className="text-xs text-slate-400">{currentUser.role}</div>
             </div>
           )}
 
