@@ -60,8 +60,23 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, sidebar
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="global-search">
       <div className="flex flex-col h-full">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-4 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <Search className="w-7 h-7" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">Global Search</h1>
+                <p className="text-primary-100 text-sm">Search workflows, forms, tasks, and approvals</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Search Input */}
-        <div className="p-4 border-b border-slate-200">
+        <div className="p-6 border-b border-slate-200 bg-white">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
             <input
@@ -74,14 +89,8 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, sidebar
               data-testid="global-search-input"
             />
             {loading && (
-              <Loader2 className="absolute right-10 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5 animate-spin" />
+              <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5 animate-spin" />
             )}
-            <button
-              onClick={handleClose}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
           <p className="text-xs text-slate-500 mt-2">
             Type at least 2 characters to search
