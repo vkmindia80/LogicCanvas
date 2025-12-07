@@ -10222,6 +10222,376 @@ async def get_component_categories():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ========== PHASE A SPRINT 4: INTEGRATION HUB ==========
+
+from cryptography.fernet import Fernet
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+# Generate or load encryption key for credentials
+ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY', Fernet.generate_key().decode())
+cipher_suite = Fernet(ENCRYPTION_KEY.encode())
+
+class Integration(BaseModel):
+    id: Optional[str] = None
+    name: str
+    description: Optional[str] = ""
+    type: str  # email, slack, teams, rest, webhook
+    config: Dict[str, Any]
+    status: str = "active"  # active, inactive, error
+    last_tested: Optional[str] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+def encrypt_credentials(data: str) -> str:
+    """Encrypt sensitive credentials"""
+    return cipher_suite.encrypt(data.encode()).decode()
+
+def decrypt_credentials(encrypted_data: str) -> str:
+    """Decrypt sensitive credentials"""
+    return cipher_suite.decrypt(encrypted_data.encode()).decode()
+
+@app.post("/api/integrations")
+async def create_integration(integration: Integration):
+    """Create a new integration"""
+    try:
+        integration_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        
+        integration_dict = integration.dict()
+        integration_dict["id"] = integration_id
+        integration_dict["created_at"] = now
+        integration_dict["updated_at"] = now
+        
+        # Encrypt sensitive fields
+        if "password" in integration_dict["config"]:
+            integration_dict["config"]["password"] = encrypt_credentials(integration_dict["config"]["password"])
+        if "api_key" in integration_dict["config"]:
+            integration_dict["config"]["api_key"] = encrypt_credentials(integration_dict["config"]["api_key"])
+        if "webhook_url" in integration_dict["config"]:
+            integration_dict["config"]["webhook_url"] = encrypt_credentials(integration_dict["config"]["webhook_url"])
+        if "token" in integration_dict["config"]:
+            integration_dict["config"]["token"] = encrypt_credentials(integration_dict["config"]["token"])
+        
+        integrations_collection.insert_one(integration_dict)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "integration",
+            "entity_id": integration_id,
+            "action": "created",
+            "details": {"name": integration.name, "type": integration.type},
+            "timestamp": now
+        })
+        
+        return {"message": "Integration created successfully", "id": integration_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/integrations")
+async def get_integrations(type: Optional[str] = None, status: Optional[str] = None):
+    """Get all integrations"""
+    try:
+        query = {}
+        if type:
+            query["type"] = type
+        if status:
+            query["status"] = status
+        
+        integrations = list(integrations_collection.find(query, {"_id": 0}))
+        
+        # Mask sensitive credentials in response
+        for integration in integrations:
+            if "password" in integration.get("config", {}):
+                integration["config"]["password"] = "••••••••"
+            if "api_key" in integration.get("config", {}):
+                integration["config"]["api_key"] = "••••••••"
+            if "webhook_url" in integration.get("config", {}):
+                # Show only last 10 chars
+                url = integration["config"]["webhook_url"]
+                if len(url) > 10:
+                    integration["config"]["webhook_url"] = "•••" + url[-10:]
+            if "token" in integration.get("config", {}):
+                integration["config"]["token"] = "••••••••"
+        
+        return {"integrations": integrations, "count": len(integrations)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/integrations/{integration_id}")
+async def get_integration(integration_id: str):
+    """Get a specific integration"""
+    try:
+        integration = integrations_collection.find_one({"id": integration_id}, {"_id": 0})
+        if not integration:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        # Mask sensitive credentials
+        if "password" in integration.get("config", {}):
+            integration["config"]["password"] = "••••••••"
+        if "api_key" in integration.get("config", {}):
+            integration["config"]["api_key"] = "••••••••"
+        if "webhook_url" in integration.get("config", {}):
+            url = integration["config"]["webhook_url"]
+            if len(url) > 10:
+                integration["config"]["webhook_url"] = "•••" + url[-10:]
+        if "token" in integration.get("config", {}):
+            integration["config"]["token"] = "••••••••"
+        
+        return integration
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/api/integrations/{integration_id}")
+async def update_integration(integration_id: str, integration: Integration):
+    """Update an integration"""
+    try:
+        existing = integrations_collection.find_one({"id": integration_id})
+        if not existing:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        now = datetime.utcnow().isoformat()
+        integration_dict = integration.dict()
+        integration_dict["id"] = integration_id
+        integration_dict["created_at"] = existing.get("created_at")
+        integration_dict["updated_at"] = now
+        
+        # Encrypt sensitive fields if they're not already masked
+        if "password" in integration_dict["config"] and integration_dict["config"]["password"] != "••••••••":
+            integration_dict["config"]["password"] = encrypt_credentials(integration_dict["config"]["password"])
+        elif "password" in integration_dict["config"] and integration_dict["config"]["password"] == "••••••••":
+            # Keep existing password
+            integration_dict["config"]["password"] = existing["config"]["password"]
+            
+        if "api_key" in integration_dict["config"] and integration_dict["config"]["api_key"] != "••••••••":
+            integration_dict["config"]["api_key"] = encrypt_credentials(integration_dict["config"]["api_key"])
+        elif "api_key" in integration_dict["config"] and integration_dict["config"]["api_key"] == "••••••••":
+            integration_dict["config"]["api_key"] = existing["config"]["api_key"]
+            
+        if "webhook_url" in integration_dict["config"] and not integration_dict["config"]["webhook_url"].startswith("•••"):
+            integration_dict["config"]["webhook_url"] = encrypt_credentials(integration_dict["config"]["webhook_url"])
+        elif "webhook_url" in integration_dict["config"] and integration_dict["config"]["webhook_url"].startswith("•••"):
+            integration_dict["config"]["webhook_url"] = existing["config"]["webhook_url"]
+            
+        if "token" in integration_dict["config"] and integration_dict["config"]["token"] != "••••••••":
+            integration_dict["config"]["token"] = encrypt_credentials(integration_dict["config"]["token"])
+        elif "token" in integration_dict["config"] and integration_dict["config"]["token"] == "••••••••":
+            integration_dict["config"]["token"] = existing["config"]["token"]
+        
+        integrations_collection.replace_one({"id": integration_id}, integration_dict)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "integration",
+            "entity_id": integration_id,
+            "action": "updated",
+            "details": {"name": integration.name, "type": integration.type},
+            "timestamp": now
+        })
+        
+        return {"message": "Integration updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/integrations/{integration_id}")
+async def delete_integration(integration_id: str):
+    """Delete an integration"""
+    try:
+        result = integrations_collection.delete_one({"id": integration_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "integration",
+            "entity_id": integration_id,
+            "action": "deleted",
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
+        return {"message": "Integration deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/integrations/{integration_id}/test")
+async def test_integration(integration_id: str):
+    """Test an integration connection"""
+    try:
+        integration = integrations_collection.find_one({"id": integration_id})
+        if not integration:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        integration_type = integration["type"]
+        config = integration["config"]
+        
+        # Decrypt credentials for testing
+        if "password" in config and config["password"] != "••••••••":
+            try:
+                config["password"] = decrypt_credentials(config["password"])
+            except:
+                pass
+        if "api_key" in config and config["api_key"] != "••••••••":
+            try:
+                config["api_key"] = decrypt_credentials(config["api_key"])
+            except:
+                pass
+        if "webhook_url" in config:
+            try:
+                if not config["webhook_url"].startswith("http"):
+                    config["webhook_url"] = decrypt_credentials(config["webhook_url"])
+            except:
+                pass
+        if "token" in config and config["token"] != "••••••••":
+            try:
+                config["token"] = decrypt_credentials(config["token"])
+            except:
+                pass
+        
+        result = {"success": False, "message": ""}
+        
+        if integration_type == "email":
+            # Test SMTP connection
+            try:
+                server = smtplib.SMTP(config.get("smtp_host", "smtp.gmail.com"), config.get("smtp_port", 587))
+                server.starttls()
+                server.login(config.get("username", ""), config.get("password", ""))
+                server.quit()
+                result = {"success": True, "message": "SMTP connection successful"}
+            except Exception as e:
+                result = {"success": False, "message": f"SMTP connection failed: {str(e)}"}
+        
+        elif integration_type == "slack":
+            # Test Slack webhook
+            try:
+                response = requests.post(
+                    config.get("webhook_url", ""),
+                    json={"text": "Test message from LogicCanvas"},
+                    timeout=10
+                )
+                if response.status_code == 200:
+                    result = {"success": True, "message": "Slack webhook test successful"}
+                else:
+                    result = {"success": False, "message": f"Slack webhook failed: {response.text}"}
+            except Exception as e:
+                result = {"success": False, "message": f"Slack webhook failed: {str(e)}"}
+        
+        elif integration_type == "teams":
+            # Test Teams webhook
+            try:
+                response = requests.post(
+                    config.get("webhook_url", ""),
+                    json={"text": "Test message from LogicCanvas"},
+                    timeout=10
+                )
+                if response.status_code == 200:
+                    result = {"success": True, "message": "Teams webhook test successful"}
+                else:
+                    result = {"success": False, "message": f"Teams webhook failed: {response.text}"}
+            except Exception as e:
+                result = {"success": False, "message": f"Teams webhook failed: {str(e)}"}
+        
+        elif integration_type == "rest":
+            # Test REST API connection
+            try:
+                method = config.get("method", "GET").upper()
+                url = config.get("url", "")
+                headers = config.get("headers", {})
+                
+                if method == "GET":
+                    response = requests.get(url, headers=headers, timeout=10)
+                elif method == "POST":
+                    response = requests.post(url, headers=headers, json=config.get("body", {}), timeout=10)
+                
+                if response.status_code < 400:
+                    result = {"success": True, "message": f"REST API test successful (Status: {response.status_code})"}
+                else:
+                    result = {"success": False, "message": f"REST API test failed (Status: {response.status_code})"}
+            except Exception as e:
+                result = {"success": False, "message": f"REST API test failed: {str(e)}"}
+        
+        elif integration_type == "webhook":
+            # Test generic webhook
+            try:
+                method = config.get("method", "POST").upper()
+                url = config.get("webhook_url", "")
+                
+                if method == "POST":
+                    response = requests.post(url, json={"test": True}, timeout=10)
+                else:
+                    response = requests.get(url, timeout=10)
+                
+                if response.status_code < 400:
+                    result = {"success": True, "message": f"Webhook test successful (Status: {response.status_code})"}
+                else:
+                    result = {"success": False, "message": f"Webhook test failed (Status: {response.status_code})"}
+            except Exception as e:
+                result = {"success": False, "message": f"Webhook test failed: {str(e)}"}
+        
+        # Update last_tested timestamp and status
+        now = datetime.utcnow().isoformat()
+        integrations_collection.update_one(
+            {"id": integration_id},
+            {
+                "$set": {
+                    "last_tested": now,
+                    "status": "active" if result["success"] else "error",
+                    "updated_at": now
+                }
+            }
+        )
+        
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/integrations/types/list")
+async def get_integration_types():
+    """Get available integration types"""
+    return {
+        "types": [
+            {
+                "id": "email",
+                "name": "Email (SMTP)",
+                "description": "Send emails via SMTP server",
+                "icon": "Mail",
+                "fields": ["smtp_host", "smtp_port", "username", "password", "from_email"]
+            },
+            {
+                "id": "slack",
+                "name": "Slack",
+                "description": "Send messages to Slack channels",
+                "icon": "MessageSquare",
+                "fields": ["webhook_url"]
+            },
+            {
+                "id": "teams",
+                "name": "Microsoft Teams",
+                "description": "Send messages to Teams channels",
+                "icon": "Users",
+                "fields": ["webhook_url"]
+            },
+            {
+                "id": "rest",
+                "name": "REST API",
+                "description": "Generic REST API integration",
+                "icon": "Globe",
+                "fields": ["url", "method", "headers", "api_key"]
+            },
+            {
+                "id": "webhook",
+                "name": "Generic Webhook",
+                "description": "Send data to any webhook URL",
+                "icon": "Zap",
+                "fields": ["webhook_url", "method"]
+            }
+        ]
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
