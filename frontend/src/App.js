@@ -312,22 +312,15 @@ const AppShell = () => {
       >
         {/* Logo Section */}
         <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4 flex-shrink-0">
-          {!sidebarCollapsed && (
-            <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
-                <Activity className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold text-white">LogicCanvas</h1>
-                <p className="text-xs text-slate-400">Workflow Builder</p>
-              </div>
-            </div>
-          )}
-          {sidebarCollapsed && (
-            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
+          <div className="flex items-center space-x-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 shadow-lg">
               <Activity className="h-6 w-6 text-white" />
             </div>
-          )}
+            <div>
+              <h1 className="text-lg font-bold text-white">LogicCanvas</h1>
+              <p className="text-xs text-slate-400">Workflow Builder</p>
+            </div>
+          </div>
         </div>
 
         {/* Navigation - Enhanced scrolling */}
