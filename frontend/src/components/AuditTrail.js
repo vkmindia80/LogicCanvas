@@ -49,7 +49,7 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
       assigned: <User className="w-4 h-4 text-green-500" />,
       reassigned: <User className="w-4 h-4 text-gold-500" />,
       escalated: <Clock className="w-4 h-4 text-red-500" />,
-      delegated: <User className="w-4 h-4 text-yellow-500" />
+      delegated: <User className="w-4 h-4 text-gold-500" />
     };
     return icons[action] || <FileText className="w-4 h-4 text-gray-500" />;
   };
@@ -67,7 +67,7 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
       assigned: 'bg-green-100 text-green-800 border-green-300',
       reassigned: 'bg-gold-100 text-gold-800 border-gold-300',
       escalated: 'bg-red-100 text-red-800 border-red-300',
-      delegated: 'bg-yellow-100 text-yellow-800 border-yellow-300'
+      delegated: 'bg-gold-100 text-gold-800 border-gold-300'
     };
     return colors[action] || 'bg-gray-100 text-gray-800 border-gray-300';
   };

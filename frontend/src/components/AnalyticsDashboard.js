@@ -688,7 +688,7 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
         {/* Leaderboard */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Award className="w-5 h-5 mr-2 text-yellow-600" />
+            <Award className="w-5 h-5 mr-2 text-gold-600" />
             Top Performers
           </h3>
           {userProductivity.length > 0 ? (
@@ -697,7 +697,7 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
                 <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
-                      idx === 0 ? 'bg-yellow-500' :
+                      idx === 0 ? 'bg-gold-500' :
                       idx === 1 ? 'bg-gray-400' :
                       idx === 2 ? 'bg-gold-500' :
                       'bg-green-500'

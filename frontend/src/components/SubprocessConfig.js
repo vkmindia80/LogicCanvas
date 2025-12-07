@@ -222,7 +222,7 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
                     </ul>
                   )}
                   {validation.warnings && validation.warnings.length > 0 && (
-                    <ul className="mt-2 text-sm text-yellow-800 space-y-1">
+                    <ul className="mt-2 text-sm text-gold-800 space-y-1">
                       {validation.warnings.map((warning, idx) => (
                         <li key={idx}>⚠ {warning}</li>
                       ))}

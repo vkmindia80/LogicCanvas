@@ -206,7 +206,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
   );
 
   const statusColors = {
-    draft: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    draft: 'bg-gold-100 text-gold-800 border-gold-300',
     published: 'bg-green-100 text-green-800 border-green-300',
     paused: 'bg-gray-100 text-gray-800 border-gray-300',
     archived: 'bg-red-100 text-red-800 border-red-300',
@@ -299,8 +299,8 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
         {/* Status chips */}
         <div className="mb-6 flex flex-wrap gap-3 text-sm">
-          <div className="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-2 font-medium text-yellow-700">
-            <span className="text-yellow-900">Draft:</span> {statusCounts.draft}
+          <div className="rounded-xl border border-gold-200 bg-gold-50 px-4 py-2 font-medium text-gold-700">
+            <span className="text-gold-900">Draft:</span> {statusCounts.draft}
           </div>
           <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-2 font-medium text-green-700">
             <span className="text-green-900">Published:</span> {statusCounts.published}
@@ -403,7 +403,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                 </button>
                 <button
                   onClick={() => handleBulkUpdateStatus('draft')}
-                  className="rounded bg-yellow-500 px-3 py-1.5 text-white hover:bg-yellow-600"
+                  className="rounded bg-gold-500 px-3 py-1.5 text-white hover:bg-gold-600"
                 >
                   Draft
                 </button>

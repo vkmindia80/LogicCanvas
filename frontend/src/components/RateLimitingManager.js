@@ -121,7 +121,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
 
   const getUsageColor = (percentage) => {
     if (percentage >= 90) return 'text-red-600 bg-red-100';
-    if (percentage >= 70) return 'text-yellow-600 bg-yellow-100';
+    if (percentage >= 70) return 'text-gold-600 bg-gold-100';
     return 'text-green-600 bg-green-100';
   };
 
@@ -132,7 +132,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
       case 'open':
         return { icon: AlertTriangle, color: 'text-red-600', label: 'Open (Failing)' };
       case 'half_open':
-        return { icon: Activity, color: 'text-yellow-600', label: 'Testing' };
+        return { icon: Activity, color: 'text-gold-600', label: 'Testing' };
       default:
         return { icon: Info, color: 'text-gray-600', label: 'Unknown' };
     }
@@ -209,7 +209,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                             <div
                               className={`h-3 rounded-full transition-all ${
                                 usagePercentage >= 90 ? 'bg-red-500' : 
-                                usagePercentage >= 70 ? 'bg-yellow-500' : 'bg-green-500'
+                                usagePercentage >= 70 ? 'bg-gold-500' : 'bg-green-500'
                               }`}
                               style={{ width: `${usagePercentage}%` }}
                             />

@@ -80,7 +80,7 @@ const EnhancedSubprocessConfig = ({
     const statusColors = {
       published: 'bg-green-100 text-green-800',
       draft: 'bg-gray-100 text-gray-800',
-      paused: 'bg-yellow-100 text-yellow-800',
+      paused: 'bg-gold-100 text-gold-800',
       archived: 'bg-red-100 text-red-800'
     };
     return { status, color: statusColors[status] || statusColors.draft };
@@ -142,17 +142,17 @@ const EnhancedSubprocessConfig = ({
         <div className={`p-4 rounded-lg border ${
           compatibilityCheck.compatible 
             ? 'bg-green-50 border-green-200' 
-            : 'bg-yellow-50 border-yellow-200'
+            : 'bg-gold-50 border-gold-200'
         }`}>
           <div className="flex items-start gap-3">
             {compatibilityCheck.compatible ? (
               <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
             )}
             <div>
               <p className={`text-sm font-medium ${
-                compatibilityCheck.compatible ? 'text-green-900' : 'text-yellow-900'
+                compatibilityCheck.compatible ? 'text-green-900' : 'text-gold-900'
               }`}>
                 {compatibilityCheck.message}
               </p>

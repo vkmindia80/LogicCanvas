@@ -391,7 +391,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                   <Star
                     className={`w-8 h-8 ${
                       (value || 0) > idx
-                        ? 'text-yellow-400 fill-yellow-400'
+                        ? 'text-gold-400 fill-yellow-400'
                         : 'text-slate-300'
                     }`}
                   />

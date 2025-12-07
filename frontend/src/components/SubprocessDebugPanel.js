@@ -132,7 +132,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
       case 'running':
         return <Activity className="w-4 h-4 text-green-600 animate-pulse" />;
       case 'waiting':
-        return <Clock className="w-4 h-4 text-yellow-600" />;
+        return <Clock className="w-4 h-4 text-gold-600" />;
       default:
         return <Info className="w-4 h-4 text-gray-400" />;
     }
@@ -288,15 +288,15 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
                       </div>
 
                       {metrics.slowestNode && (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                          <h4 className="text-sm font-semibold text-yellow-900 mb-2">Slowest Node</h4>
+                        <div className="bg-gold-50 border border-gold-200 rounded-lg p-3">
+                          <h4 className="text-sm font-semibold text-gold-900 mb-2">Slowest Node</h4>
                           <div className="flex items-center justify-between">
                             <div>
-                              <div className="text-sm text-yellow-800">
+                              <div className="text-sm text-gold-800">
                                 {metrics.slowestNode.node_type} ({metrics.slowestNode.node_id})
                               </div>
                             </div>
-                            <div className="text-lg font-bold text-yellow-900">
+                            <div className="text-lg font-bold text-gold-900">
                               {formatDuration(metrics.slowestNode.duration)}
                             </div>
                           </div>

@@ -95,7 +95,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
       case 'healthy':
         return 'text-green-600 bg-green-100';
       case 'degraded':
-        return 'text-yellow-600 bg-yellow-100';
+        return 'text-gold-600 bg-gold-100';
       case 'critical':
         return 'text-red-600 bg-red-100';
       default:
@@ -105,7 +105,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
 
   const getUsageColor = (percentage) => {
     if (percentage >= 90) return 'bg-red-500';
-    if (percentage >= 70) return 'bg-yellow-500';
+    if (percentage >= 70) return 'bg-gold-500';
     return 'bg-green-500';
   };
 

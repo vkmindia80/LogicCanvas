@@ -133,12 +133,12 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
     const colorClass = 
       type === 'added' ? 'bg-green-50 border-green-200' :
       type === 'removed' ? 'bg-red-50 border-red-200' :
-      'bg-yellow-50 border-yellow-200';
+      'bg-gold-50 border-gold-200';
 
     const iconColor =
       type === 'added' ? 'text-green-600' :
       type === 'removed' ? 'text-red-600' :
-      'text-yellow-600';
+      'text-gold-600';
 
     const Icon = 
       type === 'added' ? CheckCircle :
@@ -290,7 +290,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                         <div className="text-xs text-slate-600">Nodes Removed</div>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
-                        <div className="text-2xl font-bold text-yellow-600">{diff.nodes_modified?.length || 0}</div>
+                        <div className="text-2xl font-bold text-gold-600">{diff.nodes_modified?.length || 0}</div>
                         <div className="text-xs text-slate-600">Nodes Modified</div>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">

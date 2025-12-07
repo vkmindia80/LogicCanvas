@@ -167,7 +167,7 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
                         <span className={`px-2 py-1 text-xs font-medium rounded ${
                           version.status === 'published'
                             ? 'bg-green-100 text-green-700'
-                            : 'bg-yellow-100 text-yellow-700'
+                            : 'bg-gold-100 text-gold-700'
                         }`}>
                           {version.status}
                         </span>

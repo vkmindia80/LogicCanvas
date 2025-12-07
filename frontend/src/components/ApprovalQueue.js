@@ -89,7 +89,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
 
   const getStatusColor = (status) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+      pending: 'bg-gold-100 text-gold-800 border-gold-300',
       approved: 'bg-green-100 text-green-800 border-green-300',
       rejected: 'bg-red-100 text-red-800 border-red-300',
       changes_requested: 'bg-gold-100 text-gold-800 border-gold-300'
@@ -223,7 +223,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
       <div className="bg-white border-b border-gray-200 px-6 py-3">
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+            <div className="w-3 h-3 bg-gold-400 rounded-full"></div>
             <span className="text-sm text-gray-600">Pending: <strong>{stats.pending}</strong></span>
           </div>
           <div className="flex items-center space-x-2">

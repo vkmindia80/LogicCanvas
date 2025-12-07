@@ -94,7 +94,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
       case 'running': return <Clock className="w-4 h-4 text-green-500 animate-pulse" />;
       case 'completed': return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'failed': return <XCircle className="w-4 h-4 text-red-500" />;
-      case 'paused': return <Pause className="w-4 h-4 text-yellow-500" />;
+      case 'paused': return <Pause className="w-4 h-4 text-gold-500" />;
       case 'waiting': return <AlertCircle className="w-4 h-4 text-gold-500" />;
       default: return <Clock className="w-4 h-4 text-gray-400" />;
     }
@@ -105,7 +105,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
       case 'running': return 'bg-green-100 text-green-800';
       case 'completed': return 'bg-green-100 text-green-800';
       case 'failed': return 'bg-red-100 text-red-800';
-      case 'paused': return 'bg-yellow-100 text-yellow-800';
+      case 'paused': return 'bg-gold-100 text-gold-800';
       case 'waiting': return 'bg-gold-100 text-gold-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -185,7 +185,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                         e.stopPropagation();
                         handlePause(instance.id);
                       }}
-                      className="flex-1 text-xs bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 flex items-center justify-center gap-1"
+                      className="flex-1 text-xs bg-gold-500 text-white px-2 py-1 rounded hover:bg-gold-600 flex items-center justify-center gap-1"
                       data-testid={`pause-instance-${instance.id}`}
                     >
                       <Pause className="w-3 h-3" /> Pause

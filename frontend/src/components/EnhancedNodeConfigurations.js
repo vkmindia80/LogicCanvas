@@ -1085,7 +1085,7 @@ export const LoopControlConfig = ({
         </ul>
       </div>
 
-      <div className={`${isBreak ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'} border rounded-lg p-3`}>
+      <div className={`${isBreak ? 'bg-gold-50 border-gold-200' : 'bg-green-50 border-green-200'} border rounded-lg p-3`}>
         <p className="text-xs text-slate-700 flex items-start space-x-2">
           <span className="text-lg">⚠️</span>
           <span>

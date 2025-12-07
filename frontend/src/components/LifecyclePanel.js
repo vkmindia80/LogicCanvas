@@ -28,9 +28,9 @@ const LIFECYCLE_STATES = {
   in_review: {
     label: 'In Review',
     color: 'yellow',
-    bgColor: 'bg-yellow-100',
-    textColor: 'text-yellow-700',
-    borderColor: 'border-yellow-300',
+    bgColor: 'bg-gold-100',
+    textColor: 'text-gold-700',
+    borderColor: 'border-gold-300',
     icon: Users
   },
   published: {

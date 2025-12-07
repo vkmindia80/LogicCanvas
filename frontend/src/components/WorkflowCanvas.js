@@ -1044,7 +1044,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               </button>
               <button
                 onClick={() => setShowTriggerConfig(!showTriggerConfig)}
-                className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50 font-medium"
+                className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50 font-medium"
                 data-testid="trigger-config-btn"
                 title="Configure triggers"
                 disabled={!workflow?.id}

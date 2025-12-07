@@ -56,7 +56,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
       case 'running':
         return <Clock className="w-5 h-5 text-green-600 animate-spin" />;
       case 'waiting':
-        return <Clock className="w-5 h-5 text-yellow-600" />;
+        return <Clock className="w-5 h-5 text-gold-600" />;
       default:
         return <AlertCircle className="w-5 h-5 text-gray-400" />;
     }
@@ -71,7 +71,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
       case 'running':
         return 'bg-green-50 border-green-200';
       case 'waiting':
-        return 'bg-yellow-50 border-yellow-200';
+        return 'bg-gold-50 border-gold-200';
       default:
         return 'bg-gray-50 border-gray-200';
     }
@@ -276,7 +276,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                     <span>Running</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-yellow-600" />
+                    <Clock className="w-4 h-4 text-gold-600" />
                     <span>Waiting</span>
                   </div>
                 </div>

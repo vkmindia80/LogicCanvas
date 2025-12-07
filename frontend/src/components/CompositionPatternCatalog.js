@@ -89,7 +89,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
     const colors = {
       approval_chain: 'bg-green-100 text-green-700 border-green-200',
       data_pipeline: 'bg-green-100 text-green-700 border-green-200',
-      notification_flow: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+      notification_flow: 'bg-gold-100 text-gold-700 border-gold-200',
       error_handling: 'bg-red-100 text-red-700 border-red-200',
       parallel_processing: 'bg-gold-100 text-gold-700 border-gold-200',
       sequential_approval: 'bg-green-100 text-green-700 border-green-200',
@@ -153,7 +153,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                   className="w-4 h-4 text-gold-600 border-gray-300 rounded focus:ring-gold-500"
                   data-testid="filter-featured"
                 />
-                <Star className="w-4 h-4 text-yellow-500" />
+                <Star className="w-4 h-4 text-gold-500" />
                 <span className="text-sm text-gray-700">Featured Only</span>
               </label>
             </div>
@@ -233,7 +233,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                           <div className="flex items-center space-x-2 mb-1">
                             <h3 className="font-semibold text-gray-900">{pattern.name}</h3>
                             {pattern.is_featured && (
-                              <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                              <Star className="w-4 h-4 text-gold-500 fill-yellow-500" />
                             )}
                           </div>
                           <span className={`inline-block text-xs px-2 py-1 rounded-full border ${getCategoryColor(pattern.category)}`}>
@@ -305,7 +305,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                     <div className="flex items-center space-x-2">
                       <h3 className="text-2xl font-bold text-gray-900">{selectedPattern.name}</h3>
                       {selectedPattern.is_featured && (
-                        <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                        <Star className="w-5 h-5 text-gold-500 fill-yellow-500" />
                       )}
                     </div>
                     <span className={`inline-block text-xs px-2 py-1 rounded-full border mt-1 ${getCategoryColor(selectedPattern.category)}`}>

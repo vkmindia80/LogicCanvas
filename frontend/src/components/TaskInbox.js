@@ -204,7 +204,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
 
   const getStatusColor = (status) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
+      pending: 'bg-gold-100 text-gold-800',
       in_progress: 'bg-green-100 text-green-800',
       completed: 'bg-green-100 text-green-800',
       cancelled: 'bg-gray-100 text-gray-800'
@@ -227,7 +227,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
     
     if (diffHours < 0) return { status: 'overdue', color: 'text-red-500 bg-red-50', label: 'Overdue', icon: AlertTriangle };
     if (diffHours < 2) return { status: 'critical', color: 'text-gold-500 bg-gold-50', label: 'Critical', icon: AlertCircle };
-    if (diffHours < 24) return { status: 'warning', color: 'text-yellow-600 bg-yellow-50', label: 'Due Soon', icon: Clock };
+    if (diffHours < 24) return { status: 'warning', color: 'text-gold-600 bg-gold-50', label: 'Due Soon', icon: Clock };
     return { status: 'ok', color: 'text-green-500 bg-green-50', label: 'On Track', icon: CheckCircleIcon };
   };
 
@@ -293,8 +293,8 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
       <div className="bg-white border-b-2 border-slate-200 px-6 py-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-xl flex items-center space-x-2 font-medium">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+            <div className="px-4 py-2 bg-gold-100 text-gold-800 rounded-xl flex items-center space-x-2 font-medium">
+              <div className="w-2 h-2 bg-gold-500 rounded-full"></div>
               <span className="text-sm">Pending: <strong>{stats.pending}</strong></span>
             </div>
             <div className="px-4 py-2 bg-green-100 text-green-800 rounded-xl flex items-center space-x-2 font-medium">

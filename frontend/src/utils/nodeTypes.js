@@ -114,8 +114,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.DECISION]: {
     label: 'Decision',
     category: 'Logic',
-    color: 'bg-yellow-500',
-    borderColor: 'border-yellow-600',
+    color: 'bg-gold-500',
+    borderColor: 'border-gold-600',
     icon: 'git-branch',
     description: 'Conditional branching (if/else)',
     outputHandles: [

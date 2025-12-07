@@ -84,7 +84,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
       approval: 'bg-green-100 text-green-700',
       data_processing: 'bg-green-100 text-green-700',
       integration: 'bg-gold-100 text-gold-700',
-      notification: 'bg-yellow-100 text-yellow-700',
+      notification: 'bg-gold-100 text-gold-700',
       custom: 'bg-gray-100 text-gray-700'
     };
     return colors[category] || colors.custom;

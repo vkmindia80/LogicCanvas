@@ -538,7 +538,7 @@ const WebhookLogs = ({ webhookId, logs, onClose, onRefresh }) => {
                       ) : log.status === 'failed' ? (
                         <XCircle className="text-red-600" size={20} />
                       ) : (
-                        <AlertCircle className="text-yellow-600" size={20} />
+                        <AlertCircle className="text-gold-600" size={20} />
                       )}
                       <span className="font-semibold capitalize">{log.status}</span>
                     </div>

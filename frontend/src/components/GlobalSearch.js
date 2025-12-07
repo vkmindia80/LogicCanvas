@@ -159,7 +159,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                           <span className={`text-xs px-2 py-0.5 rounded ${
                             workflow.status === 'published' 
                               ? 'bg-green-100 text-green-700'
-                              : 'bg-yellow-100 text-yellow-700'
+                              : 'bg-gold-100 text-gold-700'
                           }`}>
                             {workflow.status}
                           </span>
@@ -220,7 +220,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                             task.status === 'completed'
                               ? 'bg-green-100 text-green-700'
                               : task.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-700'
+                              ? 'bg-gold-100 text-gold-700'
                               : 'bg-green-100 text-green-700'
                           }`}>
                             {task.status}
@@ -254,7 +254,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                             approval.status === 'approved'
                               ? 'bg-green-100 text-green-700'
                               : approval.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-700'
+                              ? 'bg-gold-100 text-gold-700'
                               : 'bg-red-100 text-red-700'
                           }`}>
                             {approval.status}

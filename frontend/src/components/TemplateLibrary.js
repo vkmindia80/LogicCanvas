@@ -15,7 +15,7 @@ const iconMap = {
 
 const complexityColors = {
   'low': 'bg-green-100 text-green-800',
-  'medium': 'bg-yellow-100 text-yellow-800',
+  'medium': 'bg-gold-100 text-gold-800',
   'high': 'bg-gold-100 text-gold-800'
 };
 

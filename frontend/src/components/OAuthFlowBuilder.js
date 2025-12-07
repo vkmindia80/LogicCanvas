@@ -401,8 +401,8 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                     </button>
                   </div>
 
-                  <div className="p-4 bg-yellow-50 rounded-lg">
-                    <p className="text-sm text-yellow-800">
+                  <div className="p-4 bg-gold-50 rounded-lg">
+                    <p className="text-sm text-gold-800">
                       <strong>Note:</strong> After authorizing, you'll receive a callback with the authorization code.
                       Use the callback endpoint to exchange it for an access token.
                     </p>

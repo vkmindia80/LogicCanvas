@@ -172,7 +172,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
   const getLevelColor = (level) => {
     switch (level) {
       case 'error': return 'text-red-600 bg-red-50';
-      case 'warning': return 'text-yellow-600 bg-yellow-50';
+      case 'warning': return 'text-gold-600 bg-gold-50';
       case 'info': return 'text-green-600 bg-green-50';
       case 'debug': return 'text-gray-600 bg-gray-50';
       default: return 'text-gray-600 bg-gray-50';
@@ -183,7 +183,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
     switch (status) {
       case 'completed': return 'text-green-600 bg-green-100';
       case 'error': return 'text-red-600 bg-red-100';
-      case 'waiting': return 'text-yellow-600 bg-yellow-100';
+      case 'waiting': return 'text-gold-600 bg-gold-100';
       case 'running': return 'text-green-600 bg-green-100';
       default: return 'text-gray-600 bg-gray-100';
     }
@@ -221,7 +221,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
           <button
             onClick={handlePause}
             disabled={debugState?.debug_action === 'pause'}
-            className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
+            className="px-3 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-colors disabled:opacity-50"
             title="Pause execution"
           >
             <Pause size={16} />
@@ -490,9 +490,9 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                         {performance.nodes.length}
                       </div>
                     </div>
-                    <div className="p-4 bg-yellow-50 rounded-lg">
+                    <div className="p-4 bg-gold-50 rounded-lg">
                       <div className="text-sm text-gray-600">Avg per Node</div>
-                      <div className="text-2xl font-bold text-yellow-600">
+                      <div className="text-2xl font-bold text-gold-600">
                         {(performance.total_duration_ms / performance.nodes.length / 1000).toFixed(2)}s
                       </div>
                     </div>
@@ -501,7 +501,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                   {/* Slowest Nodes */}
                   <div className="mb-4">
                     <h4 className="font-medium mb-2 flex items-center gap-2">
-                      <AlertCircle size={16} className="text-yellow-600" />
+                      <AlertCircle size={16} className="text-gold-600" />
                       Slowest Nodes
                     </h4>
                     <div className="space-y-2">

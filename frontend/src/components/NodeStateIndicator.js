@@ -11,9 +11,9 @@ const NODE_STATES = {
   },
   incomplete: {
     icon: AlertTriangle,
-    color: 'text-yellow-600',
-    bg: 'bg-yellow-100',
-    border: 'border-yellow-300',
+    color: 'text-gold-600',
+    bg: 'bg-gold-100',
+    border: 'border-gold-300',
     label: 'Incomplete'
   },
   error: {

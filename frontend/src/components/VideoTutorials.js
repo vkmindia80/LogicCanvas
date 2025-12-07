@@ -154,7 +154,7 @@ const TUTORIAL_CATEGORIES = [
 
 const difficultyColors = {
   'Beginner': 'bg-green-100 text-green-800',
-  'Intermediate': 'bg-yellow-100 text-yellow-800',
+  'Intermediate': 'bg-gold-100 text-gold-800',
   'Advanced': 'bg-red-100 text-red-800'
 };
 
