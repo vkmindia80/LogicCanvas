@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, FileText, Workflow as WorkflowIcon, CheckSquare, ClipboardCheck, Loader2 } from 'lucide-react';
+import { Search, X, FileText, Workflow as WorkflowIcon, CheckSquare, ClipboardCheck, Loader2, Menu } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, sidebarCollapsed = false }) => {
+const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
