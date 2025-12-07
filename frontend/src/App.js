@@ -278,7 +278,7 @@ const AppShell = () => {
     <div className="flex min-h-screen bg-slate-50">
       {/* Left Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-40 h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl transition-all duration-300 flex flex-col overflow-hidden ${
+        className={`fixed left-0 top-0 z-40 h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl transition-all duration-300 flex flex-col ${
           sidebarCollapsed ? 'w-20' : 'w-72'
         } hidden lg:block`}
       >
@@ -303,7 +303,8 @@ const AppShell = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 min-h-0 space-y-1 px-3 py-4 overflow-y-auto">
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0 }}>
+          <div className="space-y-1">
           <button
             onClick={() => {
               setActiveTab('workflows');
