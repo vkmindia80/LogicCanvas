@@ -308,9 +308,7 @@ const AppShell = () => {
     <div className="flex min-h-screen bg-slate-50">
       {/* Left Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-40 h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl transition-all duration-300 flex flex-col ${
-          sidebarCollapsed ? 'w-20' : 'w-72'
-        } hidden lg:block`}
+        className="fixed left-0 top-0 z-40 h-screen w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl transition-all duration-300 flex flex-col hidden lg:block"
       >
         {/* Logo Section */}
         <div className="flex h-16 items-center justify-between border-b border-slate-700 px-4 flex-shrink-0">
