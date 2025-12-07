@@ -572,6 +572,7 @@ const AppShell = () => {
             <Home className="h-5 w-5 flex-shrink-0" />
             {!sidebarCollapsed && <span>Take a Tour</span>}
           </button>
+          </div>
         </nav>
 
         {/* User Section */}
