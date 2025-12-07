@@ -7,7 +7,7 @@ import {
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const AuditTrail = ({ onClose, entityType, entityId }) => {
+const AuditTrail = ({ onClose, entityType, entityId, sidebarCollapsed = false }) => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
