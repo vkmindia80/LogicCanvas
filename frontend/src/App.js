@@ -574,7 +574,7 @@ const AppShell = () => {
         </nav>
 
         {/* User Section */}
-        <div className="border-t border-slate-700 p-4">
+        <div className="border-t border-slate-700 p-4 flex-shrink-0">
           {/* Role Switcher */}
           {!sidebarCollapsed && (
             <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
