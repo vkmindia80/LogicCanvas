@@ -7096,7 +7096,98 @@ async def configure_rate_limit(connector_id: str, config: RateLimitConfig):
         }}
     )
     
+    # Clear existing rate limiter to force recreation with new config
+    cache_key = f"rate_limiter:{connector_id}"
+    if cache_key in rate_limit_cache:
+        del rate_limit_cache[cache_key]
+    
     return {"message": "Rate limit configured successfully"}
+
+@app.get("/api/connectors/{connector_id}/circuit-breaker/status")
+async def get_circuit_breaker_status(connector_id: str):
+    """Get circuit breaker status for connector"""
+    connector = api_connectors_collection.find_one({"id": connector_id})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    circuit_breaker = circuit_breaker_states.get(connector_id)
+    
+    if not circuit_breaker:
+        return {
+            "connector_id": connector_id,
+            "circuit_breaker": {
+                "state": "not_initialized",
+                "failure_count": 0,
+                "last_failure_time": None,
+                "can_attempt": True
+            }
+        }
+    
+    return {
+        "connector_id": connector_id,
+        "connector_name": connector.get("name", connector_id),
+        "circuit_breaker": {
+            "state": circuit_breaker.state,
+            "failure_count": circuit_breaker.failure_count,
+            "failure_threshold": circuit_breaker.failure_threshold,
+            "last_failure_time": circuit_breaker.last_failure_time.isoformat() if circuit_breaker.last_failure_time else None,
+            "timeout_seconds": circuit_breaker.timeout,
+            "can_attempt": circuit_breaker.can_attempt(),
+            "time_until_retry": None if circuit_breaker.state != "open" else max(0, circuit_breaker.timeout - (datetime.utcnow() - circuit_breaker.last_failure_time).total_seconds()) if circuit_breaker.last_failure_time else 0
+        }
+    }
+
+@app.post("/api/connectors/{connector_id}/circuit-breaker/reset")
+async def reset_circuit_breaker(connector_id: str):
+    """Reset circuit breaker for a connector"""
+    connector = api_connectors_collection.find_one({"id": connector_id})
+    if not connector:
+        raise HTTPException(status_code=404, detail="Connector not found")
+    
+    if connector_id in circuit_breaker_states:
+        del circuit_breaker_states[connector_id]
+    
+    return {
+        "message": f"Circuit breaker reset successfully for connector {connector_id}",
+        "connector_id": connector_id,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+@app.get("/api/connectors/circuit-breakers/status")
+async def get_all_circuit_breakers_status():
+    """Get status of all circuit breakers"""
+    breakers = {}
+    
+    for connector_id, circuit_breaker in circuit_breaker_states.items():
+        connector = api_connectors_collection.find_one({"id": connector_id})
+        
+        breakers[connector_id] = {
+            "connector_id": connector_id,
+            "connector_name": connector.get("name", connector_id) if connector else connector_id,
+            "state": circuit_breaker.state,
+            "failure_count": circuit_breaker.failure_count,
+            "failure_threshold": circuit_breaker.failure_threshold,
+            "last_failure_time": circuit_breaker.last_failure_time.isoformat() if circuit_breaker.last_failure_time else None,
+            "can_attempt": circuit_breaker.can_attempt()
+        }
+    
+    # Summary statistics
+    total = len(breakers)
+    open_count = sum(1 for b in breakers.values() if b["state"] == "open")
+    half_open_count = sum(1 for b in breakers.values() if b["state"] == "half-open")
+    closed_count = sum(1 for b in breakers.values() if b["state"] == "closed")
+    
+    return {
+        "summary": {
+            "total": total,
+            "open": open_count,
+            "half_open": half_open_count,
+            "closed": closed_count,
+            "health": "healthy" if open_count == 0 else "degraded" if open_count < total / 2 else "critical"
+        },
+        "circuit_breakers": breakers,
+        "timestamp": datetime.utcnow().isoformat()
+    }
 
 @app.get("/api/connectors/{connector_id}/rate-limit/status")
 async def get_rate_limit_status(connector_id: str):
