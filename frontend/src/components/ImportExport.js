@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Download, Upload, X, FileJson, CheckCircle, AlertCircle } from 'lucide-react';
+import { Download, Upload, X, FileJson, CheckCircle, AlertCircle, Menu } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplete, onNotify, sidebarCollapsed = false }) => {
+const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplete, onNotify, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [activeTab, setActiveTab] = useState('export'); // 'export' or 'import'
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
