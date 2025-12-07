@@ -113,6 +113,20 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
             </div>
             <div className="flex gap-2">
               <button
+                onClick={() => setShowRateLimiting(true)}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <Shield size={18} className="inline mr-2" />
+                Rate Limits
+              </button>
+              <button
+                onClick={() => setShowConnectionPool(true)}
+                className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
+              >
+                <Database size={18} className="inline mr-2" />
+                Pool Monitor
+              </button>
+              <button
                 onClick={() => setShowOAuthBuilder(true)}
                 className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
