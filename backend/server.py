@@ -7105,13 +7105,30 @@ async def get_rate_limit_status(connector_id: str):
     if not connector:
         raise HTTPException(status_code=404, detail="Connector not found")
     
-    rate_limit = connector.get("rate_limit", {})
-    cache_key = f"rate_limit:{connector_id}"
-    current_usage = rate_limit_cache.get(cache_key, {"count": 0, "reset_at": None})
+    rate_limit_config = connector.get("rate_limit", {})
+    
+    # Get rate limiter
+    cache_key = f"rate_limiter:{connector_id}"
+    rate_limiter = rate_limit_cache.get(cache_key)
+    
+    current_usage = {
+        "configured": bool(rate_limit_config),
+        "max_requests": rate_limit_config.get("max_requests", 0),
+        "time_window": rate_limit_config.get("time_window", 0),
+        "current_requests": len(rate_limiter.requests) if rate_limiter else 0,
+        "available_requests": rate_limit_config.get("max_requests", 0) - (len(rate_limiter.requests) if rate_limiter else 0),
+        "can_proceed": True,
+        "wait_time": 0
+    }
+    
+    if rate_limiter:
+        can_proceed, wait_time = rate_limiter.can_proceed()
+        current_usage["can_proceed"] = can_proceed
+        current_usage["wait_time"] = wait_time
     
     return {
         "connector_id": connector_id,
-        "rate_limit": rate_limit,
+        "rate_limit": rate_limit_config,
         "current_usage": current_usage.get("count", 0),
         "max_requests": rate_limit.get("max_requests", 100),
         "reset_at": current_usage.get("reset_at"),
