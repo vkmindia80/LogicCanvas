@@ -980,7 +980,7 @@ const AppShell = () => {
         {/* Content Area */}
         <div className="min-h-screen">
           {currentView === 'workflows' && (
-            <WorkflowList
+            <WorkflowListModern
               onSelectWorkflow={handleSelectWorkflow}
               onCreateNew={handleCreateNew}
               onLoadRecruitingSample={() => {
