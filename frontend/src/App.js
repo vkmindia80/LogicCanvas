@@ -1039,7 +1039,7 @@ const AppShell = () => {
           onClose={() => { setShowGlobalSearch(false); setActiveMenuItem(activeTab); }}
           onSelectWorkflow={handleSelectWorkflow}
           onSelectForm={handleSelectForm}
-         
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
       {showImportExport && (
@@ -1053,7 +1053,7 @@ const AppShell = () => {
             }
           }}
           onNotify={addToast}
-         
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
       <OnboardingTour isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
