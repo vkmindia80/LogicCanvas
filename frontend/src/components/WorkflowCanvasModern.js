@@ -36,7 +36,7 @@ import VersionComparison from './VersionComparison';
 import EditProtectionModal from './EditProtectionModal';
 import ZoomControls from './ZoomControls';
 import ZoomPresets from './ZoomPresets';
-import ValidationPanel from './ValidationPanel';
+import ValidationPanelModern from './ValidationPanelModern';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
