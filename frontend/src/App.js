@@ -303,7 +303,7 @@ const AppShell = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
+        <nav className="flex-1 min-h-0 space-y-1 px-3 py-4 overflow-y-auto">
           <button
             onClick={() => {
               setActiveTab('workflows');
