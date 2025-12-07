@@ -483,6 +483,23 @@ const AppShell = () => {
 
           <button
             onClick={() => {
+              setShowIntegrationHub(true);
+              setMobileSidebarOpen(false);
+              setActiveMenuItem('integration-hub');
+            }}
+            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              activeMenuItem === 'integration-hub'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+            }`}
+            data-testid="sidebar-integration-hub"
+          >
+            <Globe className="h-5 w-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Integration Hub</span>}
+          </button>
+
+          <button
+            onClick={() => {
               setShowConnectorLibrary(true);
               setMobileSidebarOpen(false);
               setActiveMenuItem('connectors');
@@ -494,7 +511,7 @@ const AppShell = () => {
             }`}
             data-testid="sidebar-connectors"
           >
-            <Globe className="h-5 w-5 flex-shrink-0" />
+            <Zap className="h-5 w-5 flex-shrink-0" />
             {!sidebarCollapsed && <span>API Connectors</span>}
           </button>
 
