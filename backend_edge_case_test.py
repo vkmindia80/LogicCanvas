@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 class EdgeCaseAPITester:
-    def __init__(self, base_url: str = "https://design-refresh-98.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://workflow-redesign-1.preview.emergentagent.com"):
         self.base_url = base_url.rstrip('/')
         self.tests_run = 0
         self.tests_passed = 0
