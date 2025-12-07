@@ -1094,23 +1094,28 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         </div>
       )}
 
-      {/* Execution Panel */}
+      {/* Execution Panel - Modernized */}
       {showExecutionPanel && workflow?.id && (
-        <ExecutionPanel
-          workflowId={workflow.id}
-          onClose={() => setShowExecutionPanel(false)}
-          onInstanceStart={(instanceId) => setActiveInstance(instanceId)}
-        />
+        <div className="fixed right-0 top-0 h-full w-96 bg-gradient-to-b from-white to-slate-50 shadow-2xl border-l border-slate-200 flex flex-col z-50">
+          <ExecutionPanel
+            workflowId={workflow.id}
+            onClose={() => setShowExecutionPanel(false)}
+            onInstanceStart={(instanceId) => setActiveInstance(instanceId)}
+          />
+        </div>
       )}
 
-      {/* Trigger Config Panel */}
+      {/* Trigger Config Panel - Modernized */}
       {showTriggerConfig && workflow?.id && (
-        <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-slate-200 flex flex-col z-50 overflow-y-auto p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-slate-900">Workflow Triggers</h2>
+        <div className="fixed right-0 top-0 h-full w-96 bg-gradient-to-b from-white to-slate-50 shadow-2xl border-l border-slate-200 flex flex-col z-50 overflow-y-auto p-6">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900">Workflow Triggers</h2>
+              <p className="text-sm text-slate-600 mt-1">Configure when your workflow runs</p>
+            </div>
             <button
               onClick={() => setShowTriggerConfig(false)}
-              className="text-slate-400 hover:text-slate-700 transition-colors"
+              className="text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg p-2 transition-colors"
               data-testid="close-trigger-panel"
             >
               ✕
