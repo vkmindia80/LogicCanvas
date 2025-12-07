@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   History, Search, Filter, RefreshCw, Calendar, User,
   FileText, CheckCircle, XCircle, Edit, Trash2, Play,
-  Clock, ChevronDown, ChevronRight
+  Clock, ChevronDown, ChevronRight, X, Menu
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const AuditTrail = ({ onClose, entityType, entityId, sidebarCollapsed = false }) => {
+const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sidebarCollapsed = false }) => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
