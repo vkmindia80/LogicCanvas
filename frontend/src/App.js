@@ -637,14 +637,18 @@ const AppShell = () => {
           </button>
         </div>
 
-        {/* Collapse Toggle - Hamburger Menu */}
+        {/* Collapse Toggle - Chevron Icon */}
         <button
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="sidebar-collapse-btn absolute -right-3 top-20 flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg transition-all hover:bg-slate-600 hover:scale-110 hover:shadow-xl"
+          className="sidebar-collapse-btn absolute -right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg transition-all hover:bg-slate-600 hover:scale-110 hover:shadow-xl"
           title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           data-testid="sidebar-collapse-toggle"
         >
-          <Menu className="h-5 w-5" />
+          {sidebarCollapsed ? (
+            <ChevronRight className="h-5 w-5" />
+          ) : (
+            <ChevronLeft className="h-5 w-5" />
+          )}
         </button>
       </aside>
 
