@@ -35,17 +35,17 @@ html {
 
 /* Focus Visible */
 *:focus-visible {
-  outline: 2px solid #667eea;
+  outline: 2px solid #22c55e;
   outline-offset: 2px;
 }
 
 /* Selection */
 ::selection {
-  background-color: #667eea;
+  background-color: #22c55e;
   color: white;
 }
 
 ::-moz-selection {
-  background-color: #667eea;
+  background-color: #22c55e;
   color: white;
 }
