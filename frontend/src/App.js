@@ -333,8 +333,8 @@ const AppShell = () => {
           )}
         </div>
 
-        {/* Navigation */}
-        <nav className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0 }}>
+        {/* Navigation - Enhanced scrolling */}
+        <nav className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" style={{ minHeight: 0, maxHeight: 'calc(100vh - 16rem)' }}>
           <div className="space-y-1">
           <button
             onClick={() => {
