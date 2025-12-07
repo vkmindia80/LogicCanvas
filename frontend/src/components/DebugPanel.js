@@ -524,6 +524,7 @@ const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
                 </div>
           )}
         </div>
+      </div>
     </div>
   );
 };
