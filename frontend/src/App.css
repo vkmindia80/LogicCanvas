@@ -470,8 +470,8 @@ select {
   box-shadow: 0 0 12px rgba(96, 165, 250, 0.6);
 }
 
-/* Hamburger lines effect for active item */
-.menu-item-hamburger::before {
+/* Hamburger lines effect for active item - REMOVED to fix confusion with non-functional decorative icons */
+/* .menu-item-hamburger::before {
   content: '';
   position: absolute;
   left: 0;
@@ -482,7 +482,7 @@ select {
   background: 
     linear-gradient(#60a5fa 0%, #60a5fa 22%, transparent 22%, transparent 39%, #60a5fa 39%, #60a5fa 61%, transparent 61%, transparent 78%, #60a5fa 78%, #60a5fa 100%);
   border-radius: 1px;
-}
+} */
 
 /* Loading skeleton */
 @keyframes skeleton-loading {
