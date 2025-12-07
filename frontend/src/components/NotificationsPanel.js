@@ -90,7 +90,7 @@ const NotificationsPanel = ({ onClose }) => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col" data-testid="notifications-panel">
+    <div className="fixed inset-0 lg:left-72 bg-white z-50 flex flex-col" data-testid="notifications-panel">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
