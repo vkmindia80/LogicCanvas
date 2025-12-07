@@ -494,11 +494,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                     <h3 className="text-lg font-semibold text-slate-900 transition-colors group-hover:text-primary-600">
                       {workflow.name}
                     </h3>
-                    <span
-                      className={`rounded-full border px-2 py-1 text-xs font-medium ${
-                        statusColors[workflow.status] || statusColors.draft
-                      }`}
-                    >
+                    <span className={getBadgeStyle(workflow.status)}>
                       {workflow.status}
                     </span>
                   </div>
