@@ -104,8 +104,7 @@ const ConnectorLibrary = ({ onClose, onSelect, sidebarCollapsed = false }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col">
+      <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
             <div>
