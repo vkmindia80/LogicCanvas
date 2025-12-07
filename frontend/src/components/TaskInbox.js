@@ -13,7 +13,7 @@ import { modalHeaderStyles, buttonStyles, cardStyles, inputStyles, badgeStyles, 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const TaskInbox = ({ onClose, onNotify }) => {
+const TaskInbox = ({ onClose, onNotify, sidebarCollapsed = false }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTask, setSelectedTask] = useState(null);
