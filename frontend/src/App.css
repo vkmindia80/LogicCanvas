@@ -522,21 +522,3 @@ select {
   border-radius: 50%;
   animation: spin-smooth 0.8s linear infinite;
 }
-
-/* Sidebar collapse toggle animation */
-@keyframes menu-pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.sidebar-collapse-btn {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sidebar-collapse-btn:active {
-  animation: menu-pulse 0.3s ease-in-out;
-}
