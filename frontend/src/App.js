@@ -336,7 +336,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'workflows'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-workflows"
           >
@@ -354,7 +354,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'forms'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-forms"
           >
@@ -372,7 +372,7 @@ const AppShell = () => {
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'tasks'
                   ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
               }`}
               data-testid="sidebar-tasks"
             >
@@ -394,7 +394,7 @@ const AppShell = () => {
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'approvals'
                   ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
               }`}
               data-testid="sidebar-approvals"
             >
@@ -415,7 +415,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'notifications'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-notifications"
           >
@@ -436,7 +436,7 @@ const AppShell = () => {
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'analytics'
                   ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
               }`}
               data-testid="sidebar-analytics"
             >
@@ -452,7 +452,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'audit'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-audit"
           >
@@ -469,7 +469,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'search'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-search"
           >
@@ -485,7 +485,7 @@ const AppShell = () => {
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'import-export'
                   ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
               }`}
               data-testid="sidebar-import-export"
             >
@@ -503,7 +503,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'integration-hub'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-integration-hub"
           >
@@ -518,7 +518,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'connectors'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-connectors"
           >
@@ -534,7 +534,7 @@ const AppShell = () => {
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'debug'
                   ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
               }`}
               data-testid="sidebar-debug"
             >
@@ -550,7 +550,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'transformations'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-transformations"
           >
@@ -567,7 +567,7 @@ const AppShell = () => {
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'tour'
                 ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
             }`}
             data-testid="sidebar-tour"
           >
@@ -651,7 +651,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'workflows'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <Workflow className="h-5 w-5 flex-shrink-0" />
@@ -669,7 +669,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'forms'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <FileText className="h-5 w-5 flex-shrink-0" />
@@ -689,7 +689,7 @@ const AppShell = () => {
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'tasks'
                       ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                   }`}
                 >
                   <CheckSquare className="h-5 w-5 flex-shrink-0" />
@@ -713,7 +713,7 @@ const AppShell = () => {
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'approvals'
                       ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                   }`}
                 >
                   <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
@@ -736,7 +736,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'notifications'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <Bell className="h-5 w-5 flex-shrink-0" />
@@ -759,7 +759,7 @@ const AppShell = () => {
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'analytics'
                       ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                   }`}
                 >
                   <BarChart3 className="h-5 w-5 flex-shrink-0" />
@@ -777,7 +777,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'audit'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <History className="h-5 w-5 flex-shrink-0" />
@@ -796,7 +796,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'search'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <SearchIcon className="h-5 w-5 flex-shrink-0" />
@@ -814,7 +814,7 @@ const AppShell = () => {
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'import-export'
                       ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                   }`}
                 >
                   <Download className="h-5 w-5 flex-shrink-0" />
@@ -834,7 +834,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'integration-hub'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <Globe className="h-5 w-5 flex-shrink-0" />
@@ -851,7 +851,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'connectors'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <Zap className="h-5 w-5 flex-shrink-0" />
@@ -869,7 +869,7 @@ const AppShell = () => {
                   className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                     activeMenuItem === 'debug'
                       ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                   }`}
                 >
                   <Bug className="h-5 w-5 flex-shrink-0" />
@@ -887,7 +887,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'transformations'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <Sparkles className="h-5 w-5 flex-shrink-0" />
@@ -906,7 +906,7 @@ const AppShell = () => {
                 className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                   activeMenuItem === 'tour'
                     ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
                 }`}
               >
                 <Home className="h-5 w-5 flex-shrink-0" />
