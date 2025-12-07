@@ -796,6 +796,11 @@ const AppShell = () => {
           addToast('Workflow created with AI guidance!', 'success');
         }}
       />
+      {showIntegrationHub && (
+        <IntegrationHub
+          onClose={() => setShowIntegrationHub(false)}
+        />
+      )}
       {showConnectorLibrary && (
         <ConnectorLibrary
           onClose={() => setShowConnectorLibrary(false)}
