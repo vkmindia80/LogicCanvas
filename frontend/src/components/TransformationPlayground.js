@@ -194,10 +194,10 @@ const TransformationPlayground = ({ onClose, sidebarCollapsed = false }) => {
           >
             Examples
           </button>
-        </div>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6">
           {activeTab === 'builder' && (
             <div className="grid grid-cols-2 gap-6">
               {/* Left Column - Input & Transformations */}
