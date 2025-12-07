@@ -260,14 +260,7 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
           )}
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-end space-x-3 p-6 border-t border-slate-200 bg-slate-50">
-          <button
-            onClick={onClose}
-            className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
-          >
-            Close
-          </button>
+          </div>
         </div>
       </div>
     </div>
