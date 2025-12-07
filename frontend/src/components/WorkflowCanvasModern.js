@@ -1084,7 +1084,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       {/* Right Sidebar - Node Editor - Modernized */}
       {selectedNode && !showExecutionPanel && !showTriggerConfig && (
         <div className="w-80 bg-gradient-to-b from-white to-slate-50 border-l border-slate-200 shadow-lg p-4 overflow-y-auto">
-          <NodeEditor
+          <NodeEditorModern
             node={selectedNode}
             onUpdate={updateNode}
             onDelete={deleteNode}
