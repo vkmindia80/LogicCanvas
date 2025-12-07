@@ -362,7 +362,7 @@ const AppShell = () => {
             {<span>Forms</span>}
           </button>
 
-          <div className="my-3 border-t border-primary-700"></div>
+          <div className="my-3 border-t border-slate-700"></div>
 
           {can('accessTasks') && (
             <button
@@ -460,7 +460,7 @@ const AppShell = () => {
             {<span>Audit Trail</span>}
           </button>
 
-          <div className="my-3 border-t border-primary-700"></div>
+          <div className="my-3 border-t border-slate-700"></div>
 
           <button
             onClick={() => {
@@ -494,7 +494,7 @@ const AppShell = () => {
             </button>
           )}
 
-          <div className="my-3 border-t border-primary-700"></div>
+          <div className="my-3 border-t border-slate-700"></div>
 
           <button
             onClick={() => {
@@ -558,7 +558,7 @@ const AppShell = () => {
             {<span>Transformations</span>}
           </button>
 
-          <div className="my-3 border-t border-primary-700"></div>
+          <div className="my-3 border-t border-slate-700"></div>
 
           <button
             onClick={() => {
@@ -676,7 +676,7 @@ const AppShell = () => {
                 <span>Forms</span>
               </button>
 
-              <div className="my-3 border-t border-primary-700"></div>
+              <div className="my-3 border-t border-slate-700"></div>
 
               {can('accessTasks') && (
                 <button
@@ -784,7 +784,7 @@ const AppShell = () => {
                 <span>Audit Trail</span>
               </button>
 
-              <div className="my-3 border-t border-primary-700"></div>
+              <div className="my-3 border-t border-slate-700"></div>
 
               <button
                 onClick={() => {
@@ -822,7 +822,7 @@ const AppShell = () => {
                 </button>
               )}
 
-              <div className="my-3 border-t border-primary-700"></div>
+              <div className="my-3 border-t border-slate-700"></div>
 
               <button
                 onClick={() => {
@@ -894,7 +894,7 @@ const AppShell = () => {
                 <span>Transformations</span>
               </button>
 
-              <div className="my-3 border-t border-primary-700"></div>
+              <div className="my-3 border-t border-slate-700"></div>
 
               <button
                 onClick={() => {
