@@ -259,14 +259,24 @@ const TaskInbox = ({ onClose, onNotify, sidebarCollapsed = false }) => {
               <p className={modalHeaderStyles.subtitle}>Manage your assigned tasks and track progress</p>
             </div>
           </div>
-          <button
-            onClick={() => { loadTasks(); loadSlaMetrics(); }}
-            className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
-            data-testid="refresh-tasks-btn"
-          >
-            <RefreshCw className="w-4 h-4 mr-2 inline" />
-            <span>Refresh</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => { loadTasks(); loadSlaMetrics(); }}
+              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
+              data-testid="refresh-tasks-btn"
+            >
+              <RefreshCw className="w-4 h-4 mr-2 inline" />
+              <span>Refresh</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="close-task-inbox-btn"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </div>
 
