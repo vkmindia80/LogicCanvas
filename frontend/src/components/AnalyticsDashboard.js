@@ -25,7 +25,7 @@ const COLORS = {
 
 const PIE_COLORS = ['#10b981', '#ef4444', '#3b82f6', '#f59e0b'];
 
-const AnalyticsDashboard = ({ onClose }) => {
+const AnalyticsDashboard = ({ onClose, sidebarCollapsed = false }) => {
   const [loading, setLoading] = useState(true);
   const [overview, setOverview] = useState(null);
   const [throughput, setThroughput] = useState([]);
