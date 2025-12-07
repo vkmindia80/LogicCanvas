@@ -106,21 +106,28 @@ const IntegrationHub = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+    <div className={modalOverlayStyles.base}>
       <div className="relative flex h-[90vh] w-[95vw] max-w-7xl flex-col rounded-2xl bg-white shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 p-6">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900">Integration Hub</h2>
-            <p className="mt-1 text-sm text-slate-600">Manage your external service integrations</p>
+        <div className={modalHeaderStyles.base}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <Globe className="w-7 h-7" />
+              </div>
+              <div>
+                <h2 className={modalHeaderStyles.title}>Integration Hub</h2>
+                <p className={modalHeaderStyles.subtitle}>Manage your external service integrations</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className={modalHeaderStyles.closeButton}
+              data-testid="close-integration-hub"
+            >
+              <X className="h-6 w-6" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
-            data-testid="close-integration-hub"
-          >
-            <X className="h-6 w-6" />
-          </button>
         </div>
 
         {/* Toolbar */}
