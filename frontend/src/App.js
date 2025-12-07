@@ -152,6 +152,37 @@ const AppShell = () => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
+  // Centralized navigation handler to close all modals and set active menu
+  const handleNavigate = (menuItem, viewOrModalAction) => {
+    // Close all modals
+    setShowTaskInbox(false);
+    setShowApprovalQueue(false);
+    setShowNotifications(false);
+    setShowAuditTrail(false);
+    setShowAnalytics(false);
+    setShowGlobalSearch(false);
+    setShowImportExport(false);
+    setShowConnectorLibrary(false);
+    setShowIntegrationHub(false);
+    setShowDebugPanel(false);
+    setShowTransformationPlayground(false);
+    setShowOnboarding(false);
+    setShowTemplateLibrary(false);
+    setShowQuickStartWizard(false);
+    setShowVideoTutorials(false);
+    setShowPatternLibrary(false);
+    setShowComponentLibrary(false);
+    setMobileSidebarOpen(false);
+    
+    // Set active menu item
+    setActiveMenuItem(menuItem);
+    
+    // Execute the specific view or modal action
+    if (viewOrModalAction) {
+      viewOrModalAction();
+    }
+  };
+
   const handleCreateNew = () => {
     if (!can('createWorkflows')) {
       addToast('You do not have permission to create workflows.', 'error');
