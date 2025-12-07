@@ -816,6 +816,7 @@ const AppShell = () => {
             addToast(`Connector "${connector.name}" selected!`, 'success');
             setShowConnectorLibrary(false);
           }}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       {showDebugPanel && debugInstanceId && (
