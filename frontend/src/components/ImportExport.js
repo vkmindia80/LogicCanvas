@@ -130,8 +130,8 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
+          {/* Content */}
+          <div className="p-6 bg-white rounded-b-lg shadow-lg">
           {activeTab === 'export' && (
             <div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
