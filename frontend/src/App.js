@@ -609,7 +609,7 @@ const AppShell = () => {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20"
+            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-gold-500/10 px-3 py-2 text-sm font-medium text-gold-400 transition-all hover:bg-gold-500/20"
             data-testid="sidebar-logout"
           >
             <LogOut className="h-4 w-4" />
@@ -949,7 +949,7 @@ const AppShell = () => {
                   handleLogout();
                   setMobileSidebarOpen(false);
                 }}
-                className="flex w-full items-center justify-center space-x-2 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20"
+                className="flex w-full items-center justify-center space-x-2 rounded-lg bg-gold-500/10 px-3 py-2 text-sm font-medium text-gold-400 transition-all hover:bg-gold-500/20"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
