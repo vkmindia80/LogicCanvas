@@ -767,6 +767,7 @@ const AppShell = () => {
           onClose={() => setShowGlobalSearch(false)}
           onSelectWorkflow={handleSelectWorkflow}
           onSelectForm={handleSelectForm}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       {showImportExport && (
