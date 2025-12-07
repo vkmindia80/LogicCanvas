@@ -58,8 +58,8 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, sidebar
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[600px] flex flex-col">
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="global-search">
+      <div className="flex flex-col h-full">
         {/* Search Input */}
         <div className="p-4 border-b border-slate-200">
           <div className="relative">
