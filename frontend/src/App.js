@@ -588,7 +588,7 @@ const AppShell = () => {
             <select
               value={currentRole}
               onChange={(e) => setCurrentRole(e.target.value)}
-              className="w-full rounded-md border border-slate-600 bg-slate-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="w-full rounded-md border border-primary-600 bg-primary-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               data-testid="sidebar-role-switcher"
             >
               <option value="admin">Admin</option>
@@ -926,7 +926,7 @@ const AppShell = () => {
                 <select
                   value={currentRole}
                   onChange={(e) => setCurrentRole(e.target.value)}
-                  className="w-full rounded-md border border-slate-600 bg-slate-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  className="w-full rounded-md border border-primary-600 bg-primary-700 px-2 py-1.5 text-sm text-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                 >
                   <option value="admin">Admin</option>
                   <option value="builder">Builder</option>
