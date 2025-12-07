@@ -581,7 +581,7 @@ const AppShell = () => {
         <div className="border-t border-primary-700 p-4 flex-shrink-0">
           {/* Role Switcher */}
           <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
-            <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
+            <div className="mb-2 flex items-center space-x-2 text-xs text-green-200">
               <Shield className="h-3.5 w-3.5" />
               <span>Current Role</span>
             </div>
@@ -602,7 +602,7 @@ const AppShell = () => {
           {currentUser && (
             <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
               <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
-              <div className="text-xs text-slate-400">{currentUser.role}</div>
+              <div className="text-xs text-green-200">{currentUser.role}</div>
             </div>
           )}
 
@@ -631,10 +631,10 @@ const AppShell = () => {
                 </div>
                 <div>
                   <h1 className="text-lg font-bold text-white">LogicCanvas</h1>
-                  <p className="text-xs text-slate-400">Workflow Builder</p>
+                  <p className="text-xs text-green-200">Workflow Builder</p>
                 </div>
               </div>
-              <button onClick={() => setMobileSidebarOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setMobileSidebarOpen(false)} className="text-green-200 hover:text-white">
                 <X className="h-6 w-6" />
               </button>
             </div>
@@ -919,7 +919,7 @@ const AppShell = () => {
             <div className="border-t border-primary-700 p-4 flex-shrink-0">
               {/* Role Switcher */}
               <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
-                <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
+                <div className="mb-2 flex items-center space-x-2 text-xs text-green-200">
                   <Shield className="h-3.5 w-3.5" />
                   <span>Current Role</span>
                 </div>
@@ -939,7 +939,7 @@ const AppShell = () => {
               {currentUser && (
                 <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
                   <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
-                  <div className="text-xs text-slate-400">{currentUser.role}</div>
+                  <div className="text-xs text-green-200">{currentUser.role}</div>
                 </div>
               )}
 
