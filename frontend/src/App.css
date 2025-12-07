@@ -142,15 +142,15 @@
 /* Enhanced minimap styling */
 .react-flow__minimap {
   background-color: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(226, 232, 240, 1);
+  border: 2px solid #dcfce7;
   border-radius: 12px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.1);
 }
 
 /* Controls styling */
 .react-flow__controls {
   border-radius: 12px;
-  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 15px -3px rgba(34, 197, 94, 0.15);
   overflow: hidden;
 }
 
@@ -161,25 +161,25 @@
 }
 
 .react-flow__controls-button:hover {
-  background-color: #f1f5f9;
+  background-color: #f0fdf4;
   transform: scale(1.05);
 }
 
 /* Zoom control enhancements */
 .zoom-display {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 2px solid #e2e8f0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2px solid #86efac;
   border-radius: 8px;
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 600;
-  color: #475569;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  color: #15803d;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08);
   transition: all 0.2s;
 }
 
 .zoom-display:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.12);
 }
 
 /* Toolbar button enhancements */
@@ -228,7 +228,7 @@
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px -10px rgba(34, 197, 94, 0.15);
 }
 
 /* Scrollbar styling */
@@ -238,18 +238,18 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f0fdf4;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #86efac;
   border-radius: 4px;
   transition: background 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #4ade80;
 }
 
 /* Dark sidebar scrollbar styling - Enhanced visibility */
@@ -258,13 +258,13 @@
 }
 
 .sidebar-nav::-webkit-scrollbar-track {
-  background: rgba(51, 65, 85, 0.5);
+  background: rgba(5, 46, 22, 0.5);
   border-radius: 4px;
   margin: 4px 0;
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.6);
+  background: rgba(134, 239, 172, 0.6);
   border-radius: 4px;
   transition: background 0.2s;
   border: 2px solid transparent;
@@ -272,7 +272,7 @@
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.9);
+  background: rgba(134, 239, 172, 0.9);
   background-clip: padding-box;
 }
 
@@ -280,7 +280,7 @@
 .sidebar-nav {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.6) rgba(51, 65, 85, 0.5);
+  scrollbar-color: rgba(134, 239, 172, 0.6) rgba(5, 46, 22, 0.5);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -319,7 +319,7 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
   border-color: #22c55e;
 }
 
@@ -356,19 +356,19 @@ select {
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 4px rgba(34, 197, 94, 0.1));
   transition: stroke-width 0.2s, stroke 0.2s, filter 0.2s;
 }
 
 .react-flow__edge:hover .react-flow__edge-path {
   stroke-width: 3.5;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 4px 8px rgba(34, 197, 94, 0.15));
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
   stroke-width: 3.5;
   stroke: #22c55e;
-  filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3));
+  filter: drop-shadow(0 4px 12px rgba(34, 197, 94, 0.3));
 }
 
 /* Enhanced marker (arrow) styling */
@@ -404,7 +404,7 @@ select {
   left: 50%;
   transform: translateX(-50%) translateY(-8px);
   padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(5, 46, 22, 0.95);
   color: white;
   border-radius: 6px;
   font-size: 12px;
@@ -423,10 +423,10 @@ select {
 /* Enhanced validation indicator pulse */
 @keyframes validation-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    box-shadow: 0 0 0 8px rgba(234, 179, 8, 0);
   }
 }
 
@@ -467,22 +467,8 @@ select {
   height: 24px;
   background: linear-gradient(180deg, #4ade80 0%, #facc15 100%);
   border-radius: 2px;
-  box-shadow: 0 0 12px rgba(96, 165, 250, 0.6);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
 }
-
-/* Hamburger lines effect for active item - REMOVED to fix confusion with non-functional decorative icons */
-/* .menu-item-hamburger::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 18px;
-  background: 
-    linear-gradient(#4ade80 0%, #4ade80 22%, transparent 22%, transparent 39%, #4ade80 39%, #4ade80 61%, transparent 61%, transparent 78%, #4ade80 78%, #4ade80 100%);
-  border-radius: 1px;
-} */
 
 /* Loading skeleton */
 @keyframes skeleton-loading {
@@ -495,7 +481,7 @@ select {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, #f0fdf4 25%, #dcfce7 50%, #f0fdf4 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
   border-radius: 4px;
@@ -505,7 +491,7 @@ select {
 .export-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(5, 46, 22, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
