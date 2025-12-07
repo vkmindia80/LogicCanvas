@@ -124,7 +124,7 @@
 
 .react-flow__edge.selected .react-flow__edge-path {
   stroke-width: 3.5;
-  stroke: #3b82f6;
+  stroke: #22c55e;
 }
 
 /* Smooth edge animations */
@@ -287,7 +287,7 @@
 
 /* Text gradient effect */
 .text-gradient {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #eab308 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -320,7 +320,7 @@ textarea:focus,
 select:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
+  border-color: #22c55e;
 }
 
 /* Smooth transitions for all interactive elements */
@@ -367,7 +367,7 @@ select {
 
 .react-flow__edge.selected .react-flow__edge-path {
   stroke-width: 3.5;
-  stroke: #3b82f6;
+  stroke: #22c55e;
   filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3));
 }
 
@@ -448,7 +448,7 @@ select {
   transform: translateY(-50%);
   width: 4px;
   height: 20px;
-  background: linear-gradient(180deg, #3b82f6 0%, #8b5cf6 100%);
+  background: linear-gradient(180deg, #22c55e 0%, #eab308 100%);
   border-radius: 2px;
 }
 
@@ -465,7 +465,7 @@ select {
   transform: translateY(-50%);
   width: 4px;
   height: 24px;
-  background: linear-gradient(180deg, #60a5fa 0%, #818cf8 100%);
+  background: linear-gradient(180deg, #4ade80 0%, #facc15 100%);
   border-radius: 2px;
   box-shadow: 0 0 12px rgba(96, 165, 250, 0.6);
 }
@@ -480,7 +480,7 @@ select {
   width: 3px;
   height: 18px;
   background: 
-    linear-gradient(#60a5fa 0%, #60a5fa 22%, transparent 22%, transparent 39%, #60a5fa 39%, #60a5fa 61%, transparent 61%, transparent 78%, #60a5fa 78%, #60a5fa 100%);
+    linear-gradient(#4ade80 0%, #4ade80 22%, transparent 22%, transparent 39%, #4ade80 39%, #4ade80 61%, transparent 61%, transparent 78%, #4ade80 78%, #4ade80 100%);
   border-radius: 1px;
 } */
 
