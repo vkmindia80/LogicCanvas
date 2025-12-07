@@ -870,7 +870,7 @@ const AppShell = () => {
       />
       {showTransformationPlayground && (
         <TransformationPlayground
-          onClose={() => setShowTransformationPlayground(false)}
+          onClose={() => { setShowTransformationPlayground(false); setActiveMenuItem(activeTab); }}
           sidebarCollapsed={sidebarCollapsed}
         />
       )}
