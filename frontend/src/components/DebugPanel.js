@@ -225,9 +225,9 @@ const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
         </div>
       </div>
 
-        {/* Status Bar */}
-        {debugState && (
-          <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between text-sm">
+      {/* Status Bar */}
+      {debugState && (
+        <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
               <span className="text-gray-600">
                 Status: <span className="font-medium">{debugState.status}</span>
