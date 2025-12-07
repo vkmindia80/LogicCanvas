@@ -826,6 +826,7 @@ const AppShell = () => {
             setShowDebugPanel(false);
             setDebugInstanceId(null);
           }}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       <GettingStartedChecklist
