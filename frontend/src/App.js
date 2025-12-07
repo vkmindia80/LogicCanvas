@@ -580,7 +580,7 @@ const AppShell = () => {
         {/* User Section */}
         <div className="border-t border-primary-700 p-4 flex-shrink-0">
           {/* Role Switcher */}
-          <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+          <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
             <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
               <Shield className="h-3.5 w-3.5" />
               <span>Current Role</span>
@@ -600,7 +600,7 @@ const AppShell = () => {
 
           {/* User Info */}
           {currentUser && (
-            <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+            <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
               <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
               <div className="text-xs text-slate-400">{currentUser.role}</div>
             </div>
@@ -918,7 +918,7 @@ const AppShell = () => {
             {/* User Section */}
             <div className="border-t border-primary-700 p-4 flex-shrink-0">
               {/* Role Switcher */}
-              <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+              <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
                 <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
                   <Shield className="h-3.5 w-3.5" />
                   <span>Current Role</span>
@@ -937,7 +937,7 @@ const AppShell = () => {
 
               {/* User Info */}
               {currentUser && (
-                <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+                <div className="mb-3 rounded-lg bg-primary-800/50 p-3">
                   <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
                   <div className="text-xs text-slate-400">{currentUser.role}</div>
                 </div>
