@@ -245,7 +245,7 @@ const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
             </div>
             <div className="text-gray-600">
               Breakpoints: <span className="font-medium">{breakpoints.length}</span>
-          </div>
+            </div>
         </div>
       )}
 
