@@ -12,7 +12,7 @@ import { modalHeaderStyles, buttonStyles, inputStyles, getBadgeStyle } from '../
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const ApprovalQueue = ({ onClose, onNotify }) => {
+const ApprovalQueue = ({ onClose, onNotify, sidebarCollapsed = false }) => {
   const [approvals, setApprovals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedApproval, setSelectedApproval] = useState(null);
