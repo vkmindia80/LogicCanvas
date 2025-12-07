@@ -7389,17 +7389,11 @@ async def get_connector_templates():
     return {"templates": templates, "count": len(templates)}
 
 
-@app.get("/api/connectors/{connector_id}")
-async def get_connector(connector_id: str):
-    """Get connector by ID"""
-    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
-    if not connector:
-        raise HTTPException(status_code=404, detail="Connector not found")
-    return connector
+# Note: Connector CRUD endpoints are defined earlier in the file (lines ~5165-5250)
+# Duplicate endpoints removed to avoid routing conflicts
 
-
-@app.post("/api/connectors")
-async def create_connector(connector: APIConnector):
+@app.post("/api/connectors/from-template")
+async def create_connector_from_template(data: Dict[str, Any]):
     """Create new API connector"""
     connector_id = str(uuid.uuid4())
     now = datetime.utcnow().isoformat()
