@@ -149,6 +149,15 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
       {/* Header */}
       <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
         <div className="flex items-center gap-3">
+          {/* Hamburger Menu for Mobile */}
+          <button 
+            onClick={onOpenMobileSidebar}
+            className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+            data-testid="mobile-menu-btn"
+            aria-label="Open Menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
             <Sparkles className="w-6 h-6" />
           </div>
@@ -157,6 +166,14 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
             <p className="text-sm text-indigo-100">Test and build data transformations interactively</p>
           </div>
         </div>
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+          data-testid="close-transformation-btn"
+          aria-label="Close"
+        >
+          <X className="w-6 h-6" />
+        </button>
       </div>
 
       {/* Tabs */}
