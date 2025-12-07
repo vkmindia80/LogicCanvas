@@ -252,12 +252,6 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, sidebar
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-3 border-t border-slate-200 bg-slate-50">
-          <p className="text-xs text-slate-500 text-center">
-            Press ESC to close
-          </p>
-        </div>
       </div>
     </div>
   );
