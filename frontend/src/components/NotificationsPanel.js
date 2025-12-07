@@ -103,7 +103,7 @@ const NotificationsPanel = ({ onClose, sidebarCollapsed = false }) => {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <>
             <button
               onClick={loadNotifications}
               className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
@@ -122,7 +122,7 @@ const NotificationsPanel = ({ onClose, sidebarCollapsed = false }) => {
                 <span>Mark All Read</span>
               </button>
             )}
-          </div>
+          </>
         </div>
       </div>
 
