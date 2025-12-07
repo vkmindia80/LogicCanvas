@@ -1074,12 +1074,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Trigger Config Panel */}
       {showTriggerConfig && workflow?.id && (
-        <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-green-200 flex flex-col z-50 overflow-y-auto p-6">
+        <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-slate-200 flex flex-col z-50 overflow-y-auto p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-primary-800">Workflow Triggers</h2>
+            <h2 className="text-xl font-bold text-slate-900">Workflow Triggers</h2>
             <button
               onClick={() => setShowTriggerConfig(false)}
-              className="text-green-500 hover:text-primary-700"
+              className="text-slate-400 hover:text-slate-700 transition-colors"
               data-testid="close-trigger-panel"
             >
               ✕
