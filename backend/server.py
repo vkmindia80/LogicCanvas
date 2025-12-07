@@ -6396,6 +6396,454 @@ async def get_connector_templates():
                 {"source_path": "$.leadid", "target_variable": "lead_id", "type": "string", "transform": "none"},
                 {"source_path": "$.fullname", "target_variable": "lead_name", "type": "string", "transform": "none"}
             ]
+        },
+        # Additional Salesforce Operations
+        {
+            "id": "salesforce-update-opportunity",
+            "name": "Salesforce - Update Opportunity",
+            "description": "Update opportunity in Salesforce CRM",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "PATCH",
+                "url": "https://${instance_url}/services/data/v58.0/sobjects/Opportunity/${opportunity_id}",
+                "headers": {
+                    "Authorization": "Bearer ${salesforce_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "Amount": "${amount}",
+                    "StageName": "${stage}",
+                    "CloseDate": "${close_date}",
+                    "Probability": "${probability}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "salesforce_access_token"}}
+            },
+            "response_mapping": []
+        },
+        {
+            "id": "salesforce-soql-query",
+            "name": "Salesforce - SOQL Query",
+            "description": "Execute SOQL query in Salesforce",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${instance_url}/services/data/v58.0/query",
+                "headers": {
+                    "Authorization": "Bearer ${salesforce_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {
+                    "q": "${soql_query}"
+                },
+                "body": None,
+                "auth": {"type": "oauth2", "config": {"token_variable": "salesforce_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.totalSize", "target_variable": "total_records", "type": "number", "transform": "none"},
+                {"source_path": "$.records", "target_variable": "query_records", "type": "array", "transform": "none"}
+            ]
+        },
+        # Additional HubSpot Operations
+        {
+            "id": "hubspot-get-contact",
+            "name": "HubSpot - Get Contact",
+            "description": "Retrieve contact details from HubSpot",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://api.hubapi.com/crm/v3/objects/contacts/${contact_id}",
+                "headers": {
+                    "Authorization": "Bearer ${hubspot_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "oauth2", "config": {"token_variable": "hubspot_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "contact_id", "type": "string", "transform": "none"},
+                {"source_path": "$.properties", "target_variable": "contact_properties", "type": "object", "transform": "none"}
+            ]
+        },
+        {
+            "id": "hubspot-create-company",
+            "name": "HubSpot - Create Company",
+            "description": "Create new company in HubSpot",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.hubapi.com/crm/v3/objects/companies",
+                "headers": {
+                    "Authorization": "Bearer ${hubspot_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "properties": {
+                        "name": "${company_name}",
+                        "domain": "${domain}",
+                        "city": "${city}",
+                        "industry": "${industry}",
+                        "phone": "${phone}"
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "hubspot_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "company_id", "type": "string", "transform": "none"},
+                {"source_path": "$.properties.name", "target_variable": "company_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "hubspot-create-ticket",
+            "name": "HubSpot - Create Ticket",
+            "description": "Create support ticket in HubSpot",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.hubapi.com/crm/v3/objects/tickets",
+                "headers": {
+                    "Authorization": "Bearer ${hubspot_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "properties": {
+                        "subject": "${subject}",
+                        "content": "${content}",
+                        "hs_pipeline_stage": "${pipeline_stage}",
+                        "hs_ticket_priority": "${priority}"
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "hubspot_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "ticket_id", "type": "string", "transform": "none"},
+                {"source_path": "$.properties.subject", "target_variable": "ticket_subject", "type": "string", "transform": "none"}
+            ]
+        },
+        # Additional Jira Operations
+        {
+            "id": "jira-get-issue",
+            "name": "Jira - Get Issue",
+            "description": "Get Jira issue details",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${jira_domain}.atlassian.net/rest/api/3/issue/${issue_key}",
+                "headers": {
+                    "Authorization": "Bearer ${jira_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "bearer", "config": {"token_variable": "jira_api_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.key", "target_variable": "issue_key", "type": "string", "transform": "none"},
+                {"source_path": "$.fields.summary", "target_variable": "summary", "type": "string", "transform": "none"},
+                {"source_path": "$.fields.status.name", "target_variable": "status", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "jira-add-comment",
+            "name": "Jira - Add Comment",
+            "description": "Add comment to Jira issue",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${jira_domain}.atlassian.net/rest/api/3/issue/${issue_key}/comment",
+                "headers": {
+                    "Authorization": "Bearer ${jira_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "body": {
+                        "type": "doc",
+                        "version": 1,
+                        "content": [
+                            {
+                                "type": "paragraph",
+                                "content": [{"type": "text", "text": "${comment_text}"}]
+                            }
+                        ]
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "jira_api_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "comment_id", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "jira-transition-issue",
+            "name": "Jira - Transition Issue",
+            "description": "Change Jira issue status/workflow state",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${jira_domain}.atlassian.net/rest/api/3/issue/${issue_key}/transitions",
+                "headers": {
+                    "Authorization": "Bearer ${jira_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "transition": {
+                        "id": "${transition_id}"
+                    },
+                    "fields": {}
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "jira_api_token"}}
+            },
+            "response_mapping": []
+        },
+        # Additional ServiceNow Operations
+        {
+            "id": "servicenow-get-incident",
+            "name": "ServiceNow - Get Incident",
+            "description": "Retrieve incident details from ServiceNow",
+            "category": "itsm",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${instance}.service-now.com/api/now/table/incident/${sys_id}",
+                "headers": {
+                    "Authorization": "Bearer ${servicenow_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "oauth2", "config": {"token_variable": "servicenow_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.result.number", "target_variable": "incident_number", "type": "string", "transform": "none"},
+                {"source_path": "$.result.short_description", "target_variable": "description", "type": "string", "transform": "none"},
+                {"source_path": "$.result.state", "target_variable": "state", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "servicenow-create-change-request",
+            "name": "ServiceNow - Create Change Request",
+            "description": "Create change request in ServiceNow",
+            "category": "itsm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${instance}.service-now.com/api/now/table/change_request",
+                "headers": {
+                    "Authorization": "Bearer ${servicenow_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "short_description": "${short_description}",
+                    "description": "${description}",
+                    "type": "${type}",
+                    "risk": "${risk}",
+                    "impact": "${impact}",
+                    "priority": "${priority}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "servicenow_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.result.sys_id", "target_variable": "change_id", "type": "string", "transform": "none"},
+                {"source_path": "$.result.number", "target_variable": "change_number", "type": "string", "transform": "none"}
+            ]
+        },
+        # Additional SAP Operations
+        {
+            "id": "sap-get-business-partner",
+            "name": "SAP - Get Business Partner",
+            "description": "Retrieve business partner details from SAP",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${sap_host}/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner('${partner_id}')",
+                "headers": {
+                    "Authorization": "Basic ${sap_credentials}",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "basic", "config": {"credentials_variable": "sap_credentials"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.d.BusinessPartner", "target_variable": "partner_id", "type": "string", "transform": "none"},
+                {"source_path": "$.d.BusinessPartnerFullName", "target_variable": "partner_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "sap-create-purchase-order",
+            "name": "SAP - Create Purchase Order",
+            "description": "Create purchase order in SAP",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${sap_host}/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrder",
+                "headers": {
+                    "Authorization": "Basic ${sap_credentials}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "PurchaseOrderType": "${po_type}",
+                    "CompanyCode": "${company_code}",
+                    "PurchasingOrganization": "${purchasing_org}",
+                    "PurchasingGroup": "${purchasing_group}",
+                    "Supplier": "${supplier_id}"
+                },
+                "auth": {"type": "basic", "config": {"credentials_variable": "sap_credentials"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.d.PurchaseOrder", "target_variable": "po_number", "type": "string", "transform": "none"}
+            ]
+        },
+        # Additional Oracle Operations
+        {
+            "id": "oracle-cloud-create-customer",
+            "name": "Oracle Cloud - Create Customer",
+            "description": "Create customer in Oracle Cloud ERP",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${oracle_cloud_host}/fscmRestApi/resources/11.13.18.05/customerAccounts",
+                "headers": {
+                    "Authorization": "Bearer ${oracle_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "PartyName": "${customer_name}",
+                    "CustomerAccountNumber": "${account_number}",
+                    "CustomerType": "${customer_type}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "oracle_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.PartyId", "target_variable": "customer_id", "type": "number", "transform": "none"},
+                {"source_path": "$.PartyNumber", "target_variable": "customer_number", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "oracle-cloud-get-invoice",
+            "name": "Oracle Cloud - Get Invoice",
+            "description": "Retrieve invoice from Oracle Cloud",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${oracle_cloud_host}/fscmRestApi/resources/11.13.18.05/receivablesInvoices/${invoice_id}",
+                "headers": {
+                    "Authorization": "Bearer ${oracle_access_token}",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "oauth2", "config": {"token_variable": "oracle_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.CustomerTrxId", "target_variable": "invoice_id", "type": "number", "transform": "none"},
+                {"source_path": "$.TrxNumber", "target_variable": "invoice_number", "type": "string", "transform": "none"},
+                {"source_path": "$.TransactionAmount", "target_variable": "amount", "type": "number", "transform": "none"}
+            ]
+        },
+        # Additional Microsoft Dynamics 365 Operations
+        {
+            "id": "dynamics365-get-account",
+            "name": "Microsoft Dynamics 365 - Get Account",
+            "description": "Retrieve account details from Dynamics 365",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "GET",
+                "url": "https://${org_url}/api/data/v9.2/accounts(${account_id})",
+                "headers": {
+                    "Authorization": "Bearer ${dynamics_access_token}",
+                    "Accept": "application/json",
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0"
+                },
+                "query_params": {},
+                "body": None,
+                "auth": {"type": "oauth2", "config": {"token_variable": "dynamics_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.accountid", "target_variable": "account_id", "type": "string", "transform": "none"},
+                {"source_path": "$.name", "target_variable": "account_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "dynamics365-create-opportunity",
+            "name": "Microsoft Dynamics 365 - Create Opportunity",
+            "description": "Create sales opportunity in Dynamics 365",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${org_url}/api/data/v9.2/opportunities",
+                "headers": {
+                    "Authorization": "Bearer ${dynamics_access_token}",
+                    "Content-Type": "application/json",
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0"
+                },
+                "query_params": {},
+                "body": {
+                    "name": "${opportunity_name}",
+                    "description": "${description}",
+                    "estimatedvalue": "${estimated_value}",
+                    "estimatedclosedate": "${close_date}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "dynamics_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.opportunityid", "target_variable": "opportunity_id", "type": "string", "transform": "none"},
+                {"source_path": "$.name", "target_variable": "opportunity_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "dynamics365-create-case",
+            "name": "Microsoft Dynamics 365 - Create Case",
+            "description": "Create support case in Dynamics 365",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${org_url}/api/data/v9.2/incidents",
+                "headers": {
+                    "Authorization": "Bearer ${dynamics_access_token}",
+                    "Content-Type": "application/json",
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0"
+                },
+                "query_params": {},
+                "body": {
+                    "title": "${title}",
+                    "description": "${description}",
+                    "prioritycode": "${priority}",
+                    "caseorigincode": "${origin}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "dynamics_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.incidentid", "target_variable": "case_id", "type": "string", "transform": "none"},
+                {"source_path": "$.ticketnumber", "target_variable": "case_number", "type": "string", "transform": "none"}
+            ]
         }
     ]
     return {"templates": templates, "count": len(templates)}
