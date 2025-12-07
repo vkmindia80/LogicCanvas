@@ -112,6 +112,10 @@
   animation: fade-in 0.3s ease-out;
 }
 
+.animate-slide-in-up {
+  animation: slide-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Enhanced node hover effect */
 .node-enhanced:hover {
   transform: scale(1.02);
