@@ -453,6 +453,7 @@ const AppShell = () => {
           <button
             onClick={() => {
               setShowGlobalSearch(true);
+              setMobileSidebarOpen(false);
               setActiveMenuItem('search');
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
