@@ -289,7 +289,7 @@ const CustomNode = ({ data, selected }) => {
       {executionState && (
         <div className="absolute -top-2 -right-2 z-10">
           {isExecuting && (
-            <div className="bg-blue-500 rounded-full p-1.5 shadow-lg animate-bounce" style={{ animationDuration: '1s' }}>
+            <div className="bg-green-500 rounded-full p-1.5 shadow-lg animate-bounce" style={{ animationDuration: '1s' }}>
               <Clock className="w-4 h-4 text-white" />
             </div>
           )}
@@ -299,7 +299,7 @@ const CustomNode = ({ data, selected }) => {
             </div>
           )}
           {isWaiting && (
-            <div className="bg-orange-500 rounded-full p-1.5 shadow-lg animate-pulse">
+            <div className="bg-gold-500 rounded-full p-1.5 shadow-lg animate-pulse">
               <AlertCircle className="w-4 h-4 text-white" />
             </div>
           )}

@@ -110,7 +110,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'active':
-        return 'text-blue-600 bg-blue-50 border-blue-200';
+        return 'text-green-600 bg-green-50 border-green-200';
       case 'completed':
         return 'text-green-600 bg-green-50 border-green-200';
       case 'failed':
@@ -124,7 +124,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-8 shadow-xl">
-          <Loader className="w-8 h-8 animate-spin text-blue-500 mx-auto" />
+          <Loader className="w-8 h-8 animate-spin text-green-500 mx-auto" />
           <p className="mt-4 text-slate-600">Loading loop status...</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
+        <div className="bg-gradient-to-r from-gold-600 to-green-600 text-white p-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <Activity className="w-6 h-6" />
@@ -148,7 +148,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
               <XCircle className="w-6 h-6" />
             </button>
           </div>
-          <p className="text-purple-100 mt-2 text-sm">Instance: {instanceId}</p>
+          <p className="text-gold-100 mt-2 text-sm">Instance: {instanceId}</p>
         </div>
 
         {/* Controls */}
@@ -159,7 +159,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                 fetchLoopStatus();
                 fetchStatistics();
               }}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Refresh Now</span>
@@ -170,7 +170,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                 type="checkbox"
                 checked={autoRefresh}
                 onChange={(e) => setAutoRefresh(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded"
+                className="w-4 h-4 text-green-600 rounded"
               />
               <span className="text-sm text-slate-700">Auto-refresh (2s)</span>
             </label>
@@ -197,7 +197,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
           {loopStatus?.active_loops && loopStatus.active_loops.length > 0 ? (
             <div>
               <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
-                <TrendingUp className="w-5 h-5 text-purple-600" />
+                <TrendingUp className="w-5 h-5 text-gold-600" />
                 <span>Active Loops</span>
               </h3>
               
@@ -241,7 +241,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                         </div>
                         <div className="w-full bg-white bg-opacity-50 rounded-full h-3 overflow-hidden">
                           <div
-                            className="bg-gradient-to-r from-purple-500 to-indigo-500 h-full transition-all duration-300 rounded-full"
+                            className="bg-gradient-to-r from-gold-500 to-green-500 h-full transition-all duration-300 rounded-full"
                             style={{ width: `${Math.min(100, loop.progress_percentage)}%` }}
                           />
                         </div>
@@ -289,7 +289,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
           {statistics?.loop_statistics && statistics.loop_statistics.length > 0 && (
             <div>
               <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
-                <Activity className="w-5 h-5 text-indigo-600" />
+                <Activity className="w-5 h-5 text-green-600" />
                 <span>Loop Statistics</span>
               </h3>
               
@@ -319,11 +319,11 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-600">Breaks:</span>
-                        <span className="font-semibold text-orange-600">{stat.breaks}</span>
+                        <span className="font-semibold text-gold-600">{stat.breaks}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-600">Continues:</span>
-                        <span className="font-semibold text-blue-600">{stat.continues}</span>
+                        <span className="font-semibold text-green-600">{stat.continues}</span>
                       </div>
                     </div>
                   </div>

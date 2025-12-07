@@ -140,7 +140,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
               onClick={() => changeLogicOperator('AND')}
               className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
                 logicOperator === 'AND'
-                  ? 'bg-indigo-500 text-white shadow-lg'
+                  ? 'bg-green-500 text-white shadow-lg'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -153,7 +153,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
               onClick={() => changeLogicOperator('OR')}
               className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
                 logicOperator === 'OR'
-                  ? 'bg-purple-500 text-white shadow-lg'
+                  ? 'bg-gold-500 text-white shadow-lg'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -277,7 +277,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
       {/* Add Condition Button */}
       <button
         onClick={addCondition}
-        className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-primary-500 to-indigo-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
+        className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-primary-500 to-green-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
       >
         <Plus className="w-4 h-4" />
         <span>Add Another Condition</span>
@@ -296,20 +296,20 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
 
       {/* Preview Cards */}
       {conditions.filter(c => c.variable && c.value).length > 0 && (
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-4">
-          <h5 className="text-xs font-semibold text-blue-900 mb-3">Condition Preview</h5>
+        <div className="bg-gradient-to-br from-green-50 to-gold-50 border-2 border-green-200 rounded-lg p-4">
+          <h5 className="text-xs font-semibold text-green-900 mb-3">Condition Preview</h5>
           <div className="space-y-2">
             {conditions
               .filter(c => c.variable && c.value)
               .map((condition, index) => (
                 <div key={condition.id} className="flex items-center space-x-2 text-xs">
-                  <span className="font-mono bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                  <span className="font-mono bg-green-100 text-green-800 px-2 py-1 rounded">
                     ${condition.variable}
                   </span>
-                  <span className="text-blue-600 font-semibold">
+                  <span className="text-green-600 font-semibold">
                     {operators.find(op => op.value === condition.operator)?.icon}
                   </span>
-                  <span className="font-mono bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                  <span className="font-mono bg-gold-100 text-gold-800 px-2 py-1 rounded">
                     {condition.valueType === 'variable' ? `$${condition.value}` : condition.value}
                   </span>
                   {index < conditions.filter(c => c.variable && c.value).length - 1 && (

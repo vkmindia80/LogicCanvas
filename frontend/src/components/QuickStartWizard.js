@@ -838,12 +838,12 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
 
           {/* AI Suggestion Hint */}
           {canGoNext && step.id !== 'review' && (
-            <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl">
+            <div className="mt-6 p-4 bg-gradient-to-r from-gold-50 to-pink-50 border border-gold-200 rounded-xl">
               <div className="flex items-start space-x-3">
-                <Sparkles className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                <Sparkles className="w-5 h-5 text-gold-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <div className="font-semibold text-purple-900 mb-1">AI Suggestion</div>
-                  <div className="text-sm text-purple-700">
+                  <div className="font-semibold text-gold-900 mb-1">AI Suggestion</div>
+                  <div className="text-sm text-gold-700">
                     Based on your selections, we&apos;ll generate an optimized starter workflow structure you can
                     refine in the canvas.
                   </div>

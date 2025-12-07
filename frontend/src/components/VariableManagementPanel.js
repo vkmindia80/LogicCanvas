@@ -30,18 +30,18 @@ const TYPE_ICONS = {
 };
 
 const TYPE_COLORS = {
-  string: 'bg-blue-100 text-blue-800 border-blue-200',
-  number: 'bg-purple-100 text-purple-800 border-purple-200',
+  string: 'bg-green-100 text-green-800 border-green-200',
+  number: 'bg-gold-100 text-gold-800 border-gold-200',
   boolean: 'bg-green-100 text-green-800 border-green-200',
-  object: 'bg-orange-100 text-orange-800 border-orange-200',
+  object: 'bg-gold-100 text-gold-800 border-gold-200',
   array: 'bg-pink-100 text-pink-800 border-pink-200',
-  date: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  date: 'bg-green-100 text-green-800 border-green-200',
   null: 'bg-gray-100 text-gray-800 border-gray-200'
 };
 
 const SCOPE_COLORS = {
-  workflow: 'bg-blue-100 text-blue-800',
-  node: 'bg-purple-100 text-purple-800',
+  workflow: 'bg-green-100 text-green-800',
+  node: 'bg-gold-100 text-gold-800',
   global: 'bg-green-100 text-green-800'
 };
 

@@ -173,7 +173,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
     switch (level) {
       case 'error': return 'text-red-600 bg-red-50';
       case 'warning': return 'text-yellow-600 bg-yellow-50';
-      case 'info': return 'text-blue-600 bg-blue-50';
+      case 'info': return 'text-green-600 bg-green-50';
       case 'debug': return 'text-gray-600 bg-gray-50';
       default: return 'text-gray-600 bg-gray-50';
     }
@@ -184,7 +184,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
       case 'completed': return 'text-green-600 bg-green-100';
       case 'error': return 'text-red-600 bg-red-100';
       case 'waiting': return 'text-yellow-600 bg-yellow-100';
-      case 'running': return 'text-blue-600 bg-blue-100';
+      case 'running': return 'text-green-600 bg-green-100';
       default: return 'text-gray-600 bg-gray-100';
     }
   };
@@ -228,7 +228,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
           </button>
           <button
             onClick={handleStep}
-            className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             title="Step to next node"
           >
             <SkipForward size={16} />
@@ -252,7 +252,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                 Status: <span className="font-medium">{debugState.status}</span>
               </span>
               {debugState.debug_mode && (
-                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                <span className="px-2 py-1 bg-green-100 text-green-700 rounded">
                   Debug Mode: {debugState.debug_action || 'Active'}
                 </span>
               )}
@@ -281,7 +281,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
               onClick={() => setActiveTab(id)}
               className={`px-4 py-3 font-medium flex items-center gap-2 ${
                 activeTab === id
-                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  ? 'border-b-2 border-green-600 text-green-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -316,7 +316,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                   {breakpoints.map((bp, index) => (
                     <div
                       key={index}
-                      className="p-4 border rounded-lg hover:border-blue-500 transition-colors"
+                      className="p-4 border rounded-lg hover:border-green-500 transition-colors"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -414,7 +414,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                   <select
                     value={logFilter}
                     onChange={(e) => setLogFilter(e.target.value)}
-                    className="px-3 py-1 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="px-3 py-1 text-sm border rounded-lg focus:ring-2 focus:ring-green-500"
                   >
                     <option value="all">All Levels</option>
                     <option value="debug">Debug</option>
@@ -478,9 +478,9 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                 <div>
                   {/* Summary */}
                   <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="p-4 bg-blue-50 rounded-lg">
+                    <div className="p-4 bg-green-50 rounded-lg">
                       <div className="text-sm text-gray-600">Total Time</div>
-                      <div className="text-2xl font-bold text-blue-600">
+                      <div className="text-2xl font-bold text-green-600">
                         {(performance.total_duration_ms / 1000).toFixed(2)}s
                       </div>
                     </div>
@@ -515,7 +515,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
-                              className="bg-blue-600 h-2 rounded-full"
+                              className="bg-green-600 h-2 rounded-full"
                               style={{
                                 width: `${(node.duration_ms / performance.total_duration_ms) * 100}%`
                               }}

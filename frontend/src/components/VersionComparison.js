@@ -198,8 +198,8 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
         <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
-                <GitBranch className="h-5 w-5 text-purple-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gold-100">
+                <GitBranch className="h-5 w-5 text-gold-600" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-slate-900">Version Comparison</h2>
@@ -278,7 +278,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
               ) : diff ? (
                 <div className="space-y-4">
                   {/* Summary */}
-                  <div className="rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
+                  <div className="rounded-lg border-2 border-gold-200 bg-gold-50 p-4">
                     <h3 className="mb-3 font-semibold text-slate-900">Comparison Summary</h3>
                     <div className="grid gap-3 md:grid-cols-4">
                       <div className="rounded-lg bg-white p-3 text-center">
@@ -294,7 +294,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                         <div className="text-xs text-slate-600">Nodes Modified</div>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
-                        <div className="text-2xl font-bold text-blue-600">
+                        <div className="text-2xl font-bold text-green-600">
                           {(diff.edges_added?.length || 0) + (diff.edges_removed?.length || 0)}
                         </div>
                         <div className="text-xs text-slate-600">Edge Changes</div>
@@ -304,7 +304,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
 
                   {/* Metadata Changes */}
                   {Object.keys(diff.metadata_changes || {}).length > 0 && (
-                    <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+                    <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
                       <h4 className="mb-3 font-semibold text-slate-900">Metadata Changes</h4>
                       <div className="space-y-2">
                         {Object.entries(diff.metadata_changes).map(([key, change]) => (
@@ -333,9 +333,9 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
 
                   {/* Edge Changes */}
                   {(diff.edges_added?.length > 0 || diff.edges_removed?.length > 0) && (
-                    <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+                    <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
                       <div className="mb-3 flex items-center space-x-2">
-                        <Link className="h-5 w-5 text-blue-600" />
+                        <Link className="h-5 w-5 text-green-600" />
                         <h4 className="font-semibold text-slate-900">Edge Changes</h4>
                       </div>
                       <div className="grid gap-3 md:grid-cols-2">
@@ -380,14 +380,14 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                   {versions.map((version) => (
                     <div key={version.version} className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 hover:shadow-md transition-shadow">
                       <div className="flex items-center space-x-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 font-bold text-purple-600">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-100 font-bold text-gold-600">
                           v{version.version}
                         </div>
                         <div>
                           <div className="font-medium text-slate-900">
                             Version {version.version}
                             {version.is_rollback && (
-                              <span className="ml-2 rounded bg-orange-100 px-2 py-0.5 text-xs text-orange-700">
+                              <span className="ml-2 rounded bg-gold-100 px-2 py-0.5 text-xs text-gold-700">
                                 Rollback
                               </span>
                             )}
@@ -410,7 +410,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                       <button
                         onClick={() => handleRollback(version.version)}
                         disabled={rollbackLoading}
-                        className="flex items-center space-x-2 rounded-lg border border-purple-300 bg-purple-50 px-3 py-2 text-sm font-medium text-purple-700 transition-colors hover:bg-purple-100 disabled:opacity-50"
+                        className="flex items-center space-x-2 rounded-lg border border-gold-300 bg-gold-50 px-3 py-2 text-sm font-medium text-gold-700 transition-colors hover:bg-gold-100 disabled:opacity-50"
                       >
                         <RotateCcw className="h-4 w-4" />
                         <span>Rollback</span>

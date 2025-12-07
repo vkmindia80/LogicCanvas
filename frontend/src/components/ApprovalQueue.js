@@ -92,7 +92,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
       pending: 'bg-yellow-100 text-yellow-800 border-yellow-300',
       approved: 'bg-green-100 text-green-800 border-green-300',
       rejected: 'bg-red-100 text-red-800 border-red-300',
-      changes_requested: 'bg-orange-100 text-orange-800 border-orange-300'
+      changes_requested: 'bg-gold-100 text-gold-800 border-gold-300'
     };
     return colors[status] || colors.pending;
   };
@@ -250,14 +250,14 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search approvals..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500"
                   data-testid="approval-search-input"
                 />
               </div>
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500"
                 data-testid="approval-filter-select"
               >
                 <option value="all">All Status</option>
@@ -276,7 +276,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold-500"></div>
               </div>
             ) : filteredApprovals.length === 0 ? (
               <div className="text-center py-12">
@@ -293,7 +293,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                     onClick={() => setSelectedApproval(approval)}
                     className={`bg-white rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
                       selectedApproval?.id === approval.id
-                        ? 'border-purple-500 ring-2 ring-purple-200'
+                        ? 'border-gold-500 ring-2 ring-gold-200'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                     data-testid={`approval-item-${approval.id}`}
@@ -308,7 +308,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                     
                     {/* Approval Type Badge */}
                     <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-                      <div className="flex items-center space-x-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full">
+                      <div className="flex items-center space-x-1 px-2 py-1 bg-gold-50 text-gold-700 rounded-full">
                         {getApprovalTypeIcon(approval.approval_type)}
                         <span>{getApprovalTypeLabel(approval.approval_type)}</span>
                       </div>
@@ -347,7 +347,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                       <span className={`px-3 py-1 text-sm rounded-full border ${getStatusColor(selectedApproval.status)}`}>
                         {selectedApproval.status?.replace('_', ' ')}
                       </span>
-                      <span className="flex items-center text-sm text-gray-600 bg-purple-50 px-3 py-1 rounded-full">
+                      <span className="flex items-center text-sm text-gray-600 bg-gold-50 px-3 py-1 rounded-full">
                         {getApprovalTypeIcon(selectedApproval.approval_type)}
                         <span className="ml-1">{getApprovalTypeLabel(selectedApproval.approval_type)}</span>
                       </span>
@@ -398,7 +398,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                             <span className={`px-3 py-1 text-xs rounded-full font-medium ${
                               decision.decision === 'approved' ? 'bg-green-100 text-green-800' :
                               decision.decision === 'rejected' ? 'bg-red-100 text-red-800' :
-                              'bg-orange-100 text-orange-800'
+                              'bg-gold-100 text-gold-800'
                             }`}>
                               {decision.decision === 'approved' && <CheckCircle className="w-3 h-3 inline mr-1" />}
                               {decision.decision === 'rejected' && <XCircle className="w-3 h-3 inline mr-1" />}
@@ -425,7 +425,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                         <span className={`px-2 py-1 text-xs rounded-full ${
                           decision.decision === 'approved' ? 'bg-green-100 text-green-800' :
                           decision.decision === 'rejected' ? 'bg-red-100 text-red-800' :
-                          'bg-orange-100 text-orange-800'
+                          'bg-gold-100 text-gold-800'
                         }`}>
                           {decision.decision}
                         </span>
@@ -454,7 +454,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                       onChange={(e) => setDecisionComment(e.target.value)}
                       placeholder="Add a comment with your decision..."
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500"
                       data-testid="decision-comment-input"
                     />
                   </div>
@@ -477,7 +477,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                     </button>
                     <button
                       onClick={() => handleDecision(selectedApproval.id, 'changes_requested')}
-                      className="flex items-center justify-center space-x-2 bg-orange-500 text-white px-4 py-3 rounded-lg hover:bg-orange-600 transition-colors"
+                      className="flex items-center justify-center space-x-2 bg-gold-500 text-white px-4 py-3 rounded-lg hover:bg-gold-600 transition-colors"
                       data-testid="request-changes-btn"
                       title="Request Changes"
                     >

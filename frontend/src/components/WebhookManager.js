@@ -102,7 +102,7 @@ const WebhookManager = ({ onClose }) => {
             <div className="flex gap-2">
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Plus size={18} className="inline mr-2" />
                 New Webhook
@@ -125,7 +125,7 @@ const WebhookManager = ({ onClose }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search webhooks..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
               />
             </div>
           </div>
@@ -142,7 +142,7 @@ const WebhookManager = ({ onClose }) => {
                 {!searchQuery && (
                   <button
                     onClick={() => setShowCreateModal(true)}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <Plus size={18} className="inline mr-2" />
                     Create Webhook
@@ -154,7 +154,7 @@ const WebhookManager = ({ onClose }) => {
                 {filteredWebhooks.map((webhook) => (
                   <div
                     key={webhook.id}
-                    className="border rounded-lg p-4 hover:border-blue-500 transition-all"
+                    className="border rounded-lg p-4 hover:border-green-500 transition-all"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -191,7 +191,7 @@ const WebhookManager = ({ onClose }) => {
 
                         <div className="mt-3 p-3 bg-gray-50 rounded border">
                           <p className="text-xs text-gray-600 mb-1">Webhook Endpoint:</p>
-                          <code className="text-xs font-mono text-blue-600">
+                          <code className="text-xs font-mono text-green-600">
                             {`${BACKEND_URL}/api/webhooks/${webhook.id}/receive`}
                           </code>
                         </div>
@@ -200,7 +200,7 @@ const WebhookManager = ({ onClose }) => {
                       <div className="flex flex-col gap-2 ml-4">
                         <button
                           onClick={() => fetchWebhookLogs(webhook.id)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                          className="p-2 text-green-600 hover:bg-green-50 rounded transition-colors"
                           title="View Logs"
                         >
                           <Eye size={16} />
@@ -361,7 +361,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
               placeholder="My Webhook"
             />
           </div>
@@ -374,7 +374,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
               type="text"
               value={formData.url}
               onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
               placeholder="https://your-app.com/webhook"
             />
           </div>
@@ -389,12 +389,12 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
                 value={newEvent}
                 onChange={(e) => setNewEvent(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addEvent()}
-                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="workflow.completed"
               />
               <button
                 onClick={addEvent}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
                 Add
               </button>
@@ -403,10 +403,10 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
               {formData.events.map((event) => (
                 <span
                   key={event}
-                  className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-2"
+                  className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm flex items-center gap-2"
                 >
                   {event}
-                  <button onClick={() => removeEvent(event)} className="hover:text-blue-900">
+                  <button onClick={() => removeEvent(event)} className="hover:text-green-900">
                     <X size={14} />
                   </button>
                 </span>
@@ -422,7 +422,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
               type="password"
               value={formData.secret}
               onChange={(e) => setFormData({ ...formData, secret: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
               placeholder="Webhook secret for signing"
             />
           </div>
@@ -436,19 +436,19 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
                 type="text"
                 value={newHeaderKey}
                 onChange={(e) => setNewHeaderKey(e.target.value)}
-                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="Header name"
               />
               <input
                 type="text"
                 value={newHeaderValue}
                 onChange={(e) => setNewHeaderValue(e.target.value)}
-                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="Header value"
               />
               <button
                 onClick={addHeader}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
                 Add
               </button>
@@ -471,7 +471,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
               id="active"
               checked={formData.active}
               onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
             />
             <label htmlFor="active" className="text-sm font-medium text-gray-700">
               Active
@@ -489,7 +489,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
           <button
             onClick={handleSubmit}
             disabled={!formData.name || !formData.url}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
           >
             {webhook ? 'Update' : 'Create'}
           </button>
@@ -509,7 +509,7 @@ const WebhookLogs = ({ webhookId, logs, onClose, onRefresh }) => {
           <div className="flex gap-2">
             <button
               onClick={onRefresh}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+              className="p-2 text-green-600 hover:bg-green-50 rounded"
               title="Refresh"
             >
               <RefreshCw size={18} />

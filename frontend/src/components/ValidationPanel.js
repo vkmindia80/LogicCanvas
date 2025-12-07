@@ -202,7 +202,7 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
           {hasErrors ? (
             <AlertTriangle className="w-5 h-5 text-red-500" />
           ) : hasWarnings ? (
-            <AlertCircle className="w-5 h-5 text-orange-500" />
+            <AlertCircle className="w-5 h-5 text-gold-500" />
           ) : (
             <CheckCircle className="w-5 h-5 text-green-500" />
           )}
@@ -283,7 +283,7 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
                   className="w-full flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
                   <div className="flex items-center space-x-2">
-                    <AlertCircle className="w-4 h-4 text-orange-500" />
+                    <AlertCircle className="w-4 h-4 text-gold-500" />
                     <span className="text-sm font-medium text-slate-900 dark:text-white">
                       Warnings ({categorizedIssues.warnings.length})
                     </span>
@@ -295,18 +295,18 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
                   )}
                 </button>
                 {expandedCategories.warnings && (
-                  <div className="bg-orange-50 dark:bg-orange-900/10">
+                  <div className="bg-gold-50 dark:bg-gold-900/10">
                     {categorizedIssues.warnings.map((issue, idx) => (
                       <div
                         key={idx}
-                        className="p-3 border-l-2 border-orange-500 hover:bg-orange-100 dark:hover:bg-orange-900/20 cursor-pointer transition-colors"
+                        className="p-3 border-l-2 border-gold-500 hover:bg-gold-100 dark:hover:bg-gold-900/20 cursor-pointer transition-colors"
                         onClick={() => handleIssueClick(issue)}
                       >
-                        <p className="text-sm font-medium text-orange-900 dark:text-orange-200 mb-1">
+                        <p className="text-sm font-medium text-gold-900 dark:text-gold-200 mb-1">
                           {issue.message}
                         </p>
                         {issue.suggestion && (
-                          <p className="text-xs text-orange-700 dark:text-orange-300 italic">
+                          <p className="text-xs text-gold-700 dark:text-gold-300 italic">
                             💡 {issue.suggestion}
                           </p>
                         )}

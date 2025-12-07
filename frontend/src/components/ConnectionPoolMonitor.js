@@ -121,7 +121,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
         <div className="flex items-center justify-between p-6 border-b">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Database className="text-blue-600" size={28} />
+              <Database className="text-green-600" size={28} />
               Connection Pool Monitor
             </h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -134,13 +134,13 @@ const ConnectionPoolMonitor = ({ onClose }) => {
                 type="checkbox"
                 checked={autoRefresh}
                 onChange={(e) => setAutoRefresh(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
               />
               <label className="text-sm font-medium text-gray-700">Auto-refresh</label>
             </div>
             <button
               onClick={fetchPoolData}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
               title="Refresh Now"
             >
               <RefreshCw size={18} />
@@ -148,7 +148,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
             <button
               onClick={handleCleanupPools}
               disabled={loading}
-              className="px-3 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+              className="px-3 py-2 bg-gold-600 text-white text-sm rounded-lg hover:bg-gold-700 transition-colors disabled:opacity-50"
             >
               <Trash2 size={16} className="inline mr-1" />
               Cleanup Idle
@@ -167,12 +167,12 @@ const ConnectionPoolMonitor = ({ onClose }) => {
           {/* Overall Health Summary */}
           {poolHealth && (
             <div className="grid grid-cols-4 gap-4 mb-6">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="text-sm font-medium text-blue-900">Total Pools</div>
-                  <Server className="text-blue-600" size={20} />
+                  <div className="text-sm font-medium text-green-900">Total Pools</div>
+                  <Server className="text-green-600" size={20} />
                 </div>
-                <div className="text-2xl font-bold text-blue-900">
+                <div className="text-2xl font-bold text-green-900">
                   {poolHealth.pools?.length || 0}
                 </div>
               </div>
@@ -187,22 +187,22 @@ const ConnectionPoolMonitor = ({ onClose }) => {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
+              <div className="bg-gradient-to-br from-gold-50 to-gold-100 rounded-xl p-4 border border-gold-200">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="text-sm font-medium text-purple-900">Idle Connections</div>
-                  <Clock className="text-purple-600" size={20} />
+                  <div className="text-sm font-medium text-gold-900">Idle Connections</div>
+                  <Clock className="text-gold-600" size={20} />
                 </div>
-                <div className="text-2xl font-bold text-purple-900">
+                <div className="text-2xl font-bold text-gold-900">
                   {poolStats?.total_idle_connections || 0}
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
+              <div className="bg-gradient-to-br from-gold-50 to-gold-100 rounded-xl p-4 border border-gold-200">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="text-sm font-medium text-orange-900">Total Requests</div>
-                  <TrendingUp className="text-orange-600" size={20} />
+                  <div className="text-sm font-medium text-gold-900">Total Requests</div>
+                  <TrendingUp className="text-gold-600" size={20} />
                 </div>
-                <div className="text-2xl font-bold text-orange-900">
+                <div className="text-2xl font-bold text-gold-900">
                   {poolStats?.total_requests || 0}
                 </div>
               </div>
@@ -235,7 +235,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
                     return (
                       <div
                         key={pool.connector_id}
-                        className="border rounded-lg p-4 hover:border-blue-300 transition-all bg-white"
+                        className="border rounded-lg p-4 hover:border-green-300 transition-all bg-white"
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
@@ -306,7 +306,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
                         {/* Additional Stats */}
                         <div className="mt-3 pt-3 border-t grid grid-cols-3 gap-2 text-xs">
                           <div className="flex items-center gap-1">
-                            <Zap size={12} className="text-blue-600" />
+                            <Zap size={12} className="text-green-600" />
                             <span className="text-gray-600">Avg Latency:</span>
                             <span className="font-medium">{pool.avg_latency_ms || 0}ms</span>
                           </div>
@@ -345,7 +345,7 @@ const ConnectionPoolMonitor = ({ onClose }) => {
         {/* Footer */}
         <div className="p-4 border-t bg-gray-50">
           <div className="flex items-start gap-2 text-sm">
-            <Info size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
+            <Info size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
             <div className="text-gray-600">
               <p>
                 <strong>Connection pooling</strong> reuses HTTP connections to improve performance and reduce overhead.

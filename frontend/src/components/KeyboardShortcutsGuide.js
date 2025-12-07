@@ -97,11 +97,11 @@ const KeyboardShortcutsGuide = ({ isOpen, onClose }) => {
           </div>
 
           {/* Mac Note */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-xs text-blue-800 flex items-center space-x-2">
+          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-xs text-green-800 flex items-center space-x-2">
               <Command className="w-4 h-4" />
               <span>
-                <strong>Mac users:</strong> Use <kbd className="px-1 py-0.5 bg-blue-100 rounded text-xs">⌘ Cmd</kbd> instead of <kbd className="px-1 py-0.5 bg-blue-100 rounded text-xs">Ctrl</kbd>
+                <strong>Mac users:</strong> Use <kbd className="px-1 py-0.5 bg-green-100 rounded text-xs">⌘ Cmd</kbd> instead of <kbd className="px-1 py-0.5 bg-green-100 rounded text-xs">Ctrl</kbd>
               </span>
             </p>
           </div>

@@ -153,8 +153,8 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
           <div className="p-6 bg-white rounded-b-lg shadow-lg">
           {activeTab === 'export' && (
             <div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <p className="text-sm text-blue-800">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-green-800">
                   <strong>Export workflows to JSON file:</strong>
                   <br />
                   {selectedWorkflows.length > 0
@@ -197,8 +197,8 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
 
           {activeTab === 'import' && (
             <div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <p className="text-sm text-blue-800">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-green-800">
                   <strong>Import workflows from JSON file:</strong>
                   <br />
                   Select a previously exported LogicCanvas workflow file to import.

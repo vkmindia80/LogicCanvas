@@ -87,12 +87,12 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      approval_chain: 'bg-blue-100 text-blue-700 border-blue-200',
+      approval_chain: 'bg-green-100 text-green-700 border-green-200',
       data_pipeline: 'bg-green-100 text-green-700 border-green-200',
       notification_flow: 'bg-yellow-100 text-yellow-700 border-yellow-200',
       error_handling: 'bg-red-100 text-red-700 border-red-200',
-      parallel_processing: 'bg-purple-100 text-purple-700 border-purple-200',
-      sequential_approval: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+      parallel_processing: 'bg-gold-100 text-gold-700 border-gold-200',
+      sequential_approval: 'bg-green-100 text-green-700 border-green-200',
       conditional_routing: 'bg-pink-100 text-pink-700 border-pink-200'
     };
     return colors[category] || 'bg-gray-100 text-gray-700 border-gray-200';
@@ -104,13 +104,13 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+        <div className="bg-gradient-to-r from-gold-600 to-pink-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Sparkles className="w-8 h-8" />
               <div>
                 <h2 className="text-2xl font-bold">Composition Pattern Catalog</h2>
-                <p className="text-purple-100 text-sm">Pre-built workflow patterns for common use cases</p>
+                <p className="text-gold-100 text-sm">Pre-built workflow patterns for common use cases</p>
               </div>
             </div>
             <button
@@ -133,7 +133,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold-500 focus:border-transparent"
                   data-testid="filter-pattern-category"
                 >
                   {categories.map(cat => (
@@ -150,7 +150,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                   type="checkbox"
                   checked={showFeaturedOnly}
                   onChange={(e) => setShowFeaturedOnly(e.target.checked)}
-                  className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                  className="w-4 h-4 text-gold-600 border-gray-300 rounded focus:ring-gold-500"
                   data-testid="filter-featured"
                 />
                 <Star className="w-4 h-4 text-yellow-500" />
@@ -162,14 +162,14 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
             <div className="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded ${viewMode === 'grid' ? 'bg-purple-100 text-purple-700' : 'text-gray-600'}`}
+                className={`p-2 rounded ${viewMode === 'grid' ? 'bg-gold-100 text-gold-700' : 'text-gray-600'}`}
                 data-testid="view-grid"
               >
                 <Grid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded ${viewMode === 'list' ? 'bg-purple-100 text-purple-700' : 'text-gray-600'}`}
+                className={`p-2 rounded ${viewMode === 'list' ? 'bg-gold-100 text-gold-700' : 'text-gray-600'}`}
                 data-testid="view-list"
               >
                 <List className="w-4 h-4" />
@@ -183,7 +183,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading patterns...</p>
               </div>
             </div>
@@ -196,7 +196,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
               </p>
               <button
                 onClick={initializeDefaultPatterns}
-                className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-6 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-colors"
                 data-testid="initialize-patterns"
               >
                 Initialize Default Patterns
@@ -213,7 +213,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                 return (
                   <div
                     key={pattern.id}
-                    className={`border border-gray-200 rounded-lg p-4 hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer bg-white ${
+                    className={`border border-gray-200 rounded-lg p-4 hover:shadow-lg hover:border-gold-300 transition-all cursor-pointer bg-white ${
                       viewMode === 'list' ? 'flex items-start space-x-4' : ''
                     }`}
                     onClick={() => setSelectedPattern(pattern)}
@@ -272,7 +272,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                           e.stopPropagation();
                           handleInsertPattern(pattern);
                         }}
-                        className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                        className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-colors text-sm font-medium"
                         data-testid={`insert-pattern-${pattern.id}`}
                       >
                         <Download className="w-4 h-4" />
@@ -324,9 +324,9 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
               <p className="text-gray-600 mb-6">{selectedPattern.description}</p>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                  <div className="text-sm text-purple-700 mb-1 font-medium">Nodes</div>
-                  <div className="text-2xl font-bold text-purple-900">{selectedPattern.template_nodes?.length || 0}</div>
+                <div className="bg-gold-50 p-4 rounded-lg border border-gold-100">
+                  <div className="text-sm text-gold-700 mb-1 font-medium">Nodes</div>
+                  <div className="text-2xl font-bold text-gold-900">{selectedPattern.template_nodes?.length || 0}</div>
                 </div>
                 <div className="bg-pink-50 p-4 rounded-lg border border-pink-100">
                   <div className="text-sm text-pink-700 mb-1 font-medium">Connections</div>
@@ -374,7 +374,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                     handleInsertPattern(selectedPattern);
                     setSelectedPattern(null);
                   }}
-                  className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center space-x-2"
+                  className="px-6 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 flex items-center space-x-2"
                 >
                   <Zap className="w-4 h-4" />
                   <span>Use This Pattern</span>

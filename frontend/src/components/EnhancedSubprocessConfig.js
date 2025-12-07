@@ -105,7 +105,7 @@ const EnhancedSubprocessConfig = ({
         <select
           value={subprocessWorkflowId}
           onChange={(e) => handleWorkflowChange(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           data-testid="subprocess-workflow-select"
         >
           <option value="">-- Select a workflow --</option>
@@ -180,7 +180,7 @@ const EnhancedSubprocessConfig = ({
           <select
             value={selectedVersion}
             onChange={(e) => setSelectedVersion(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="subprocess-version-select"
             disabled={loadingVersions}
           >
@@ -210,7 +210,7 @@ const EnhancedSubprocessConfig = ({
                 </span>
               </label>
               {subprocessMetadata?.required_inputs?.length > 0 && (
-                <span className="text-xs text-orange-600 font-medium">
+                <span className="text-xs text-gold-600 font-medium">
                   {subprocessMetadata.required_inputs.length} required
                 </span>
               )}
@@ -227,9 +227,9 @@ const EnhancedSubprocessConfig = ({
             
             {/* Show required inputs from metadata */}
             {subprocessMetadata?.required_inputs?.length > 0 && (
-              <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded">
-                <p className="text-xs font-medium text-blue-900 mb-1">Required Inputs:</p>
-                <ul className="text-xs text-blue-700 space-y-1">
+              <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded">
+                <p className="text-xs font-medium text-green-900 mb-1">Required Inputs:</p>
+                <ul className="text-xs text-green-700 space-y-1">
                   {subprocessMetadata.required_inputs.map((input, idx) => (
                     <li key={idx}>• {input}</li>
                   ))}
@@ -275,7 +275,7 @@ const EnhancedSubprocessConfig = ({
         <div>
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            className="flex items-center gap-2 text-sm font-medium text-green-600 hover:text-green-700"
           >
             {showAdvanced ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             Advanced Settings
@@ -319,12 +319,12 @@ const EnhancedSubprocessConfig = ({
 
       {/* Helper Info */}
       {!subprocessWorkflowId && (
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-blue-600 mt-0.5" />
+            <Info className="w-5 h-5 text-green-600 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-blue-900">About Subprocesses</p>
-              <p className="text-sm text-blue-700 mt-1">
+              <p className="text-sm font-medium text-green-900">About Subprocesses</p>
+              <p className="text-sm text-green-700 mt-1">
                 Subprocesses allow you to reuse workflows as modular components. Select a workflow to execute it as a nested subprocess with proper data passing and error handling.
               </p>
             </div>

@@ -235,13 +235,13 @@ const KeyValueEditor = ({
       )}
 
       {showVariableHelp && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
           <div className="flex items-start space-x-2">
-            <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-            <div className="text-xs text-blue-800">
+            <Info className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-green-800">
               <p className="font-semibold mb-1">💡 Pro Tip: Dynamic Variables</p>
-              <p>Use <code className="bg-blue-100 px-1 py-0.5 rounded font-mono">${'{variable}'}</code> syntax to insert workflow variables dynamically.</p>
-              <p className="mt-1 text-blue-700">Example: <code className="bg-blue-100 px-1 py-0.5 rounded font-mono">${'{userId}'}</code> or <code className="bg-blue-100 px-1 py-0.5 rounded font-mono">${'{apiToken}'}</code></p>
+              <p>Use <code className="bg-green-100 px-1 py-0.5 rounded font-mono">${'{variable}'}</code> syntax to insert workflow variables dynamically.</p>
+              <p className="mt-1 text-green-700">Example: <code className="bg-green-100 px-1 py-0.5 rounded font-mono">${'{userId}'}</code> or <code className="bg-green-100 px-1 py-0.5 rounded font-mono">${'{apiToken}'}</code></p>
             </div>
           </div>
         </div>

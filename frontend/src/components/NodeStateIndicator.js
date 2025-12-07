@@ -25,9 +25,9 @@ const NODE_STATES = {
   },
   running: {
     icon: Play,
-    color: 'text-blue-600',
-    bg: 'bg-blue-100',
-    border: 'border-blue-300',
+    color: 'text-green-600',
+    bg: 'bg-green-100',
+    border: 'border-green-300',
     label: 'Running'
   },
   waiting: {

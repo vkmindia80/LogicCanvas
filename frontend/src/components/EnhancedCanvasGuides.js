@@ -179,7 +179,7 @@ const EnhancedCanvasGuides = ({ nodes, edges, selectedNode, onNodeMove, enabled 
           onClick={() => setShowGrid(!showGrid)}
           className={`p-2 rounded transition ${
             showGrid
-              ? 'bg-purple-100 text-purple-700'
+              ? 'bg-gold-100 text-gold-700'
               : 'text-gray-600 hover:bg-gray-100'
           }`}
           title="Toggle Grid"
@@ -190,7 +190,7 @@ const EnhancedCanvasGuides = ({ nodes, edges, selectedNode, onNodeMove, enabled 
           onClick={() => setSnapEnabled(!snapEnabled)}
           className={`p-2 rounded transition ${
             snapEnabled
-              ? 'bg-purple-100 text-purple-700'
+              ? 'bg-gold-100 text-gold-700'
               : 'text-gray-600 hover:bg-gray-100'
           }`}
           title="Toggle Snap"

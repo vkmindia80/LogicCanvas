@@ -127,7 +127,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
             <div className="flex gap-2">
               <button
                 onClick={() => setShowRateLimiting(true)}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Shield size={18} className="inline mr-2" />
                 Rate Limits
@@ -141,7 +141,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
               </button>
               <button
                 onClick={() => setShowOAuthBuilder(true)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-4 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-colors"
               >
                 <Key size={18} className="inline mr-2" />
                 OAuth
@@ -155,7 +155,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
               </button>
               <button
                 onClick={handleCreate}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Plus size={18} className="inline mr-2" />
                 New Connector
@@ -176,7 +176,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                 onClick={() => setViewMode('saved')}
                 className={`px-4 py-3 font-medium transition-all ${
                   viewMode === 'saved'
-                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    ? 'border-b-2 border-green-600 text-green-600'
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -186,7 +186,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                 onClick={() => setViewMode('templates')}
                 className={`px-4 py-3 font-medium transition-all ${
                   viewMode === 'templates'
-                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    ? 'border-b-2 border-green-600 text-green-600'
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -205,13 +205,13 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search connectors..."
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 />
               </div>
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
               >
                 <option value="all">All Categories</option>
                 <option value="payment">💳 Payment</option>
@@ -243,7 +243,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                 {viewMode === 'saved' && (
                   <button
                     onClick={handleCreate}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <Plus size={18} className="inline mr-2" />
                     Create Connector
@@ -255,7 +255,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                 {filteredItems.map((item) => (
                   <div
                     key={item.id}
-                    className="border rounded-lg p-4 hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group"
+                    className="border rounded-lg p-4 hover:border-green-500 hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => {
                       if (viewMode === 'templates') {
                         // For templates, open builder with template data
@@ -270,11 +270,11 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{getCategoryIcon(item.category)}</span>
                         <div>
-                          <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-600">
                             {item.name}
                           </h3>
                           {item.is_template && (
-                            <span className="text-xs px-2 py-0.5 bg-purple-100 text-purple-700 rounded">
+                            <span className="text-xs px-2 py-0.5 bg-gold-100 text-gold-700 rounded">
                               Template
                             </span>
                           )}
@@ -304,7 +304,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                             setEditingConnector({ ...item, id: null, is_template: false });
                             setShowBuilder(true);
                           }}
-                          className="flex-1 px-3 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded transition-colors"
+                          className="flex-1 px-3 py-2 text-sm bg-green-600 text-white hover:bg-green-700 rounded transition-colors"
                         >
                           <Plus size={14} className="inline mr-1" />
                           Use Template

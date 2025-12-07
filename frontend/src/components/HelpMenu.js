@@ -18,7 +18,7 @@ const HelpMenu = ({
       title: 'Take Product Tour',
       description: 'Interactive walkthrough of all features',
       action: onShowTour,
-      color: 'bg-blue-500',
+      color: 'bg-green-500',
       testId: 'help-tour-btn'
     },
     {
@@ -26,7 +26,7 @@ const HelpMenu = ({
       title: 'Video Tutorials',
       description: 'Step-by-step video guides',
       action: onShowVideos,
-      color: 'bg-purple-500',
+      color: 'bg-gold-500',
       testId: 'help-videos-btn'
     },
     {
@@ -42,7 +42,7 @@ const HelpMenu = ({
       title: 'Template Library',
       description: '20+ pre-built workflow templates',
       action: onShowTemplates,
-      color: 'bg-indigo-500',
+      color: 'bg-green-500',
       testId: 'help-templates-btn'
     },
     {

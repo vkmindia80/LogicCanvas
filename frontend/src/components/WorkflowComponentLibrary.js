@@ -81,9 +81,9 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      approval: 'bg-blue-100 text-blue-700',
+      approval: 'bg-green-100 text-green-700',
       data_processing: 'bg-green-100 text-green-700',
-      integration: 'bg-purple-100 text-purple-700',
+      integration: 'bg-gold-100 text-gold-700',
       notification: 'bg-yellow-100 text-yellow-700',
       custom: 'bg-gray-100 text-gray-700'
     };
@@ -107,13 +107,13 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white p-6">
+        <div className="bg-gradient-to-r from-green-600 to-green-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Package className="w-8 h-8" />
               <div>
                 <h2 className="text-2xl font-bold">Component Library</h2>
-                <p className="text-indigo-100 text-sm">Browse and insert reusable workflow components</p>
+                <p className="text-green-100 text-sm">Browse and insert reusable workflow components</p>
               </div>
             </div>
             <button
@@ -137,7 +137,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
                 placeholder="Search components..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 data-testid="search-components"
               />
             </div>
@@ -148,7 +148,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 data-testid="filter-category"
               >
                 {categories.map(cat => (
@@ -166,7 +166,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading components...</p>
               </div>
             </div>
@@ -185,7 +185,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
               {components.map(component => (
                 <div
                   key={component.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-lg hover:border-indigo-300 transition-all cursor-pointer bg-white"
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-lg hover:border-green-300 transition-all cursor-pointer bg-white"
                   onClick={() => setSelectedComponent(component)}
                   data-testid={`component-card-${component.id}`}
                 >
@@ -246,7 +246,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
                       e.stopPropagation();
                       handleInsertComponent(component);
                     }}
-                    className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                     data-testid={`insert-component-${component.id}`}
                   >
                     <Download className="w-4 h-4" />
@@ -295,7 +295,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
                   <h4 className="text-sm font-semibold text-gray-700 mb-2">Input Variables</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedComponent.input_variables.map((varName, idx) => (
-                      <span key={idx} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                      <span key={idx} className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
                         {varName}
                       </span>
                     ))}
@@ -328,7 +328,7 @@ const WorkflowComponentLibrary = ({ isOpen, onClose, onInsertComponent }) => {
                     handleInsertComponent(selectedComponent);
                     setSelectedComponent(null);
                   }}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center space-x-2"
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
                 >
                   <Download className="w-4 h-4" />
                   <span>Insert Component</span>

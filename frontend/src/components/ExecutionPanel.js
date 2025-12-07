@@ -91,22 +91,22 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'running': return <Clock className="w-4 h-4 text-blue-500 animate-pulse" />;
+      case 'running': return <Clock className="w-4 h-4 text-green-500 animate-pulse" />;
       case 'completed': return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'failed': return <XCircle className="w-4 h-4 text-red-500" />;
       case 'paused': return <Pause className="w-4 h-4 text-yellow-500" />;
-      case 'waiting': return <AlertCircle className="w-4 h-4 text-orange-500" />;
+      case 'waiting': return <AlertCircle className="w-4 h-4 text-gold-500" />;
       default: return <Clock className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'running': return 'bg-blue-100 text-blue-800';
+      case 'running': return 'bg-green-100 text-green-800';
       case 'completed': return 'bg-green-100 text-green-800';
       case 'failed': return 'bg-red-100 text-red-800';
       case 'paused': return 'bg-yellow-100 text-yellow-800';
-      case 'waiting': return 'bg-orange-100 text-orange-800';
+      case 'waiting': return 'bg-gold-100 text-gold-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -114,7 +114,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
   return (
     <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-gray-200 flex flex-col z-50">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+      <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-gold-50">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold text-gray-800">Workflow Execution</h2>
           <button
@@ -127,7 +127,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
         </div>
         <button
           onClick={handleExecute}
-          className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-600 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
+          className="w-full bg-gradient-to-r from-green-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-gold-600 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
           data-testid="execute-workflow-button"
         >
           <Play className="w-4 h-4" />
@@ -152,7 +152,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                 key={instance.id}
                 className={`border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md ${
                   selectedInstance?.id === instance.id
-                    ? 'border-blue-500 bg-blue-50'
+                    ? 'border-green-500 bg-green-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
                 onClick={() => setSelectedInstance(instance)}
@@ -173,7 +173,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                 <div className="text-xs text-gray-600 space-y-1">
                   <div>Triggered: {instance.triggered_by}</div>
                   {instance.current_node_id && (
-                    <div className="text-blue-600">Current: {instance.current_node_id.slice(0, 8)}...</div>
+                    <div className="text-green-600">Current: {instance.current_node_id.slice(0, 8)}...</div>
                   )}
                 </div>
 
@@ -197,7 +197,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                         e.stopPropagation();
                         handleResume(instance.id);
                       }}
-                      className="flex-1 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 flex items-center justify-center gap-1"
+                      className="flex-1 text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 flex items-center justify-center gap-1"
                       data-testid={`resume-instance-${instance.id}`}
                     >
                       <Play className="w-3 h-3" /> Resume

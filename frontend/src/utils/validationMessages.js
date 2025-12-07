@@ -274,9 +274,9 @@ export function getCategoryColor(category) {
 export function getPriorityStyle(priority) {
   const styles = {
     critical: 'bg-red-100 text-red-800 border-red-300',
-    high: 'bg-orange-100 text-orange-800 border-orange-300',
+    high: 'bg-gold-100 text-gold-800 border-gold-300',
     medium: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    low: 'bg-blue-100 text-blue-800 border-blue-300'
+    low: 'bg-green-100 text-green-800 border-green-300'
   };
   return styles[priority] || styles.medium;
 }

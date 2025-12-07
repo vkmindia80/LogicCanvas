@@ -58,7 +58,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -73,7 +73,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
             placeholder="Search functions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
 
@@ -89,10 +89,10 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
                   <button
                     key={funcName}
                     onClick={() => onSelectFunction && onSelectFunction(funcName, info)}
-                    className="w-full text-left px-3 py-2 hover:bg-indigo-50 rounded-lg transition-colors group"
+                    className="w-full text-left px-3 py-2 hover:bg-green-50 rounded-lg transition-colors group"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-mono text-indigo-600 group-hover:text-indigo-700">{funcName}</span>
+                      <span className="text-sm font-mono text-green-600 group-hover:text-green-700">{funcName}</span>
                       <Code className="w-3 h-3 text-slate-400" />
                     </div>
                     <div className="text-xs text-slate-500 mt-0.5">{info.description}</div>
@@ -112,7 +112,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-indigo-500" />
+            <Sparkles className="w-6 h-6 text-green-500" />
             Transformation Functions Library
           </h2>
           <p className="text-sm text-slate-600 mt-1">
@@ -130,7 +130,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
             placeholder="Search functions by name or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="function-search"
           />
         </div>
@@ -139,7 +139,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white"
+            className="pl-10 pr-8 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none bg-white"
             data-testid="category-filter"
           >
             <option value="all">All Categories</option>
@@ -158,11 +158,11 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
 
           return (
             <div key={category} className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-3">
+              <div className="bg-gradient-to-r from-green-500 to-gold-500 px-6 py-3">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                   <BookOpen className="w-5 h-5" />
                   {category}
-                  <span className="ml-auto text-sm font-normal text-indigo-100">
+                  <span className="ml-auto text-sm font-normal text-green-100">
                     {categoryFunctions.length} functions
                   </span>
                 </h3>
@@ -174,12 +174,12 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-2">
-                          <code className="text-base font-semibold text-indigo-600 font-mono">
+                          <code className="text-base font-semibold text-green-600 font-mono">
                             {funcName}
                           </code>
                           <button
                             onClick={() => handleCopyFunction(funcName, info.params)}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-indigo-100 rounded"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-green-100 rounded"
                             title="Copy function signature"
                           >
                             {copiedFunction === funcName ? (
@@ -201,7 +201,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
                                 className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-mono ${
                                   param.endsWith('?')
                                     ? 'bg-slate-100 text-slate-600'
-                                    : 'bg-indigo-100 text-indigo-700'
+                                    : 'bg-green-100 text-green-700'
                                 }`}
                               >
                                 {param}
@@ -216,7 +216,7 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
                       {onSelectFunction && (
                         <button
                           onClick={() => onSelectFunction(funcName, info)}
-                          className="flex-shrink-0 px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-sm font-medium"
+                          className="flex-shrink-0 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
                           data-testid={`select-${funcName}`}
                         >
                           Use Function
@@ -241,12 +241,12 @@ const TransformationFunctionLibrary = ({ onSelectFunction, compact = false }) =>
       )}
 
       {/* Quick Reference */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <h4 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
           <Code className="w-4 h-4" />
           Quick Reference
         </h4>
-        <div className="text-sm text-blue-800 space-y-1">
+        <div className="text-sm text-green-800 space-y-1">
           <p>• Use optional parameters (marked with ?) when needed</p>
           <p>• Chain multiple transformations for complex operations</p>
           <p>• Test transformations with sample data before applying</p>

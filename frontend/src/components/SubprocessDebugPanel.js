@@ -130,7 +130,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
       case 'failed':
         return <AlertCircle className="w-4 h-4 text-red-600" />;
       case 'running':
-        return <Activity className="w-4 h-4 text-blue-600 animate-pulse" />;
+        return <Activity className="w-4 h-4 text-green-600 animate-pulse" />;
       case 'waiting':
         return <Clock className="w-4 h-4 text-yellow-600" />;
       default:
@@ -158,7 +158,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white p-6">
+        <div className="bg-gradient-to-r from-red-600 to-gold-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Bug className="w-8 h-8" />
@@ -182,7 +182,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
           {loading && !instance ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <Activity className="w-12 h-12 text-orange-600 animate-pulse mx-auto mb-3" />
+                <Activity className="w-12 h-12 text-gold-600 animate-pulse mx-auto mb-3" />
                 <p className="text-gray-600">Loading debug data...</p>
               </div>
             </div>
@@ -263,7 +263,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
                       )}
                       <h3 className="text-lg font-semibold text-gray-900">Performance Metrics</h3>
                     </div>
-                    <Activity className="w-5 h-5 text-blue-600" />
+                    <Activity className="w-5 h-5 text-green-600" />
                   </button>
                   
                   {expandedSections.has('performance') && (
@@ -271,7 +271,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                         <div className="bg-white p-3 rounded-lg border border-gray-200">
                           <div className="text-xs text-gray-600 mb-1">Total Execution Time</div>
-                          <div className="text-xl font-bold text-blue-600">
+                          <div className="text-xl font-bold text-green-600">
                             {formatDuration(metrics.totalExecutionTime)}
                           </div>
                         </div>
@@ -281,7 +281,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
                         </div>
                         <div className="bg-white p-3 rounded-lg border border-gray-200">
                           <div className="text-xs text-gray-600 mb-1">Avg Node Time</div>
-                          <div className="text-xl font-bold text-purple-600">
+                          <div className="text-xl font-bold text-gold-600">
                             {formatDuration(metrics.averageNodeTime)}
                           </div>
                         </div>
@@ -322,7 +322,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
                                   <div
                                     className={`h-full ${
                                       nodeMetric.status === 'completed' ? 'bg-green-500' :
-                                      nodeMetric.status === 'failed' ? 'bg-red-500' : 'bg-blue-500'
+                                      nodeMetric.status === 'failed' ? 'bg-red-500' : 'bg-green-500'
                                     }`}
                                     style={{
                                       width: `${Math.min(100, (nodeMetric.duration / metrics.slowestNode.duration) * 100)}%`
@@ -404,7 +404,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
           <div className="text-sm text-gray-600">
             {instance?.status === 'running' && (
               <span className="flex items-center space-x-2">
-                <Activity className="w-4 h-4 animate-pulse text-blue-600" />
+                <Activity className="w-4 h-4 animate-pulse text-green-600" />
                 <span>Auto-refreshing every 3 seconds</span>
               </span>
             )}
@@ -412,13 +412,13 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
           <div className="flex space-x-3">
             <button
               onClick={loadDebugData}
-              className="px-4 py-2 border border-orange-600 text-orange-600 rounded-lg hover:bg-orange-50 transition-colors text-sm font-medium"
+              className="px-4 py-2 border border-gold-600 text-gold-600 rounded-lg hover:bg-gold-50 transition-colors text-sm font-medium"
             >
               Refresh
             </button>
             <button
               onClick={onClose}
-              className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium"
+              className="px-6 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-colors text-sm font-medium"
             >
               Close
             </button>

@@ -379,7 +379,7 @@ const AppShell = () => {
               <CheckSquare className="h-5 w-5 flex-shrink-0" />
               {<span>Tasks</span>}
               {taskCount > 0 && (
-                <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-xs text-white">
                   {taskCount > 9 ? '9+' : taskCount}
                 </span>
               )}
@@ -401,7 +401,7 @@ const AppShell = () => {
               <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
               {<span>Approvals</span>}
               {approvalCount > 0 && (
-                <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
+                <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold-500 text-xs text-white">
                   {approvalCount > 9 ? '9+' : approvalCount}
                 </span>
               )}
@@ -422,7 +422,7 @@ const AppShell = () => {
             <Bell className="h-5 w-5 flex-shrink-0" />
             {<span>Notifications</span>}
             {notificationCount > 0 && (
-              <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
+              <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-xs text-white">
                 {notificationCount > 9 ? '9+' : notificationCount}
               </span>
             )}
@@ -695,7 +695,7 @@ const AppShell = () => {
                   <CheckSquare className="h-5 w-5 flex-shrink-0" />
                   <span>Tasks</span>
                   {taskCount > 0 && (
-                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-xs text-white">
                       {taskCount > 9 ? '9+' : taskCount}
                     </span>
                   )}
@@ -719,7 +719,7 @@ const AppShell = () => {
                   <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
                   <span>Approvals</span>
                   {approvalCount > 0 && (
-                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
+                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold-500 text-xs text-white">
                       {approvalCount > 9 ? '9+' : approvalCount}
                     </span>
                   )}
@@ -742,7 +742,7 @@ const AppShell = () => {
                 <Bell className="h-5 w-5 flex-shrink-0" />
                 <span>Notifications</span>
                 {notificationCount > 0 && (
-                  <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
+                  <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-xs text-white">
                     {notificationCount > 9 ? '9+' : notificationCount}
                   </span>
                 )}

@@ -102,15 +102,15 @@ const NodePaletteEnhanced = ({ onAddNode, lastNodeType, onShowAISuggestion }) =>
 
       {/* AI Suggestion */}
       {aiSuggestion && !searchTerm && (
-        <div className="mx-3 mt-3 p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+        <div className="mx-3 mt-3 p-3 bg-gradient-to-br from-gold-50 to-pink-50 border border-gold-200 rounded-lg">
           <div className="flex items-start space-x-2">
-            <Sparkles className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
+            <Sparkles className="w-4 h-4 text-gold-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-semibold text-purple-900 mb-1">AI Suggestion</div>
-              <div className="text-xs text-purple-700 mb-2">{aiSuggestion.suggestion}</div>
+              <div className="text-xs font-semibold text-gold-900 mb-1">AI Suggestion</div>
+              <div className="text-xs text-gold-700 mb-2">{aiSuggestion.suggestion}</div>
               <button
                 onClick={() => onAddNode(aiSuggestion.nodeType)}
-                className="text-xs bg-purple-600 text-white px-3 py-1 rounded-md hover:bg-purple-700 transition-colors font-medium"
+                className="text-xs bg-gold-600 text-white px-3 py-1 rounded-md hover:bg-gold-700 transition-colors font-medium"
                 data-testid="ai-suggestion-btn"
               >
                 Add {NODE_CONFIGS[aiSuggestion.nodeType].label}

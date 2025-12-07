@@ -360,13 +360,13 @@ const VisualAPIBuilder = ({ value, onChange }) => {
       </div>
 
       {/* Help Text */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
         <div className="flex items-start space-x-2">
-          <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-          <div className="text-xs text-blue-800">
+          <AlertCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+          <div className="text-xs text-green-800">
             <p className="font-medium mb-1">Dynamic Variables</p>
             <p>Use ${'{variableName}'} to reference workflow variables in URL, headers, query params, or body.</p>
-            <p className="mt-1">The API response will be stored in <code className="bg-blue-100 px-1 py-0.5 rounded">response</code> variable.</p>
+            <p className="mt-1">The API response will be stored in <code className="bg-green-100 px-1 py-0.5 rounded">response</code> variable.</p>
           </div>
         </div>
       </div>

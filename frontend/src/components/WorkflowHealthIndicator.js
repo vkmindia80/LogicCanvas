@@ -45,11 +45,11 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
       case 'excellent':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'good':
-        return <TrendingUp className="w-5 h-5 text-blue-500" />;
+        return <TrendingUp className="w-5 h-5 text-green-500" />;
       case 'fair':
         return <Info className="w-5 h-5 text-yellow-500" />;
       case 'poor':
-        return <AlertTriangle className="w-5 h-5 text-orange-500" />;
+        return <AlertTriangle className="w-5 h-5 text-gold-500" />;
       case 'critical':
         return <XCircle className="w-5 h-5 text-red-500" />;
       default:
@@ -62,11 +62,11 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
       case 'excellent':
         return 'bg-green-50 border-green-200 text-green-800';
       case 'good':
-        return 'bg-blue-50 border-blue-200 text-blue-800';
+        return 'bg-green-50 border-green-200 text-green-800';
       case 'fair':
         return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'poor':
-        return 'bg-orange-50 border-orange-200 text-orange-800';
+        return 'bg-gold-50 border-gold-200 text-gold-800';
       case 'critical':
         return 'bg-red-50 border-red-200 text-red-800';
       default:
@@ -76,9 +76,9 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
 
   const getScoreColor = (score) => {
     if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-blue-600';
+    if (score >= 70) return 'text-green-600';
     if (score >= 50) return 'text-yellow-600';
-    if (score >= 30) return 'text-orange-600';
+    if (score >= 30) return 'text-gold-600';
     return 'text-red-600';
   };
 
@@ -150,7 +150,7 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
                     <div key={index} className="flex items-start space-x-2 text-xs">
                       <AlertTriangle className={`w-3 h-3 mt-0.5 ${
                         rec.priority === 'high' ? 'text-red-500' : 
-                        rec.priority === 'medium' ? 'text-yellow-500' : 'text-blue-500'
+                        rec.priority === 'medium' ? 'text-yellow-500' : 'text-green-500'
                       }`} />
                       <span className="text-gray-700">{rec.message}</span>
                     </div>
@@ -174,7 +174,7 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
         </h3>
         <button
           onClick={loadHealth}
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+          className="text-sm text-green-600 hover:text-green-800 font-medium"
         >
           Refresh
         </button>
@@ -261,7 +261,7 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
                     ? 'bg-red-50 border-red-200'
                     : rec.priority === 'medium'
                     ? 'bg-yellow-50 border-yellow-200'
-                    : 'bg-blue-50 border-blue-200'
+                    : 'bg-green-50 border-green-200'
                 }`}
               >
                 <AlertTriangle
@@ -270,13 +270,13 @@ const WorkflowHealthIndicator = ({ workflowId, compact = false }) => {
                       ? 'text-red-500'
                       : rec.priority === 'medium'
                       ? 'text-yellow-500'
-                      : 'text-blue-500'
+                      : 'text-green-500'
                   }`}
                 />
                 <div className="flex-1">
                   <p className="text-sm text-gray-700">{rec.message}</p>
                   {rec.action && (
-                    <button className="text-xs text-blue-600 hover:text-blue-800 font-medium mt-1">
+                    <button className="text-xs text-green-600 hover:text-green-800 font-medium mt-1">
                       Take Action →
                     </button>
                   )}

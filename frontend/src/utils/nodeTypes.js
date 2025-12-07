@@ -80,16 +80,16 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.TASK]: {
     label: 'Task',
     category: 'User Interaction',
-    color: 'bg-blue-500',
-    borderColor: 'border-blue-600',
+    color: 'bg-green-500',
+    borderColor: 'border-green-600',
     icon: 'check-square',
     description: 'Assign a task to users'
   },
   [NODE_TYPES.FORM]: {
     label: 'Form',
     category: 'User Interaction',
-    color: 'bg-indigo-500',
-    borderColor: 'border-indigo-600',
+    color: 'bg-green-500',
+    borderColor: 'border-green-600',
     icon: 'file-text',
     description: 'Collect data via forms'
   },
@@ -134,8 +134,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.ASSIGNMENT]: {
     label: 'Assignment',
     category: 'Logic',
-    color: 'bg-orange-500',
-    borderColor: 'border-orange-600',
+    color: 'bg-gold-500',
+    borderColor: 'border-gold-600',
     icon: 'equal',
     description: 'Set variable values or transform data'
   },
@@ -144,8 +144,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.LOOP_FOR_EACH]: {
     label: 'For Each Loop',
     category: 'Logic',
-    color: 'bg-purple-500',
-    borderColor: 'border-purple-600',
+    color: 'bg-gold-500',
+    borderColor: 'border-gold-600',
     icon: 'repeat',
     description: 'Iterate over collection items'
   },
@@ -160,8 +160,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.LOOP_DO_WHILE]: {
     label: 'Do-While Loop',
     category: 'Logic',
-    color: 'bg-indigo-500',
-    borderColor: 'border-indigo-600',
+    color: 'bg-green-500',
+    borderColor: 'border-green-600',
     icon: 'rotate-cw',
     description: 'Execute once, then repeat while condition is true'
   },
@@ -194,8 +194,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.APPROVAL]: {
     label: 'Approval',
     category: 'User Interaction',
-    color: 'bg-purple-600',
-    borderColor: 'border-purple-700',
+    color: 'bg-gold-600',
+    borderColor: 'border-gold-700',
     icon: 'clipboard-check',
     description: 'Require approval from users'
   },
@@ -244,8 +244,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.GET_RECORD]: {
     label: 'Get Record',
     category: 'Data',
-    color: 'bg-blue-600',
-    borderColor: 'border-blue-700',
+    color: 'bg-green-600',
+    borderColor: 'border-green-700',
     icon: 'file-search',
     description: 'Retrieve single record by ID'
   },
@@ -296,8 +296,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.PARALLEL]: {
     label: 'Parallel Gateway',
     category: 'Flow Components',
-    color: 'bg-orange-500',
-    borderColor: 'border-orange-600',
+    color: 'bg-gold-500',
+    borderColor: 'border-gold-600',
     icon: 'split',
     description: 'Split into parallel paths',
     outputHandles: [

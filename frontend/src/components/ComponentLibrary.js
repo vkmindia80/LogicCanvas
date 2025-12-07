@@ -64,7 +64,7 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-7xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6">
+        <div className="bg-gradient-to-r from-violet-600 to-gold-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Package className="w-8 h-8" />
@@ -209,7 +209,7 @@ const ComponentCard = ({ component, onView, onUse }) => {
   return (
     <div className="border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white group">
       {/* Thumbnail or Icon */}
-      <div className="h-32 bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center">
+      <div className="h-32 bg-gradient-to-br from-violet-500 to-gold-500 flex items-center justify-center">
         <Layers className="w-16 h-16 text-white opacity-80" />
       </div>
 
@@ -271,7 +271,7 @@ const ComponentCard = ({ component, onView, onUse }) => {
 const ComponentListItem = ({ component, onView, onUse }) => {
   return (
     <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-200 bg-white flex items-center space-x-4">
-      <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-500 rounded-lg flex items-center justify-center">
+      <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-violet-500 to-gold-500 rounded-lg flex items-center justify-center">
         <Layers className="w-8 h-8 text-white" />
       </div>
 
@@ -317,7 +317,7 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col">
-        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-violet-600 to-gold-600 text-white p-6 flex items-center justify-between">
           <div>
             <h3 className="text-xl font-bold">{component.name}</h3>
             <p className="text-violet-100 text-sm">Version {component.version}</p>
@@ -369,7 +369,7 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
                   <div className="mt-1 space-y-1">
                     {component.input_variables?.length > 0 ? (
                       component.input_variables.map((v, idx) => (
-                        <span key={idx} className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mr-1">
+                        <span key={idx} className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-1">
                           {v}
                         </span>
                       ))

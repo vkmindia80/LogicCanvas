@@ -410,7 +410,7 @@ const ExpressionBuilderModal = ({ mapping, variables, onSave, onClose }) => {
                 <button
                   key={v.name}
                   onClick={() => insertVariable(v.name)}
-                  className="rounded-md bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100"
+                  className="rounded-md bg-green-50 px-3 py-1 text-xs font-medium text-green-700 hover:bg-green-100"
                 >
                   {v.name}
                 </button>

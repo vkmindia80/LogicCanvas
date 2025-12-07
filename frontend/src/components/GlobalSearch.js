@@ -221,7 +221,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                               ? 'bg-green-100 text-green-700'
                               : task.status === 'pending'
                               ? 'bg-yellow-100 text-yellow-700'
-                              : 'bg-blue-100 text-blue-700'
+                              : 'bg-green-100 text-green-700'
                           }`}>
                             {task.status}
                           </span>

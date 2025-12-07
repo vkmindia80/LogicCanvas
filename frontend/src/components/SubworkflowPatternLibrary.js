@@ -172,7 +172,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
   const complexityColors = {
     'simple': 'bg-green-100 text-green-800',
     'medium': 'bg-yellow-100 text-yellow-800',
-    'complex': 'bg-orange-100 text-orange-800'
+    'complex': 'bg-gold-100 text-gold-800'
   };
 
   if (!isOpen) return null;
@@ -181,7 +181,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-6">
+        <div className="bg-gradient-to-r from-cyan-600 to-green-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Layers className="w-8 h-8" />
@@ -244,7 +244,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                   data-testid={`pattern-${pattern.id}`}
                 >
                   {/* Pattern Header */}
-                  <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-4 text-white">
+                  <div className="bg-gradient-to-r from-cyan-500 to-green-500 p-4 text-white">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-white/20 rounded-lg">
@@ -313,7 +313,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
         {selectedPattern && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[80vh] overflow-hidden">
-              <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-6 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-cyan-600 to-green-600 text-white p-6 flex items-center justify-between">
                 <h3 className="text-xl font-bold">{selectedPattern.name}</h3>
                 <button
                   onClick={() => setSelectedPattern(null)}

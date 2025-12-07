@@ -55,13 +55,13 @@ const EditProtectionModal = ({
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-xl rounded-xl bg-white p-6 shadow-2xl">
         {/* Warning Header */}
-        <div className="mb-4 flex items-center space-x-3 rounded-lg bg-orange-50 p-4">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-orange-200">
-            <AlertTriangle className="h-6 w-6 text-orange-600" />
+        <div className="mb-4 flex items-center space-x-3 rounded-lg bg-gold-50 p-4">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gold-200">
+            <AlertTriangle className="h-6 w-6 text-gold-600" />
           </div>
           <div>
-            <h3 className="font-bold text-orange-900">Published Workflow - Edit Protection</h3>
-            <p className="text-sm text-orange-700">
+            <h3 className="font-bold text-gold-900">Published Workflow - Edit Protection</h3>
+            <p className="text-sm text-gold-700">
               This workflow is currently published and cannot be edited directly
             </p>
           </div>
@@ -87,7 +87,7 @@ const EditProtectionModal = ({
           </div>
           {activeInstances > 0 && (
             <div className="flex items-center space-x-3">
-              <Activity className="h-5 w-5 text-blue-500" />
+              <Activity className="h-5 w-5 text-green-500" />
               <div>
                 <div className="text-sm font-medium text-slate-700">Active Instances</div>
                 <div className="text-slate-900">
@@ -99,23 +99,23 @@ const EditProtectionModal = ({
         </div>
 
         {/* Explanation */}
-        <div className="mb-4 rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
-          <h4 className="mb-2 font-semibold text-blue-900">What will happen?</h4>
-          <ul className="space-y-2 text-sm text-blue-800">
+        <div className="mb-4 rounded-lg border-2 border-green-200 bg-green-50 p-4">
+          <h4 className="mb-2 font-semibold text-green-900">What will happen?</h4>
+          <ul className="space-y-2 text-sm text-green-800">
             <li className="flex items-start space-x-2">
-              <span className="mt-0.5 text-blue-600">✓</span>
+              <span className="mt-0.5 text-green-600">✓</span>
               <span>A new draft version will be created for you to edit</span>
             </li>
             <li className="flex items-start space-x-2">
-              <span className="mt-0.5 text-blue-600">✓</span>
+              <span className="mt-0.5 text-green-600">✓</span>
               <span>The current published version will remain active and unchanged</span>
             </li>
             <li className="flex items-start space-x-2">
-              <span className="mt-0.5 text-blue-600">✓</span>
+              <span className="mt-0.5 text-green-600">✓</span>
               <span>Active workflow instances will continue running on the current version</span>
             </li>
             <li className="flex items-start space-x-2">
-              <span className="mt-0.5 text-blue-600">✓</span>
+              <span className="mt-0.5 text-green-600">✓</span>
               <span>After editing, you can request review and publish the new version</span>
             </li>
           </ul>

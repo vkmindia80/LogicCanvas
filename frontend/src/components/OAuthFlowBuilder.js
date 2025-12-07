@@ -197,7 +197,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-3 font-medium capitalize transition-all ${
                 activeTab === tab
-                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  ? 'border-b-2 border-green-600 text-green-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -218,7 +218,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                 <select
                   value={config.provider}
                   onChange={(e) => handleProviderChange(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 >
                   {Object.entries(PROVIDERS).map(([key, provider]) => (
                     <option key={key} value={key}>{provider.name}</option>
@@ -235,7 +235,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                     type="text"
                     value={config.client_id}
                     onChange={(e) => setConfig({ ...config, client_id: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                     placeholder="Enter client ID"
                   />
                 </div>
@@ -247,7 +247,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                     type="password"
                     value={config.client_secret}
                     onChange={(e) => setConfig({ ...config, client_secret: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                     placeholder="Enter client secret"
                   />
                 </div>
@@ -261,7 +261,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   type="text"
                   value={config.redirect_uri}
                   onChange={(e) => setConfig({ ...config, redirect_uri: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                   placeholder="https://your-app.com/oauth/callback"
                 />
               </div>
@@ -274,7 +274,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   type="text"
                   value={config.authorization_url}
                   onChange={(e) => setConfig({ ...config, authorization_url: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 />
               </div>
 
@@ -286,7 +286,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   type="text"
                   value={config.token_url}
                   onChange={(e) => setConfig({ ...config, token_url: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 />
               </div>
 
@@ -297,7 +297,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   </label>
                   <button
                     onClick={addScope}
-                    className="text-xs text-blue-600 hover:text-blue-700"
+                    className="text-xs text-green-600 hover:text-green-700"
                   >
                     + Add Scope
                   </button>
@@ -313,7 +313,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                           newScopes[index] = e.target.value;
                           setConfig({ ...config, scopes: newScopes });
                         }}
-                        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                       />
                       <button
                         onClick={() => removeScope(index)}
@@ -329,7 +329,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
               <button
                 onClick={handleInitiateOAuth}
                 disabled={!config.client_id || !config.authorization_url}
-                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Key size={18} className="inline mr-2" />
                 Initiate OAuth Flow
@@ -342,12 +342,12 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
             <div className="space-y-4">
               {authUrl ? (
                 <>
-                  <div className="p-4 bg-blue-50 rounded-lg">
+                  <div className="p-4 bg-green-50 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Shield className="text-blue-600" size={20} />
-                      <h3 className="font-semibold text-blue-900">Authorization Ready</h3>
+                      <Shield className="text-green-600" size={20} />
+                      <h3 className="font-semibold text-green-900">Authorization Ready</h3>
                     </div>
-                    <p className="text-sm text-blue-800">
+                    <p className="text-sm text-green-800">
                       Click the button below to open the authorization window or copy the URL to authorize manually.
                     </p>
                   </div>
@@ -417,7 +417,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   </p>
                   <button
                     onClick={() => setActiveTab('configure')}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                   >
                     Go to Configure
                   </button>
@@ -442,7 +442,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   {tokens.map((token) => (
                     <div
                       key={token.id}
-                      className="border rounded-lg p-4 hover:border-blue-500 transition-colors"
+                      className="border rounded-lg p-4 hover:border-green-500 transition-colors"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -468,7 +468,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleRefreshToken(token.id)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                            className="p-2 text-green-600 hover:bg-green-50 rounded"
                             title="Refresh Token"
                           >
                             <RefreshCw size={16} />

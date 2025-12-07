@@ -230,10 +230,10 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
         </div>
 
         {/* Info Panel */}
-        <div className="p-4 border-t border-slate-200 bg-blue-50">
+        <div className="p-4 border-t border-slate-200 bg-green-50">
           <div className="flex items-start space-x-2">
-            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-blue-800">
+            <AlertCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-green-800">
               <p className="font-medium mb-1">Version Control Tips:</p>
               <ul className="space-y-1 text-xs">
                 <li>• Save versions before major changes</li>

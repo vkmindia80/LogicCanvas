@@ -245,7 +245,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
               </button>
               <button
                 onClick={() => setShowQuickStartWizard(true)}
-                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-amber-500/30"
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-amber-500 to-gold-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-amber-500/30"
                 data-testid="quick-start-wizard-btn"
               >
                 <Zap className="h-4 w-4" />
@@ -253,7 +253,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
               </button>
               <button
                 onClick={() => setShowTemplateLibrary(true)}
-                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-purple-500/30"
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-gold-500 to-pink-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-purple-500/30"
                 data-testid="template-library-btn"
               >
                 <BookOpen className="h-4 w-4" />
@@ -261,7 +261,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
               </button>
               <button
                 onClick={() => setShowAIWizard(true)}
-                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/30"
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-green-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/30"
                 data-testid="ai-wizard-btn"
               >
                 <Sparkles className="h-4 w-4" />
@@ -452,7 +452,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                   </button>
                   <button
                     onClick={() => setShowQuickStartWizard(true)}
-                    className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-3 text-white font-semibold shadow-lg shadow-amber-500/30 transition-all hover:shadow-xl hover:shadow-amber-500/40"
+                    className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-amber-500 to-gold-500 px-6 py-3 text-white font-semibold shadow-lg shadow-amber-500/30 transition-all hover:shadow-xl hover:shadow-amber-500/40"
                   >
                     <Zap className="h-5 w-5" />
                     <span>Quick Start Wizard</span>
@@ -544,7 +544,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                       <Tooltip content="Create a copy of this workflow" position="top">
                         <button
                           onClick={(e) => duplicateWorkflow(workflow.id, e)}
-                          className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-blue-600 transition-colors hover:bg-blue-50"
+                          className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-green-600 transition-colors hover:bg-green-50"
                         >
                           <Copy className="h-4 w-4" />
                           <span className="font-medium">Copy</span>
@@ -555,7 +555,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                     <Tooltip content="View and restore previous versions" position="top">
                       <button
                         onClick={(e) => openVersionHistory(workflow.id, e)}
-                        className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-purple-600 transition-colors hover:bg-purple-50"
+                        className="flex flex-1 items-center justify-center space-x-1 rounded px-2 py-2 text-gold-600 transition-colors hover:bg-gold-50"
                       >
                         <Clock className="h-4 w-4" />
                         <span className="font-medium">Versions</span>

@@ -124,10 +124,10 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
 
   const getTypeColor = (type) => {
     const colors = {
-      string: 'bg-blue-100 text-blue-700',
+      string: 'bg-green-100 text-green-700',
       number: 'bg-green-100 text-green-700',
-      boolean: 'bg-purple-100 text-purple-700',
-      object: 'bg-orange-100 text-orange-700',
+      boolean: 'bg-gold-100 text-gold-700',
+      object: 'bg-gold-100 text-gold-700',
       array: 'bg-pink-100 text-pink-700',
       date: 'bg-cyan-100 text-cyan-700'
     };
@@ -144,7 +144,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-gradient-to-r from-primary-500 to-blue-500">
+      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-gradient-to-r from-primary-500 to-green-500">
         <div>
           <h3 className="text-lg font-bold text-white flex items-center">
             Variables

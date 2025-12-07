@@ -77,10 +77,10 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
       return 'border-l-red-500 bg-red-50';
     }
     const colors = {
-      mention: 'border-l-blue-500 bg-blue-50',
-      escalation: 'border-l-orange-500 bg-orange-50',
+      mention: 'border-l-blue-500 bg-green-50',
+      escalation: 'border-l-orange-500 bg-gold-50',
       sla_breach: 'border-l-red-500 bg-red-50',
-      approval_required: 'border-l-purple-500 bg-purple-50',
+      approval_required: 'border-l-purple-500 bg-gold-50',
       task_assigned: 'border-l-green-500 bg-green-50',
       default: 'border-l-gray-500 bg-gray-50'
     };
@@ -92,7 +92,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="notifications-panel">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-6 py-4 shadow-lg">
+      <div className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             {/* Hamburger Menu for Mobile */}
@@ -107,7 +107,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
             <Bell className="w-8 h-8" />
             <div>
               <h1 className="text-2xl font-bold">Notifications</h1>
-              <p className="text-indigo-100 text-sm">
+              <p className="text-green-100 text-sm">
                 {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}
               </p>
             </div>
@@ -149,7 +149,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
             data-testid="notification-filter-select"
           >
             <option value="all">All Notifications</option>
@@ -163,7 +163,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
       <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
           </div>
         ) : notifications.length === 0 ? (
           <div className="text-center py-12">
@@ -180,17 +180,17 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                   key={notification.id}
                   className={`bg-white rounded-lg border-l-4 shadow-sm p-4 transition-all hover:shadow-md ${
                     getNotificationColor(notification.type, notification.priority)
-                  } ${!notification.read ? 'ring-1 ring-indigo-200' : ''}`}
+                  } ${!notification.read ? 'ring-1 ring-green-200' : ''}`}
                   data-testid={`notification-item-${notification.id}`}
                 >
                   <div className="flex items-start space-x-4">
                     <div className={`p-2 rounded-lg ${
                       notification.priority === 'urgent' ? 'bg-red-100' :
-                      notification.priority === 'high' ? 'bg-orange-100' : 'bg-gray-100'
+                      notification.priority === 'high' ? 'bg-gold-100' : 'bg-gray-100'
                     }`}>
                       <Icon className={`w-5 h-5 ${
                         notification.priority === 'urgent' ? 'text-red-600' :
-                        notification.priority === 'high' ? 'text-orange-600' : 'text-gray-600'
+                        notification.priority === 'high' ? 'text-gold-600' : 'text-gray-600'
                       }`} />
                     </div>
                     <div className="flex-1">
@@ -202,7 +202,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                         {!notification.read && (
                           <button
                             onClick={() => markAsRead(notification.id)}
-                            className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-indigo-600"
+                            className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-green-600"
                             title="Mark as read"
                             data-testid={`mark-read-${notification.id}`}
                           >
@@ -215,7 +215,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                         {notification.priority && (
                           <span className={`px-2 py-0.5 rounded-full ${
                             notification.priority === 'urgent' ? 'bg-red-100 text-red-700' :
-                            notification.priority === 'high' ? 'bg-orange-100 text-orange-700' :
+                            notification.priority === 'high' ? 'bg-gold-100 text-gold-700' :
                             'bg-gray-100 text-gray-600'
                           }`}>
                             {notification.priority}

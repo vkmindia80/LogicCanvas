@@ -44,9 +44,9 @@ const LIFECYCLE_STATES = {
   paused: {
     label: 'Paused',
     color: 'orange',
-    bgColor: 'bg-orange-100',
-    textColor: 'text-orange-700',
-    borderColor: 'border-orange-300',
+    bgColor: 'bg-gold-100',
+    textColor: 'text-gold-700',
+    borderColor: 'border-gold-300',
     icon: Pause
   },
   archived: {
@@ -274,18 +274,18 @@ const LifecyclePanel = ({ workflowId, currentState = 'draft', onClose, onStateCh
                         onClick={() => initiateAction(action.action, action.endpoint, action.requiresComment)}
                         disabled={actionLoading}
                         className={`flex items-center space-x-3 rounded-lg border-2 p-4 text-left transition-all hover:shadow-md disabled:opacity-50 ${
-                          action.color === 'blue' ? 'border-blue-200 bg-blue-50 hover:bg-blue-100' :
+                          action.color === 'blue' ? 'border-green-200 bg-green-50 hover:bg-green-100' :
                           action.color === 'green' ? 'border-green-200 bg-green-50 hover:bg-green-100' :
                           action.color === 'red' ? 'border-red-200 bg-red-50 hover:bg-red-100' :
-                          action.color === 'orange' ? 'border-orange-200 bg-orange-50 hover:bg-orange-100' :
+                          action.color === 'orange' ? 'border-gold-200 bg-gold-50 hover:bg-gold-100' :
                           'border-slate-200 bg-slate-50 hover:bg-slate-100'
                         }`}
                       >
                         <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg ${
-                          action.color === 'blue' ? 'bg-blue-200' :
+                          action.color === 'blue' ? 'bg-green-200' :
                           action.color === 'green' ? 'bg-green-200' :
                           action.color === 'red' ? 'bg-red-200' :
-                          action.color === 'orange' ? 'bg-orange-200' :
+                          action.color === 'orange' ? 'bg-gold-200' :
                           'bg-slate-200'
                         }`}>
                           <ActionIcon className="h-5 w-5 text-slate-700" />

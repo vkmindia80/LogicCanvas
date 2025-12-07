@@ -147,7 +147,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
         <div className="flex items-center justify-between p-6 border-b">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Shield className="text-blue-600" size={28} />
+              <Shield className="text-green-600" size={28} />
               Rate Limiting & Circuit Breaker
             </h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -175,7 +175,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                 <select
                   value={selectedConnector || ''}
                   onChange={(e) => setSelectedConnector(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">Choose a connector...</option>
                   {connectors.map((connector) => (
@@ -190,9 +190,9 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                 <>
                   {/* Current Status */}
                   {status && (
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200">
+                    <div className="bg-gradient-to-br from-green-50 to-green-50 rounded-xl p-4 border border-green-200">
                       <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                        <Activity size={18} className="text-blue-600" />
+                        <Activity size={18} className="text-green-600" />
                         Current Usage
                       </h3>
                       <div className="space-y-3">
@@ -251,7 +251,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                           type="checkbox"
                           checked={rateLimitConfig.enabled}
                           onChange={(e) => setRateLimitConfig({ ...rateLimitConfig, enabled: e.target.checked })}
-                          className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                          className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
                         />
                         <label className="ml-2 text-sm font-medium text-gray-700">
                           Enable Rate Limiting
@@ -267,7 +267,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                             type="number"
                             value={rateLimitConfig.max_requests}
                             onChange={(e) => setRateLimitConfig({ ...rateLimitConfig, max_requests: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                             min="1"
                           />
                         </div>
@@ -279,7 +279,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                             type="number"
                             value={rateLimitConfig.time_window_seconds}
                             onChange={(e) => setRateLimitConfig({ ...rateLimitConfig, time_window_seconds: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                             min="1"
                           />
                         </div>
@@ -294,7 +294,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                             type="number"
                             value={rateLimitConfig.burst_size}
                             onChange={(e) => setRateLimitConfig({ ...rateLimitConfig, burst_size: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                             min="1"
                           />
                         </div>
@@ -306,7 +306,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                             type="number"
                             value={rateLimitConfig.retry_after_seconds}
                             onChange={(e) => setRateLimitConfig({ ...rateLimitConfig, retry_after_seconds: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                             min="1"
                           />
                         </div>
@@ -323,8 +323,8 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                               onClick={() => setRateLimitConfig({ ...rateLimitConfig, strategy: strategy.value })}
                               className={`p-3 border rounded-lg cursor-pointer transition-all ${
                                 rateLimitConfig.strategy === strategy.value
-                                  ? 'border-blue-500 bg-blue-50'
-                                  : 'border-gray-200 hover:border-blue-300'
+                                  ? 'border-green-500 bg-green-50'
+                                  : 'border-gray-200 hover:border-green-300'
                               }`}
                             >
                               <div className="flex items-center justify-between">
@@ -337,7 +337,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                                   </div>
                                 </div>
                                 {rateLimitConfig.strategy === strategy.value && (
-                                  <CheckCircle size={18} className="text-blue-600" />
+                                  <CheckCircle size={18} className="text-green-600" />
                                 )}
                               </div>
                             </div>
@@ -348,7 +348,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                       <button
                         onClick={handleSaveRateLimit}
                         disabled={loading}
-                        className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                        className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                       >
                         <Save size={18} />
                         {loading ? 'Saving...' : 'Save Configuration'}
@@ -363,7 +363,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
             <div className="col-span-1">
               <div className="bg-white rounded-xl border p-4 sticky top-0">
                 <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <Zap size={18} className="text-orange-600" />
+                  <Zap size={18} className="text-gold-600" />
                   Circuit Breakers
                 </h3>
                 <div className="space-y-2 max-h-[600px] overflow-auto">
@@ -379,7 +379,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                       return (
                         <div
                           key={cb.connector_id}
-                          className="border rounded-lg p-3 hover:border-blue-300 transition-colors"
+                          className="border rounded-lg p-3 hover:border-green-300 transition-colors"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
@@ -405,7 +405,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
                           {cb.state === 'open' && (
                             <button
                               onClick={() => handleResetCircuitBreaker(cb.connector_id)}
-                              className="w-full mt-2 px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors flex items-center justify-center gap-1"
+                              className="w-full mt-2 px-2 py-1 text-xs bg-gold-100 text-gold-700 rounded hover:bg-gold-200 transition-colors flex items-center justify-center gap-1"
                             >
                               <RotateCcw size={12} />
                               Reset
@@ -424,7 +424,7 @@ const RateLimitingManager = ({ onClose, connectorId = null }) => {
         {/* Footer */}
         <div className="p-4 border-t bg-gray-50">
           <div className="flex items-start gap-2 text-sm">
-            <Info size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
+            <Info size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
             <div className="text-gray-600">
               <p>
                 <strong>Rate Limiting</strong> prevents API abuse by limiting requests per time window.

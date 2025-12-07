@@ -155,7 +155,7 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
       case 'failed':
         return <XCircle className="w-4 h-4 text-red-500" />;
       case 'running':
-        return <Activity className="w-4 h-4 text-blue-500 animate-pulse" />;
+        return <Activity className="w-4 h-4 text-green-500 animate-pulse" />;
       default:
         return <Info className="w-4 h-4 text-gray-400" />;
     }
@@ -166,10 +166,10 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
   return (
     <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl border-l border-gray-200 flex flex-col z-40">
       {/* Header */}
-      <div className="px-4 py-3 bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-gray-200">
+      <div className="px-4 py-3 bg-gradient-to-r from-gold-50 to-green-50 border-b border-gray-200">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Bug className="w-5 h-5 text-purple-600" />
+            <Bug className="w-5 h-5 text-gold-600" />
             <h3 className="font-semibold text-gray-900">Debug Console</h3>
           </div>
           <button
@@ -185,7 +185,7 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
           <button
             onClick={stepExecution}
             disabled={isStepping}
-            className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 disabled:opacity-50"
+            className="flex items-center gap-1 px-3 py-1.5 bg-green-500 text-white rounded text-sm hover:bg-green-600 disabled:opacity-50"
             title="Step Over (Execute next node)"
           >
             <StepForward className="w-4 h-4" />
@@ -225,7 +225,7 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
             onClick={() => setSelectedTab(tab.id)}
             className={`flex-1 px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
               selectedTab === tab.id
-                ? 'border-purple-500 text-purple-600 bg-white'
+                ? 'border-gold-500 text-gold-600 bg-white'
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -249,7 +249,7 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
                   const nodeId = prompt('Enter node ID to add breakpoint:');
                   if (nodeId) addBreakpoint(nodeId);
                 }}
-                className="text-xs text-blue-600 hover:text-blue-700"
+                className="text-xs text-green-600 hover:text-green-700"
               >
                 + Add
               </button>
@@ -327,12 +327,12 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
         {/* Performance Tab */}
         {selectedTab === 'performance' && performanceData && (
           <div className="space-y-4">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+            <div className="bg-gradient-to-r from-green-50 to-green-50 rounded-lg p-4 border border-green-200">
               <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-5 h-5 text-blue-600" />
+                <Clock className="w-5 h-5 text-green-600" />
                 <h4 className="font-semibold text-gray-900">Total Execution Time</h4>
               </div>
-              <p className="text-3xl font-bold text-blue-600">
+              <p className="text-3xl font-bold text-green-600">
                 {performanceData.total_execution_time?.toFixed(2)}s
               </p>
               <p className="text-sm text-gray-600 mt-1">
@@ -394,7 +394,7 @@ const DebugControlPanel = ({ instanceId, isOpen, onClose }) => {
                       ? 'bg-green-500 border-green-600'
                       : entry.status === 'failed'
                       ? 'bg-red-500 border-red-600'
-                      : 'bg-blue-500 border-blue-600'
+                      : 'bg-green-500 border-green-600'
                   }`}></div>
 
                   <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">

@@ -136,11 +136,11 @@ export const ContextualTooltip = ({ content, type = 'info', children, placement 
   };
 
   const colors = {
-    info: 'bg-blue-500',
-    help: 'bg-indigo-500',
+    info: 'bg-green-500',
+    help: 'bg-green-500',
     tip: 'bg-amber-500',
     success: 'bg-green-500',
-    warning: 'bg-orange-500'
+    warning: 'bg-gold-500'
   };
 
   const Icon = icons[type] || HelpCircle;
@@ -204,24 +204,24 @@ export const InlineHelp = ({ topic, compact = false }) => {
   }
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
       <div className="flex items-start space-x-3">
         <div className="flex-shrink-0">
-          <div className="bg-blue-500 rounded-full p-1.5">
+          <div className="bg-green-500 rounded-full p-1.5">
             <HelpCircle className="w-4 h-4 text-white" />
           </div>
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <h4 className="text-sm font-semibold text-blue-900">{helpData.title}</h4>
+            <h4 className="text-sm font-semibold text-green-900">{helpData.title}</h4>
             <button
               onClick={() => setExpanded(!expanded)}
-              className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+              className="text-green-600 hover:text-green-800 text-xs font-medium"
             >
               {expanded ? 'Less' : 'More'} →
             </button>
           </div>
-          <p className="text-xs text-blue-800 mb-2">{helpData.description}</p>
+          <p className="text-xs text-green-800 mb-2">{helpData.description}</p>
           
           {expanded && (
             <div className="space-y-3 mt-3">
@@ -251,7 +251,7 @@ export const InlineHelp = ({ topic, compact = false }) => {
                     {helpData.examples.map((example, idx) => (
                       <span
                         key={idx}
-                        className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded"
+                        className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded"
                       >
                         {example}
                       </span>
@@ -298,7 +298,7 @@ export const HelpPanel = ({ isOpen, onClose }) => {
                     onClick={() => setSelectedTopic(topic)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                       selectedTopic === topic
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-green-500 text-white'
                         : 'text-slate-700 hover:bg-slate-100'
                     }`}
                   >
@@ -327,8 +327,8 @@ export const HelpPanel = ({ isOpen, onClose }) => {
 
           <div className="flex-1 overflow-y-auto p-6">
             <div className="prose prose-sm max-w-none">
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
-                <p className="text-sm text-blue-900">{helpData?.description}</p>
+              <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                <p className="text-sm text-green-900">{helpData?.description}</p>
               </div>
 
               {helpData?.tips && helpData.tips.length > 0 && (
@@ -351,7 +351,7 @@ export const HelpPanel = ({ isOpen, onClose }) => {
               {helpData?.examples && helpData.examples.length > 0 && (
                 <div>
                   <div className="flex items-center space-x-2 mb-3">
-                    <Info className="w-5 h-5 text-blue-500" />
+                    <Info className="w-5 h-5 text-green-500" />
                     <h3 className="text-lg font-bold text-slate-900">Common Examples</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-3">

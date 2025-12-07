@@ -109,10 +109,10 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
 
   const getTypeColor = (type) => {
     const colors = {
-      string: 'bg-blue-100 text-blue-700 border-blue-200',
+      string: 'bg-green-100 text-green-700 border-green-200',
       number: 'bg-green-100 text-green-700 border-green-200',
-      boolean: 'bg-purple-100 text-purple-700 border-purple-200',
-      object: 'bg-orange-100 text-orange-700 border-orange-200',
+      boolean: 'bg-gold-100 text-gold-700 border-gold-200',
+      object: 'bg-gold-100 text-gold-700 border-gold-200',
       array: 'bg-pink-100 text-pink-700 border-pink-200',
       date: 'bg-cyan-100 text-cyan-700 border-cyan-200'
     };
@@ -139,7 +139,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
   return (
     <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-slate-200 flex flex-col z-50 animate-slide-in">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-500">
+      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-gradient-to-r from-green-500 to-gold-500">
         <div>
           <h3 className="text-lg font-bold text-white flex items-center space-x-2">
             <Eye className="w-5 h-5" />
@@ -179,7 +179,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search variables..."
-            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="search-variables"
           />
         </div>
@@ -189,7 +189,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
           <select
             value={filterScope}
             onChange={(e) => setFilterScope(e.target.value)}
-            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="filter-scope"
           >
             <option value="all">All Scopes</option>
@@ -201,7 +201,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="filter-type"
           >
             <option value="all">All Types</option>
@@ -246,7 +246,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
                 key={`${variable.name}-${index}`}
                 className={`border rounded-lg p-3 transition-all ${
                   variable.isActive 
-                    ? 'border-indigo-400 bg-indigo-50 shadow-md animate-pulse-subtle' 
+                    ? 'border-green-400 bg-green-50 shadow-md animate-pulse-subtle' 
                     : 'border-slate-200 bg-white hover:shadow-md'
                 }`}
                 data-testid="variable-item"
@@ -255,7 +255,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       {variable.isActive && (
-                        <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" title="Active in current node" />
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Active in current node" />
                       )}
                       <span className="font-mono text-sm font-semibold text-slate-800">
                         {variable.name}

@@ -26,7 +26,7 @@ const LoadingSpinner = ({
     primary: 'border-primary-500 border-t-transparent',
     white: 'border-white border-t-transparent',
     slate: 'border-slate-500 border-t-transparent',
-    blue: 'border-blue-500 border-t-transparent',
+    blue: 'border-green-500 border-t-transparent',
     green: 'border-green-500 border-t-transparent'
   };
 

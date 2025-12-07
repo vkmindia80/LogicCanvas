@@ -56,7 +56,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             placeholder={fieldMeta.placeholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           />
         );
       case 'textarea':
@@ -66,7 +66,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
             onChange={(e) => handleFieldChange(field, e.target.value)}
             placeholder={fieldMeta.placeholder}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent resize-none"
           />
         );
       case 'number':
@@ -78,7 +78,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
             placeholder={fieldMeta.placeholder}
             min={fieldMeta.min}
             max={fieldMeta.max}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           />
         );
       case 'select':
@@ -86,7 +86,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
           <select
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           >
             <option value="">Select...</option>
             {fieldMeta.options?.map(opt => (
@@ -101,7 +101,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
               type="checkbox"
               checked={value || false}
               onChange={(e) => handleFieldChange(field, e.target.checked)}
-              className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+              className="w-4 h-4 text-gold-600 border-gray-300 rounded focus:ring-gold-500"
             />
             <span className="text-sm text-gray-700">{fieldMeta.label}</span>
           </label>
@@ -138,7 +138,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       {/* Header with AI Assist */}
-      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 border-b border-gray-200">
+      <div className="bg-gradient-to-r from-gold-50 to-green-50 p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-gray-900">Configure {nodeType}</h3>
@@ -149,8 +149,8 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
               onClick={() => setShowAIAssist(!showAIAssist)}
               className="p-2 hover:bg-white hover:bg-opacity-50 rounded-lg transition flex items-center gap-2 text-sm"
             >
-              <Sparkles className="w-4 h-4 text-purple-600" />
-              <span className="text-purple-700 font-medium">AI Assist</span>
+              <Sparkles className="w-4 h-4 text-gold-600" />
+              <span className="text-gold-700 font-medium">AI Assist</span>
             </button>
           </Tooltip>
         </div>
@@ -158,17 +158,17 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
 
       {/* AI Assistant Panel */}
       {showAIAssist && (
-        <div className="bg-blue-50 border-b border-blue-200 p-4">
+        <div className="bg-green-50 border-b border-green-200 p-4">
           <div className="flex items-start gap-3">
-            <Sparkles className="w-5 h-5 text-blue-600 mt-0.5" />
+            <Sparkles className="w-5 h-5 text-green-600 mt-0.5" />
             <div className="flex-1">
-              <p className="font-medium text-blue-900 text-sm">AI Configuration Suggestions</p>
-              <ul className="mt-2 space-y-1 text-sm text-blue-700">
+              <p className="font-medium text-green-900 text-sm">AI Configuration Suggestions</p>
+              <ul className="mt-2 space-y-1 text-sm text-green-700">
                 <li>• Recommended timeout: 30 seconds for API calls</li>
                 <li>• Enable retries (3 attempts) for reliability</li>
                 <li>• Add error notifications for critical steps</li>
               </ul>
-              <button className="mt-3 text-xs text-blue-600 hover:text-blue-700 font-medium">
+              <button className="mt-3 text-xs text-green-600 hover:text-green-700 font-medium">
                 Apply all suggestions →
               </button>
             </div>
@@ -231,7 +231,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
       {/* Info Box */}
       <div className="bg-gray-50 p-4 border-t border-gray-200">
         <div className="flex items-start gap-2">
-          <Info className="w-4 h-4 text-blue-500 mt-0.5" />
+          <Info className="w-4 h-4 text-green-500 mt-0.5" />
           <p className="text-xs text-gray-600">
             <strong>Tip:</strong> Only configure what you need. Default values work for most cases.
             Use advanced settings when you need fine-grained control.

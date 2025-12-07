@@ -147,7 +147,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+      <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-green-600 to-gold-600 text-white">
         <div className="flex items-center gap-3">
           {/* Hamburger Menu for Mobile */}
           <button 
@@ -163,7 +163,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
           </div>
           <div>
             <h2 className="text-2xl font-bold">Transformation Playground</h2>
-            <p className="text-sm text-indigo-100">Test and build data transformations interactively</p>
+            <p className="text-sm text-green-100">Test and build data transformations interactively</p>
           </div>
         </div>
         <button
@@ -182,7 +182,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
             onClick={() => setActiveTab('builder')}
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'builder'
-                ? 'text-indigo-600 border-indigo-600'
+                ? 'text-green-600 border-green-600'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
             }`}
             data-testid="tab-builder"
@@ -193,7 +193,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
             onClick={() => setActiveTab('library')}
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'library'
-                ? 'text-indigo-600 border-indigo-600'
+                ? 'text-green-600 border-green-600'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
             }`}
             data-testid="tab-library"
@@ -204,7 +204,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
             onClick={() => setActiveTab('examples')}
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'examples'
-                ? 'text-indigo-600 border-indigo-600'
+                ? 'text-green-600 border-green-600'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
             }`}
             data-testid="tab-examples"
@@ -224,7 +224,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                   <button
                     onClick={runTransformations}
                     disabled={loading || transformations.length === 0}
-                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                     data-testid="run-transformations-btn"
                   >
                     {loading ? (
@@ -274,7 +274,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                     value={inputData}
                     onChange={(e) => setInputData(e.target.value)}
                     rows={8}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
                     placeholder="Enter JSON or plain text..."
                     data-testid="input-data"
                   />
@@ -336,7 +336,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                               <div key={idx} className="bg-white border border-slate-200 rounded-lg p-3">
                                 <div className="flex items-center justify-between mb-2">
                                   <span className="text-sm font-medium text-slate-700">
-                                    Step {step.step}: <code className="text-indigo-600">{step.function}</code>
+                                    Step {step.step}: <code className="text-green-600">{step.function}</code>
                                   </span>
                                   {step.execution_time_ms && (
                                     <span className="text-xs text-slate-500">
@@ -380,9 +380,9 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
 
           {activeTab === 'examples' && (
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-blue-900 mb-1">Example Transformations</h3>
-                <p className="text-sm text-blue-700">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h3 className="font-semibold text-green-900 mb-1">Example Transformations</h3>
+                <p className="text-sm text-green-700">
                   Click on any example to load it into the playground
                 </p>
               </div>
@@ -392,16 +392,16 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                   <div
                     key={idx}
                     onClick={() => loadExample(example)}
-                    className="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-lg hover:border-indigo-300 transition-all cursor-pointer group"
+                    className="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-lg hover:border-green-300 transition-all cursor-pointer group"
                     data-testid={`example-${idx}`}
                   >
-                    <h4 className="font-semibold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors">
+                    <h4 className="font-semibold text-slate-800 mb-1 group-hover:text-green-600 transition-colors">
                       {example.name}
                     </h4>
                     <p className="text-sm text-slate-600 mb-3">{example.description}</p>
                     <div className="flex items-center justify-between text-xs text-slate-500">
                       <span>{example.transformations.length} steps</span>
-                      <span className="text-indigo-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-green-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                         Load Example →
                       </span>
                     </div>

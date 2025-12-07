@@ -865,7 +865,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 data-testid="workflow-name-input"
               />
               <div className="flex items-center space-x-3 text-sm">
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">
                   {nodes.length} nodes
                 </span>
                 <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full font-medium">
@@ -986,7 +986,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               {showTemplates && (
                 <button
                   onClick={showTemplates}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-gold-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
                   data-testid="show-templates-btn"
                   title="Browse templates"
                 >
@@ -997,7 +997,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               {showWizard && (
                 <button
                   onClick={showWizard}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all font-medium"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all font-medium"
                   data-testid="show-wizard-btn"
                   title="AI Builder"
                 >
@@ -1026,7 +1026,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                     alert('Please start a workflow instance to manage variables');
                   }
                 }}
-                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all font-medium disabled:opacity-50"
+                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-green-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all font-medium disabled:opacity-50"
                 data-testid="variables-btn"
                 title="Manage workflow variables (requires active instance)"
               >
@@ -1054,7 +1054,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               </button>
               <button
                 onClick={handleAutoLayout}
-                className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-indigo-500/30 transition-all font-medium"
+                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-indigo-500/30 transition-all font-medium"
                 data-testid="auto-layout-btn"
                 title="Auto-layout nodes"
               >
@@ -1063,7 +1063,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               </button>
               <button
                 onClick={() => handleSave(false)}
-                className="flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-medium"
+                className="flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-green-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-medium"
                 data-testid="workflow-save-btn"
               >
                 <Save className="w-4 h-4" />
@@ -1079,7 +1079,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                   setShowExecutionPanel(!showExecutionPanel);
                   setShowTriggerConfig(false);
                 }}
-                className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
+                className="flex items-center space-x-2 bg-gradient-to-r from-gold-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
                 data-testid="workflow-run-btn"
               >
                 <Play className="w-4 h-4" />
@@ -1293,7 +1293,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                                 onClick={() => {
                                   handleQuickFix(issue.quickFix);
                                 }}
-                                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors"
                                 data-testid="validation-quick-fix-btn"
                               >
                                 {issue.quickFix.label}

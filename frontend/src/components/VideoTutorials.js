@@ -185,13 +185,13 @@ const VideoTutorials = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-7xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+        <div className="bg-gradient-to-r from-gold-600 to-pink-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Video className="w-8 h-8" />
               <div>
                 <h2 className="text-2xl font-bold">Video Tutorials</h2>
-                <p className="text-purple-100 text-sm">Master LogicCanvas with step-by-step guides</p>
+                <p className="text-gold-100 text-sm">Master LogicCanvas with step-by-step guides</p>
               </div>
             </div>
             <button
@@ -205,11 +205,11 @@ const VideoTutorials = ({ isOpen, onClose }) => {
 
           {/* Progress Bar */}
           <div className="mt-4 space-y-1">
-            <div className="flex justify-between text-xs text-purple-100">
+            <div className="flex justify-between text-xs text-gold-100">
               <span>Your Progress</span>
               <span>{watchedCount} of {totalVideos} videos watched ({Math.round(progress)}%)</span>
             </div>
-            <div className="h-2 bg-purple-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-gold-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-white transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -235,7 +235,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                       selectedCategory === category.id
-                        ? 'bg-purple-100 text-purple-900 font-medium'
+                        ? 'bg-gold-100 text-gold-900 font-medium'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                     data-testid={`category-${category.id}`}
@@ -268,7 +268,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Remaining:</span>
-                  <span className="font-medium text-purple-600">{totalVideos - watchedCount}</span>
+                  <span className="font-medium text-gold-600">{totalVideos - watchedCount}</span>
                 </div>
               </div>
             </div>
@@ -309,7 +309,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                             setSelectedVideo(video);
                             markAsWatched(video.id);
                           }}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity bg-white text-purple-600 rounded-full p-4 hover:scale-110 transform"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity bg-white text-gold-600 rounded-full p-4 hover:scale-110 transform"
                           data-testid={`play-${video.id}`}
                         >
                           <Play className="w-8 h-8 fill-current" />
@@ -352,7 +352,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                           setSelectedVideo(video);
                           markAsWatched(video.id);
                         }}
-                        className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center space-x-2 text-sm font-medium"
+                        className="w-full bg-gold-600 text-white py-2 rounded-lg hover:bg-gold-700 transition-colors flex items-center justify-center space-x-2 text-sm font-medium"
                       >
                         <Play className="w-4 h-4" />
                         <span>{isWatched ? 'Watch Again' : 'Watch Now'}</span>
@@ -369,7 +369,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
         {selectedVideo && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-5xl w-full overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-gold-600 to-pink-600 text-white p-4 flex items-center justify-between">
                 <h3 className="text-lg font-bold">{selectedVideo.title}</h3>
                 <button
                   onClick={() => setSelectedVideo(null)}
@@ -411,7 +411,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                   <h4 className="text-sm font-semibold text-gray-900 mb-2">Topics Covered:</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedVideo.topics.map((topic, idx) => (
-                      <span key={idx} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
+                      <span key={idx} className="bg-gold-100 text-gold-800 px-3 py-1 rounded-full text-sm">
                         {topic}
                       </span>
                     ))}

@@ -16,7 +16,7 @@ const iconMap = {
 const complexityColors = {
   'low': 'bg-green-100 text-green-800',
   'medium': 'bg-yellow-100 text-yellow-800',
-  'high': 'bg-orange-100 text-orange-800'
+  'high': 'bg-gold-100 text-gold-800'
 };
 
 const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
@@ -109,7 +109,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                 placeholder="Search templates..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 data-testid="template-search"
               />
             </div>
@@ -120,7 +120,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 data-testid="category-filter"
               >
                 <option value="all">All Categories</option>
@@ -138,7 +138,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
         <div className="flex-1 overflow-y-auto p-6">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
             </div>
           ) : filteredTemplates.length === 0 ? (
             <div className="text-center py-12">
@@ -157,7 +157,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                     data-testid={`template-${template.id}`}
                   >
                     {/* Template Header */}
-                    <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-4 text-white">
+                    <div className="bg-gradient-to-r from-green-500 to-gold-500 p-4 text-white">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="p-2 bg-white/20 rounded-lg">
@@ -165,7 +165,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                           </div>
                           <div>
                             <h3 className="font-semibold text-lg">{template.name}</h3>
-                            <p className="text-xs text-indigo-100">{template.category}</p>
+                            <p className="text-xs text-green-100">{template.category}</p>
                           </div>
                         </div>
                       </div>
@@ -218,7 +218,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                         </button>
                         <button
                           onClick={() => handleUseTemplate(template)}
-                          className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
+                          className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
                           data-testid={`use-${template.id}`}
                         >
                           <Star className="w-4 h-4" />
@@ -237,7 +237,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
         {selectedTemplate && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-scale-in">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-green-600 to-gold-600 text-white p-6 flex items-center justify-between">
                 <h3 className="text-xl font-bold">{selectedTemplate.name}</h3>
                 <button
                   onClick={() => setSelectedTemplate(null)}
@@ -279,7 +279,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                   </button>
                   <button
                     onClick={() => handleUseTemplate(selectedTemplate)}
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center space-x-2"
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
                   >
                     <Star className="w-4 h-4" />
                     <span>Use This Template</span>

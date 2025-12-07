@@ -369,14 +369,14 @@ export const LoopConfig = ({
   const isRepeat = nodeType === 'loop_repeat';
 
   return (
-    <div className="bg-white border-2 border-purple-200 rounded-lg p-4 shadow-sm space-y-4">
+    <div className="bg-white border-2 border-gold-200 rounded-lg p-4 shadow-sm space-y-4">
       <h3 className="section-header font-bold text-slate-900 text-sm mb-3 flex items-center space-x-2">
-        <Repeat className="w-4 h-4 text-purple-600" />
+        <Repeat className="w-4 h-4 text-gold-600" />
         <span>Loop Configuration</span>
       </h3>
 
-      <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-4">
-        <p className="text-xs text-purple-800 flex items-start space-x-2">
+      <div className="bg-gold-50 border border-gold-200 rounded-lg p-3 mb-4">
+        <p className="text-xs text-gold-800 flex items-start space-x-2">
           <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
           <span>
             {isForEach && 'Iterate over each item in a collection or array'}
@@ -398,7 +398,7 @@ export const LoopConfig = ({
               value={loopCollection}
               onChange={(e) => setLoopCollection(e.target.value)}
               placeholder="e.g., ${items}, ${users}"
-              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
               data-testid="loop-collection"
             />
             <p className="text-xs text-slate-500 mt-1">The array or collection to iterate over</p>
@@ -414,7 +414,7 @@ export const LoopConfig = ({
                 value={loopItemVar}
                 onChange={(e) => setLoopItemVar(e.target.value)}
                 placeholder="item"
-                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
                 data-testid="loop-item-var"
               />
               <p className="text-xs text-slate-500 mt-1">Access current item as ${loopItemVar}</p>
@@ -428,7 +428,7 @@ export const LoopConfig = ({
                 value={loopIndexVar}
                 onChange={(e) => setLoopIndexVar(e.target.value)}
                 placeholder="index"
-                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
                 data-testid="loop-index-var"
               />
               <p className="text-xs text-slate-500 mt-1">Access index as ${loopIndexVar}</p>
@@ -449,7 +449,7 @@ export const LoopConfig = ({
             placeholder={isDoWhile ? "e.g., ${hasMoreData} === true" : "e.g., ${count} < 10"}
           />
           {isDoWhile && (
-            <p className="text-xs text-indigo-600 mt-2 flex items-start space-x-1">
+            <p className="text-xs text-green-600 mt-2 flex items-start space-x-1">
               <span>💡</span>
               <span>Do-While loops execute the body at least once before checking the condition</span>
             </p>
@@ -468,7 +468,7 @@ export const LoopConfig = ({
             onChange={(e) => setRepeatCount(e.target.value)}
             min="1"
             placeholder="10"
-            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
             data-testid="repeat-count"
           />
           <p className="text-xs text-slate-500 mt-1">Number of times to repeat the loop</p>
@@ -485,15 +485,15 @@ export const LoopConfig = ({
           onChange={(e) => setMaxIterations(e.target.value)}
           min="1"
           placeholder="1000"
-          className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+          className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
           data-testid="max-iterations"
         />
         <p className="text-xs text-slate-500 mt-1">Loop will stop after this many iterations to prevent infinite loops</p>
       </div>
 
       {/* Phase 3.2: Advanced Loop Features */}
-      <div className="border-t-2 border-purple-100 pt-4 space-y-4">
-        <h4 className="text-sm font-semibold text-purple-700">⚡ Advanced Options (Phase 3)</h4>
+      <div className="border-t-2 border-gold-100 pt-4 space-y-4">
+        <h4 className="text-sm font-semibold text-gold-700">⚡ Advanced Options (Phase 3)</h4>
         
         {isForEach && (
           <div>
@@ -511,7 +511,7 @@ export const LoopConfig = ({
               }}
               min="0"
               placeholder="0 = no batching"
-              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
               data-testid="batch-size"
             />
             <p className="text-xs text-slate-500 mt-1">Process items in batches for better performance (0 = no batching)</p>
@@ -525,7 +525,7 @@ export const LoopConfig = ({
           <input
             type="text"
             placeholder="e.g., ${count} > 100"
-            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
             data-testid="break-condition"
           />
           <p className="text-xs text-slate-500 mt-1">Exit loop early when condition becomes true</p>
@@ -539,7 +539,7 @@ export const LoopConfig = ({
             <input
               type="text"
               placeholder="loop_counter"
-              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+              className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
               data-testid="counter-variable"
             />
             <p className="text-xs text-slate-500 mt-1">Track loop iterations in a variable</p>
@@ -555,7 +555,7 @@ export const LoopConfig = ({
               <input
                 type="number"
                 placeholder="0"
-                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
                 data-testid="start-from"
               />
             </div>
@@ -566,7 +566,7 @@ export const LoopConfig = ({
               <input
                 type="number"
                 placeholder="1"
-                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-gold-500 text-sm"
                 data-testid="step-increment"
               />
             </div>
@@ -575,18 +575,18 @@ export const LoopConfig = ({
       </div>
 
       {/* Phase 3.2: Nested Loop Information */}
-      <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-indigo-900 mb-2 flex items-center space-x-2">
+      <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-green-900 mb-2 flex items-center space-x-2">
           <span>🔄</span>
           <span>Nested Loops Support (Phase 3.2)</span>
         </h4>
-        <ul className="text-xs text-indigo-800 space-y-1 ml-4 list-disc">
+        <ul className="text-xs text-green-800 space-y-1 ml-4 list-disc">
           <li>Supports up to <strong>3 levels</strong> of nested loops</li>
           <li>Each loop has its own variable scope</li>
           <li>Break/Continue nodes affect only the current loop level</li>
           <li>Performance monitoring available for each loop level</li>
         </ul>
-        <p className="text-xs text-indigo-600 mt-3 italic">
+        <p className="text-xs text-green-600 mt-3 italic">
           💡 Tip: Use Break and Continue nodes inside loops to control iteration flow
         </p>
       </div>
@@ -611,15 +611,15 @@ export const AssignmentConfig = ({ assignments, setAssignments, workflowVariable
   };
 
   return (
-    <div className="bg-white border-2 border-orange-200 rounded-lg p-4 shadow-sm space-y-4">
+    <div className="bg-white border-2 border-gold-200 rounded-lg p-4 shadow-sm space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="section-header font-bold text-slate-900 text-sm flex items-center space-x-2">
-          <GitBranch className="w-4 h-4 text-orange-600" />
+          <GitBranch className="w-4 h-4 text-gold-600" />
           <span>Variable Assignments</span>
         </h3>
         <button
           onClick={addAssignment}
-          className="flex items-center space-x-1 px-3 py-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-xs font-medium"
+          className="flex items-center space-x-1 px-3 py-1.5 bg-gold-500 text-white rounded-lg hover:bg-gold-600 transition-colors text-xs font-medium"
           data-testid="add-assignment"
         >
           <Plus className="w-3 h-3" />
@@ -627,8 +627,8 @@ export const AssignmentConfig = ({ assignments, setAssignments, workflowVariable
         </button>
       </div>
 
-      <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-        <p className="text-xs text-orange-800 flex items-start space-x-2">
+      <div className="bg-gold-50 border border-gold-200 rounded-lg p-3">
+        <p className="text-xs text-gold-800 flex items-start space-x-2">
           <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
           <span>Set or update workflow variables with new values or calculations</span>
         </p>
@@ -639,7 +639,7 @@ export const AssignmentConfig = ({ assignments, setAssignments, workflowVariable
           <p className="text-sm text-slate-500 mb-2">No assignments configured</p>
           <button
             onClick={addAssignment}
-            className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+            className="text-xs text-gold-600 hover:text-gold-700 font-medium"
           >
             Click "Add Assignment" to create one
           </button>
@@ -1085,7 +1085,7 @@ export const LoopControlConfig = ({
         </ul>
       </div>
 
-      <div className={`${isBreak ? 'bg-yellow-50 border-yellow-200' : 'bg-blue-50 border-blue-200'} border rounded-lg p-3`}>
+      <div className={`${isBreak ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'} border rounded-lg p-3`}>
         <p className="text-xs text-slate-700 flex items-start space-x-2">
           <span className="text-lg">⚠️</span>
           <span>

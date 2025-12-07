@@ -114,7 +114,7 @@ const DataTransformationMapper = ({ value = [], onChange, variables = {} }) => {
           <button
             onClick={testTransformations}
             disabled={transformations.length === 0 || loading}
-            className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
           >
             {loading ? (
               <>
@@ -130,7 +130,7 @@ const DataTransformationMapper = ({ value = [], onChange, variables = {} }) => {
           </button>
           <button
             onClick={addTransformation}
-            className="flex items-center gap-2 px-3 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-colors text-sm"
           >
             <Plus className="w-4 h-4" />
             Add Step
@@ -155,7 +155,7 @@ const DataTransformationMapper = ({ value = [], onChange, variables = {} }) => {
               <div key={transform.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-700 rounded-full font-semibold text-sm">
+                    <div className="flex items-center justify-center w-8 h-8 bg-gold-100 text-gold-700 rounded-full font-semibold text-sm">
                       {index + 1}
                     </div>
                     <div>
@@ -189,7 +189,7 @@ const DataTransformationMapper = ({ value = [], onChange, variables = {} }) => {
                       <select
                         value={transform.function}
                         onChange={(e) => updateTransformation(transform.id, 'function', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
                       >
                         {categories.map(category => (
                           <optgroup key={category} label={category}>
@@ -223,7 +223,7 @@ const DataTransformationMapper = ({ value = [], onChange, variables = {} }) => {
                           }
                         }}
                         placeholder='["value", "param2"]'
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent font-mono text-sm"
                       />
                       <p className="mt-1 text-xs text-gray-500">
                         Use {"{previous_result}"} to reference the previous step's output
@@ -302,12 +302,12 @@ const DataTransformationMapper = ({ value = [], onChange, variables = {} }) => {
       )}
 
       {/* Quick Reference */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
         <div className="flex items-start gap-2">
-          <Info className="w-4 h-4 text-blue-600 mt-0.5" />
-          <div className="text-sm text-blue-800">
+          <Info className="w-4 h-4 text-green-600 mt-0.5" />
+          <div className="text-sm text-green-800">
             <p className="font-medium mb-1">Quick Tips:</p>
-            <ul className="list-disc list-inside space-y-0.5 text-blue-700">
+            <ul className="list-disc list-inside space-y-0.5 text-green-700">
               <li>Add multiple steps to create a transformation pipeline</li>
               <li>Use {"{previous_result}"} to chain transformations</li>
               <li>Test your transformations before saving</li>

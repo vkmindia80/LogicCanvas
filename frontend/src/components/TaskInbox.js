@@ -195,8 +195,8 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
   const getPriorityColor = (priority) => {
     const colors = {
       low: 'bg-slate-100 text-slate-700 border-slate-300',
-      medium: 'bg-blue-100 text-blue-700 border-blue-300',
-      high: 'bg-orange-100 text-orange-700 border-orange-300',
+      medium: 'bg-green-100 text-green-700 border-green-300',
+      high: 'bg-gold-100 text-gold-700 border-gold-300',
       urgent: 'bg-red-100 text-red-700 border-red-300 animate-pulse'
     };
     return colors[priority] || colors.medium;
@@ -205,7 +205,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
-      in_progress: 'bg-blue-100 text-blue-800',
+      in_progress: 'bg-green-100 text-green-800',
       completed: 'bg-green-100 text-green-800',
       cancelled: 'bg-gray-100 text-gray-800'
     };
@@ -226,7 +226,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
     const diffHours = (dueDate - now) / (1000 * 60 * 60);
     
     if (diffHours < 0) return { status: 'overdue', color: 'text-red-500 bg-red-50', label: 'Overdue', icon: AlertTriangle };
-    if (diffHours < 2) return { status: 'critical', color: 'text-orange-500 bg-orange-50', label: 'Critical', icon: AlertCircle };
+    if (diffHours < 2) return { status: 'critical', color: 'text-gold-500 bg-gold-50', label: 'Critical', icon: AlertCircle };
     if (diffHours < 24) return { status: 'warning', color: 'text-yellow-600 bg-yellow-50', label: 'Due Soon', icon: Clock };
     return { status: 'ok', color: 'text-green-500 bg-green-50', label: 'On Track', icon: CheckCircleIcon };
   };
@@ -297,8 +297,8 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
               <span className="text-sm">Pending: <strong>{stats.pending}</strong></span>
             </div>
-            <div className="px-4 py-2 bg-blue-100 text-blue-800 rounded-xl flex items-center space-x-2 font-medium">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <div className="px-4 py-2 bg-green-100 text-green-800 rounded-xl flex items-center space-x-2 font-medium">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-sm">In Progress: <strong>{stats.inProgress}</strong></span>
             </div>
             <div className="px-4 py-2 bg-green-100 text-green-800 rounded-xl flex items-center space-x-2 font-medium">
@@ -314,7 +314,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               </div>
             )}
             {atRiskCount > 0 && (
-              <div className="flex items-center space-x-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-xl text-sm font-semibold border border-orange-200">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-gold-100 text-gold-700 rounded-xl text-sm font-semibold border border-gold-200">
                 <Timer className="w-4 h-4" />
                 <span>{atRiskCount} At Risk</span>
               </div>
@@ -336,7 +336,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search tasks..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   data-testid="task-search-input"
                 />
               </div>
@@ -345,7 +345,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
                 data-testid="task-filter-select"
               >
                 <option value="all">All Status</option>
@@ -356,7 +356,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
                 data-testid="task-priority-filter"
               >
                 <option value="all">All Priorities</option>
@@ -401,7 +401,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                       onClick={() => setSelectedTask(task)}
                       className={`bg-white rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
                         selectedTask?.id === task.id
-                          ? 'border-blue-500 ring-2 ring-blue-200'
+                          ? 'border-green-500 ring-2 ring-green-200'
                           : 'border-gray-200 hover:border-gray-300'
                       } ${task.escalated ? 'border-l-4 border-l-red-500' : ''}`}
                       data-testid={`task-item-${task.id}`}
@@ -498,7 +498,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                           <button
                             onClick={() => handleReassign(selectedTask.id)}
                             disabled={!reassignTo}
-                            className="w-full mt-2 px-2 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                            className="w-full mt-2 px-2 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
                           >
                             Reassign
                           </button>
@@ -519,7 +519,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                             const reason = prompt('Enter escalation reason:');
                             if (reason) handleEscalate(selectedTask.id, reason);
                           }}
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-orange-600 flex items-center space-x-2"
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-gold-600 flex items-center space-x-2"
                           data-testid="escalate-task-btn"
                         >
                           <AlertTriangle className="w-4 h-4" />
@@ -603,7 +603,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                       <p className="text-gray-600 text-sm">
                         {c.content.split(' ').map((word, i) => 
                           word.startsWith('@') ? 
-                            <span key={i} className="text-blue-600 font-medium">{word} </span> : 
+                            <span key={i} className="text-green-600 font-medium">{word} </span> : 
                             word + ' '
                         )}
                       </p>
@@ -627,13 +627,13 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="Add a comment... Use @username to mention"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     onKeyDown={(e) => e.key === 'Enter' && handleAddComment(selectedTask.id)}
                     data-testid="comment-input"
                   />
                   <button
                     onClick={() => handleAddComment(selectedTask.id)}
-                    className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+                    className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600"
                     data-testid="add-comment-btn"
                   >
                     <Send className="w-5 h-5" />

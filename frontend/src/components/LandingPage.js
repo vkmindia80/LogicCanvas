@@ -57,7 +57,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-slate-200/50">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-purple-50/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-gold-50/30" />
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" style={{ backgroundSize: '30px 30px' }} />
         
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:py-20 lg:py-28">
@@ -78,7 +78,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
                   data-testid="landing-hero-title"
                 >
                   Enterprise Workflow
-                  <span className="block mt-2 bg-gradient-to-r from-primary-600 via-primary-500 to-purple-600 bg-clip-text text-transparent">
+                  <span className="block mt-2 bg-gradient-to-r from-primary-600 via-primary-500 to-gold-600 bg-clip-text text-transparent">
                     Automation Platform
                   </span>
                 </h1>
@@ -140,7 +140,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
 
             {/* Right Column - Feature Preview */}
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 to-purple-500/20 rounded-3xl blur-2xl" />
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 to-gold-500/20 rounded-3xl blur-2xl" />
               <div className="relative rounded-2xl border border-slate-200/50 bg-white/80 backdrop-blur-sm p-6 shadow-2xl" data-testid="landing-feature-list">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
@@ -230,10 +230,10 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             </div>
 
             {/* Feature Card 2 */}
-            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-purple-200 transition-all duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-transparent rounded-bl-full" />
+            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-gold-200 transition-all duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gold-500/10 to-transparent rounded-bl-full" />
               <div className="relative">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/30 mb-5">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg shadow-purple-500/30 mb-5">
                   <FileText className="h-7 w-7 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-3">Smart Form Builder</h3>
@@ -259,10 +259,10 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             </div>
 
             {/* Feature Card 3 */}
-            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent rounded-bl-full" />
+            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-green-200 transition-all duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-transparent rounded-bl-full" />
               <div className="relative">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30 mb-5">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-blue-500/30 mb-5">
                   <CheckSquare className="h-7 w-7 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-3">Multi-Level Approvals</h3>
@@ -317,10 +317,10 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             </div>
 
             {/* Feature Card 5 */}
-            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-orange-200 transition-all duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/10 to-transparent rounded-bl-full" />
+            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-gold-200 transition-all duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gold-500/10 to-transparent rounded-bl-full" />
               <div className="relative">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30 mb-5">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-lg shadow-orange-500/30 mb-5">
                   <BarChart3 className="h-7 w-7 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-3">Analytics & Insights</h3>
@@ -346,10 +346,10 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             </div>
 
             {/* Feature Card 6 */}
-            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-bl-full" />
+            <div className="group relative rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm hover:shadow-xl hover:border-green-200 transition-all duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-transparent rounded-bl-full" />
               <div className="relative">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-lg shadow-indigo-500/30 mb-5">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-indigo-500/30 mb-5">
                   <Zap className="h-7 w-7 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-3">Execution Engine</h3>
@@ -412,14 +412,14 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
                 </p>
               </div>
               {/* Connector Line */}
-              <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-primary-500 to-purple-500" style={{ width: 'calc(100% - 5rem)', left: 'calc(50% + 2.5rem)' }} />
+              <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-primary-500 to-gold-500" style={{ width: 'calc(100% - 5rem)', left: 'calc(50% + 2.5rem)' }} />
             </div>
 
             {/* Step 2 */}
             <div className="relative">
               <div className="flex flex-col items-center text-center">
                 <div className="relative mb-6">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-xl shadow-purple-500/40">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-xl shadow-purple-500/40">
                     <Settings className="h-10 w-10 text-white" />
                   </div>
                   <div className="absolute -top-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white shadow-lg">
@@ -433,7 +433,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
                 </p>
               </div>
               {/* Connector Line */}
-              <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-purple-500 to-emerald-500" style={{ width: 'calc(100% - 5rem)', left: 'calc(50% + 2.5rem)' }} />
+              <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-gold-500 to-emerald-500" style={{ width: 'calc(100% - 5rem)', left: 'calc(50% + 2.5rem)' }} />
             </div>
 
             {/* Step 3 */}
@@ -462,7 +462,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
       <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-slate-200/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center space-x-2 rounded-full bg-purple-100 px-4 py-2 text-sm font-semibold text-purple-700 mb-4">
+            <div className="inline-flex items-center space-x-2 rounded-full bg-gold-100 px-4 py-2 text-sm font-semibold text-gold-700 mb-4">
               <Target className="h-4 w-4" />
               <span>Real-World Applications</span>
             </div>
@@ -479,7 +479,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
               { 
                 icon: Users, 
                 title: 'HR & Recruiting', 
-                color: 'from-blue-500 to-blue-600',
+                color: 'from-green-500 to-green-600',
                 shadowColor: 'shadow-blue-500/30',
                 examples: ['Onboarding workflows', 'Leave approvals', 'Candidate screening']
               },
@@ -493,14 +493,14 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
               { 
                 icon: Box, 
                 title: 'Operations', 
-                color: 'from-orange-500 to-orange-600',
+                color: 'from-gold-500 to-gold-600',
                 shadowColor: 'shadow-orange-500/30',
                 examples: ['Procurement workflows', 'Vendor management', 'Change requests']
               },
               { 
                 icon: Settings, 
                 title: 'IT & Support', 
-                color: 'from-purple-500 to-purple-600',
+                color: 'from-gold-500 to-gold-600',
                 shadowColor: 'shadow-purple-500/30',
                 examples: ['Service requests', 'Incident management', 'Access provisioning']
               }
@@ -525,7 +525,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
       </section>
 
       {/* Demo Access Section */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-primary-50 via-purple-50/30 to-slate-50 border-b border-slate-200/50">
+      <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-primary-50 via-gold-50/30 to-slate-50 border-b border-slate-200/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center space-x-2 rounded-full bg-primary-100 px-4 py-2 text-sm font-semibold text-primary-700 mb-4">
@@ -606,7 +606,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
       {/* Final CTA Section */}
       <section className="py-20 sm:py-24 lg:py-28 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.3))]" style={{ backgroundSize: '30px 30px' }} />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-purple-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-gold-500/10" />
         
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl mb-6">

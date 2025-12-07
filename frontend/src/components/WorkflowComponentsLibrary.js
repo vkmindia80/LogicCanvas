@@ -66,13 +66,13 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
+        <div className="bg-gradient-to-r from-green-600 to-gold-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Package className="w-8 h-8" />
               <div>
                 <h2 className="text-2xl font-bold">Workflow Components Library</h2>
-                <p className="text-indigo-100 text-sm">Reusable building blocks for your workflows</p>
+                <p className="text-green-100 text-sm">Reusable building blocks for your workflows</p>
               </div>
             </div>
             <button
@@ -98,7 +98,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 bg-white text-indigo-600 rounded-lg hover:bg-indigo-50 font-medium flex items-center gap-2"
+              className="px-4 py-2 bg-white text-green-600 rounded-lg hover:bg-green-50 font-medium flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Create Component
@@ -120,7 +120,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                   onClick={() => setSelectedCategory(category.value)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
                     selectedCategory === category.value
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-green-600 text-white'
                       : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
                   }`}
                 >
@@ -135,7 +135,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
         <div className="flex-1 overflow-y-auto p-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
             </div>
           ) : filteredComponents.length === 0 ? (
             <div className="text-center py-12">
@@ -152,11 +152,11 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                   data-testid={`component-${component.id}`}
                 >
                   {/* Component Header */}
-                  <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-4 text-white">
+                  <div className="bg-gradient-to-r from-green-500 to-gold-500 p-4 text-white">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h3 className="font-semibold text-lg mb-1">{component.name}</h3>
-                        <p className="text-xs text-indigo-100">v{component.version}</p>
+                        <p className="text-xs text-green-100">v{component.version}</p>
                       </div>
                       <div className="flex items-center gap-1">
                         {component.is_public && (
@@ -221,7 +221,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                           if (onUseComponent) onUseComponent(component);
                           onClose();
                         }}
-                        className="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                        className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                         data-testid={`use-${component.id}`}
                       >
                         <Download className="w-4 h-4 inline mr-1" />
@@ -245,10 +245,10 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
         {selectedComponent && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-green-600 to-gold-600 text-white p-6 flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold">{selectedComponent.name}</h3>
-                  <p className="text-indigo-100 text-sm">Version {selectedComponent.version}</p>
+                  <p className="text-green-100 text-sm">Version {selectedComponent.version}</p>
                 </div>
                 <button
                   onClick={() => setSelectedComponent(null)}
@@ -340,7 +340,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                       setSelectedComponent(null);
                       onClose();
                     }}
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center space-x-2"
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
                   >
                     <Download className="w-4 h-4" />
                     <span>Use This Component</span>

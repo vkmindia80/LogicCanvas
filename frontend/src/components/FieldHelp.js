@@ -19,8 +19,8 @@ const FieldHelp = ({
     <div className="mt-1 space-y-2">
       {/* Tooltip Description */}
       {description && (
-        <div className="flex items-start space-x-2 text-xs text-slate-600 bg-blue-50 border border-blue-200 rounded-lg p-2">
-          <Info className="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start space-x-2 text-xs text-slate-600 bg-green-50 border border-green-200 rounded-lg p-2">
+          <Info className="w-3.5 h-3.5 text-green-600 flex-shrink-0 mt-0.5" />
           <p className="leading-relaxed">{description}</p>
         </div>
       )}
@@ -67,7 +67,7 @@ const FieldHelp = ({
           href={externalLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center space-x-1 text-xs text-blue-600 hover:text-blue-800 hover:underline"
+          className="inline-flex items-center space-x-1 text-xs text-green-600 hover:text-green-800 hover:underline"
         >
           <ExternalLink className="w-3 h-3" />
           <span>View Documentation</span>

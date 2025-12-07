@@ -139,12 +139,12 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h4 className="text-sm font-semibold text-slate-700 flex items-center space-x-2">
-          <Link className="w-4 h-4 text-indigo-500" />
+          <Link className="w-4 h-4 text-green-500" />
           <span>Data Mapping</span>
         </h4>
         <button
           onClick={saveMappings}
-          className="flex items-center space-x-1 px-3 py-1 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-xs font-medium"
+          className="flex items-center space-x-1 px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-xs font-medium"
           data-testid="save-mappings-btn"
         >
           <Save className="w-3 h-3" />
@@ -171,10 +171,10 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
                 key={`var-${index}`}
                 draggable
                 onDragStart={(e) => handleDragStart(e, variable)}
-                className="flex items-center space-x-2 px-2 py-1 bg-white border border-slate-200 rounded cursor-move hover:border-indigo-300 hover:bg-indigo-50 transition-all"
+                className="flex items-center space-x-2 px-2 py-1 bg-white border border-slate-200 rounded cursor-move hover:border-green-300 hover:bg-green-50 transition-all"
                 data-testid="draggable-variable"
               >
-                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                 <span className="text-xs font-mono text-slate-700">{variable.name}</span>
                 <span className="text-[10px] text-slate-500">({variable.type})</span>
               </div>
@@ -184,8 +184,8 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
       </div>
 
       {/* Input Mappings (Drop Target) */}
-      <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-        <h5 className="text-xs font-semibold text-blue-700 mb-2">Node Inputs</h5>
+      <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+        <h5 className="text-xs font-semibold text-green-700 mb-2">Node Inputs</h5>
         <div className="space-y-1">
           {inputFields.map((field) => (
             <div
@@ -196,8 +196,8 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
               onDragLeave={handleDragLeave}
               className={`px-2 py-1.5 bg-white border rounded flex items-center justify-between transition-all ${
                 dropTarget === field 
-                  ? 'border-indigo-400 bg-indigo-50 shadow-md' 
-                  : 'border-blue-300 hover:border-blue-400'
+                  ? 'border-green-400 bg-green-50 shadow-md' 
+                  : 'border-green-300 hover:border-green-400'
               }`}
               data-testid="drop-target-input"
             >
@@ -225,7 +225,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
                    `"${mapping.constant}"`}
                 </span>
                 <ArrowRight className="w-3 h-3 text-slate-400" />
-                <span className="font-mono text-slate-700 px-2 py-0.5 bg-indigo-100 rounded">
+                <span className="font-mono text-slate-700 px-2 py-0.5 bg-green-100 rounded">
                   {mapping.target}
                 </span>
               </div>
@@ -252,7 +252,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
         <select
           value={newMapping.sourceType}
           onChange={(e) => setNewMapping({ ...newMapping, sourceType: e.target.value })}
-          className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
           data-testid="mapping-source-type"
         >
           <option value="variable">Variable</option>
@@ -264,7 +264,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
           <select
             value={newMapping.source}
             onChange={(e) => setNewMapping({ ...newMapping, source: e.target.value })}
-            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="mapping-source-variable"
           >
             <option value="">Select variable...</option>
@@ -283,7 +283,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
               onChange={(e) => setNewMapping({ ...newMapping, expression: e.target.value })}
               placeholder="e.g., ${variable1} + ${variable2}"
               rows={2}
-              className="w-full px-2 py-1.5 text-xs font-mono border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-2 py-1.5 text-xs font-mono border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
               data-testid="mapping-expression"
             />
             <p className="text-[10px] text-slate-500 mt-1">
@@ -298,7 +298,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
             value={newMapping.source}
             onChange={(e) => setNewMapping({ ...newMapping, source: e.target.value })}
             placeholder="Enter constant value"
-            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="mapping-constant"
           />
         )}
@@ -306,7 +306,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
         <select
           value={newMapping.target}
           onChange={(e) => setNewMapping({ ...newMapping, target: e.target.value })}
-          className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
           data-testid="mapping-target"
         >
           <option value="">Select target field...</option>
@@ -318,7 +318,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
         <button
           onClick={addMapping}
           disabled={!newMapping.target || (newMapping.sourceType === 'variable' && !newMapping.source)}
-          className="w-full flex items-center justify-center space-x-2 px-3 py-1.5 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center space-x-2 px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="add-mapping-btn"
         >
           <Plus className="w-3 h-3" />

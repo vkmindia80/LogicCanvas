@@ -66,8 +66,8 @@ const TriggerConfig = ({ workflowId }) => {
 
   const getTriggerIcon = (type) => {
     switch (type) {
-      case 'scheduled': return <Clock className="w-5 h-5 text-blue-500" />;
-      case 'webhook': return <Webhook className="w-5 h-5 text-purple-500" />;
+      case 'scheduled': return <Clock className="w-5 h-5 text-green-500" />;
+      case 'webhook': return <Webhook className="w-5 h-5 text-gold-500" />;
       default: return <Zap className="w-5 h-5 text-green-500" />;
     }
   };
@@ -78,7 +78,7 @@ const TriggerConfig = ({ workflowId }) => {
         <h3 className="text-lg font-semibold text-gray-800">Workflow Triggers</h3>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm"
+          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 text-sm"
           data-testid="add-trigger-button"
         >
           + Add Trigger
@@ -95,7 +95,7 @@ const TriggerConfig = ({ workflowId }) => {
               <select
                 value={triggerType}
                 onChange={(e) => setTriggerType(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 data-testid="trigger-type-select"
               >
                 <option value="manual">Manual</option>
@@ -114,7 +114,7 @@ const TriggerConfig = ({ workflowId }) => {
                   value={cronExpression}
                   onChange={(e) => setCronExpression(e.target.value)}
                   placeholder="0 0 * * * (Daily at midnight)"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   data-testid="cron-expression-input"
                 />
                 <p className="text-xs text-gray-500 mt-1">

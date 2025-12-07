@@ -39,15 +39,15 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
   const getActionIcon = (action) => {
     const icons = {
       created: <CheckCircle className="w-4 h-4 text-green-500" />,
-      updated: <Edit className="w-4 h-4 text-blue-500" />,
+      updated: <Edit className="w-4 h-4 text-green-500" />,
       deleted: <Trash2 className="w-4 h-4 text-red-500" />,
-      executed: <Play className="w-4 h-4 text-purple-500" />,
+      executed: <Play className="w-4 h-4 text-gold-500" />,
       completed: <CheckCircle className="w-4 h-4 text-green-500" />,
       failed: <XCircle className="w-4 h-4 text-red-500" />,
       approved: <CheckCircle className="w-4 h-4 text-green-500" />,
       rejected: <XCircle className="w-4 h-4 text-red-500" />,
-      assigned: <User className="w-4 h-4 text-blue-500" />,
-      reassigned: <User className="w-4 h-4 text-orange-500" />,
+      assigned: <User className="w-4 h-4 text-green-500" />,
+      reassigned: <User className="w-4 h-4 text-gold-500" />,
       escalated: <Clock className="w-4 h-4 text-red-500" />,
       delegated: <User className="w-4 h-4 text-yellow-500" />
     };
@@ -57,15 +57,15 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
   const getActionColor = (action) => {
     const colors = {
       created: 'bg-green-100 text-green-800 border-green-300',
-      updated: 'bg-blue-100 text-blue-800 border-blue-300',
+      updated: 'bg-green-100 text-green-800 border-green-300',
       deleted: 'bg-red-100 text-red-800 border-red-300',
-      executed: 'bg-purple-100 text-purple-800 border-purple-300',
+      executed: 'bg-gold-100 text-gold-800 border-gold-300',
       completed: 'bg-green-100 text-green-800 border-green-300',
       failed: 'bg-red-100 text-red-800 border-red-300',
       approved: 'bg-green-100 text-green-800 border-green-300',
       rejected: 'bg-red-100 text-red-800 border-red-300',
-      assigned: 'bg-blue-100 text-blue-800 border-blue-300',
-      reassigned: 'bg-orange-100 text-orange-800 border-orange-300',
+      assigned: 'bg-green-100 text-green-800 border-green-300',
+      reassigned: 'bg-gold-100 text-gold-800 border-gold-300',
       escalated: 'bg-red-100 text-red-800 border-red-300',
       delegated: 'bg-yellow-100 text-yellow-800 border-yellow-300'
     };

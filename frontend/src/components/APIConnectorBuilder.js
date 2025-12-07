@@ -197,7 +197,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
           <div className="flex gap-2">
             <button
               onClick={() => setShowTemplates(!showTemplates)}
-              className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="px-4 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
             >
               <Code size={18} className="inline mr-2" />
               Templates
@@ -212,7 +212,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Save size={18} className="inline mr-2" />
               Save
@@ -238,13 +238,13 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       <div
                         key={template.id}
                         onClick={() => loadTemplate(template)}
-                        className="p-3 border rounded-lg hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all"
+                        className="p-3 border rounded-lg hover:border-green-500 hover:bg-green-50 cursor-pointer transition-all"
                       >
                         <div className="font-medium text-sm">{template.name}</div>
                         <div className="text-xs text-gray-500 mt-1">
                           {template.description}
                         </div>
-                        <div className="text-xs text-blue-600 mt-1">
+                        <div className="text-xs text-green-600 mt-1">
                           {template.category}
                         </div>
                       </div>
@@ -263,7 +263,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                         type="text"
                         value={connector.name}
                         onChange={(e) => setConnector({ ...connector, name: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         placeholder="e.g., Stripe Payment"
                       />
                     </div>
@@ -274,7 +274,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       <textarea
                         value={connector.description}
                         onChange={(e) => setConnector({ ...connector, description: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         rows="3"
                         placeholder="What does this connector do?"
                       />
@@ -286,7 +286,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       <select
                         value={connector.category}
                         onChange={(e) => setConnector({ ...connector, category: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                       >
                         <option value="payment">Payment</option>
                         <option value="communication">Communication</option>
@@ -315,7 +315,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                     onClick={() => setActiveTab(tab)}
                     className={`px-4 py-2 font-medium capitalize ${
                       activeTab === tab
-                        ? 'border-b-2 border-blue-600 text-blue-600'
+                        ? 'border-b-2 border-green-600 text-green-600'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -338,7 +338,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                           ...connector,
                           config: { ...connector.config, method: e.target.value }
                         })}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                       >
                         <option value="GET">GET</option>
                         <option value="POST">POST</option>
@@ -358,7 +358,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                           ...connector,
                           config: { ...connector.config, url: e.target.value }
                         })}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         placeholder="https://api.example.com/endpoint"
                       />
                       <p className="text-xs text-gray-500 mt-1">
@@ -375,7 +375,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       </label>
                       <button
                         onClick={addHeader}
-                        className="text-xs text-blue-600 hover:text-blue-700"
+                        className="text-xs text-green-600 hover:text-green-700"
                       >
                         <Plus size={14} className="inline" /> Add Header
                       </button>
@@ -399,7 +399,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                                 headers: { ...connector.config.headers, [key]: e.target.value }
                               }
                             })}
-                            className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                             placeholder="Value"
                           />
                           <button
@@ -437,7 +437,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                             });
                           }
                         }}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 font-mono text-sm"
                         rows="8"
                         placeholder='{\n  "key": "value"\n}'
                       />
@@ -462,7 +462,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                           auth: { type: e.target.value, config: {} }
                         }
                       })}
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                     >
                       <option value="none">None</option>
                       <option value="bearer">Bearer Token</option>
@@ -473,7 +473,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                   </div>
 
                   {connector.config.auth.type !== 'none' && (
-                    <div className="p-4 bg-blue-50 rounded-lg">
+                    <div className="p-4 bg-green-50 rounded-lg">
                       <p className="text-sm text-gray-700">
                         <Info size={16} className="inline mr-1" />
                         Configure authentication in headers using workflow variables.
@@ -493,7 +493,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                     </label>
                     <button
                       onClick={addResponseMapping}
-                      className="text-xs text-blue-600 hover:text-blue-700"
+                      className="text-xs text-green-600 hover:text-green-700"
                     >
                       <Plus size={14} className="inline" /> Add Mapping
                     </button>
@@ -510,7 +510,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                               type="text"
                               value={mapping.source_path}
                               onChange={(e) => updateResponseMapping(index, 'source_path', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-green-500"
                               placeholder="$.data.id"
                             />
                           </div>
@@ -522,7 +522,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                               type="text"
                               value={mapping.target_variable}
                               onChange={(e) => updateResponseMapping(index, 'target_variable', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-green-500"
                               placeholder="user_id"
                             />
                           </div>
@@ -533,7 +533,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                             <select
                               value={mapping.type}
                               onChange={(e) => updateResponseMapping(index, 'type', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-green-500"
                             >
                               <option value="string">String</option>
                               <option value="number">Number</option>
@@ -576,7 +576,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                           setTestVariables(JSON.parse(e.target.value));
                         } catch {}
                       }}
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 font-mono text-sm"
                       rows="6"
                       placeholder='{\n  "api_key": "test-key",\n  "user_id": "123"\n}'
                     />

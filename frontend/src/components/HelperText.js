@@ -26,17 +26,17 @@ const HelperText = ({
   const types = {
     info: {
       icon: Info,
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
-      textColor: 'text-blue-800',
-      iconColor: 'text-blue-500'
+      bgColor: 'bg-green-50',
+      borderColor: 'border-green-200',
+      textColor: 'text-green-800',
+      iconColor: 'text-green-500'
     },
     tip: {
       icon: HelpCircle,
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200',
-      textColor: 'text-purple-800',
-      iconColor: 'text-purple-500'
+      bgColor: 'bg-gold-50',
+      borderColor: 'border-gold-200',
+      textColor: 'text-gold-800',
+      iconColor: 'text-gold-500'
     },
     warning: {
       icon: AlertTriangle,
@@ -97,8 +97,8 @@ const HelperText = ({
  */
 export const InlineHelperText = ({ text, type = 'info' }) => {
   const colors = {
-    info: 'text-blue-600',
-    tip: 'text-purple-600',
+    info: 'text-green-600',
+    tip: 'text-gold-600',
     warning: 'text-amber-600',
     success: 'text-green-600',
     error: 'text-red-600'

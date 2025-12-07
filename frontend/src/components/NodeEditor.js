@@ -656,7 +656,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
         {/* Decision Node - Enhanced with Visual Builder */}
         {resolvedNodeType === NODE_TYPES.DECISION && (
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4 shadow-md">
+          <div className="bg-gradient-to-br from-amber-50 to-gold-50 border-2 border-amber-300 rounded-xl p-4 shadow-md">
             <div className="flex items-center justify-between mb-4">
               <h3 className="section-header font-bold text-amber-900 text-sm flex items-center space-x-2">
                 <span>Decision Logic</span>
@@ -703,17 +703,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                     onChange={setCondition}
                     variables={workflowVariables.reduce((acc, v) => ({ ...acc, [v.name]: v }), {})}
                   />
-                  <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-xs font-semibold text-blue-900 mb-1 flex items-center space-x-1">
+                  <div className="mt-3 bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-xs font-semibold text-green-900 mb-1 flex items-center space-x-1">
                       <Info className="w-3 h-3" />
                       <span>Examples:</span>
                     </p>
-                    <ul className="text-xs text-blue-800 space-y-1 ml-4">
-                      <li>• <code className="bg-blue-100 px-1 rounded">amount &gt; 1000</code> - Check if amount exceeds limit</li>
-                      <li>• <code className="bg-blue-100 px-1 rounded">status === "approved"</code> - Check exact status</li>
-                      <li>• <code className="bg-blue-100 px-1 rounded">priority === "high" && urgent === true</code> - Multiple conditions</li>
+                    <ul className="text-xs text-green-800 space-y-1 ml-4">
+                      <li>• <code className="bg-green-100 px-1 rounded">amount &gt; 1000</code> - Check if amount exceeds limit</li>
+                      <li>• <code className="bg-green-100 px-1 rounded">status === "approved"</code> - Check exact status</li>
+                      <li>• <code className="bg-green-100 px-1 rounded">priority === "high" && urgent === true</code> - Multiple conditions</li>
                     </ul>
-                    <p className="text-xs text-blue-700 mt-2">
+                    <p className="text-xs text-green-700 mt-2">
                       💡 Use variables from previous nodes in your condition
                     </p>
                   </div>
@@ -725,10 +725,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
         {/* Task Node - Assignment */}
         {resolvedNodeType === NODE_TYPES.TASK && (
-          <div className="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm space-y-4">
+          <div className="bg-white border-2 border-green-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Task Configuration</h3>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-              <p className="text-xs text-blue-800 flex items-start space-x-2">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-green-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>Tasks create work items that users can complete from their inbox. Configure who should handle this task and set priority/SLA.</span>
               </p>
@@ -844,10 +844,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
         {/* Approval Node */}
         {resolvedNodeType === NODE_TYPES.APPROVAL && (
-          <div className="bg-white border-2 border-purple-200 rounded-lg p-4 shadow-sm space-y-4">
+          <div className="bg-white border-2 border-gold-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Approval Configuration</h3>
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-4">
-              <p className="text-xs text-purple-800 flex items-start space-x-2">
+            <div className="bg-gold-50 border border-gold-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-gold-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>Approval nodes require one or more people to review and approve/reject before workflow continues.</span>
               </p>
@@ -899,10 +899,10 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
         {/* Form Node */}
         {resolvedNodeType === NODE_TYPES.FORM && (
-          <div className="bg-white border-2 border-indigo-200 rounded-lg p-4 shadow-sm">
+          <div className="bg-white border-2 border-green-200 rounded-lg p-4 shadow-sm">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Form Selection</h3>
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-4">
-              <p className="text-xs text-indigo-800 flex items-start space-x-2">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-green-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>Form nodes collect information from users. The workflow pauses here until the form is submitted.</span>
               </p>
@@ -943,7 +943,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === 'action' && (
           <div className="bg-white border-2 border-pink-200 rounded-lg p-4 shadow-sm space-y-4">
             <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Action Configuration</h3>
-            <div className="bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 rounded-lg p-3 mb-4">
+            <div className="bg-gradient-to-r from-pink-50 to-gold-50 border border-pink-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-pink-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>Action nodes integrate with external systems via API calls, webhooks, or custom scripts. Use the visual builder for easy configuration.</span>
@@ -966,7 +966,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             </div>
 
             {(actionType === 'http' || actionType === 'webhook') && (
-              <div className="border-2 border-primary-200 rounded-xl p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
+              <div className="border-2 border-primary-200 rounded-xl p-4 bg-gradient-to-br from-green-50 to-green-50">
                 <div className="flex items-center space-x-2 mb-3">
                   <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
                   <h4 className="text-sm font-semibold text-primary-900">Visual API Builder</h4>
@@ -1425,7 +1425,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               onClick={() => {
                 onDuplicate(node.id);
               }}
-              className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all font-semibold toolbar-btn"
+              className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all font-semibold toolbar-btn"
               data-testid="node-editor-copy"
               title="Duplicate this node"
             >

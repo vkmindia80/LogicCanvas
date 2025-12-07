@@ -54,7 +54,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
       case 'failed':
         return <XCircle className="w-5 h-5 text-red-600" />;
       case 'running':
-        return <Clock className="w-5 h-5 text-blue-600 animate-spin" />;
+        return <Clock className="w-5 h-5 text-green-600 animate-spin" />;
       case 'waiting':
         return <Clock className="w-5 h-5 text-yellow-600" />;
       default:
@@ -69,7 +69,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
       case 'failed':
         return 'bg-red-50 border-red-200';
       case 'running':
-        return 'bg-blue-50 border-blue-200';
+        return 'bg-green-50 border-green-200';
       case 'waiting':
         return 'bg-yellow-50 border-yellow-200';
       default:
@@ -132,7 +132,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                     {node.workflow_name}
                   </h4>
                   {node.nesting_level > 0 && (
-                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-gold-100 text-gold-700 px-2 py-0.5 rounded-full">
                       Level {node.nesting_level}
                     </span>
                   )}
@@ -187,13 +187,13 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
+        <div className="bg-gradient-to-r from-gold-600 to-green-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <GitBranch className="w-8 h-8" />
               <div>
                 <h2 className="text-2xl font-bold">Subprocess Execution Tree</h2>
-                <p className="text-purple-100 text-sm">View nested workflow execution hierarchy</p>
+                <p className="text-gold-100 text-sm">View nested workflow execution hierarchy</p>
               </div>
             </div>
             <button
@@ -211,7 +211,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
           {loading && (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <Clock className="w-12 h-12 text-indigo-600 animate-spin mx-auto mb-3" />
+                <Clock className="w-12 h-12 text-green-600 animate-spin mx-auto mb-3" />
                 <p className="text-gray-600">Loading execution tree...</p>
               </div>
             </div>
@@ -232,8 +232,8 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
           {!loading && !error && tree && (
             <div>
               {/* Summary */}
-              <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
-                <h3 className="font-semibold text-indigo-900 mb-2">Execution Summary</h3>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold text-green-900 mb-2">Execution Summary</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
                     <div className="text-gray-600">Root Workflow</div>
@@ -272,7 +272,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                     <span>Failed</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-blue-600" />
+                    <Clock className="w-4 h-4 text-green-600" />
                     <span>Running</span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -290,14 +290,14 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
           {!loading && !error && (
             <button
               onClick={loadTree}
-              className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors text-sm font-medium"
+              className="px-4 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors text-sm font-medium"
             >
               Refresh
             </button>
           )}
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
           >
             Close
           </button>

@@ -79,9 +79,9 @@ export const shadows = {
  * Consistent gradient header for all modals and panels
  */
 export const modalHeaderStyles = {
-  base: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-5 shadow-xl',
+  base: 'bg-gradient-to-r from-green-600 to-green-600 text-white px-6 py-5 shadow-xl',
   title: 'text-2xl font-bold',
-  subtitle: 'text-blue-100 text-sm mt-1',
+  subtitle: 'text-green-100 text-sm mt-1',
   closeButton: 'p-2 hover:bg-white/20 rounded-lg transition-all hover:shadow-lg',
 };
 
@@ -140,10 +140,10 @@ export const badgeStyles = {
   active: 'inline-flex items-center space-x-1 rounded-full border-2 border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-800',
   inactive: 'inline-flex items-center space-x-1 rounded-full border-2 border-slate-300 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-800',
   error: 'inline-flex items-center space-x-1 rounded-full border-2 border-red-300 bg-red-100 px-3 py-1 text-xs font-semibold text-red-800',
-  in_progress: 'inline-flex items-center space-x-1 rounded-full border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800',
+  in_progress: 'inline-flex items-center space-x-1 rounded-full border-2 border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-800',
   urgent: 'inline-flex items-center space-x-1 rounded-full border-2 border-red-300 bg-red-100 px-3 py-1 text-xs font-semibold text-red-800 animate-pulse',
-  high: 'inline-flex items-center space-x-1 rounded-full border-2 border-orange-300 bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800',
-  medium: 'inline-flex items-center space-x-1 rounded-full border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800',
+  high: 'inline-flex items-center space-x-1 rounded-full border-2 border-gold-300 bg-gold-100 px-3 py-1 text-xs font-semibold text-gold-800',
+  medium: 'inline-flex items-center space-x-1 rounded-full border-2 border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-800',
   low: 'inline-flex items-center space-x-1 rounded-full border-2 border-slate-300 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-800',
 };
 
@@ -215,8 +215,8 @@ export const toastStyles = {
   base: 'rounded-xl shadow-xl border-2 px-6 py-4 flex items-center space-x-3 animate-slide-in',
   success: 'bg-green-50 border-green-300 text-green-900',
   error: 'bg-red-50 border-red-300 text-red-900',
-  warning: 'bg-orange-50 border-orange-300 text-orange-900',
-  info: 'bg-blue-50 border-blue-300 text-blue-900',
+  warning: 'bg-gold-50 border-gold-300 text-gold-900',
+  info: 'bg-green-50 border-green-300 text-green-900',
 };
 
 /**
@@ -239,8 +239,8 @@ export const getBadgeStyle = (status) => {
  */
 export const priorityColors = {
   low: { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-300' },
-  medium: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-300' },
-  high: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-300' },
+  medium: { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-300' },
+  high: { bg: 'bg-gold-100', text: 'text-gold-700', border: 'border-gold-300' },
   urgent: { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-300' },
 };
 

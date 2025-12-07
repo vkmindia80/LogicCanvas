@@ -104,7 +104,7 @@ const AnalyticsDashboard = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-8 shadow-xl">
           <div className="flex items-center space-x-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
             <p className="text-gray-700">Loading analytics...</p>
           </div>
         </div>
@@ -115,7 +115,7 @@ const AnalyticsDashboard = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-gray-50 overflow-auto z-50`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-10 shadow-xl">
+      <div className="bg-gradient-to-r from-green-600 to-green-600 text-white sticky top-0 z-10 shadow-xl">
         <div className="px-6 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -161,7 +161,7 @@ const AnalyticsDashboard = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                 className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-all font-medium ${
                   activeTab === tab.id
                     ? 'border-white text-white bg-white/10'
-                    : 'border-transparent text-blue-100 hover:text-white hover:bg-white/5'
+                    : 'border-transparent text-green-100 hover:text-white hover:bg-white/5'
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -210,8 +210,8 @@ const OverviewTab = ({ overview, throughput, successRate }) => {
       change: '+12%',
       icon: FileText,
       color: 'blue',
-      bgColor: 'bg-blue-100',
-      textColor: 'text-blue-600'
+      bgColor: 'bg-green-100',
+      textColor: 'text-green-600'
     },
     {
       label: 'Total Executions',
@@ -228,8 +228,8 @@ const OverviewTab = ({ overview, throughput, successRate }) => {
       change: `${overview.tasks.overdue} overdue`,
       icon: Clock,
       color: 'orange',
-      bgColor: 'bg-orange-100',
-      textColor: 'text-orange-600'
+      bgColor: 'bg-gold-100',
+      textColor: 'text-gold-600'
     },
     {
       label: 'SLA Compliance',
@@ -237,8 +237,8 @@ const OverviewTab = ({ overview, throughput, successRate }) => {
       change: 'Last 30 days',
       icon: Target,
       color: 'purple',
-      bgColor: 'bg-purple-100',
-      textColor: 'text-purple-600'
+      bgColor: 'bg-gold-100',
+      textColor: 'text-gold-600'
     }
   ];
 
@@ -310,8 +310,8 @@ const OverviewTab = ({ overview, throughput, successRate }) => {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity (Last 7 Days)</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <div className="text-3xl font-bold text-blue-600">{overview.recent_activity.last_7_days}</div>
+          <div className="text-center p-4 bg-green-50 rounded-lg">
+            <div className="text-3xl font-bold text-green-600">{overview.recent_activity.last_7_days}</div>
             <div className="text-sm text-gray-600 mt-1">Workflow Executions</div>
           </div>
           <div className="text-center p-4 bg-green-50 rounded-lg">
@@ -322,8 +322,8 @@ const OverviewTab = ({ overview, throughput, successRate }) => {
             <div className="text-3xl font-bold text-red-600">{overview.workflows.failed}</div>
             <div className="text-sm text-gray-600 mt-1">Failed</div>
           </div>
-          <div className="text-center p-4 bg-purple-50 rounded-lg">
-            <div className="text-3xl font-bold text-purple-600">{overview.approvals.pending}</div>
+          <div className="text-center p-4 bg-gold-50 rounded-lg">
+            <div className="text-3xl font-bold text-gold-600">{overview.approvals.pending}</div>
             <div className="text-sm text-gray-600 mt-1">Pending Approvals</div>
           </div>
         </div>
@@ -429,8 +429,8 @@ const SLATab = ({ slaCompliance, slaTrends }) => {
           value={slaCompliance.completed_on_time}
           icon={CheckCircle}
           color="blue"
-          bgColor="bg-blue-100"
-          textColor="text-blue-600"
+          bgColor="bg-green-100"
+          textColor="text-green-600"
         />
         <MetricCard
           label="Overdue Tasks"
@@ -445,8 +445,8 @@ const SLATab = ({ slaCompliance, slaTrends }) => {
           value={slaCompliance.at_risk}
           icon={AlertCircle}
           color="orange"
-          bgColor="bg-orange-100"
-          textColor="text-orange-600"
+          bgColor="bg-gold-100"
+          textColor="text-gold-600"
         />
       </div>
 
@@ -504,9 +504,9 @@ const SLATab = ({ slaCompliance, slaTrends }) => {
                 <span className="text-gray-700">Completed Late</span>
                 <span className="font-semibold text-red-600">{slaCompliance.completed_late}</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-orange-50 rounded">
+              <div className="flex justify-between items-center p-3 bg-gold-50 rounded">
                 <span className="text-gray-700">Currently At Risk</span>
-                <span className="font-semibold text-orange-600">{slaCompliance.at_risk}</span>
+                <span className="font-semibold text-gold-600">{slaCompliance.at_risk}</span>
               </div>
             </div>
           </div>
@@ -526,19 +526,19 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
           {/* Slowest Nodes */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <Clock className="w-5 h-5 mr-2 text-orange-600" />
+              <Clock className="w-5 h-5 mr-2 text-gold-600" />
               Slowest Nodes (Bottlenecks)
             </h3>
             {bottlenecks.slowest_nodes.length > 0 ? (
               <div className="space-y-3">
                 {bottlenecks.slowest_nodes.map((node, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                  <div key={idx} className="flex items-center justify-between p-3 bg-gold-50 rounded-lg">
                     <div>
                       <div className="font-medium text-gray-900">{node.node_type}</div>
                       <div className="text-sm text-gray-600">ID: {node.node_id.substring(0, 8)}...</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-orange-600">{node.avg_execution_time}s</div>
+                      <div className="font-bold text-gold-600">{node.avg_execution_time}s</div>
                       <div className="text-xs text-gray-500">{node.executions} executions</div>
                     </div>
                   </div>
@@ -601,7 +601,7 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
                   <tr key={idx} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-600">{node.node_id.substring(0, 12)}...</td>
                     <td className="px-6 py-4 text-sm">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
                         {node.node_type}
                       </span>
                     </td>
@@ -612,7 +612,7 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
                     <td className="px-6 py-4 text-sm">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         node.failure_rate > 20 ? 'bg-red-100 text-red-800' :
-                        node.failure_rate > 10 ? 'bg-orange-100 text-orange-800' :
+                        node.failure_rate > 10 ? 'bg-gold-100 text-gold-800' :
                         'bg-green-100 text-green-800'
                       }`}>
                         {node.failure_rate}%
@@ -699,8 +699,8 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
                       idx === 0 ? 'bg-yellow-500' :
                       idx === 1 ? 'bg-gray-400' :
-                      idx === 2 ? 'bg-orange-500' :
-                      'bg-blue-500'
+                      idx === 2 ? 'bg-gold-500' :
+                      'bg-green-500'
                     }`}>
                       {idx + 1}
                     </div>
@@ -751,11 +751,11 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">{user.total_tasks}</td>
                     <td className="px-6 py-4 text-sm text-green-600">{user.completed}</td>
-                    <td className="px-6 py-4 text-sm text-orange-600">{user.pending}</td>
+                    <td className="px-6 py-4 text-sm text-gold-600">{user.pending}</td>
                     <td className="px-6 py-4 text-sm">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         user.completion_rate >= 80 ? 'bg-green-100 text-green-800' :
-                        user.completion_rate >= 50 ? 'bg-orange-100 text-orange-800' :
+                        user.completion_rate >= 50 ? 'bg-gold-100 text-gold-800' :
                         'bg-red-100 text-red-800'
                       }`}>
                         {user.completion_rate}%
