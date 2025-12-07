@@ -338,10 +338,10 @@ const AppShell = () => {
           <div className="space-y-1">
           <button
             onClick={() => {
-              setActiveTab('workflows');
-              setCurrentView('workflows');
-              setMobileSidebarOpen(false);
-              setActiveMenuItem('workflows');
+              handleNavigate('workflows', () => {
+                setActiveTab('workflows');
+                setCurrentView('workflows');
+              });
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'workflows'
@@ -356,10 +356,10 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setActiveTab('forms');
-              setCurrentView('forms');
-              setMobileSidebarOpen(false);
-              setActiveMenuItem('forms');
+              handleNavigate('forms', () => {
+                setActiveTab('forms');
+                setCurrentView('forms');
+              });
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'forms'
