@@ -3,7 +3,7 @@ import {
   CheckSquare, Clock, AlertCircle, User, Calendar, Flag,
   ChevronRight, RefreshCw, Search, Filter, MessageSquare,
   ArrowRight, UserPlus, AlertTriangle, CheckCircle as CheckCircleIcon, XCircle,
-  MoreVertical, Send, Users, Zap, Timer, TrendingUp, X
+  MoreVertical, Send, Users, Zap, Timer, TrendingUp, X, Menu
 } from 'lucide-react';
 import EmptyState from './EmptyState';
 import Tooltip from './Tooltip';
@@ -13,7 +13,7 @@ import { modalHeaderStyles, buttonStyles, cardStyles, inputStyles, badgeStyles, 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const TaskInbox = ({ onClose, onNotify, sidebarCollapsed = false }) => {
+const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTask, setSelectedTask] = useState(null);
