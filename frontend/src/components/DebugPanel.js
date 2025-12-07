@@ -4,7 +4,7 @@ import {
   AlertCircle, Info, Clock, Zap, Activity, Eye, Filter, Download
 } from 'lucide-react';
 
-const DebugPanel = ({ instanceId, onClose }) => {
+const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
   const [activeTab, setActiveTab] = useState('breakpoints'); // breakpoints, timeline, logs, performance, watch
   const [debugState, setDebugState] = useState(null);
   const [breakpoints, setBreakpoints] = useState([]);
