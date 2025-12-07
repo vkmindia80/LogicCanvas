@@ -341,7 +341,7 @@ const AppShell = () => {
             data-testid="sidebar-workflows"
           >
             <Workflow className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Workflows</span>}
+            {<span>Workflows</span>}
           </button>
 
           <button
@@ -359,7 +359,7 @@ const AppShell = () => {
             data-testid="sidebar-forms"
           >
             <FileText className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Forms</span>}
+            {<span>Forms</span>}
           </button>
 
           <div className="my-3 border-t border-slate-700"></div>
@@ -377,7 +377,7 @@ const AppShell = () => {
               data-testid="sidebar-tasks"
             >
               <CheckSquare className="h-5 w-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span>Tasks</span>}
+              {<span>Tasks</span>}
               {taskCount > 0 && (
                 <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
                   {taskCount > 9 ? '9+' : taskCount}
@@ -399,7 +399,7 @@ const AppShell = () => {
               data-testid="sidebar-approvals"
             >
               <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span>Approvals</span>}
+              {<span>Approvals</span>}
               {approvalCount > 0 && (
                 <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
                   {approvalCount > 9 ? '9+' : approvalCount}
@@ -420,7 +420,7 @@ const AppShell = () => {
             data-testid="sidebar-notifications"
           >
             <Bell className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Notifications</span>}
+            {<span>Notifications</span>}
             {notificationCount > 0 && (
               <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
                 {notificationCount > 9 ? '9+' : notificationCount}
@@ -441,7 +441,7 @@ const AppShell = () => {
               data-testid="sidebar-analytics"
             >
               <BarChart3 className="h-5 w-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span>Analytics</span>}
+              {<span>Analytics</span>}
             </button>
           )}
 
@@ -457,7 +457,7 @@ const AppShell = () => {
             data-testid="sidebar-audit"
           >
             <History className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Audit Trail</span>}
+            {<span>Audit Trail</span>}
           </button>
 
           <div className="my-3 border-t border-slate-700"></div>
@@ -474,7 +474,7 @@ const AppShell = () => {
             data-testid="sidebar-search"
           >
             <SearchIcon className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Search</span>}
+            {<span>Search</span>}
           </button>
 
           {can('accessImportExport') && (
@@ -490,7 +490,7 @@ const AppShell = () => {
               data-testid="sidebar-import-export"
             >
               <Download className="h-5 w-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span>Import/Export</span>}
+              {<span>Import/Export</span>}
             </button>
           )}
 
@@ -508,7 +508,7 @@ const AppShell = () => {
             data-testid="sidebar-integration-hub"
           >
             <Globe className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Integration Hub</span>}
+            {<span>Integration Hub</span>}
           </button>
 
           <button
@@ -523,7 +523,7 @@ const AppShell = () => {
             data-testid="sidebar-connectors"
           >
             <Zap className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>API Connectors</span>}
+            {<span>API Connectors</span>}
           </button>
 
           {can('accessAnalytics') && (
@@ -539,7 +539,7 @@ const AppShell = () => {
               data-testid="sidebar-debug"
             >
               <Bug className="h-5 w-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span>Debug Console</span>}
+              {<span>Debug Console</span>}
             </button>
           )}
 
@@ -555,7 +555,7 @@ const AppShell = () => {
             data-testid="sidebar-transformations"
           >
             <Sparkles className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Transformations</span>}
+            {<span>Transformations</span>}
           </button>
 
           <div className="my-3 border-t border-slate-700"></div>
@@ -572,7 +572,7 @@ const AppShell = () => {
             data-testid="sidebar-tour"
           >
             <Home className="h-5 w-5 flex-shrink-0" />
-            {!sidebarCollapsed && <span>Take a Tour</span>}
+            {<span>Take a Tour</span>}
           </button>
           </div>
         </nav>
@@ -580,7 +580,7 @@ const AppShell = () => {
         {/* User Section */}
         <div className="border-t border-slate-700 p-4 flex-shrink-0">
           {/* Role Switcher */}
-          {!sidebarCollapsed && (
+          {(
             <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
               <div className="mb-2 flex items-center space-x-2 text-xs text-slate-400">
                 <Shield className="h-3.5 w-3.5" />
@@ -623,7 +623,7 @@ const AppShell = () => {
             data-testid="sidebar-logout"
           >
             <LogOut className="h-4 w-4" />
-            {!sidebarCollapsed && <span>Logout</span>}
+            {<span>Logout</span>}
           </button>
         </div>
 
