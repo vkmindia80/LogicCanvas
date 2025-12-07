@@ -10,7 +10,7 @@ import { SkeletonList } from './Skeleton';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const NotificationsPanel = ({ onClose }) => {
+const NotificationsPanel = ({ onClose, sidebarCollapsed = false }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, unread
