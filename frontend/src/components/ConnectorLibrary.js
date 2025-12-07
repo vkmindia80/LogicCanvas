@@ -363,6 +363,20 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
           onClose={() => setShowWebhookManager(false)}
         />
       )}
+
+      {/* Rate Limiting Manager Modal */}
+      {showRateLimiting && (
+        <RateLimitingManager
+          onClose={() => setShowRateLimiting(false)}
+        />
+      )}
+
+      {/* Connection Pool Monitor Modal */}
+      {showConnectionPool && (
+        <ConnectionPoolMonitor
+          onClose={() => setShowConnectionPool(false)}
+        />
+      )}
     </>
   );
 };
