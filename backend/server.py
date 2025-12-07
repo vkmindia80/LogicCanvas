@@ -134,6 +134,13 @@ variable_manager = VariableManager(db)
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+# Shutdown event handler
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Clean up resources on shutdown"""
+    await close_http_clients()
+    scheduler.shutdown()
+
 # Webhook registry for workflow triggers
 webhook_registry = {}  # workflow_id -> webhook_token
 
