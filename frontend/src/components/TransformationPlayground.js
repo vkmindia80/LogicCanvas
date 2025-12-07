@@ -159,8 +159,8 @@ const TransformationPlayground = ({ onClose, sidebarCollapsed = false }) => {
         </div>
       </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-slate-200 px-6">
+      {/* Tabs */}
+      <div className="flex border-b border-slate-200 px-6">
           <button
             onClick={() => setActiveTab('builder')}
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
