@@ -121,7 +121,7 @@ const AuditTrail = ({ onClose, entityType, entityId }) => {
   }, {});
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col" data-testid="audit-trail">
+    <div className="fixed inset-0 lg:left-72 bg-white z-50 flex flex-col" data-testid="audit-trail">
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
