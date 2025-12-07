@@ -181,6 +181,15 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
       <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
+            {/* Hamburger Menu for Mobile */}
+            <button 
+              onClick={onOpenMobileSidebar}
+              className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="mobile-menu-btn"
+              aria-label="Open Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
               <ClipboardCheck className="w-7 h-7" />
             </div>
@@ -189,14 +198,24 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
               <p className={modalHeaderStyles.subtitle}>Review and approve workflow requests</p>
             </div>
           </div>
-          <button
-            onClick={loadApprovals}
-            className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
-            data-testid="refresh-approvals-btn"
-          >
-            <RefreshCw className="w-4 h-4 mr-2 inline" />
-            <span>Refresh</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={loadApprovals}
+              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
+              data-testid="refresh-approvals-btn"
+            >
+              <RefreshCw className="w-4 h-4 mr-2 inline" />
+              <span>Refresh</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="close-approval-queue-btn"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </div>
 
