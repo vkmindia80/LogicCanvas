@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Search, Trash2, Edit, Play, Code, Globe, Key, Webhook, Shield, Database } from 'lucide-react';
+import { X, Plus, Search, Trash2, Edit, Play, Code, Globe, Key, Webhook, Shield, Database, Menu } from 'lucide-react';
 import APIConnectorBuilder from './APIConnectorBuilder';
 import OAuthFlowBuilder from './OAuthFlowBuilder';
 import WebhookManager from './WebhookManager';
 import RateLimitingManager from './RateLimitingManager';
 import ConnectionPoolMonitor from './ConnectionPoolMonitor';
 
-const ConnectorLibrary = ({ onClose, onSelect, sidebarCollapsed = false }) => {
+const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [connectors, setConnectors] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
