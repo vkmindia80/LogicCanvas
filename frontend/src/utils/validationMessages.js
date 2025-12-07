@@ -273,7 +273,7 @@ export function getCategoryColor(category) {
  */
 export function getPriorityStyle(priority) {
   const styles = {
-    critical: 'bg-red-100 text-red-800 border-red-300',
+    critical: 'bg-gold-100 text-gold-800 border-gold-300',
     high: 'bg-gold-100 text-gold-800 border-gold-300',
     medium: 'bg-gold-100 text-gold-800 border-gold-300',
     low: 'bg-green-100 text-green-800 border-green-300'

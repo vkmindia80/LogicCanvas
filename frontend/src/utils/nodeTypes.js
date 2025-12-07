@@ -70,8 +70,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.END]: {
     label: 'End',
     category: 'Flow Components',
-    color: 'bg-red-500',
-    borderColor: 'border-red-600',
+    color: 'bg-gold-500',
+    borderColor: 'border-gold-600',
     icon: 'stop-circle',
     description: 'Workflow ending point'
   },
@@ -104,8 +104,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.WAIT]: {
     label: 'Wait',
     category: 'User Interaction',
-    color: 'bg-slate-500',
-    borderColor: 'border-slate-600',
+    color: 'bg-green-500',
+    borderColor: 'border-primary-600',
     icon: 'pause-circle',
     description: 'Wait for user action or event'
   },
@@ -220,8 +220,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.DELETE_RECORD]: {
     label: 'Delete Record',
     category: 'Data',
-    color: 'bg-red-600',
-    borderColor: 'border-red-700',
+    color: 'bg-gold-600',
+    borderColor: 'border-gold-700',
     icon: 'trash-2',
     description: 'Delete database record'
   },
@@ -350,8 +350,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.EMAIL]: {
     label: 'Email',
     category: 'Integrations',
-    color: 'bg-red-400',
-    borderColor: 'border-red-500',
+    color: 'bg-gold-400',
+    borderColor: 'border-gold-500',
     icon: 'mail',
     description: 'Send email notification'
   },
@@ -376,8 +376,8 @@ export const NODE_CONFIGS = {
   [NODE_TYPES.ERROR_HANDLER]: {
     label: 'Error Handler',
     category: 'Flow Components',
-    color: 'bg-red-500',
-    borderColor: 'border-red-600',
+    color: 'bg-gold-500',
+    borderColor: 'border-gold-600',
     icon: 'alert-triangle',
     description: 'Handle errors and exceptions'
   }
