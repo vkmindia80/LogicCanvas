@@ -613,7 +613,7 @@ const AppShell = () => {
             data-testid="sidebar-logout"
           >
             <LogOut className="h-4 w-4" />
-            {<span>Logout</span>}
+            <span>Logout</span>
           </button>
         </div>
 
