@@ -1096,13 +1096,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Execution Panel - Modernized */}
       {showExecutionPanel && workflow?.id && (
-        <div className="fixed right-0 top-0 h-full w-96 bg-gradient-to-b from-white to-slate-50 shadow-2xl border-l border-slate-200 flex flex-col z-50">
-          <ExecutionPanel
-            workflowId={workflow.id}
-            onClose={() => setShowExecutionPanel(false)}
-            onInstanceStart={(instanceId) => setActiveInstance(instanceId)}
-          />
-        </div>
+        <ExecutionPanelModern
+          workflowId={workflow.id}
+          onClose={() => setShowExecutionPanel(false)}
+          onInstanceStart={(instanceId) => setActiveInstance(instanceId)}
+        />
       )}
 
       {/* Trigger Config Panel - Modernized */}
