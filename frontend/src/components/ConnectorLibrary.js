@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Search, Trash2, Edit, Play, Code, Globe, Key, Webhook } from 'lucide-react';
+import { X, Plus, Search, Trash2, Edit, Play, Code, Globe, Key, Webhook, Shield, Database } from 'lucide-react';
 import APIConnectorBuilder from './APIConnectorBuilder';
 import OAuthFlowBuilder from './OAuthFlowBuilder';
 import WebhookManager from './WebhookManager';
+import RateLimitingManager from './RateLimitingManager';
+import ConnectionPoolMonitor from './ConnectionPoolMonitor';
 
 const ConnectorLibrary = ({ onClose, onSelect }) => {
   const [connectors, setConnectors] = useState([]);
@@ -14,6 +16,8 @@ const ConnectorLibrary = ({ onClose, onSelect }) => {
   const [viewMode, setViewMode] = useState('saved'); // 'saved' or 'templates'
   const [showOAuthBuilder, setShowOAuthBuilder] = useState(false);
   const [showWebhookManager, setShowWebhookManager] = useState(false);
+  const [showRateLimiting, setShowRateLimiting] = useState(false);
+  const [showConnectionPool, setShowConnectionPool] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
