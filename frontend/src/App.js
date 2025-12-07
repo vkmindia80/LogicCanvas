@@ -679,7 +679,7 @@ const AppShell = () => {
       )}
 
       {/* Main Content */}
-      <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-72'}`}>
+      <main className="flex-1 transition-all duration-300 lg:ml-72">
         {/* Mobile Header */}
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm lg:hidden">
           <div className="flex h-16 items-center justify-between px-4">
