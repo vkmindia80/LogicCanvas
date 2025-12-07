@@ -865,6 +865,7 @@ const AppShell = () => {
       {showTransformationPlayground && (
         <TransformationPlayground
           onClose={() => setShowTransformationPlayground(false)}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
