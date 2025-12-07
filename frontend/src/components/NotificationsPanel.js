@@ -95,6 +95,15 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
       <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
+            {/* Hamburger Menu for Mobile */}
+            <button 
+              onClick={onOpenMobileSidebar}
+              className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="mobile-menu-btn"
+              aria-label="Open Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <Bell className="w-8 h-8" />
             <div>
               <h1 className="text-2xl font-bold">Notifications</h1>
@@ -103,7 +112,7 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
               </p>
             </div>
           </div>
-          <>
+          <div className="flex items-center space-x-2">
             <button
               onClick={loadNotifications}
               className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
@@ -122,7 +131,15 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                 <span>Mark All Read</span>
               </button>
             )}
-          </>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="close-notifications-btn"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </div>
 
