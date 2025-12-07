@@ -252,31 +252,37 @@
   background: #94a3b8;
 }
 
-/* Dark sidebar scrollbar styling */
+/* Dark sidebar scrollbar styling - Enhanced visibility */
 .sidebar-nav::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .sidebar-nav::-webkit-scrollbar-track {
-  background: rgba(51, 65, 85, 0.3);
-  border-radius: 3px;
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 4px;
+  margin: 4px 0;
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.5);
-  border-radius: 3px;
+  background: rgba(148, 163, 184, 0.6);
+  border-radius: 4px;
   transition: background 0.2s;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.8);
+  background: rgba(148, 163, 184, 0.9);
+  background-clip: padding-box;
 }
 
 /* Smooth scroll behavior for sidebar */
 .sidebar-nav {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.5) rgba(51, 65, 85, 0.3);
+  scrollbar-color: rgba(148, 163, 184, 0.6) rgba(51, 65, 85, 0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Text gradient effect */
