@@ -240,7 +240,6 @@ const IntegrationHub = ({ onClose, sidebarCollapsed = false }) => {
             </div>
           )}
         </div>
-      </div>
 
       {/* Add/Edit Modal */}
       {showAddModal && (
