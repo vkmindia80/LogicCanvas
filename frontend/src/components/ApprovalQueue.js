@@ -178,27 +178,29 @@ const ApprovalQueue = ({ onClose, onNotify }) => {
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col" data-testid="approval-queue">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-4 shadow-lg">
+      <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <ClipboardCheck className="w-8 h-8" />
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <ClipboardCheck className="w-7 h-7" />
+            </div>
             <div>
-              <h1 className="text-2xl font-bold">Approval Queue</h1>
-              <p className="text-purple-100 text-sm">Review and approve workflow requests</p>
+              <h1 className={modalHeaderStyles.title}>Approval Queue</h1>
+              <p className={modalHeaderStyles.subtitle}>Review and approve workflow requests</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <button
               onClick={loadApprovals}
-              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
+              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
               data-testid="refresh-approvals-btn"
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className="w-4 h-4 mr-2 inline" />
               <span>Refresh</span>
             </button>
             <button
               onClick={onClose}
-              className="text-white hover:bg-white/20 px-4 py-2 rounded-lg transition-colors"
+              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
               data-testid="close-approval-queue-btn"
             >
               Close
