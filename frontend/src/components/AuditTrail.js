@@ -126,20 +126,39 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
       <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
+            {/* Hamburger Menu for Mobile */}
+            <button 
+              onClick={onOpenMobileSidebar}
+              className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="mobile-menu-btn"
+              aria-label="Open Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <History className="w-8 h-8" />
             <div>
               <h1 className="text-2xl font-bold">Audit Trail</h1>
               <p className="text-slate-300 text-sm">Complete activity history</p>
             </div>
           </div>
-          <button
-            onClick={loadLogs}
-            className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
-            data-testid="refresh-logs-btn"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Refresh</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={loadLogs}
+              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
+              data-testid="refresh-logs-btn"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Refresh</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="close-audit-trail-btn"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </div>
 
