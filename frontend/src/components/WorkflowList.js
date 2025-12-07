@@ -466,7 +466,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
             {filteredWorkflows.map((workflow) => (
               <div
                 key={workflow.id}
-                className="group relative cursor-pointer rounded-2xl border-2 border-slate-200 bg-white shadow-lg shadow-slate-200/50 transition-all hover:border-primary-300 hover:shadow-2xl hover:shadow-primary-500/20"
+                className={`group relative cursor-pointer ${cardStyles.base} ${cardStyles.hover}`}
                 data-testid={`workflow-card-${workflow.id}`}
               >
                 {/* Selection Checkbox */}
