@@ -251,6 +251,15 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
       <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
+            {/* Hamburger Menu for Mobile */}
+            <button 
+              onClick={onOpenMobileSidebar}
+              className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="mobile-menu-btn"
+              aria-label="Open Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
               <CheckSquare className="w-7 h-7" />
             </div>
