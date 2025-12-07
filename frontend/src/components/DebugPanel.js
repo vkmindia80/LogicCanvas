@@ -191,46 +191,39 @@ const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
 
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">Debug Panel</h2>
-            <p className="text-sm text-gray-500">Instance: {instanceId}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Debug Controls */}
-            <button
-              onClick={handlePlay}
-              disabled={debugState?.debug_action === 'continue'}
-              className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-              title="Continue (Run until next breakpoint)"
-            >
-              <Play size={16} />
-            </button>
-            <button
-              onClick={handlePause}
-              disabled={debugState?.debug_action === 'pause'}
-              className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
-              title="Pause execution"
-            >
-              <Pause size={16} />
-            </button>
-            <button
-              onClick={handleStep}
-              className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              title="Step to next node"
-            >
-              <SkipForward size={16} />
-            </button>
-            <div className="h-6 w-px bg-gray-300 mx-2"></div>
-            <button
-              onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <X size={20} />
-            </button>
-          </div>
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-slate-700 to-slate-800 text-white">
+        <div>
+          <h2 className="text-xl font-bold">Debug Panel</h2>
+          <p className="text-sm text-slate-300">Instance: {instanceId}</p>
         </div>
+        <div className="flex items-center gap-2">
+          {/* Debug Controls */}
+          <button
+            onClick={handlePlay}
+            disabled={debugState?.debug_action === 'continue'}
+            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+            title="Continue (Run until next breakpoint)"
+          >
+            <Play size={16} />
+          </button>
+          <button
+            onClick={handlePause}
+            disabled={debugState?.debug_action === 'pause'}
+            className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
+            title="Pause execution"
+          >
+            <Pause size={16} />
+          </button>
+          <button
+            onClick={handleStep}
+            className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            title="Step to next node"
+          >
+            <SkipForward size={16} />
+          </button>
+        </div>
+      </div>
 
         {/* Status Bar */}
         {debugState && (
