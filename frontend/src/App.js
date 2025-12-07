@@ -4,8 +4,8 @@ import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bel
 import { ReactFlowProvider } from 'reactflow';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import { RoleProvider, useRole } from './contexts/RoleContext';
-import WorkflowList from './components/WorkflowList';
-import WorkflowCanvas from './components/WorkflowCanvas';
+import WorkflowListModern from './components/WorkflowListModern';
+import WorkflowCanvasModern from './components/WorkflowCanvasModern';
 import FormList from './components/forms/FormList';
 import FormBuilder from './components/forms/FormBuilder';
 import TaskInbox from './components/TaskInbox';
