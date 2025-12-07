@@ -6844,6 +6844,546 @@ async def get_connector_templates():
                 {"source_path": "$.incidentid", "target_variable": "case_id", "type": "string", "transform": "none"},
                 {"source_path": "$.ticketnumber", "target_variable": "case_number", "type": "string", "transform": "none"}
             ]
+        },
+        # ========== PHASE 3.4 EXPANSION: MODERN COLLABORATION & CLOUD SERVICES ==========
+        {
+            "id": "teams-message",
+            "name": "Microsoft Teams - Send Message",
+            "description": "Send message to Microsoft Teams channel",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://graph.microsoft.com/v1.0/teams/${team_id}/channels/${channel_id}/messages",
+                "headers": {
+                    "Authorization": "Bearer ${microsoft_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "body": {
+                        "contentType": "html",
+                        "content": "${message_content}"
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "microsoft_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "message_id", "type": "string", "transform": "none"},
+                {"source_path": "$.createdDateTime", "target_variable": "created_at", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "discord-webhook",
+            "name": "Discord - Send Webhook Message",
+            "description": "Send message to Discord via webhook",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "${webhook_url}",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "content": "${message}",
+                    "username": "${bot_name}",
+                    "embeds": []
+                },
+                "auth": {"type": "none", "config": {}}
+            },
+            "response_mapping": []
+        },
+        {
+            "id": "zoom-create-meeting",
+            "name": "Zoom - Create Meeting",
+            "description": "Schedule a new Zoom meeting",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.zoom.us/v2/users/${user_id}/meetings",
+                "headers": {
+                    "Authorization": "Bearer ${zoom_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "topic": "${meeting_topic}",
+                    "type": 2,
+                    "start_time": "${start_time}",
+                    "duration": "${duration}",
+                    "timezone": "${timezone}",
+                    "settings": {
+                        "join_before_host": True,
+                        "mute_upon_entry": False
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "zoom_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "meeting_id", "type": "number", "transform": "none"},
+                {"source_path": "$.join_url", "target_variable": "join_url", "type": "string", "transform": "none"},
+                {"source_path": "$.start_url", "target_variable": "start_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "aws-s3-upload",
+            "name": "AWS S3 - Upload Object",
+            "description": "Upload file to Amazon S3 bucket",
+            "category": "storage",
+            "is_template": True,
+            "config": {
+                "method": "PUT",
+                "url": "https://${bucket_name}.s3.${region}.amazonaws.com/${object_key}",
+                "headers": {
+                    "Authorization": "AWS4-HMAC-SHA256 ${aws_signature}",
+                    "Content-Type": "${content_type}",
+                    "x-amz-content-sha256": "${content_hash}"
+                },
+                "query_params": {},
+                "body": "${file_content}",
+                "auth": {"type": "custom", "config": {"auth_type": "aws_sig_v4"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.ETag", "target_variable": "etag", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "dropbox-upload",
+            "name": "Dropbox - Upload File",
+            "description": "Upload file to Dropbox",
+            "category": "storage",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://content.dropboxapi.com/2/files/upload",
+                "headers": {
+                    "Authorization": "Bearer ${dropbox_access_token}",
+                    "Content-Type": "application/octet-stream",
+                    "Dropbox-API-Arg": "{\"path\":\"${file_path}\",\"mode\":\"add\",\"autorename\":true}"
+                },
+                "query_params": {},
+                "body": "${file_content}",
+                "auth": {"type": "bearer", "config": {"token_variable": "dropbox_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "file_id", "type": "string", "transform": "none"},
+                {"source_path": "$.path_display", "target_variable": "file_path", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "notion-create-page",
+            "name": "Notion - Create Page",
+            "description": "Create new page in Notion database",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.notion.com/v1/pages",
+                "headers": {
+                    "Authorization": "Bearer ${notion_token}",
+                    "Content-Type": "application/json",
+                    "Notion-Version": "2022-06-28"
+                },
+                "query_params": {},
+                "body": {
+                    "parent": {"database_id": "${database_id}"},
+                    "properties": {
+                        "Name": {
+                            "title": [{"text": {"content": "${title}"}}]
+                        }
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "notion_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "page_id", "type": "string", "transform": "none"},
+                {"source_path": "$.url", "target_variable": "page_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "airtable-create-record",
+            "name": "Airtable - Create Record",
+            "description": "Create new record in Airtable base",
+            "category": "database",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.airtable.com/v0/${base_id}/${table_name}",
+                "headers": {
+                    "Authorization": "Bearer ${airtable_api_key}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "fields": {}
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "airtable_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "record_id", "type": "string", "transform": "none"},
+                {"source_path": "$.fields", "target_variable": "record_data", "type": "object", "transform": "none"}
+            ]
+        },
+        {
+            "id": "monday-create-item",
+            "name": "Monday.com - Create Item",
+            "description": "Create new item in Monday.com board",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.monday.com/v2",
+                "headers": {
+                    "Authorization": "${monday_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "query": "mutation { create_item (board_id: ${board_id}, item_name: \"${item_name}\") { id } }"
+                },
+                "auth": {"type": "api_key", "config": {"key_variable": "monday_api_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.data.create_item.id", "target_variable": "item_id", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "asana-create-task",
+            "name": "Asana - Create Task",
+            "description": "Create new task in Asana project",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://app.asana.com/api/1.0/tasks",
+                "headers": {
+                    "Authorization": "Bearer ${asana_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "data": {
+                        "name": "${task_name}",
+                        "notes": "${description}",
+                        "projects": ["${project_id}"]
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "asana_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.data.gid", "target_variable": "task_id", "type": "string", "transform": "none"},
+                {"source_path": "$.data.name", "target_variable": "task_name", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "trello-create-card",
+            "name": "Trello - Create Card",
+            "description": "Create new card in Trello board",
+            "category": "project_management",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.trello.com/1/cards",
+                "headers": {
+                    "Accept": "application/json"
+                },
+                "query_params": {
+                    "key": "${trello_api_key}",
+                    "token": "${trello_token}",
+                    "idList": "${list_id}",
+                    "name": "${card_name}",
+                    "desc": "${description}"
+                },
+                "body": None,
+                "auth": {"type": "custom", "config": {"auth_type": "query_params"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "card_id", "type": "string", "transform": "none"},
+                {"source_path": "$.shortUrl", "target_variable": "card_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "mailchimp-add-subscriber",
+            "name": "Mailchimp - Add Subscriber",
+            "description": "Add email subscriber to Mailchimp list",
+            "category": "communication",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${datacenter}.api.mailchimp.com/3.0/lists/${list_id}/members",
+                "headers": {
+                    "Authorization": "Bearer ${mailchimp_api_key}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "email_address": "${email}",
+                    "status": "subscribed",
+                    "merge_fields": {
+                        "FNAME": "${first_name}",
+                        "LNAME": "${last_name}"
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "mailchimp_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "subscriber_id", "type": "string", "transform": "none"},
+                {"source_path": "$.email_address", "target_variable": "email", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "zendesk-create-ticket",
+            "name": "Zendesk - Create Ticket",
+            "description": "Create support ticket in Zendesk",
+            "category": "itsm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${subdomain}.zendesk.com/api/v2/tickets",
+                "headers": {
+                    "Authorization": "Bearer ${zendesk_api_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "ticket": {
+                        "subject": "${subject}",
+                        "comment": {
+                            "body": "${description}"
+                        },
+                        "priority": "${priority}",
+                        "type": "problem"
+                    }
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "zendesk_api_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.ticket.id", "target_variable": "ticket_id", "type": "number", "transform": "none"},
+                {"source_path": "$.ticket.url", "target_variable": "ticket_url", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "intercom-create-user",
+            "name": "Intercom - Create User",
+            "description": "Create or update user in Intercom",
+            "category": "crm",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.intercom.io/users",
+                "headers": {
+                    "Authorization": "Bearer ${intercom_access_token}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "email": "${email}",
+                    "name": "${name}",
+                    "custom_attributes": {}
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "intercom_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "user_id", "type": "string", "transform": "none"},
+                {"source_path": "$.email", "target_variable": "user_email", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "shopify-create-order",
+            "name": "Shopify - Create Order",
+            "description": "Create new order in Shopify store",
+            "category": "ecommerce",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://${shop_name}.myshopify.com/admin/api/2024-01/orders.json",
+                "headers": {
+                    "X-Shopify-Access-Token": "${shopify_access_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "order": {
+                        "line_items": [],
+                        "customer": {
+                            "email": "${customer_email}"
+                        },
+                        "financial_status": "pending"
+                    }
+                },
+                "auth": {"type": "custom", "config": {"header": "X-Shopify-Access-Token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.order.id", "target_variable": "order_id", "type": "number", "transform": "none"},
+                {"source_path": "$.order.order_number", "target_variable": "order_number", "type": "number", "transform": "none"}
+            ]
+        },
+        {
+            "id": "quickbooks-create-invoice",
+            "name": "QuickBooks - Create Invoice",
+            "description": "Create invoice in QuickBooks Online",
+            "category": "erp",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://quickbooks.api.intuit.com/v3/company/${company_id}/invoice",
+                "headers": {
+                    "Authorization": "Bearer ${quickbooks_access_token}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "CustomerRef": {
+                        "value": "${customer_id}"
+                    },
+                    "Line": [],
+                    "DueDate": "${due_date}"
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "quickbooks_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.Invoice.Id", "target_variable": "invoice_id", "type": "string", "transform": "none"},
+                {"source_path": "$.Invoice.DocNumber", "target_variable": "invoice_number", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "linkedin-share-post",
+            "name": "LinkedIn - Share Post",
+            "description": "Share post on LinkedIn profile or company page",
+            "category": "social_media",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.linkedin.com/v2/ugcPosts",
+                "headers": {
+                    "Authorization": "Bearer ${linkedin_access_token}",
+                    "Content-Type": "application/json",
+                    "X-Restli-Protocol-Version": "2.0.0"
+                },
+                "query_params": {},
+                "body": {
+                    "author": "urn:li:person:${person_id}",
+                    "lifecycleState": "PUBLISHED",
+                    "specificContent": {
+                        "com.linkedin.ugc.ShareContent": {
+                            "shareCommentary": {
+                                "text": "${post_text}"
+                            },
+                            "shareMediaCategory": "NONE"
+                        }
+                    },
+                    "visibility": {
+                        "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+                    }
+                },
+                "auth": {"type": "oauth2", "config": {"token_variable": "linkedin_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.id", "target_variable": "post_id", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "twitter-create-tweet",
+            "name": "Twitter/X - Create Tweet",
+            "description": "Post tweet on Twitter/X",
+            "category": "social_media",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.twitter.com/2/tweets",
+                "headers": {
+                    "Authorization": "Bearer ${twitter_bearer_token}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "text": "${tweet_text}"
+                },
+                "auth": {"type": "bearer", "config": {"token_variable": "twitter_bearer_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.data.id", "target_variable": "tweet_id", "type": "string", "transform": "none"},
+                {"source_path": "$.data.text", "target_variable": "tweet_text", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "azure-blob-upload",
+            "name": "Azure Blob Storage - Upload",
+            "description": "Upload file to Azure Blob Storage",
+            "category": "storage",
+            "is_template": True,
+            "config": {
+                "method": "PUT",
+                "url": "https://${storage_account}.blob.core.windows.net/${container_name}/${blob_name}",
+                "headers": {
+                    "x-ms-blob-type": "BlockBlob",
+                    "x-ms-version": "2021-08-06",
+                    "Authorization": "Bearer ${azure_access_token}",
+                    "Content-Type": "${content_type}"
+                },
+                "query_params": {},
+                "body": "${file_content}",
+                "auth": {"type": "oauth2", "config": {"token_variable": "azure_access_token"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.ETag", "target_variable": "etag", "type": "string", "transform": "none"}
+            ]
+        },
+        {
+            "id": "aws-lambda-invoke",
+            "name": "AWS Lambda - Invoke Function",
+            "description": "Invoke AWS Lambda function",
+            "category": "custom",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://lambda.${region}.amazonaws.com/2015-03-31/functions/${function_name}/invocations",
+                "headers": {
+                    "Authorization": "AWS4-HMAC-SHA256 ${aws_signature}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {},
+                "auth": {"type": "custom", "config": {"auth_type": "aws_sig_v4"}}
+            },
+            "response_mapping": [
+                {"source_path": "$", "target_variable": "lambda_response", "type": "object", "transform": "none"}
+            ]
+        },
+        {
+            "id": "datadog-send-metric",
+            "name": "Datadog - Send Metric",
+            "description": "Send custom metric to Datadog",
+            "category": "monitoring",
+            "is_template": True,
+            "config": {
+                "method": "POST",
+                "url": "https://api.datadoghq.com/api/v1/series",
+                "headers": {
+                    "DD-API-KEY": "${datadog_api_key}",
+                    "Content-Type": "application/json"
+                },
+                "query_params": {},
+                "body": {
+                    "series": [
+                        {
+                            "metric": "${metric_name}",
+                            "points": [[{"$now_timestamp"}, "${metric_value}"]],
+                            "type": "gauge",
+                            "tags": []
+                        }
+                    ]
+                },
+                "auth": {"type": "api_key", "config": {"key_variable": "datadog_api_key"}}
+            },
+            "response_mapping": [
+                {"source_path": "$.status", "target_variable": "status", "type": "string", "transform": "none"}
+            ]
         }
     ]
     return {"templates": templates, "count": len(templates)}
