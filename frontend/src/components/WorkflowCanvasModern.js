@@ -850,10 +850,10 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   }, [getZoom]);
 
   return (
-    <div className="flex h-screen bg-green-50">
+    <div className="flex h-screen bg-slate-50">
       {/* Left Sidebar - Node Palette */}
-      <div className="w-72 bg-white border-r-2 border-green-300 shadow-lg overflow-hidden">
-        <NodePaletteSalesforce 
+      <div className="w-72 bg-white border-r border-slate-200 shadow-sm overflow-hidden">
+        <NodePaletteModern 
           onAddNode={addNode} 
           lastNodeType={nodes[nodes.length - 1]?.type}
         />
