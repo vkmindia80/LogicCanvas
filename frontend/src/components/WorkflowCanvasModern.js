@@ -1052,7 +1052,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Right Sidebar - Node Editor */}
       {selectedNode && !showExecutionPanel && !showTriggerConfig && (
-        <div className="w-80 bg-green-100 border-l border-green-200 p-4 overflow-y-auto">
+        <div className="w-80 bg-slate-50 border-l border-slate-200 p-4 overflow-y-auto">
           <NodeEditor
             node={selectedNode}
             onUpdate={updateNode}
