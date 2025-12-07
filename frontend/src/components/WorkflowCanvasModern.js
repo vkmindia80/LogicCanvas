@@ -1025,25 +1025,43 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               size={1}
               color="#cbd5e1"
             />
-            <Controls showInteractive={false} />
+            <Controls 
+              showInteractive={false}
+              style={{
+                button: {
+                  backgroundColor: 'white',
+                  borderColor: '#e2e8f0',
+                  color: '#475569',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                },
+              }}
+            />
+            {/* Modern MiniMap */}
             <MiniMap
               nodeColor={(node) => {
                 const colors = {
-                  start: '#22c55e',
-                  task: '#3b82f6',
-                  decision: '#eab308',
+                  start: '#10b981',
+                  task: '#6366f1',
+                  decision: '#f59e0b',
                   approval: '#a855f7',
-                  form: '#6366f1',
+                  form: '#3b82f6',
                   end: '#ef4444',
                   parallel: '#f97316',
                   merge: '#14b8a6',
                   action: '#ec4899',
+                  subprocess: '#8b5cf6',
+                  loop_for_each: '#06b6d4',
+                  loop_while: '#0891b2',
                 };
                 return colors[node.type] || '#94a3b8';
               }}
-              maskColor="rgba(0, 0, 0, 0.08)"
+              maskColor="rgba(15, 23, 42, 0.1)"
               style={{
-                background: 'rgba(255, 255, 255, 0.95)',
+                background: 'rgba(255, 255, 255, 0.98)',
+                border: '1px solid #e2e8f0',
+                borderRadius: '1rem',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.07)',
               }}
             />
           </ReactFlow>
