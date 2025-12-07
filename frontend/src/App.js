@@ -346,6 +346,7 @@ const AppShell = () => {
             <button
               onClick={() => {
                 setShowTaskInbox(true);
+                setMobileSidebarOpen(false);
                 setActiveMenuItem('tasks');
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
