@@ -107,11 +107,22 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
       <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">API Connector Library</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Manage and reuse API integrations across workflows
-              </p>
+            <div className="flex items-center space-x-3">
+              {/* Hamburger Menu for Mobile */}
+              <button 
+                onClick={onOpenMobileSidebar}
+                className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                data-testid="mobile-menu-btn"
+                aria-label="Open Menu"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">API Connector Library</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Manage and reuse API integrations across workflows
+                </p>
+              </div>
             </div>
             <div className="flex gap-2">
               <button
