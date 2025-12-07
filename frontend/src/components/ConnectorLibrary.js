@@ -335,7 +335,6 @@ const ConnectorLibrary = ({ onClose, onSelect, sidebarCollapsed = false }) => {
             </p>
           </div>
         </div>
-      </div>
 
       {/* API Connector Builder Modal */}
       {showBuilder && (
