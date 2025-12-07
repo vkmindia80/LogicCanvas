@@ -6597,6 +6597,158 @@ webhook_logs_collection = db['webhook_logs']
 rate_limit_cache = {}
 circuit_breaker_states = {}
 
+# Connection pooling for HTTP requests
+import httpx
+import asyncio
+from collections import defaultdict
+
+# HTTP client pool with connection pooling
+http_clients = {}  # connector_id -> httpx.AsyncClient
+client_semaphores = defaultdict(lambda: asyncio.Semaphore(10))  # Max 10 concurrent requests per connector
+
+def get_http_client(connector_id: str, timeout: int = 30) -> httpx.AsyncClient:
+    """Get or create HTTP client with connection pooling for a connector"""
+    if connector_id not in http_clients:
+        http_clients[connector_id] = httpx.AsyncClient(
+            timeout=httpx.Timeout(timeout),
+            limits=httpx.Limits(
+                max_keepalive_connections=5,
+                max_connections=10,
+                keepalive_expiry=30.0
+            ),
+            follow_redirects=True
+        )
+    return http_clients[connector_id]
+
+async def close_http_clients():
+    """Close all HTTP clients on shutdown"""
+    for client in http_clients.values():
+        await client.aclose()
+    http_clients.clear()
+
+# Circuit Breaker implementation
+class CircuitBreaker:
+    def __init__(self, failure_threshold: int = 5, timeout: int = 60):
+        self.failure_threshold = failure_threshold
+        self.timeout = timeout  # seconds to wait before trying again
+        self.failure_count = 0
+        self.last_failure_time = None
+        self.state = "closed"  # closed, open, half-open
+    
+    def record_success(self):
+        """Record successful call"""
+        self.failure_count = 0
+        self.state = "closed"
+    
+    def record_failure(self):
+        """Record failed call"""
+        self.failure_count += 1
+        self.last_failure_time = datetime.utcnow()
+        
+        if self.failure_count >= self.failure_threshold:
+            self.state = "open"
+    
+    def can_attempt(self) -> bool:
+        """Check if request can be attempted"""
+        if self.state == "closed":
+            return True
+        
+        if self.state == "open":
+            # Check if timeout has passed
+            if self.last_failure_time:
+                elapsed = (datetime.utcnow() - self.last_failure_time).total_seconds()
+                if elapsed >= self.timeout:
+                    self.state = "half-open"
+                    return True
+            return False
+        
+        # half-open state: try one request
+        return True
+
+def get_circuit_breaker(connector_id: str) -> CircuitBreaker:
+    """Get or create circuit breaker for connector"""
+    if connector_id not in circuit_breaker_states:
+        circuit_breaker_states[connector_id] = CircuitBreaker()
+    return circuit_breaker_states[connector_id]
+
+# Rate limiting implementation
+class RateLimiter:
+    def __init__(self, max_requests: int, time_window: int):
+        self.max_requests = max_requests
+        self.time_window = time_window  # in seconds
+        self.requests = []  # list of timestamps
+    
+    def can_proceed(self) -> tuple[bool, float]:
+        """Check if request can proceed. Returns (can_proceed, wait_time)"""
+        now = datetime.utcnow()
+        
+        # Clean old requests outside time window
+        cutoff = now - timedelta(seconds=self.time_window)
+        self.requests = [ts for ts in self.requests if ts > cutoff]
+        
+        if len(self.requests) < self.max_requests:
+            self.requests.append(now)
+            return True, 0.0
+        
+        # Calculate wait time
+        oldest_request = min(self.requests)
+        wait_time = (oldest_request + timedelta(seconds=self.time_window) - now).total_seconds()
+        return False, max(0, wait_time)
+    
+    def record_request(self):
+        """Record a new request"""
+        self.requests.append(datetime.utcnow())
+
+def get_rate_limiter(connector_id: str) -> Optional[RateLimiter]:
+    """Get rate limiter for connector if configured"""
+    connector = api_connectors_collection.find_one({"id": connector_id})
+    if not connector:
+        return None
+    
+    rate_limit_config = connector.get("rate_limit")
+    if not rate_limit_config:
+        return None
+    
+    cache_key = f"rate_limiter:{connector_id}"
+    if cache_key not in rate_limit_cache:
+        rate_limit_cache[cache_key] = RateLimiter(
+            max_requests=rate_limit_config.get("max_requests", 100),
+            time_window=rate_limit_config.get("time_window", 60)
+        )
+    
+    return rate_limit_cache[cache_key]
+
+# Retry logic with exponential backoff
+async def execute_with_retry(
+    func,
+    max_retries: int = 3,
+    base_delay: float = 1.0,
+    max_delay: float = 60.0,
+    exponential_base: float = 2.0
+):
+    """Execute function with exponential backoff retry logic"""
+    last_exception = None
+    
+    for attempt in range(max_retries + 1):
+        try:
+            return await func()
+        except (httpx.TimeoutException, httpx.NetworkError, httpx.ConnectError) as e:
+            last_exception = e
+            
+            if attempt < max_retries:
+                # Calculate delay with exponential backoff
+                delay = min(base_delay * (exponential_base ** attempt), max_delay)
+                # Add jitter to prevent thundering herd
+                jitter = delay * 0.1 * (2 * (hash(str(datetime.utcnow())) % 100) / 100 - 1)
+                actual_delay = delay + jitter
+                
+                await asyncio.sleep(actual_delay)
+            else:
+                # Max retries exceeded
+                raise last_exception
+    
+    raise last_exception if last_exception else Exception("Retry failed")
+
 class OAuthConfig(BaseModel):
     provider: str  # salesforce, hubspot, servicenow, etc.
     client_id: str
