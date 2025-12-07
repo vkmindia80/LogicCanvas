@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Bell, X, Check, CheckCheck, Trash2, Filter,
   AlertTriangle, Clock, User, CheckCircle, MessageSquare,
-  Mail, RefreshCw
+  Mail, RefreshCw, Menu
 } from 'lucide-react';
 import EmptyState from './EmptyState';
 import LoadingSpinner from './LoadingSpinner';
@@ -10,7 +10,7 @@ import { SkeletonList } from './Skeleton';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const NotificationsPanel = ({ onClose, sidebarCollapsed = false }) => {
+const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, unread
