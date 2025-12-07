@@ -1231,23 +1231,23 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Designer Capabilities Panel */}
       {showCapabilitiesPanel && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col" data-testid="designer-capabilities-panel">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-green-200 bg-gradient-to-r from-primary-900 to-primary-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-indigo-600 to-indigo-700">
               <div>
                 <h2 className="text-xl font-bold text-white">Workflow Designer Capabilities</h2>
-                <p className="text-xs text-green-300">Everything available in this workflow designer</p>
+                <p className="text-xs text-indigo-200">Everything available in this workflow designer</p>
               </div>
               <button
                 onClick={() => setShowCapabilitiesPanel(false)}
-                className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5"
+                className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors"
                 data-testid="close-designer-capabilities"
               >
                 ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-green-50">
+            <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                 {/* Core Components */}
                 <div className="bg-white rounded-xl border border-green-200 p-4">
