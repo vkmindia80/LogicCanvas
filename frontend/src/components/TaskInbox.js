@@ -3,7 +3,7 @@ import {
   CheckSquare, Clock, AlertCircle, User, Calendar, Flag,
   ChevronRight, RefreshCw, Search, Filter, MessageSquare,
   ArrowRight, UserPlus, AlertTriangle, CheckCircle as CheckCircleIcon, XCircle,
-  MoreVertical, Send, Users, Zap, Timer, TrendingUp
+  MoreVertical, Send, Users, Zap, Timer, TrendingUp, X
 } from 'lucide-react';
 import EmptyState from './EmptyState';
 import Tooltip from './Tooltip';
