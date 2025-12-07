@@ -331,7 +331,7 @@ const ConnectorLibrary = ({ onClose, onSelect, sidebarCollapsed = false }) => {
           {/* Footer */}
           <div className="p-4 border-t bg-gray-50 text-sm text-gray-600">
             <p>
-              💡 <strong>Tip:</strong> Use <code className="px-2 py-0.5 bg-gray-200 rounded">${'{variable}'}</code> syntax in URLs, headers, and body to use workflow variables
+              💡 <strong>Tip:</strong> Use <code className="px-2 py-0.5 bg-gray-200 rounded">{'${variable}'}</code> syntax in URLs, headers, and body to use workflow variables
             </p>
           </div>
         </div>
