@@ -508,9 +508,7 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setShowIntegrationHub(true);
-              setMobileSidebarOpen(false);
-              setActiveMenuItem('integration-hub');
+              handleNavigate('integration-hub', () => setShowIntegrationHub(true));
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'integration-hub'
@@ -525,9 +523,7 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setShowConnectorLibrary(true);
-              setMobileSidebarOpen(false);
-              setActiveMenuItem('connectors');
+              handleNavigate('connectors', () => setShowConnectorLibrary(true));
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'connectors'
@@ -543,9 +539,7 @@ const AppShell = () => {
           {can('accessAnalytics') && (
             <button
               onClick={() => {
-                setShowDebugPanel(true);
-                setMobileSidebarOpen(false);
-                setActiveMenuItem('debug');
+                handleNavigate('debug', () => setShowDebugPanel(true));
               }}
               className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'debug'
@@ -561,9 +555,7 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setShowTransformationPlayground(true);
-              setMobileSidebarOpen(false);
-              setActiveMenuItem('transformations');
+              handleNavigate('transformations', () => setShowTransformationPlayground(true));
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'transformations'
