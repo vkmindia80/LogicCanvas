@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   Play, Pause, SkipForward, X, Circle, ChevronRight,
-  AlertCircle, Info, Clock, Zap, Activity, Eye, Filter, Download
+  AlertCircle, Info, Clock, Zap, Activity, Eye, Filter, Download, Menu
 } from 'lucide-react';
 
-const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
+const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [activeTab, setActiveTab] = useState('breakpoints'); // breakpoints, timeline, logs, performance, watch
   const [debugState, setDebugState] = useState(null);
   const [breakpoints, setBreakpoints] = useState([]);
