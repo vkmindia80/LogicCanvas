@@ -237,11 +237,11 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
             <div className="hidden items-center space-x-3 md:flex">
               <button
                 onClick={onCreateNew}
-                className="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
+                className={buttonStyles.primary}
                 data-testid="create-workflow-btn"
               >
                 <Plus className="h-5 w-5" />
-                <span className="font-semibold">Create Workflow</span>
+                <span>Create Workflow</span>
               </button>
               <button
                 onClick={() => setShowQuickStartWizard(true)}
