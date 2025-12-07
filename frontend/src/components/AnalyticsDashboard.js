@@ -113,7 +113,7 @@ const AnalyticsDashboard = ({ onClose, sidebarCollapsed = false }) => {
   }
 
   return (
-    <div className="fixed inset-0 lg:left-72 bg-gray-50 overflow-auto z-50">
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-gray-50 overflow-auto z-50`}>
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-10 shadow-xl">
         <div className="px-6 py-5">
