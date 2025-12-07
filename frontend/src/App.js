@@ -1078,7 +1078,7 @@ const AppShell = () => {
       {showIntegrationHub && (
         <IntegrationHub
           onClose={() => { setShowIntegrationHub(false); setActiveMenuItem(activeTab); }}
-         
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
       {showConnectorLibrary && (
@@ -1089,7 +1089,7 @@ const AppShell = () => {
             setShowConnectorLibrary(false);
             setActiveMenuItem(activeTab);
           }}
-         
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
       {showDebugPanel && debugInstanceId && (
@@ -1100,7 +1100,7 @@ const AppShell = () => {
             setDebugInstanceId(null);
             setActiveMenuItem(activeTab);
           }}
-         
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
       <GettingStartedChecklist
