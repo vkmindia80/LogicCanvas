@@ -414,8 +414,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'notifications'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-notifications"
           >
@@ -451,8 +451,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'audit'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-audit"
           >
@@ -468,8 +468,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'search'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-search"
           >
@@ -502,8 +502,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'integration-hub'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-integration-hub"
           >
@@ -517,8 +517,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'connectors'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-connectors"
           >
@@ -549,8 +549,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'transformations'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-transformations"
           >
@@ -566,8 +566,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'tour'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-tour"
           >
