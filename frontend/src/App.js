@@ -343,9 +343,9 @@ const AppShell = () => {
                 setCurrentView('workflows');
               });
             }}
-            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+            className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'workflows'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-workflows"
@@ -361,9 +361,9 @@ const AppShell = () => {
                 setCurrentView('forms');
               });
             }}
-            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+            className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'forms'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-forms"
