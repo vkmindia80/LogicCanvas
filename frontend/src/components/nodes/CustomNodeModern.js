@@ -1,0 +1,444 @@
+import React, { memo } from 'react';
+import { Handle, Position } from 'reactflow';
+import {
+  PlayCircle,
+  CheckSquare,
+  GitBranch,
+  ClipboardCheck,
+  FileText,
+  StopCircle,
+  Split,
+  Merge,
+  Zap,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Workflow,
+  Radio,
+  Monitor,
+  PauseCircle,
+  List,
+  Equal,
+  Repeat,
+  RefreshCw,
+  Repeat1,
+  PlusCircle,
+  Edit,
+  Trash2,
+  Search,
+  Database,
+  FileSearch,
+  Shuffle,
+  Filter,
+  ArrowUpDown,
+  BarChart2,
+  Calculator,
+  Cloud,
+  Mail,
+  AlertTriangle,
+  Settings,
+  Info
+} from 'lucide-react';
+import { NODE_TYPES, NODE_CONFIGS } from '../../utils/nodeTypes';
+
+const iconMap = {
+  'play-circle': PlayCircle,
+  'check-square': CheckSquare,
+  'git-branch': GitBranch,
+  'clipboard-check': ClipboardCheck,
+  'file-text': FileText,
+  'stop-circle': StopCircle,
+  'split': Split,
+  'merge': Merge,
+  'zap': Zap,
+  'clock': Clock,
+  'workflow': Workflow,
+  'radio': Radio,
+  'monitor': Monitor,
+  'pause-circle': PauseCircle,
+  'list': List,
+  'equal': Equal,
+  'repeat': Repeat,
+  'refresh-cw': RefreshCw,
+  'repeat-1': Repeat1,
+  'plus-circle': PlusCircle,
+  'edit': Edit,
+  'trash-2': Trash2,
+  'search': Search,
+  'database': Database,
+  'file-search': FileSearch,
+  'shuffle': Shuffle,
+  'filter': Filter,
+  'arrow-up-down': ArrowUpDown,
+  'bar-chart-2': BarChart2,
+  'calculator': Calculator,
+  'cloud': Cloud,
+  'mail': Mail,
+  'webhook': Mail,
+  'alert-triangle': AlertTriangle
+};
+
+const CustomNodeModern = ({ data, selected }) => {
+  const config = NODE_CONFIGS[data.type];
+  const IconComponent = config ? iconMap[config.icon] : null;
+
+  // Execution state from data (if provided)
+  const executionState = data.executionState; // 'running', 'completed', 'waiting', 'failed'
+
+  // Validation state from data (if provided)
+  const validationStatus = data.validationStatus; // 'error' | 'warning' | null
+
+  const isExecuting = executionState === 'running';
+  const isCompleted = executionState === 'completed';
+  const isWaiting = executionState === 'waiting';
+  const isFailed = executionState === 'failed';
+
+  const hasValidationError = validationStatus === 'error';
+  const hasValidationWarning = validationStatus === 'warning';
+
+  // Configuration status check
+  const isConfigured = checkNodeConfiguration(data);
+  const configStatus = getConfigurationStatus(data);
+
+  // Helper function to check if node is properly configured
+  function checkNodeConfiguration(nodeData) {
+    if (!nodeData) return false;
+    
+    // Basic checks that apply to all nodes
+    if (!nodeData.label || nodeData.label.trim() === '' || nodeData.label === 'New Node') {
+      return false;
+    }
+
+    // Type-specific configuration checks
+    switch (nodeData.type) {
+      case NODE_TYPES.TASK:
+        return !!(nodeData.assignedTo || nodeData.assignmentRole);
+      case NODE_TYPES.FORM:
+        return !!nodeData.formId;
+      case NODE_TYPES.DECISION:
+        return !!nodeData.condition;
+      case NODE_TYPES.APPROVAL:
+        return !!(nodeData.approvers && nodeData.approvers.length > 0);
+      case NODE_TYPES.ACTION:
+        return !!nodeData.url;
+      case NODE_TYPES.SUBPROCESS:
+        return !!nodeData.subprocessWorkflowId;
+      case NODE_TYPES.TIMER:
+        return !!(nodeData.delaySeconds || nodeData.delayMinutes || nodeData.delayHours || nodeData.scheduledTime);
+      default:
+        return true; // Assume configured for nodes without specific requirements
+    }
+  }
+
+  // Get detailed configuration status
+  function getConfigurationStatus(nodeData) {
+    if (!nodeData) return { status: 'incomplete', message: 'No data' };
+
+    const issues = [];
+    
+    // Check label
+    if (!nodeData.label || nodeData.label.trim() === '' || nodeData.label === 'New Node') {
+      issues.push('Missing label');
+    }
+
+    // Type-specific checks
+    switch (nodeData.type) {
+      case NODE_TYPES.TASK:
+        if (!nodeData.assignedTo && !nodeData.assignmentRole) {
+          issues.push('No assignee configured');
+        }
+        break;
+      case NODE_TYPES.FORM:
+        if (!nodeData.formId) {
+          issues.push('No form selected');
+        }
+        break;
+      case NODE_TYPES.DECISION:
+        if (!nodeData.condition) {
+          issues.push('No condition defined');
+        }
+        break;
+      case NODE_TYPES.APPROVAL:
+        if (!nodeData.approvers || nodeData.approvers.length === 0) {
+          issues.push('No approvers assigned');
+        }
+        break;
+      case NODE_TYPES.ACTION:
+        if (!nodeData.url) {
+          issues.push('No URL configured');
+        }
+        break;
+      case NODE_TYPES.SUBPROCESS:
+        if (!nodeData.subprocessWorkflowId) {
+          issues.push('No subprocess selected');
+        }
+        break;
+      case NODE_TYPES.TIMER:
+        if (!nodeData.delaySeconds && !nodeData.delayMinutes && !nodeData.delayHours && !nodeData.scheduledTime) {
+          issues.push('No timer configured');
+        }
+        break;
+    }
+
+    if (issues.length === 0) {
+      return { status: 'complete', message: 'Fully configured' };
+    } else {
+      return { status: 'incomplete', message: issues.join(', ') };
+    }
+  }
+
+  // Modern Indigo/Slate color scheme with clean gradients
+  const getNodeStyle = () => {
+    const baseStyles = {
+      background: '',
+      boxShadow: '',
+      border: ''
+    };
+
+    // Modern indigo/purple/cyan color scheme (Figma/Miro inspired)
+    const gradientMap = {
+      [NODE_TYPES.START]: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      [NODE_TYPES.END]: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+      [NODE_TYPES.TASK]: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', // Indigo
+      [NODE_TYPES.FORM]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.SCREEN]: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', // Cyan
+      [NODE_TYPES.WAIT]: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)', // Purple
+      [NODE_TYPES.DECISION]: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', // Amber
+      [NODE_TYPES.SWITCH]: 'linear-gradient(135deg, #f59e0b 0%, #ea580c 100%)', // Amber-orange
+      [NODE_TYPES.ASSIGNMENT]: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', // Indigo
+      [NODE_TYPES.APPROVAL]: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)', // Purple
+      [NODE_TYPES.PARALLEL]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.MERGE]: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', // Teal
+      [NODE_TYPES.SUBPROCESS]: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', // Cyan
+      [NODE_TYPES.TIMER]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.EVENT]: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)', // Pink
+      [NODE_TYPES.ACTION]: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', // Cyan
+      [NODE_TYPES.API_CALL]: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', // Sky
+      [NODE_TYPES.WEBHOOK]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.EMAIL]: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', // Indigo
+      // Loop nodes
+      [NODE_TYPES.LOOP_FOR_EACH]: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)', // Purple
+      [NODE_TYPES.LOOP_WHILE]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.LOOP_REPEAT]: 'linear-gradient(135deg, #d946ef 0%, #c026d3 100%)', // Fuchsia
+      // Data nodes
+      [NODE_TYPES.CREATE_RECORD]: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', // Emerald
+      [NODE_TYPES.UPDATE_RECORD]: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', // Teal
+      [NODE_TYPES.DELETE_RECORD]: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', // Red
+      [NODE_TYPES.LOOKUP_RECORD]: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', // Cyan
+      [NODE_TYPES.QUERY_RECORDS]: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', // Blue
+      [NODE_TYPES.GET_RECORD]: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', // Sky
+      [NODE_TYPES.TRANSFORM]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.FILTER]: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', // Cyan
+      [NODE_TYPES.SORT]: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', // Blue
+      [NODE_TYPES.AGGREGATE]: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', // Indigo
+      [NODE_TYPES.CALCULATE]: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // Purple
+      [NODE_TYPES.ERROR_HANDLER]: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)' // Orange
+    };
+
+    baseStyles.background = gradientMap[data.type] || 'linear-gradient(135deg, #64748b 0%, #475569 100%)';
+    
+    // Modern shadows - cleaner and subtler
+    if (selected) {
+      baseStyles.boxShadow = '0 10px 30px -5px rgba(99, 102, 241, 0.3), 0 0 0 3px rgba(99, 102, 241, 0.5)';
+      baseStyles.border = '2px solid rgba(255, 255, 255, 0.3)';
+    } else if (isExecuting) {
+      baseStyles.boxShadow = '0 8px 25px -5px rgba(99, 102, 241, 0.4), 0 0 0 2px rgba(99, 102, 241, 0.3)';
+      baseStyles.border = '2px solid rgba(255, 255, 255, 0.2)';
+    } else if (isCompleted) {
+      baseStyles.boxShadow = '0 8px 25px -5px rgba(16, 185, 129, 0.4), 0 0 0 2px rgba(16, 185, 129, 0.3)';
+      baseStyles.border = '2px solid rgba(255, 255, 255, 0.2)';
+    } else if (isFailed) {
+      baseStyles.boxShadow = '0 8px 25px -5px rgba(239, 68, 68, 0.5), 0 0 0 2px rgba(239, 68, 68, 0.3)';
+      baseStyles.border = '2px solid rgba(255, 255, 255, 0.2)';
+    } else {
+      baseStyles.boxShadow = '0 4px 15px -3px rgba(0, 0, 0, 0.12), 0 2px 6px -2px rgba(0, 0, 0, 0.08)';
+      baseStyles.border = '2px solid rgba(255, 255, 255, 0.15)';
+    }
+
+    return baseStyles;
+  };
+
+  const nodeStyle = getNodeStyle();
+
+  // If config is not found, show a fallback error state
+  if (!config) {
+    return (
+      <div
+        className="relative px-4 py-3 rounded-xl border-2 border-rose-400 bg-rose-100 min-w-[160px]"
+        data-testid={`node-${data.type}`}
+      >
+        <div className="flex items-center space-x-2 text-rose-700">
+          <AlertTriangle className="w-5 h-5" />
+          <div>
+            <div className="font-bold text-sm">Unknown Node Type</div>
+            <div className="text-xs mt-1">{data.type}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`
+        relative px-4 py-3 rounded-xl transition-all duration-200
+        min-w-[160px] backdrop-blur-sm
+        ${selected ? 'scale-105' : 'hover:scale-[1.02]'}
+        ${isExecuting ? 'animate-pulse-slow' : ''}
+        cursor-pointer node-enhanced
+      `}
+      style={nodeStyle}
+      data-testid={`node-${data.type}`}
+    >
+      {/* Execution State Indicator - Enhanced with animations */}
+      {executionState && (
+        <div className="absolute -top-2 -right-2 z-10">
+          {isExecuting && (
+            <div className="bg-indigo-600 rounded-full p-1.5 shadow-lg animate-bounce" style={{ animationDuration: '1s' }}>
+              <Clock className="w-4 h-4 text-white" />
+            </div>
+          )}
+          {isCompleted && (
+            <div className="bg-emerald-600 rounded-full p-1.5 shadow-lg animate-check-bounce">
+              <CheckCircle className="w-4 h-4 text-white" />
+            </div>
+          )}
+          {isWaiting && (
+            <div className="bg-amber-500 rounded-full p-1.5 shadow-lg animate-pulse">
+              <AlertCircle className="w-4 h-4 text-white" />
+            </div>
+          )}
+          {isFailed && (
+            <div className="bg-rose-600 rounded-full p-1.5 shadow-lg animate-shake">
+              <AlertCircle className="w-4 h-4 text-white" />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Validation Indicator */}
+      {validationStatus && (
+        <div className="absolute -top-2 -left-2 z-10" data-testid="node-validation-indicator">
+          {hasValidationError && (
+            <div className="bg-rose-600 rounded-full p-1 shadow-md animate-pulse" title="This node has validation errors">
+              <AlertCircle className="w-3 h-3 text-white" />
+            </div>
+          )}
+          {hasValidationWarning && !hasValidationError && (
+            <div className="bg-amber-500 rounded-full p-1 shadow-md" title="This node has validation warnings">
+              <AlertCircle className="w-3 h-3 text-white" />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Configuration Status Badge - Bottom Left */}
+      {!executionState && configStatus.status === 'incomplete' && (
+        <div 
+          className="absolute -bottom-2 -left-2 z-10 group" 
+          data-testid="node-config-status"
+          title={configStatus.message}
+        >
+          <div className="bg-amber-500 rounded-full p-1 shadow-md hover:scale-110 transition-transform">
+            <Settings className="w-3 h-3 text-white" />
+          </div>
+          {/* Tooltip on hover */}
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-20">
+            <div className="bg-slate-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-xl">
+              <div className="font-semibold mb-1">Configuration Needed</div>
+              <div className="text-slate-300">{configStatus.message}</div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fully Configured Badge - Bottom Left */}
+      {!executionState && isConfigured && !validationStatus && (
+        <div 
+          className="absolute -bottom-2 -left-2 z-10" 
+          data-testid="node-config-complete"
+          title="Fully configured"
+        >
+          <div className="bg-emerald-500 rounded-full p-1 shadow-md">
+            <CheckCircle className="w-3 h-3 text-white" />
+          </div>
+        </div>
+      )}
+
+      {/* Subtle shine effect overlay for modern aesthetic */}
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+      {/* Input Handle - not for start node */}
+      {data.type !== NODE_TYPES.START && (
+        <Handle
+          type="target"
+          position={Position.Top}
+          className="w-3 h-3 !bg-white !border-2 !border-slate-300 shadow-md hover:scale-125 transition-transform"
+          data-testid="node-handle-input"
+        />
+      )}
+
+      {/* Node Content */}
+      <div className="flex items-center space-x-3 text-white relative z-10">
+        {IconComponent && (
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <IconComponent className="w-5 h-5 drop-shadow-md" />
+          </div>
+        )}
+        <div className="flex-1">
+          <div className="font-bold text-sm drop-shadow-md">{data.label}</div>
+          {data.description && (
+            <div className="text-xs opacity-90 mt-1 drop-shadow-sm line-clamp-2">
+              {data.description}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Output Handles - not for end node */}
+      {data.type !== NODE_TYPES.END && (
+        <>
+          {/* Default single output for most nodes */}
+          {!NODE_CONFIGS[data.type]?.outputHandles && (
+            <Handle
+              type="source"
+              position={Position.Bottom}
+              className="w-3 h-3 !bg-white !border-2 !border-slate-300 shadow-md hover:scale-125 transition-transform"
+              data-testid="node-handle-output"
+            />
+          )}
+
+          {/* Multiple named outputs for special nodes */}
+          {NODE_CONFIGS[data.type]?.outputHandles && (
+            <div className="absolute -bottom-3 left-0 right-0 text-[10px] text-white/90">
+              {NODE_CONFIGS[data.type].outputHandles.map((handle, index) => (
+                <div
+                  key={handle.id}
+                  className="absolute flex flex-col items-center"
+                  style={{
+                    left: `${((index + 1) * 100) / (NODE_CONFIGS[data.type].outputHandles.length + 1)}%`,
+                    transform: 'translateX(-50%)',
+                  }}
+                >
+                  <Handle
+                    id={handle.id}
+                    type="source"
+                    position={Position.Bottom}
+                    className="w-3 h-3 !bg-white !border-2 !border-slate-300 shadow-md hover:scale-125 transition-transform"
+                    data-testid={`node-handle-output-${handle.id}`}
+                  />
+                  <span className="mt-1 bg-black/40 px-2 py-0.5 rounded-full whitespace-nowrap font-semibold drop-shadow-md backdrop-blur-sm">
+                    {handle.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+export default memo(CustomNodeModern);
