@@ -7448,36 +7448,8 @@ async def get_connector_stats_summary():
     }
 
 
-# Circuit Breaker, Rate Limiting, and Connection Pool endpoints continue below...
-
-@app_dummy_placeholder_to_keep_code_structure = None  # This line will be removed
-if False:  # Conditional to preserve existing duplicate code structure
-    @app.put("/api/connectors/{connector_id}")
-    async def update_connector_duplicate(connector_id: str, connector: APIConnector):
-        """Update existing connector - DUPLICATE REMOVED"""
-        existing = api_connectors_collection.find_one({"id": connector_id})
-        if not existing:
-            raise HTTPException(status_code=404, detail="Connector not found")
-        
-        now = datetime.utcnow().isoformat()
-        connector_dict = connector.dict()
-        connector_dict["id"] = connector_id
-    connector_dict["created_at"] = existing.get("created_at")
-    connector_dict["updated_at"] = now
-    
-    api_connectors_collection.replace_one({"id": connector_id}, connector_dict)
-    
-    return {"message": "Connector updated successfully"}
-
-
-@app.delete("/api/connectors/{connector_id}")
-async def delete_connector(connector_id: str):
-    """Delete connector"""
-    result = api_connectors_collection.delete_one({"id": connector_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Connector not found")
-    
-    return {"message": "Connector deleted successfully"}
+# ========== CIRCUIT BREAKER, RATE LIMITING, AND CONNECTION POOL ENDPOINTS ==========
+# (Duplicate CRUD endpoints removed - see lines ~5165-5250 for primary connector management)
 
 
 @app.post("/api/connectors/{connector_id}/test")
