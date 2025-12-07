@@ -933,84 +933,42 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               />
             </div>
 
-            {/* Right: Capabilities summary + core actions */}
-            <div className="flex items-center space-x-2">
+            {/* Right: Capabilities + Action Buttons */}
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowCapabilitiesPanel(true)}
-                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg border border-green-200 bg-white text-xs font-medium text-primary-700 hover:bg-green-50 hover:border-primary-300"
+                className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
                 data-testid="designer-capabilities-btn"
                 title="View all designer capabilities"
               >
-                <Activity className="w-4 h-4 text-primary-500" />
-                <span>Designer Capabilities</span>
+                <Activity className="w-4 h-4 text-slate-500" />
+                <span>Capabilities</span>
               </button>
-              <button
-                onClick={() => {
+
+              {/* Action Buttons Group */}
+              <ActionButtonsGroup
+                onVariables={() => {
                   if (activeInstance) {
                     setShowVariableManagement(!showVariableManagement);
                   } else {
                     alert('Please start a workflow instance to manage variables');
                   }
                 }}
-                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-green-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all font-medium disabled:opacity-50"
-                data-testid="variables-btn"
-                title="Manage workflow variables (requires active instance)"
-              >
-                <Variable className="w-4 h-4" />
-                <span>Variables</span>
-              </button>
-              <button
-                onClick={handleValidate}
-                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all font-medium"
-                data-testid="validate-workflow-btn"
-                title="Validate workflow"
-              >
-                <Eye className="w-4 h-4" />
-                <span>Validate</span>
-              </button>
-              <button
-                onClick={() => setShowTriggerConfig(!showTriggerConfig)}
-                className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50 font-medium"
-                data-testid="trigger-config-btn"
-                title="Configure triggers"
-                disabled={!workflow?.id}
-              >
-                <Zap className="w-4 h-4" />
-                <span>Triggers</span>
-              </button>
-              <button
-                onClick={handleAutoLayout}
-                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-indigo-500/30 transition-all font-medium"
-                data-testid="auto-layout-btn"
-                title="Auto-layout nodes"
-              >
-                <Layers className="w-4 h-4" />
-                <span>Layout</span>
-              </button>
-              <button
-                onClick={() => handleSave(false)}
-                className="flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-green-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transition-all font-medium"
-                data-testid="workflow-save-btn"
-              >
-                <Save className="w-4 h-4" />
-                <span>Save</span>
-              </button>
-              <button
-                onClick={() => {
+                onValidate={handleValidate}
+                onTriggers={() => setShowTriggerConfig(!showTriggerConfig)}
+                onAutoLayout={handleAutoLayout}
+                onSave={() => handleSave(false)}
+                onExecute={() => {
                   if (!workflow?.id) {
-                    // eslint-disable-next-line no-alert
                     alert('Please save the workflow before executing.');
                     return;
                   }
                   setShowExecutionPanel(!showExecutionPanel);
                   setShowTriggerConfig(false);
                 }}
-                className="flex items-center space-x-2 bg-gradient-to-r from-gold-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
-                data-testid="workflow-run-btn"
-              >
-                <Play className="w-4 h-4" />
-                <span>Execute</span>
-              </button>
+                workflowId={workflow?.id}
+                isSaving={isSaving}
+              />
             </div>
           </div>
         </div>
