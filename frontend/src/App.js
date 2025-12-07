@@ -572,9 +572,7 @@ const AppShell = () => {
 
           <button
             onClick={() => {
-              setShowOnboarding(true);
-              setMobileSidebarOpen(false);
-              setActiveMenuItem('tour');
+              handleNavigate('tour', () => setShowOnboarding(true));
             }}
             className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'tour'
