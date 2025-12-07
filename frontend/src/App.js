@@ -962,16 +962,16 @@ const AppShell = () => {
       {/* Main Content */}
       <main className="flex-1 transition-all duration-300 lg:ml-72">
         {/* Mobile Header */}
-        <header className="sticky top-0 z-30 border-b border-green-200 bg-white/90 shadow-sm backdrop-blur-sm lg:hidden">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm lg:hidden">
           <div className="flex h-16 items-center justify-between px-4">
-            <button onClick={() => setMobileSidebarOpen(true)} className="text-primary-600 hover:text-primary-900">
+            <button onClick={() => setMobileSidebarOpen(true)} className="text-indigo-600 hover:text-indigo-900">
               <Menu className="h-6 w-6" />
             </button>
             <div className="flex items-center space-x-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700">
                 <Activity className="h-5 w-5 text-white" />
               </div>
-              <h1 className="text-lg font-bold text-primary-900">LogicCanvas</h1>
+              <h1 className="text-lg font-bold text-slate-900">LogicCanvas</h1>
             </div>
             <div className="w-6"></div>
           </div>
