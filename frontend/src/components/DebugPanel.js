@@ -270,10 +270,10 @@ const DebugPanel = ({ instanceId, onClose, sidebarCollapsed = false }) => {
               {label}
             </button>
           ))}
-        </div>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-auto p-4">
+      {/* Content */}
+      <div className="flex-1 overflow-auto p-4">
           {/* Breakpoints Tab */}
           {activeTab === 'breakpoints' && (
             <div className="space-y-3">
