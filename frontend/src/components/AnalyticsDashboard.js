@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, Clock, CheckCircle, AlertTriangle, X, Activity,
-  Users, Zap, Target, FileText, AlertCircle, Award, Workflow
+  Users, Zap, Target, FileText, AlertCircle, Award, Workflow, Menu
 } from 'lucide-react';
 import { modalHeaderStyles, cardStyles, statsCardStyles } from '../utils/designSystem';
 
@@ -25,7 +25,7 @@ const COLORS = {
 
 const PIE_COLORS = ['#10b981', '#ef4444', '#3b82f6', '#f59e0b'];
 
-const AnalyticsDashboard = ({ onClose, sidebarCollapsed = false }) => {
+const AnalyticsDashboard = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [loading, setLoading] = useState(true);
   const [overview, setOverview] = useState(null);
   const [throughput, setThroughput] = useState([]);
