@@ -806,6 +806,7 @@ const AppShell = () => {
       {showIntegrationHub && (
         <IntegrationHub
           onClose={() => setShowIntegrationHub(false)}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       {showConnectorLibrary && (
