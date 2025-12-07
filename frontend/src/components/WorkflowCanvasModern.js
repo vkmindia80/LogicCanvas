@@ -1091,11 +1091,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Validation Results Panel - Enhanced */}
       {validationRan && validationResults && (
-        <div className="fixed bottom-4 right-4 w-[480px] bg-white shadow-2xl border-2 border-green-300 rounded-xl z-50 max-h-[500px] overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between p-4 border-b-2 border-green-200 bg-gradient-to-r from-green-50 to-white">
+        <div className="fixed bottom-4 right-4 w-[480px] bg-white shadow-2xl border border-slate-200 rounded-2xl z-50 max-h-[500px] overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-white">
             <div>
-              <h3 className="text-lg font-bold text-primary-900">Validation Results</h3>
-              <p className="text-xs text-primary-600 mt-0.5">
+              <h3 className="text-lg font-bold text-slate-900">Validation Results</h3>
+              <p className="text-xs text-slate-600 mt-0.5">
                 {validationResults.length === 0 
                   ? 'All checks passed!' 
                   : `Found ${validationResults.length} issue${validationResults.length > 1 ? 's' : ''}`
@@ -1104,48 +1104,48 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             </div>
             <button
               onClick={handleValidationPanelClose}
-              className="text-green-400 hover:text-primary-600 hover:bg-green-100 rounded-lg p-2 transition-colors"
+              className="text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg p-2 transition-colors"
               data-testid="close-validation-panel"
             >
               ✕
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 bg-slate-50">
             {validationResults.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8">
-                <div className="bg-green-100 rounded-full p-4 mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                <div className="bg-emerald-100 rounded-full p-4 mb-4">
+                  <CheckCircle className="w-8 h-8 text-emerald-600" />
                 </div>
-                <p className="text-green-800 font-semibold text-lg">Workflow is valid!</p>
-                <p className="text-primary-600 text-sm mt-1">No issues found. Ready to execute.</p>
+                <p className="text-emerald-800 font-semibold text-lg">Workflow is valid!</p>
+                <p className="text-slate-600 text-sm mt-1">No issues found. Ready to execute.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {validationResults.map((issue, index) => (
                   <div
                     key={`${issue.message}-${issue.nodeId || 'global'}-${index}`}
-                    className={`rounded-xl border-2 overflow-hidden ${
+                    className={`rounded-xl border overflow-hidden ${
                       issue.type === 'error'
-                        ? 'bg-gold-50 border-gold-200'
+                        ? 'bg-rose-50 border-rose-200'
                         : 'bg-amber-50 border-amber-200'
                     }`}
                   >
                     <div className="p-4">
                       <div className="flex items-start space-x-3">
                         <div className={`mt-1 ${
-                          issue.type === 'error' ? 'text-gold-600' : 'text-amber-600'
+                          issue.type === 'error' ? 'text-rose-600' : 'text-amber-600'
                         }`}>
                           <AlertCircle className="w-5 h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm font-semibold ${
-                            issue.type === 'error' ? 'text-gold-900' : 'text-amber-900'
+                            issue.type === 'error' ? 'text-rose-900' : 'text-amber-900'
                           }`}>
                             {issue.message}
                           </p>
                           {issue.suggestion && (
                             <p className={`text-xs mt-1 ${
-                              issue.type === 'error' ? 'text-gold-700' : 'text-amber-700'
+                              issue.type === 'error' ? 'text-rose-700' : 'text-amber-700'
                             }`}>
                               💡 {issue.suggestion}
                             </p>
@@ -1164,7 +1164,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                                 }}
                                 className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
                                   issue.type === 'error'
-                                    ? 'bg-gold-600 text-white hover:bg-gold-700'
+                                    ? 'bg-rose-600 text-white hover:bg-rose-700'
                                     : 'bg-amber-600 text-white hover:bg-amber-700'
                                 }`}
                                 data-testid="validation-go-to-node-btn"
@@ -1177,7 +1177,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                                 onClick={() => {
                                   handleQuickFix(issue.quickFix);
                                 }}
-                                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors"
+                                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
                                 data-testid="validation-quick-fix-btn"
                               >
                                 {issue.quickFix.label}
