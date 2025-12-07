@@ -141,13 +141,6 @@ const AuditTrail = ({ onClose, entityType, entityId, sidebarCollapsed = false })
               <RefreshCw className="w-4 h-4" />
               <span>Refresh</span>
             </button>
-            <button
-              onClick={onClose}
-              className="text-white hover:bg-white/20 px-4 py-2 rounded-lg transition-colors"
-              data-testid="close-audit-trail-btn"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
