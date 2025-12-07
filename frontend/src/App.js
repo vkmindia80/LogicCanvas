@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell, BarChart3, Search as SearchIcon, Download, Shield, Menu, X, ChevronLeft, ChevronRight, Home, Settings, LogOut, Globe, Bug, Sparkles } from 'lucide-react';
+import { Activity, FileText, Workflow, CheckSquare, ClipboardCheck, History, Bell, BarChart3, Search as SearchIcon, Download, Shield, Menu, X, ChevronLeft, ChevronRight, Home, Settings, LogOut, Globe, Bug, Sparkles, Zap } from 'lucide-react';
 import { ReactFlowProvider } from 'reactflow';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import { RoleProvider, useRole } from './contexts/RoleContext';
