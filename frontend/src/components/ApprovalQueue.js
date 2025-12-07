@@ -3,7 +3,7 @@ import {
   ClipboardCheck, Clock, CheckCircle, XCircle, AlertCircle,
   User, Calendar, MessageSquare, ChevronRight, RefreshCw,
   Search, Filter, ThumbsUp, ThumbsDown, Edit3, Users,
-  GitBranch, Send, ArrowRight, CheckSquare
+  GitBranch, Send, ArrowRight, CheckSquare, X, Menu
 } from 'lucide-react';
 import EmptyState from './EmptyState';
 import Tooltip from './Tooltip';
@@ -12,7 +12,7 @@ import { modalHeaderStyles, buttonStyles, inputStyles, getBadgeStyle } from '../
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const ApprovalQueue = ({ onClose, onNotify, sidebarCollapsed = false }) => {
+const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = false }) => {
   const [approvals, setApprovals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedApproval, setSelectedApproval] = useState(null);
