@@ -471,6 +471,7 @@ const AppShell = () => {
             <button
               onClick={() => {
                 setShowImportExport(true);
+                setMobileSidebarOpen(false);
                 setActiveMenuItem('import-export');
               }}
               className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
