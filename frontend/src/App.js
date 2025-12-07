@@ -381,7 +381,7 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'tasks'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-tasks"
@@ -403,7 +403,7 @@ const AppShell = () => {
               }}
               className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'approvals'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-approvals"
@@ -424,7 +424,7 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'notifications'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-notifications"
@@ -443,9 +443,9 @@ const AppShell = () => {
               onClick={() => {
                 handleNavigate('analytics', () => setShowAnalytics(true));
               }}
-              className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'analytics'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-analytics"
@@ -459,9 +459,9 @@ const AppShell = () => {
             onClick={() => {
               handleNavigate('audit', () => setShowAuditTrail(true));
             }}
-            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+            className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'audit'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-audit"
