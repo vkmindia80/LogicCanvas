@@ -132,16 +132,14 @@ const AuditTrail = ({ onClose, entityType, entityId, sidebarCollapsed = false })
               <p className="text-slate-300 text-sm">Complete activity history</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={loadLogs}
-              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
-              data-testid="refresh-logs-btn"
-            >
-              <RefreshCw className="w-4 h-4" />
-              <span>Refresh</span>
-            </button>
-          </div>
+          <button
+            onClick={loadLogs}
+            className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors"
+            data-testid="refresh-logs-btn"
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span>Refresh</span>
+          </button>
         </div>
       </div>
 
