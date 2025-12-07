@@ -747,18 +747,18 @@ const AppShell = () => {
       </main>
 
       {/* Modals */}
-      {showTaskInbox && <TaskInbox onClose={() => { setShowTaskInbox(false); setActiveMenuItem(activeTab); }} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
-      {showApprovalQueue && <ApprovalQueue onClose={() => { setShowApprovalQueue(false); setActiveMenuItem(activeTab); }} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
-      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setActiveMenuItem(activeTab); }} sidebarCollapsed={sidebarCollapsed} />}
-      {showAuditTrail && <AuditTrail onClose={() => { setShowAuditTrail(false); setActiveMenuItem(activeTab); }} sidebarCollapsed={sidebarCollapsed} />}
-      {showAnalytics && <AnalyticsDashboard onClose={() => { setShowAnalytics(false); setActiveMenuItem(activeTab); }} sidebarCollapsed={sidebarCollapsed} />}
+      {showTaskInbox && <TaskInbox onClose={() => { setShowTaskInbox(false); setActiveMenuItem(activeTab); }} onNotify={addToast} />}
+      {showApprovalQueue && <ApprovalQueue onClose={() => { setShowApprovalQueue(false); setActiveMenuItem(activeTab); }} onNotify={addToast} />}
+      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setActiveMenuItem(activeTab); }} />}
+      {showAuditTrail && <AuditTrail onClose={() => { setShowAuditTrail(false); setActiveMenuItem(activeTab); }} />}
+      {showAnalytics && <AnalyticsDashboard onClose={() => { setShowAnalytics(false); setActiveMenuItem(activeTab); }} />}
       {showGlobalSearch && (
         <GlobalSearch
           isOpen={showGlobalSearch}
           onClose={() => { setShowGlobalSearch(false); setActiveMenuItem(activeTab); }}
           onSelectWorkflow={handleSelectWorkflow}
           onSelectForm={handleSelectForm}
-          sidebarCollapsed={sidebarCollapsed}
+         
         />
       )}
       {showImportExport && (
@@ -772,7 +772,7 @@ const AppShell = () => {
             }
           }}
           onNotify={addToast}
-          sidebarCollapsed={sidebarCollapsed}
+         
         />
       )}
       <OnboardingTour isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
@@ -797,7 +797,7 @@ const AppShell = () => {
       {showIntegrationHub && (
         <IntegrationHub
           onClose={() => { setShowIntegrationHub(false); setActiveMenuItem(activeTab); }}
-          sidebarCollapsed={sidebarCollapsed}
+         
         />
       )}
       {showConnectorLibrary && (
@@ -808,7 +808,7 @@ const AppShell = () => {
             setShowConnectorLibrary(false);
             setActiveMenuItem(activeTab);
           }}
-          sidebarCollapsed={sidebarCollapsed}
+         
         />
       )}
       {showDebugPanel && debugInstanceId && (
@@ -819,7 +819,7 @@ const AppShell = () => {
             setDebugInstanceId(null);
             setActiveMenuItem(activeTab);
           }}
-          sidebarCollapsed={sidebarCollapsed}
+         
         />
       )}
       <GettingStartedChecklist
@@ -858,7 +858,7 @@ const AppShell = () => {
       {showTransformationPlayground && (
         <TransformationPlayground
           onClose={() => { setShowTransformationPlayground(false); setActiveMenuItem(activeTab); }}
-          sidebarCollapsed={sidebarCollapsed}
+         
         />
       )}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
