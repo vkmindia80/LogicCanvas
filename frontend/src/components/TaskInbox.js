@@ -246,7 +246,7 @@ const TaskInbox = ({ onClose, onNotify, sidebarCollapsed = false }) => {
   };
 
   return (
-    <div className="fixed inset-0 lg:left-72 bg-gradient-to-br from-slate-50 via-white to-slate-50 z-50 flex flex-col" data-testid="task-inbox">
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-gradient-to-br from-slate-50 via-white to-slate-50 z-50 flex flex-col`} data-testid="task-inbox">
       {/* Header */}
       <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
