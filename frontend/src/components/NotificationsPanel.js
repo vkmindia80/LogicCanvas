@@ -122,13 +122,6 @@ const NotificationsPanel = ({ onClose, sidebarCollapsed = false }) => {
                 <span>Mark All Read</span>
               </button>
             )}
-            <button
-              onClick={onClose}
-              className="text-white hover:bg-white/20 px-4 py-2 rounded-lg transition-colors"
-              data-testid="close-notifications-btn"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
