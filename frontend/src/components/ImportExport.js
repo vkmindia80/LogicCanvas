@@ -79,18 +79,22 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900">Import/Export Workflows</h2>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="import-export">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-4 shadow-lg">
+        <div className="flex items-center space-x-3">
+          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <Download className="w-7 h-7" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Import/Export Workflows</h2>
+            <p className="text-primary-100 text-sm">Backup and restore your workflows</p>
+          </div>
         </div>
+      </div>
+
+      <div className="flex-1 overflow-auto bg-slate-50">
+        <div className="max-w-4xl mx-auto p-6">
 
         {/* Tabs */}
         <div className="flex border-b border-slate-200">
