@@ -893,129 +893,44 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
 
           <div className="flex items-center justify-between">
-            {/* Left: Undo/Redo + Zoom + Grid + Template & AI Builder */}
-            <div className="flex items-center space-x-2">
-              {/* Undo/Redo */}
-              <div className="flex items-center space-x-1 border-r border-green-300 pr-2 mr-1">
-                <button
-                  onClick={handleUndo}
-                  disabled={historyIndex <= 0}
-                  className="p-2 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                  title="Undo (Ctrl+Z)"
-                  data-testid="undo-btn"
-                >
-                  <Undo2 className="w-4 h-4 text-primary-700" />
-                </button>
-                <button
-                  onClick={handleRedo}
-                  disabled={historyIndex >= history.length - 1}
-                  className="p-2 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                  title="Redo (Ctrl+Y)"
-                  data-testid="redo-btn"
-                >
-                  <Redo2 className="w-4 h-4 text-primary-700" />
-                </button>
-              </div>
+            {/* Left: Control Groups + Templates */}
+            <div className="flex items-center gap-3">
+              {/* Undo/Redo Group */}
+              <UndoRedoGroup
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                canUndo={historyIndex > 0}
+                canRedo={historyIndex < history.length - 1}
+              />
 
-              {/* Zoom Controls */}
-              <div className="flex items-center space-x-1 border-r border-green-300 pr-2 mr-1">
-                <button
-                  onClick={handleZoomOut}
-                  className="p-2 hover:bg-green-100 rounded-lg transition-colors"
-                  title="Zoom Out"
-                  data-testid="zoom-out-btn"
-                >
-                  <ZoomOut className="w-4 h-4 text-primary-700" />
-                </button>
-                <div className="zoom-display min-w-[60px] text-center" title="Current zoom level">
-                  {zoomLevel}%
-                </div>
-                <button
-                  onClick={handleZoomIn}
-                  className="p-2 hover:bg-green-100 rounded-lg transition-colors"
-                  title="Zoom In"
-                  data-testid="zoom-in-btn"
-                >
-                  <ZoomIn className="w-4 h-4 text-primary-700" />
-                </button>
-                <button
-                  onClick={handleFitView}
-                  className="p-2 hover:bg-green-100 rounded-lg transition-colors"
-                  title="Fit to View"
-                  data-testid="fit-view-btn"
-                >
-                  <Maximize2 className="w-4 h-4 text-primary-700" />
-                </button>
-              </div>
+              {/* Zoom Controls Group */}
+              <ZoomControlsGroup
+                onZoomIn={handleZoomIn}
+                onZoomOut={handleZoomOut}
+                onFitView={handleFitView}
+                zoomLevel={zoomLevel}
+              />
 
               {/* Grid Snap Toggle */}
-              <button
-                onClick={toggleGridSnap}
-                className={`p-2 rounded-lg transition-all ${
-                  snapToGrid 
-                    ? 'bg-primary-100 text-primary-700 hover:bg-primary-200' 
-                    : 'hover:bg-green-100 text-green-500'
-                }`}
-                title={snapToGrid ? 'Grid Snap: ON' : 'Grid Snap: OFF'}
-                data-testid="grid-snap-toggle"
-              >
-                {snapToGrid ? <Grid className="w-4 h-4 opacity-100" /> : <Grid className="w-4 h-4 opacity-50" />}
-              </button>
+              <GridSnapToggle
+                isActive={snapToGrid}
+                onToggle={toggleGridSnap}
+              />
 
-              {/* Export Controls */}
-              <div className="relative group">
-                <button
-                  className="flex items-center space-x-1 p-2 hover:bg-green-100 rounded-lg transition-colors"
-                  title="Export Workflow"
-                  data-testid="export-menu-btn"
-                  disabled={isExporting}
-                >
-                  <Download className="w-4 h-4 text-primary-700" />
-                </button>
-                <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white rounded-lg shadow-xl border border-green-200 py-1 min-w-[140px] z-50 animate-slide-in">
-                  <button
-                    onClick={exportToPNG}
-                    disabled={isExporting}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-green-50 transition-colors disabled:opacity-50"
-                    data-testid="export-png-btn"
-                  >
-                    Export as PNG
-                  </button>
-                  <button
-                    onClick={exportToPDF}
-                    disabled={isExporting}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-green-50 transition-colors disabled:opacity-50"
-                    data-testid="export-pdf-btn"
-                  >
-                    Export as PDF
-                  </button>
-                </div>
-              </div>
+              {/* Export Menu */}
+              <ExportMenu
+                onExportPNG={exportToPNG}
+                onExportPDF={exportToPDF}
+                isExporting={isExporting}
+              />
 
-              <div className="border-r border-green-300 pr-2 mr-1 h-8" />
+              <div className="h-8 w-px bg-slate-300" />
 
-              {showTemplates && (
-                <button
-                  onClick={showTemplates}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-gold-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all font-medium"
-                  data-testid="show-templates-btn"
-                  title="Browse templates"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  <span>Templates</span>
-                </button>
-              )}
-              {showWizard && (
-                <button
-                  onClick={showWizard}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-gold-500 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amber-500/30 transition-all font-medium"
-                  data-testid="show-wizard-btn"
-                  title="AI Builder"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>AI Builder</span>
-                </button>
-              )}
+              {/* Template & AI Buttons */}
+              <TemplateAndAIButtons
+                onShowTemplates={showTemplates}
+                onShowWizard={showWizard}
+              />
             </div>
 
             {/* Right: Capabilities summary + core actions */}
