@@ -861,35 +861,48 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Main Canvas Area */}
       <div className="flex-1 flex flex-col">
-        {/* Top Toolbar */}
-        <div className="bg-white border-b border-slate-200 px-6 py-4 shadow-sm">
+        {/* Top Toolbar - Modernized */}
+        <div className="bg-gradient-to-r from-white to-slate-50/50 border-b border-slate-200 px-6 py-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-4 flex-1">
               <input
                 type="text"
                 value={workflowName}
                 onChange={(e) => setWorkflowName(e.target.value)}
-                className="text-xl font-bold text-slate-900 bg-white border border-slate-300 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-2 transition-all"
+                className={`${modernInputStyles.base} text-xl font-bold max-w-md`}
                 placeholder="Workflow Name"
                 data-testid="workflow-name-input"
               />
               <div className="flex items-center space-x-2 text-sm">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg font-medium ring-1 ring-inset ring-indigo-600/10">
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg font-medium ring-1 ring-inset ring-indigo-600/10 shadow-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></div>
                   {nodes.length} nodes
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 text-purple-700 rounded-lg font-medium ring-1 ring-inset ring-purple-600/10">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg font-medium ring-1 ring-inset ring-purple-600/10 shadow-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-600 animate-pulse"></div>
                   {edges.length} connections
                 </span>
               </div>
             </div>
-            <span
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium"
-              data-testid="workflow-save-status"
-            >
-              {isSaving ? '💾 Saving…' : formatLastSaved()}
-            </span>
+            {/* Modern Save Status Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium shadow-sm">
+              {isSaving ? (
+                <>
+                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                  <span className="text-amber-700">Saving...</span>
+                </>
+              ) : lastSavedAt ? (
+                <>
+                  <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  <span className="text-slate-700">{formatLastSaved()}</span>
+                </>
+              ) : (
+                <>
+                  <div className="w-2 h-2 rounded-full bg-slate-400"></div>
+                  <span className="text-slate-600">Unsaved changes</span>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
