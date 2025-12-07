@@ -115,21 +115,23 @@ const AnalyticsDashboard = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-gray-50 overflow-auto z-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="px-6 py-4">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-10 shadow-xl">
+        <div className="px-6 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Activity className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <Activity className="w-7 h-7" />
+              </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
-                <p className="text-sm text-gray-500">Real-time insights and performance metrics</p>
+                <h1 className={modalHeaderStyles.title}>Analytics Dashboard</h1>
+                <p className={modalHeaderStyles.subtitle}>Real-time insights and performance metrics</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className={modalHeaderStyles.closeButton}
             >
-              <X className="w-6 h-6 text-gray-500" />
+              <X className="w-6 h-6" />
             </button>
           </div>
 
