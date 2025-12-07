@@ -5,7 +5,7 @@ import DataTransformationMapper from './DataTransformationMapper';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const TransformationPlayground = ({ onClose }) => {
+const TransformationPlayground = ({ onClose, sidebarCollapsed = false }) => {
   const [inputData, setInputData] = useState('{\n  "name": "John Doe",\n  "email": "john@example.com",\n  "age": 30\n}');
   const [transformations, setTransformations] = useState([]);
   const [output, setOutput] = useState(null);
