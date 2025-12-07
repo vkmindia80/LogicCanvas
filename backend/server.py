@@ -6532,26 +6532,118 @@ async def test_connector(connector_id: str, variables: Dict[str, Any]):
 
 @app.post("/api/connectors/execute")
 async def execute_connector(connector_id: str, variables: Dict[str, Any]):
-    """Execute connector in workflow context and map response"""
+    """Execute connector with rate limiting, circuit breaker, and retry logic"""
     connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
     if not connector:
         raise HTTPException(status_code=404, detail="Connector not found")
     
-    # First test the connector
-    test_result = await test_connector(connector_id, variables)
-    
-    if not test_result["success"]:
+    # Check circuit breaker
+    circuit_breaker = get_circuit_breaker(connector_id)
+    if not circuit_breaker.can_attempt():
         return {
             "success": False,
-            "error": "Connector execution failed",
-            "status_code": test_result["status_code"],
-            "response": test_result["response"]
+            "error": "Circuit breaker is open. Too many recent failures.",
+            "retry_after": circuit_breaker.timeout
         }
+    
+    # Check rate limiting
+    rate_limiter = get_rate_limiter(connector_id)
+    if rate_limiter:
+        can_proceed, wait_time = rate_limiter.can_proceed()
+        if not can_proceed:
+            return {
+                "success": False,
+                "error": "Rate limit exceeded",
+                "retry_after": wait_time
+            }
+    
+    # Execute with retry logic and connection pooling
+    try:
+        async def execute_request():
+            # Use connection pool semaphore to limit concurrent requests
+            async with client_semaphores[connector_id]:
+                return await _execute_connector_request(connector, variables)
+        
+        # Execute with retry and exponential backoff
+        result = await execute_with_retry(
+            execute_request,
+            max_retries=connector.get("retry_config", {}).get("max_retries", 3),
+            base_delay=connector.get("retry_config", {}).get("base_delay", 1.0)
+        )
+        
+        # Record success in circuit breaker
+        circuit_breaker.record_success()
+        
+        return result
+        
+    except Exception as e:
+        # Record failure in circuit breaker
+        circuit_breaker.record_failure()
+        
+        return {
+            "success": False,
+            "error": f"Connector execution failed: {str(e)}"
+        }
+
+async def _execute_connector_request(connector: Dict[str, Any], variables: Dict[str, Any]) -> Dict[str, Any]:
+    """Internal function to execute connector request with connection pooling"""
+    config = connector.get("config", {})
+    
+    # Replace variables in URL
+    url = config.get("url", "")
+    for var_name, var_value in variables.items():
+        url = url.replace(f"${{{var_name}}}", str(var_value))
+    
+    # Replace variables in headers
+    headers = {}
+    for key, value in config.get("headers", {}).items():
+        for var_name, var_value in variables.items():
+            value = value.replace(f"${{{var_name}}}", str(var_value))
+        headers[key] = value
+    
+    # Replace variables in body
+    body = config.get("body")
+    if body:
+        if isinstance(body, str):
+            for var_name, var_value in variables.items():
+                body = body.replace(f"${{{var_name}}}", str(var_value))
+        elif isinstance(body, dict):
+            body = json.loads(json.dumps(body))
+            body_str = json.dumps(body)
+            for var_name, var_value in variables.items():
+                body_str = body_str.replace(f"${{{var_name}}}", str(var_value))
+            body = json.loads(body_str)
+    
+    # Get HTTP client with connection pooling
+    client = get_http_client(connector["id"], timeout=config.get("timeout", 30))
+    
+    # Execute request
+    method = config.get("method", "GET").upper()
+    
+    if method == "GET":
+        response = await client.get(url, headers=headers)
+    elif method == "POST":
+        response = await client.post(url, headers=headers, json=body if isinstance(body, dict) else None, content=body if isinstance(body, str) else None)
+    elif method == "PUT":
+        response = await client.put(url, headers=headers, json=body if isinstance(body, dict) else None, content=body if isinstance(body, str) else None)
+    elif method == "PATCH":
+        response = await client.patch(url, headers=headers, json=body if isinstance(body, dict) else None)
+    elif method == "DELETE":
+        response = await client.delete(url, headers=headers)
+    else:
+        raise ValueError(f"Unsupported HTTP method: {method}")
+    
+    # Parse response
+    try:
+        response_data = response.json()
+    except:
+        response_data = {"text": response.text}
+    
+    if not response.is_success:
+        raise HTTPException(status_code=response.status_code, detail=f"API request failed: {response.text}")
     
     # Map response to variables
     mapped_variables = {}
-    response_data = test_result["response"]
-    
     for mapping in connector.get("response_mapping", []):
         source_path = mapping.get("source_path", "")
         target_variable = mapping.get("target_variable", "")
@@ -6561,7 +6653,18 @@ async def execute_connector(connector_id: str, variables: Dict[str, Any]):
         if source_path.startswith("$."):
             path_parts = source_path[2:].split(".")
             for part in path_parts:
-                if isinstance(value, dict):
+                # Handle array indexing like $.items[0]
+                if '[' in part and ']' in part:
+                    field_name = part[:part.index('[')]
+                    index = int(part[part.index('[')+1:part.index(']')])
+                    if isinstance(value, dict) and field_name in value:
+                        value = value[field_name]
+                        if isinstance(value, list) and len(value) > index:
+                            value = value[index]
+                        else:
+                            value = None
+                            break
+                elif isinstance(value, dict):
                     value = value.get(part)
                 else:
                     value = None
@@ -6578,8 +6681,10 @@ async def execute_connector(connector_id: str, variables: Dict[str, Any]):
     
     return {
         "success": True,
+        "status_code": response.status_code,
         "mapped_variables": mapped_variables,
-        "raw_response": response_data
+        "raw_response": response_data,
+        "elapsed_ms": response.elapsed.total_seconds() * 1000
     }
 
 
