@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Edit2, CheckCircle, XCircle, Clock, Mail, MessageSquare, Users, Globe, Zap, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { modalHeaderStyles, modalOverlayStyles, cardStyles, buttonStyles, inputStyles, getBadgeStyle } from '../utils/designSystem';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
