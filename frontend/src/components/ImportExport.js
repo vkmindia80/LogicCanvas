@@ -82,14 +82,33 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="import-export">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-4 shadow-lg">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-            <Download className="w-7 h-7" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            {/* Hamburger Menu for Mobile */}
+            <button 
+              onClick={onOpenMobileSidebar}
+              className="lg:hidden p-2 hover:bg-white/20 rounded-lg transition-colors"
+              data-testid="mobile-menu-btn"
+              aria-label="Open Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <Download className="w-7 h-7" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold">Import/Export Workflows</h2>
+              <p className="text-primary-100 text-sm">Backup and restore your workflows</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-2xl font-bold">Import/Export Workflows</h2>
-            <p className="text-primary-100 text-sm">Backup and restore your workflows</p>
-          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+            data-testid="close-import-export-btn"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
       </div>
 
