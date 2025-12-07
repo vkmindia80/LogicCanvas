@@ -756,11 +756,11 @@ const AppShell = () => {
       </main>
 
       {/* Modals */}
-      {showTaskInbox && <TaskInbox onClose={() => setShowTaskInbox(false)} onNotify={addToast} />}
-      {showApprovalQueue && <ApprovalQueue onClose={() => setShowApprovalQueue(false)} onNotify={addToast} />}
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
-      {showAuditTrail && <AuditTrail onClose={() => setShowAuditTrail(false)} />}
-      {showAnalytics && <AnalyticsDashboard onClose={() => setShowAnalytics(false)} />}
+      {showTaskInbox && <TaskInbox onClose={() => setShowTaskInbox(false)} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
+      {showApprovalQueue && <ApprovalQueue onClose={() => setShowApprovalQueue(false)} onNotify={addToast} sidebarCollapsed={sidebarCollapsed} />}
+      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} sidebarCollapsed={sidebarCollapsed} />}
+      {showAuditTrail && <AuditTrail onClose={() => setShowAuditTrail(false)} sidebarCollapsed={sidebarCollapsed} />}
+      {showAnalytics && <AnalyticsDashboard onClose={() => setShowAnalytics(false)} sidebarCollapsed={sidebarCollapsed} />}
       {showGlobalSearch && (
         <GlobalSearch
           isOpen={showGlobalSearch}
