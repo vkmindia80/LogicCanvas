@@ -335,8 +335,8 @@ const AppShell = () => {
             }}
             className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'workflows'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
-                : 'text-green-100 hover:bg-primary-700/50 hover:text-white'
+                ? 'bg-indigo-500/20 text-indigo-300 shadow-lg shadow-indigo-500/20 border border-indigo-500/30'
+                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-workflows"
           >
