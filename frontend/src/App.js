@@ -510,9 +510,9 @@ const AppShell = () => {
             onClick={() => {
               handleNavigate('integration-hub', () => setShowIntegrationHub(true));
             }}
-            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+            className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'integration-hub'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-integration-hub"
@@ -525,9 +525,9 @@ const AppShell = () => {
             onClick={() => {
               handleNavigate('connectors', () => setShowConnectorLibrary(true));
             }}
-            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+            className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'connectors'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-connectors"
@@ -541,9 +541,9 @@ const AppShell = () => {
               onClick={() => {
                 handleNavigate('debug', () => setShowDebugPanel(true));
               }}
-              className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
                 activeMenuItem === 'debug'
-                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                  ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
               data-testid="sidebar-debug"
@@ -557,9 +557,9 @@ const AppShell = () => {
             onClick={() => {
               handleNavigate('transformations', () => setShowTransformationPlayground(true));
             }}
-            className={`flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+            className={`relative flex w-full items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
               activeMenuItem === 'transformations'
-                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20'
+                ? 'bg-primary-500/20 text-primary-400 shadow-lg shadow-primary-500/20 menu-item-hamburger'
                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
             }`}
             data-testid="sidebar-transformations"
