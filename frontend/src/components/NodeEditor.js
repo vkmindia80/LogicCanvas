@@ -348,19 +348,19 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
     });
     
     return (
-      <div className="bg-white rounded-xl shadow-2xl border-2 border-red-500 overflow-hidden animate-slide-in">
-        <div className="p-5 bg-red-50">
-          <div className="flex items-center space-x-3 text-red-700">
+      <div className="bg-white rounded-xl shadow-2xl border-2 border-gold-500 overflow-hidden animate-slide-in">
+        <div className="p-5 bg-gold-50">
+          <div className="flex items-center space-x-3 text-gold-700">
             <Info className="w-6 h-6" />
             <div>
               <h3 className="font-bold text-lg">⚠️ Configuration Error</h3>
               <p className="text-sm mt-1 font-medium">Cannot edit node: Type configuration not found</p>
-              <div className="mt-3 text-xs space-y-1 bg-white p-3 rounded border border-red-200">
+              <div className="mt-3 text-xs space-y-1 bg-white p-3 rounded border border-gold-200">
                 <p><strong>Attempted Type:</strong> {nodeType || 'undefined'}</p>
                 <p><strong>Node Data Type:</strong> {node.data?.type || 'not set'}</p>
                 <p><strong>Node Root Type:</strong> {node.type || 'not set'}</p>
                 <p className="mt-2"><strong>Available Types:</strong></p>
-                <p className="text-slate-600 ml-2">{Object.keys(NODE_CONFIGS).join(', ')}</p>
+                <p className="text-primary-600 ml-2">{Object.keys(NODE_CONFIGS).join(', ')}</p>
               </div>
               <p className="text-xs mt-3 text-amber-700">💡 This node may need to be recreated from the palette.</p>
             </div>
@@ -378,7 +378,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
           </button>
           <button
             onClick={onClose}
-            className="w-full bg-red-500 text-white px-5 py-3 rounded-lg hover:bg-red-600 transition-all font-semibold"
+            className="w-full bg-gold-500 text-white px-5 py-3 rounded-lg hover:bg-gold-600 transition-all font-semibold"
           >
             Close
           </button>
@@ -400,19 +400,19 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   };
   
   const CollapsibleSection = ({ title, id, children, icon: Icon }) => (
-    <div className="border-2 border-slate-200 rounded-lg overflow-hidden bg-white">
+    <div className="border-2 border-green-200 rounded-lg overflow-hidden bg-white">
       <button
         onClick={() => toggleSection(id)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200 transition-all"
+        className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 transition-all"
       >
         <div className="flex items-center space-x-2">
-          {Icon && <Icon className="w-4 h-4 text-slate-600" />}
-          <span className="font-semibold text-slate-800">{title}</span>
+          {Icon && <Icon className="w-4 h-4 text-primary-600" />}
+          <span className="font-semibold text-primary-800">{title}</span>
         </div>
         {sectionsExpanded[id] ? (
-          <ChevronUp className="w-4 h-4 text-slate-600" />
+          <ChevronUp className="w-4 h-4 text-primary-600" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-slate-600" />
+          <ChevronDown className="w-4 h-4 text-primary-600" />
         )}
       </button>
       {sectionsExpanded[id] && (
@@ -579,7 +579,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-2xl border-2 border-slate-300 overflow-hidden animate-slide-in">
+    <div className="bg-white rounded-xl shadow-2xl border-2 border-green-300 overflow-hidden animate-slide-in">
       {/* Enhanced Header with Gradient */}
       <div 
         className="p-5 text-white relative overflow-hidden"
@@ -606,28 +606,28 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
       </div>
 
       {/* Content with improved spacing */}
-      <div className="p-5 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
+      <div className="p-5 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto bg-gradient-to-b from-green-50 to-white">
         {/* Basic Information Section */}
-        <div className="bg-white border-2 border-slate-200 rounded-lg p-4 space-y-4 shadow-sm">
-          <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Basic Information</h3>
+        <div className="bg-white border-2 border-green-200 rounded-lg p-4 space-y-4 shadow-sm">
+          <h3 className="section-header font-bold text-primary-900 text-sm mb-3">Basic Information</h3>
           
           {/* Label */}
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-slate-800">
-              Label <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-primary-800">
+              Label <span className="text-gold-500">*</span>
             </label>
             <input
               type="text"
               value={label}
               onChange={(e) => setLabel(e.target.value)}
-              className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 ${
-                !label ? 'border-red-300 bg-red-50' : 'border-slate-200'
+              className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-green-300 ${
+                !label ? 'border-gold-300 bg-gold-50' : 'border-green-200'
               }`}
               placeholder="Enter node label"
               data-testid="node-editor-label"
             />
             {!label && (
-              <div className="flex items-center space-x-1 text-xs text-red-600">
+              <div className="flex items-center space-x-1 text-xs text-gold-600">
                 <Info className="w-3 h-3" />
                 <span>Label is required to identify this node</span>
               </div>
@@ -636,18 +636,18 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
           {/* Description */}
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-slate-800">
-              Description <span className="text-slate-400 text-xs font-normal">(optional)</span>
+            <label className="block text-sm font-semibold text-primary-800">
+              Description <span className="text-green-400 text-xs font-normal">(optional)</span>
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-slate-300 resize-none"
+              className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all shadow-sm hover:border-green-300 resize-none"
               placeholder="Example: This step reviews the invoice and checks if approval is needed..."
               data-testid="node-editor-description"
             />
-            <p className="text-xs text-slate-500 flex items-center space-x-1">
+            <p className="text-xs text-green-500 flex items-center space-x-1">
               <Info className="w-3 h-3" />
               <span>Add context to help team members understand what this step does</span>
             </p>
@@ -668,7 +668,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                   className={`px-3 py-1 rounded text-xs font-medium transition-all ${
                     conditionMode === 'visual'
                       ? 'bg-amber-500 text-white shadow-sm'
-                      : 'text-slate-600 hover:text-slate-800'
+                      : 'text-primary-600 hover:text-primary-800'
                   }`}
                 >
                   🎨 Visual
@@ -677,8 +677,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                   onClick={() => setConditionMode('code')}
                   className={`px-3 py-1 rounded text-xs font-medium transition-all ${
                     conditionMode === 'code'
-                      ? 'bg-slate-700 text-white shadow-sm'
-                      : 'text-slate-600 hover:text-slate-800'
+                      ? 'bg-primary-700 text-white shadow-sm'
+                      : 'text-primary-600 hover:text-primary-800'
                   }`}
                 >
                   &lt;/&gt; Code
@@ -695,8 +695,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 />
               ) : (
                 <>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Condition Expression <span className="text-red-500">*</span>
+                  <label className="block text-sm font-semibold text-primary-700 mb-2">
+                    Condition Expression <span className="text-gold-500">*</span>
                   </label>
                   <ExpressionEditor
                     value={condition}
@@ -726,7 +726,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {/* Task Node - Assignment */}
         {resolvedNodeType === NODE_TYPES.TASK && (
           <div className="bg-white border-2 border-green-200 rounded-lg p-4 shadow-sm space-y-4">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Task Configuration</h3>
+            <h3 className="section-header font-bold text-primary-900 text-sm mb-3">Task Configuration</h3>
             <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-green-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -734,13 +734,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Assignment Strategy
               </label>
               <select
                 value={assignmentStrategy}
                 onChange={(e) => setAssignmentStrategy(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="task-assignment-strategy"
               >
                 <option value="direct">Direct Assignment</option>
@@ -748,7 +748,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 <option value="round_robin">Round Robin</option>
                 <option value="load_balanced">Load Balanced</option>
               </select>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-green-500">
                 {assignmentStrategy === 'direct' && '👤 Assign to a specific user by email'}
                 {assignmentStrategy === 'role' && '👥 Assign to first available user in a role'}
                 {assignmentStrategy === 'round_robin' && '🔄 Rotate assignments evenly among role members'}
@@ -758,13 +758,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             
             {assignmentStrategy === 'direct' ? (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-primary-700 mb-1">
                   Assign To
                 </label>
                 <select
                   value={assignedTo}
                   onChange={(e) => setAssignedTo(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   data-testid="task-assigned-to"
                 >
                   <option value="">-- Select User --</option>
@@ -774,24 +774,24 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                     </option>
                   ))}
                 </select>
-                <p className="mt-1 text-xs text-slate-500">Or enter email manually:</p>
+                <p className="mt-1 text-xs text-green-500">Or enter email manually:</p>
                 <input
                   type="text"
                   value={assignedTo}
                   onChange={(e) => setAssignedTo(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full mt-1 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="user@example.com"
                 />
               </div>
             ) : (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-primary-700 mb-1">
                   Select Role
                 </label>
                 <select
                   value={assignmentRole}
                   onChange={(e) => setAssignmentRole(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   data-testid="task-assignment-role"
                 >
                   <option value="">-- Select Role --</option>
@@ -805,13 +805,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Priority
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="task-priority"
               >
                 <option value="low">Low</option>
@@ -822,7 +822,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 SLA - Due In (hours)
               </label>
               <input
@@ -830,11 +830,11 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 value={dueInHours}
                 onChange={(e) => setDueInHours(e.target.value)}
                 min="1"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="24"
                 data-testid="task-due-hours"
               />
-              <p className="mt-1 text-xs text-slate-500 flex items-center space-x-1">
+              <p className="mt-1 text-xs text-green-500 flex items-center space-x-1">
                 <Info className="w-3 h-3" />
                 <span>Task will be auto-escalated if not completed within this time</span>
               </p>
@@ -845,7 +845,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {/* Approval Node */}
         {resolvedNodeType === NODE_TYPES.APPROVAL && (
           <div className="bg-white border-2 border-gold-200 rounded-lg p-4 shadow-sm space-y-4">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Approval Configuration</h3>
+            <h3 className="section-header font-bold text-primary-900 text-sm mb-3">Approval Configuration</h3>
             <div className="bg-gold-50 border border-gold-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-gold-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -853,29 +853,29 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Approvers (comma-separated) <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-primary-700 mb-1">
+                Approvers (comma-separated) <span className="text-gold-500">*</span>
               </label>
               <input
                 type="text"
                 value={approvers}
                 onChange={(e) => setApprovers(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="manager@example.com, director@example.com"
                 data-testid="approval-approvers"
               />
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-green-500">
                 💡 Tip: Enter email addresses separated by commas
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Approval Type
               </label>
               <select
                 value={approvalType}
                 onChange={(e) => setApprovalType(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="approval-type"
               >
                 <option value="single">Single Approver (any one can approve)</option>
@@ -884,8 +884,8 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 <option value="unanimous">Unanimous (all must approve)</option>
                 <option value="majority">Majority (more than 50% must approve)</option>
               </select>
-              <div className="mt-2 bg-slate-50 rounded p-2">
-                <p className="text-xs text-slate-600">
+              <div className="mt-2 bg-green-50 rounded p-2">
+                <p className="text-xs text-primary-600">
                   {approvalType === 'single' && '✅ First person to respond determines outcome'}
                   {approvalType === 'sequential' && '📋 Each person must approve before next person can review'}
                   {approvalType === 'parallel' && '⚡ Everyone reviews at the same time'}
@@ -900,7 +900,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {/* Form Node */}
         {resolvedNodeType === NODE_TYPES.FORM && (
           <div className="bg-white border-2 border-green-200 rounded-lg p-4 shadow-sm">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Form Selection</h3>
+            <h3 className="section-header font-bold text-primary-900 text-sm mb-3">Form Selection</h3>
             <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-green-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -908,13 +908,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               </p>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Select Form <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold text-primary-700 mb-2">
+                Select Form <span className="text-gold-500">*</span>
               </label>
               <select
                 value={formId}
                 onChange={(e) => setFormId(e.target.value)}
-                className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-3 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 data-testid="form-select"
               >
                 <option value="">-- Select a form --</option>
@@ -942,7 +942,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {/* Action Node - Enhanced with Visual API Builder */}
         {resolvedNodeType === 'action' && (
           <div className="bg-white border-2 border-pink-200 rounded-lg p-4 shadow-sm space-y-4">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Action Configuration</h3>
+            <h3 className="section-header font-bold text-primary-900 text-sm mb-3">Action Configuration</h3>
             <div className="bg-gradient-to-r from-pink-50 to-gold-50 border border-pink-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-pink-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -950,13 +950,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Action Type
               </label>
               <select
                 value={actionType}
                 onChange={(e) => setActionType(e.target.value)}
-                className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-3 py-2 border-2 border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 data-testid="action-type"
               >
                 <option value="http">🌐 HTTP Request (REST API)</option>
@@ -981,18 +981,18 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
             {actionType === 'script' && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-primary-700 mb-1">
                   Script
                 </label>
                 <textarea
                   value={script}
                   onChange={(e) => setScript(e.target.value)}
                   rows={6}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
+                  className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-xs"
                   placeholder="// Your script here\nconsole.log('Hello World');"
                   data-testid="action-script"
                 />
-                <p className="mt-1 text-xs text-slate-500 flex items-center space-x-1">
+                <p className="mt-1 text-xs text-green-500 flex items-center space-x-1">
                   <Info className="w-3 h-3" />
                   <span>JavaScript code to execute</span>
                 </p>
@@ -1005,13 +1005,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === NODE_TYPES.TIMER && (
           <>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Timer Type
               </label>
               <select
                 value={timerType}
                 onChange={(e) => setTimerType(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="timer-type"
               >
                 <option value="delay">Delay</option>
@@ -1023,7 +1023,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             {timerType === 'delay' && (
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-sm font-medium text-primary-700 mb-1">
                     Hours
                   </label>
                   <input
@@ -1031,13 +1031,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                     value={delayHours}
                     onChange={(e) => setDelayHours(e.target.value)}
                     min="0"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="0"
                     data-testid="timer-delay-hours"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-sm font-medium text-primary-700 mb-1">
                     Minutes
                   </label>
                   <input
@@ -1046,13 +1046,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                     onChange={(e) => setDelayMinutes(e.target.value)}
                     min="0"
                     max="59"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="0"
                     data-testid="timer-delay-minutes"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-sm font-medium text-primary-700 mb-1">
                     Seconds
                   </label>
                   <input
@@ -1061,7 +1061,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                     onChange={(e) => setDelaySeconds(e.target.value)}
                     min="0"
                     max="59"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="0"
                     data-testid="timer-delay-seconds"
                   />
@@ -1071,17 +1071,17 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
             {timerType === 'scheduled' && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-primary-700 mb-1">
                   Scheduled Time
                 </label>
                 <input
                   type="datetime-local"
                   value={scheduledTime}
                   onChange={(e) => setScheduledTime(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   data-testid="timer-scheduled-time"
                 />
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-green-500">
                   Or use cron expression for recurring schedules
                 </p>
               </div>
@@ -1089,7 +1089,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
             {timerType === 'timeout' && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-primary-700 mb-1">
                   Timeout (hours)
                 </label>
                 <input
@@ -1097,11 +1097,11 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                   value={timeoutHours}
                   onChange={(e) => setTimeoutHours(e.target.value)}
                   min="1"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="24"
                   data-testid="timer-timeout-hours"
                 />
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-green-500">
                   SLA timeout for tracking purposes
                 </p>
               </div>
@@ -1126,13 +1126,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {resolvedNodeType === NODE_TYPES.EVENT && (
           <>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Event Type
               </label>
               <select
                 value={eventType}
                 onChange={(e) => setEventType(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="event-type"
               >
                 <option value="message">Message</option>
@@ -1142,13 +1142,13 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Event Action
               </label>
               <select
                 value={eventAction}
                 onChange={(e) => setEventAction(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="event-action"
               >
                 <option value="send">Send/Throw</option>
@@ -1157,18 +1157,18 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-primary-700 mb-1">
                 Event Name
               </label>
               <input
                 type="text"
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="event.name"
                 data-testid="event-name"
               />
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-green-500">
                 Unique identifier for this event
               </p>
             </div>
@@ -1187,7 +1187,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
 
             {(eventAction === 'receive' || eventAction === 'catch') && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-primary-700 mb-1">
                   Timeout (hours)
                 </label>
                 <input
@@ -1195,11 +1195,11 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                   value={timeoutHours}
                   onChange={(e) => setTimeoutHours(e.target.value)}
                   min="1"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="24"
                   data-testid="event-timeout-hours"
                 />
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-green-500">
                   How long to wait for the event before timing out
                 </p>
               </div>
@@ -1342,7 +1342,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {/* API Call Node (similar to Action but separate) */}
         {resolvedNodeType === NODE_TYPES.API_CALL && (
           <div className="bg-white border-2 border-rose-200 rounded-lg p-4 shadow-sm">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">API Call Configuration</h3>
+            <h3 className="section-header font-bold text-primary-900 text-sm mb-3">API Call Configuration</h3>
             <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-rose-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -1359,7 +1359,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         {/* Webhook Node */}
         {resolvedNodeType === NODE_TYPES.WEBHOOK && (
           <div className="bg-white border-2 border-pink-300 rounded-lg p-4 shadow-sm">
-            <h3 className="section-header font-bold text-slate-900 text-sm mb-3">Webhook Configuration</h3>
+            <h3 className="section-header font-bold text-primary-900 text-sm mb-3">Webhook Configuration</h3>
             <div className="bg-pink-50 border border-pink-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-pink-800 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -1386,21 +1386,21 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         <CollapsibleSection title="Node Metadata" id="metadata" icon={Info}>
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-primary-700 mb-2">
                 Node Type
               </label>
-              <div className="px-4 py-2.5 bg-slate-100 rounded-lg border-2 border-slate-200 text-sm font-medium text-slate-700">
+              <div className="px-4 py-2.5 bg-green-100 rounded-lg border-2 border-green-200 text-sm font-medium text-primary-700">
                 {config.label}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-primary-700 mb-2">
                 Node ID
               </label>
-              <div className="text-xs text-slate-600 font-mono bg-white p-3 rounded-lg border-2 border-slate-200 select-all">
+              <div className="text-xs text-primary-600 font-mono bg-white p-3 rounded-lg border-2 border-green-200 select-all">
                 {node.id}
               </div>
-              <p className="text-xs text-slate-500 mt-2 flex items-center space-x-1">
+              <p className="text-xs text-green-500 mt-2 flex items-center space-x-1">
                 <Info className="w-3 h-3" />
                 <span>Unique identifier used for referencing this node</span>
               </p>
@@ -1409,7 +1409,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
         </CollapsibleSection>
 
         {/* Actions - Enhanced with tooltips */}
-        <div className="flex space-x-3 pt-5 mt-5 border-t-2 border-slate-200">
+        <div className="flex space-x-3 pt-5 mt-5 border-t-2 border-green-200">
           <button
             onClick={handleSave}
             disabled={!label}
@@ -1425,7 +1425,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
               onClick={() => {
                 onDuplicate(node.id);
               }}
-              className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all font-semibold toolbar-btn"
+              className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all font-semibold toolbar-btn"
               data-testid="node-editor-copy"
               title="Duplicate this node"
             >
@@ -1439,7 +1439,7 @@ const NodeEditor = ({ node, onUpdate, onDelete, onDuplicate, onClose }) => {
                 onDelete(node.id);
               }
             }}
-            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all font-semibold toolbar-btn"
+            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-gold-500 to-gold-600 text-white px-5 py-3.5 rounded-lg hover:shadow-lg hover:shadow-gold-500/30 transition-all font-semibold toolbar-btn"
             data-testid="node-editor-delete"
             title="Delete this node"
           >

@@ -132,12 +132,12 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
 
     const colorClass = 
       type === 'added' ? 'bg-green-50 border-green-200' :
-      type === 'removed' ? 'bg-red-50 border-red-200' :
+      type === 'removed' ? 'bg-gold-50 border-gold-200' :
       'bg-gold-50 border-gold-200';
 
     const iconColor =
       type === 'added' ? 'text-green-600' :
-      type === 'removed' ? 'text-red-600' :
+      type === 'removed' ? 'text-gold-600' :
       'text-gold-600';
 
     const Icon = 
@@ -149,8 +149,8 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
       <div className={`rounded-lg border-2 p-4 ${colorClass}`}>
         <div className="mb-3 flex items-center space-x-2">
           <Icon className={`h-5 w-5 ${iconColor}`} />
-          <h4 className="font-semibold text-slate-900">{title}</h4>
-          <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-slate-700">
+          <h4 className="font-semibold text-primary-900">{title}</h4>
+          <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-primary-700">
             {items.length}
           </span>
         </div>
@@ -158,21 +158,21 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
           {items.map((item, index) => (
             <div key={index} className="rounded-md bg-white p-3 text-sm">
               {item.id && (
-                <div className="mb-1 font-mono text-xs text-slate-500">
+                <div className="mb-1 font-mono text-xs text-green-500">
                   ID: {item.id}
                 </div>
               )}
               {item.data?.label && (
-                <div className="font-medium text-slate-900">{item.data.label}</div>
+                <div className="font-medium text-primary-900">{item.data.label}</div>
               )}
               {item.type && (
-                <div className="text-slate-600">Type: {item.type}</div>
+                <div className="text-primary-600">Type: {item.type}</div>
               )}
               {item.before && item.after && (
                 <div className="mt-2 grid gap-2 md:grid-cols-2">
                   <div>
-                    <div className="text-xs font-medium text-red-600">Before:</div>
-                    <div className="mt-1 rounded bg-red-50 p-2 text-xs">
+                    <div className="text-xs font-medium text-gold-600">Before:</div>
+                    <div className="mt-1 rounded bg-gold-50 p-2 text-xs">
                       <pre className="overflow-x-auto">{JSON.stringify(item.before.data, null, 2)}</pre>
                     </div>
                   </div>
@@ -192,23 +192,23 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary-900/50 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-6 py-4">
+        <div className="sticky top-0 z-10 border-b border-green-200 bg-white px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gold-100">
                 <GitBranch className="h-5 w-5 text-gold-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900">Version Comparison</h2>
-                <p className="text-sm text-slate-500">Compare workflow versions and rollback if needed</p>
+                <h2 className="text-xl font-bold text-primary-900">Version Comparison</h2>
+                <p className="text-sm text-green-500">Compare workflow versions and rollback if needed</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+              className="rounded-lg p-2 text-green-400 transition-colors hover:bg-green-100 hover:text-primary-600"
             >
               <X className="h-5 w-5" />
             </button>
@@ -222,23 +222,23 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
               <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary-500"></div>
             </div>
           ) : versions.length === 0 ? (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center">
-              <GitBranch className="mx-auto mb-3 h-12 w-12 text-slate-400" />
-              <h3 className="mb-1 text-lg font-semibold text-slate-900">No Version History</h3>
-              <p className="text-sm text-slate-600">This workflow doesn't have any saved versions yet.</p>
+            <div className="rounded-lg border border-green-200 bg-green-50 p-8 text-center">
+              <GitBranch className="mx-auto mb-3 h-12 w-12 text-green-400" />
+              <h3 className="mb-1 text-lg font-semibold text-primary-900">No Version History</h3>
+              <p className="text-sm text-primary-600">This workflow doesn't have any saved versions yet.</p>
             </div>
           ) : (
             <>
               {/* Version Selector */}
               <div className="mb-6 grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  <label className="mb-2 block text-sm font-semibold text-primary-700">
                     Version A (Older)
                   </label>
                   <select
                     value={selectedVersionA || ''}
                     onChange={(e) => setSelectedVersionA(Number(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
+                    className="w-full rounded-lg border border-green-300 bg-white px-4 py-2 text-primary-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
                   >
                     <option value="">Select version...</option>
                     {versions.map((v) => (
@@ -249,13 +249,13 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  <label className="mb-2 block text-sm font-semibold text-primary-700">
                     Version B (Newer)
                   </label>
                   <select
                     value={selectedVersionB || ''}
                     onChange={(e) => setSelectedVersionB(Number(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
+                    className="w-full rounded-lg border border-green-300 bg-white px-4 py-2 text-primary-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
                   >
                     <option value="">Select version...</option>
                     {versions.map((v) => (
@@ -272,32 +272,32 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
                     <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-b-2 border-primary-500"></div>
-                    <p className="text-sm text-slate-600">Comparing versions...</p>
+                    <p className="text-sm text-primary-600">Comparing versions...</p>
                   </div>
                 </div>
               ) : diff ? (
                 <div className="space-y-4">
                   {/* Summary */}
                   <div className="rounded-lg border-2 border-gold-200 bg-gold-50 p-4">
-                    <h3 className="mb-3 font-semibold text-slate-900">Comparison Summary</h3>
+                    <h3 className="mb-3 font-semibold text-primary-900">Comparison Summary</h3>
                     <div className="grid gap-3 md:grid-cols-4">
                       <div className="rounded-lg bg-white p-3 text-center">
                         <div className="text-2xl font-bold text-green-600">{diff.nodes_added?.length || 0}</div>
-                        <div className="text-xs text-slate-600">Nodes Added</div>
+                        <div className="text-xs text-primary-600">Nodes Added</div>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
-                        <div className="text-2xl font-bold text-red-600">{diff.nodes_removed?.length || 0}</div>
-                        <div className="text-xs text-slate-600">Nodes Removed</div>
+                        <div className="text-2xl font-bold text-gold-600">{diff.nodes_removed?.length || 0}</div>
+                        <div className="text-xs text-primary-600">Nodes Removed</div>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
                         <div className="text-2xl font-bold text-gold-600">{diff.nodes_modified?.length || 0}</div>
-                        <div className="text-xs text-slate-600">Nodes Modified</div>
+                        <div className="text-xs text-primary-600">Nodes Modified</div>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
                         <div className="text-2xl font-bold text-green-600">
                           {(diff.edges_added?.length || 0) + (diff.edges_removed?.length || 0)}
                         </div>
-                        <div className="text-xs text-slate-600">Edge Changes</div>
+                        <div className="text-xs text-primary-600">Edge Changes</div>
                       </div>
                     </div>
                   </div>
@@ -305,19 +305,19 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                   {/* Metadata Changes */}
                   {Object.keys(diff.metadata_changes || {}).length > 0 && (
                     <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
-                      <h4 className="mb-3 font-semibold text-slate-900">Metadata Changes</h4>
+                      <h4 className="mb-3 font-semibold text-primary-900">Metadata Changes</h4>
                       <div className="space-y-2">
                         {Object.entries(diff.metadata_changes).map(([key, change]) => (
                           <div key={key} className="rounded-md bg-white p-3">
-                            <div className="mb-1 text-sm font-medium text-slate-900 capitalize">{key}</div>
+                            <div className="mb-1 text-sm font-medium text-primary-900 capitalize">{key}</div>
                             <div className="grid gap-2 md:grid-cols-2">
-                              <div className="rounded bg-red-50 p-2">
-                                <div className="text-xs font-medium text-red-600">From:</div>
-                                <div className="text-sm text-slate-700">{JSON.stringify(change.from)}</div>
+                              <div className="rounded bg-gold-50 p-2">
+                                <div className="text-xs font-medium text-gold-600">From:</div>
+                                <div className="text-sm text-primary-700">{JSON.stringify(change.from)}</div>
                               </div>
                               <div className="rounded bg-green-50 p-2">
                                 <div className="text-xs font-medium text-green-600">To:</div>
-                                <div className="text-sm text-slate-700">{JSON.stringify(change.to)}</div>
+                                <div className="text-sm text-primary-700">{JSON.stringify(change.to)}</div>
                               </div>
                             </div>
                           </div>
@@ -336,7 +336,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                     <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
                       <div className="mb-3 flex items-center space-x-2">
                         <Link className="h-5 w-5 text-green-600" />
-                        <h4 className="font-semibold text-slate-900">Edge Changes</h4>
+                        <h4 className="font-semibold text-primary-900">Edge Changes</h4>
                       </div>
                       <div className="grid gap-3 md:grid-cols-2">
                         {diff.edges_added?.length > 0 && (
@@ -353,7 +353,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                         )}
                         {diff.edges_removed?.length > 0 && (
                           <div>
-                            <div className="mb-2 text-sm font-medium text-red-600">Removed ({diff.edges_removed.length})</div>
+                            <div className="mb-2 text-sm font-medium text-gold-600">Removed ({diff.edges_removed.length})</div>
                             <div className="space-y-2">
                               {diff.edges_removed.map((edge, index) => (
                                 <div key={index} className="rounded-md bg-white p-2 text-xs">
@@ -368,23 +368,23 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                   )}
                 </div>
               ) : (
-                <div className="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center">
-                  <p className="text-slate-600">Select two versions to compare</p>
+                <div className="rounded-lg border border-green-200 bg-green-50 p-8 text-center">
+                  <p className="text-primary-600">Select two versions to compare</p>
                 </div>
               )}
 
               {/* Version List */}
               <div className="mt-6">
-                <h3 className="mb-3 text-lg font-semibold text-slate-900">All Versions</h3>
+                <h3 className="mb-3 text-lg font-semibold text-primary-900">All Versions</h3>
                 <div className="space-y-2">
                   {versions.map((version) => (
-                    <div key={version.version} className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 hover:shadow-md transition-shadow">
+                    <div key={version.version} className="flex items-center justify-between rounded-lg border border-green-200 bg-white p-4 hover:shadow-md transition-shadow">
                       <div className="flex items-center space-x-4">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-100 font-bold text-gold-600">
                           v{version.version}
                         </div>
                         <div>
-                          <div className="font-medium text-slate-900">
+                          <div className="font-medium text-primary-900">
                             Version {version.version}
                             {version.is_rollback && (
                               <span className="ml-2 rounded bg-gold-100 px-2 py-0.5 text-xs text-gold-700">
@@ -392,7 +392,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                               </span>
                             )}
                           </div>
-                          <div className="mt-1 flex items-center space-x-4 text-xs text-slate-500">
+                          <div className="mt-1 flex items-center space-x-4 text-xs text-green-500">
                             <span className="flex items-center space-x-1">
                               <Clock className="h-3 w-3" />
                               <span>{new Date(version.created_at).toLocaleString()}</span>
@@ -403,7 +403,7 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
                             </span>
                           </div>
                           {version.change_notes && (
-                            <div className="mt-1 text-sm text-slate-600">{version.change_notes}</div>
+                            <div className="mt-1 text-sm text-primary-600">{version.change_notes}</div>
                           )}
                         </div>
                       </div>
@@ -424,10 +424,10 @@ const VersionComparison = ({ workflowId, onClose, onRollback }) => {
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 border-t border-slate-200 bg-slate-50 px-6 py-4">
+        <div className="sticky bottom-0 border-t border-green-200 bg-green-50 px-6 py-4">
           <button
             onClick={onClose}
-            className="w-full rounded-lg bg-slate-200 px-4 py-2 font-medium text-slate-700 transition-colors hover:bg-slate-300"
+            className="w-full rounded-lg bg-green-200 px-4 py-2 font-medium text-primary-700 transition-colors hover:bg-green-300"
           >
             Close
           </button>

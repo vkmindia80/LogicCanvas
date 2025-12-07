@@ -93,40 +93,40 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
         </div>
 
         {/* Search Input */}
-        <div className="p-6 border-b border-slate-200 bg-white">
+        <div className="p-6 border-b border-green-200 bg-white">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-5 h-5" />
             <input
               ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search workflows, forms, tasks, approvals..."
-              className="w-full pl-10 pr-10 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-10 pr-10 py-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               data-testid="global-search-input"
             />
             {loading && (
-              <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5 animate-spin" />
+              <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-400 w-5 h-5 animate-spin" />
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-green-500 mt-2">
             Type at least 2 characters to search
           </p>
         </div>
 
         {/* Results */}
-        <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+        <div className="flex-1 overflow-y-auto p-6 bg-green-50">
           {!results && !loading && (
             <div className="text-center py-12">
-              <Search className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <p className="text-slate-600">Start typing to search across all resources</p>
+              <Search className="w-16 h-16 text-green-300 mx-auto mb-4" />
+              <p className="text-primary-600">Start typing to search across all resources</p>
             </div>
           )}
 
           {results && results.total === 0 && (
             <div className="text-center py-12">
-              <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <p className="text-slate-600">No results found for {`"${query}"`}</p>
+              <FileText className="w-16 h-16 text-green-300 mx-auto mb-4" />
+              <p className="text-primary-600">No results found for {`"${query}"`}</p>
             </div>
           )}
 
@@ -135,7 +135,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
               {/* Workflows */}
               {results.results.workflows.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-2 flex items-center">
+                  <h3 className="text-sm font-semibold text-primary-700 mb-2 flex items-center">
                     <WorkflowIcon className="w-4 h-4 mr-2" />
                     Workflows ({results.results.workflows.length})
                   </h3>
@@ -144,18 +144,18 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                       <button
                         key={workflow.id}
                         onClick={() => handleSelectWorkflow(workflow)}
-                        className="w-full text-left p-3 rounded-lg hover:bg-slate-50 border border-slate-200 transition-colors"
+                        className="w-full text-left p-3 rounded-lg hover:bg-green-50 border border-green-200 transition-colors"
                         data-testid={`search-result-workflow-${workflow.id}`}
                       >
-                        <p className="font-medium text-slate-900">{workflow.name}</p>
+                        <p className="font-medium text-primary-900">{workflow.name}</p>
                         {workflow.description && (
-                          <p className="text-sm text-slate-600 mt-1">{workflow.description}</p>
+                          <p className="text-sm text-primary-600 mt-1">{workflow.description}</p>
                         )}
                         <div className="flex items-center space-x-2 mt-2">
-                          <span className="text-xs text-slate-500">
+                          <span className="text-xs text-green-500">
                             {workflow.nodes?.length || 0} nodes
                           </span>
-                          <span className="text-xs text-slate-400">•</span>
+                          <span className="text-xs text-green-400">•</span>
                           <span className={`text-xs px-2 py-0.5 rounded ${
                             workflow.status === 'published' 
                               ? 'bg-green-100 text-green-700'
@@ -173,7 +173,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
               {/* Forms */}
               {results.results.forms.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-2 flex items-center">
+                  <h3 className="text-sm font-semibold text-primary-700 mb-2 flex items-center">
                     <FileText className="w-4 h-4 mr-2" />
                     Forms ({results.results.forms.length})
                   </h3>
@@ -182,14 +182,14 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                       <button
                         key={form.id}
                         onClick={() => handleSelectForm(form)}
-                        className="w-full text-left p-3 rounded-lg hover:bg-slate-50 border border-slate-200 transition-colors"
+                        className="w-full text-left p-3 rounded-lg hover:bg-green-50 border border-green-200 transition-colors"
                         data-testid={`search-result-form-${form.id}`}
                       >
-                        <p className="font-medium text-slate-900">{form.name}</p>
+                        <p className="font-medium text-primary-900">{form.name}</p>
                         {form.description && (
-                          <p className="text-sm text-slate-600 mt-1">{form.description}</p>
+                          <p className="text-sm text-primary-600 mt-1">{form.description}</p>
                         )}
-                        <p className="text-xs text-slate-500 mt-2">
+                        <p className="text-xs text-green-500 mt-2">
                           {form.fields?.length || 0} fields
                         </p>
                       </button>
@@ -201,7 +201,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
               {/* Tasks */}
               {results.results.tasks.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-2 flex items-center">
+                  <h3 className="text-sm font-semibold text-primary-700 mb-2 flex items-center">
                     <CheckSquare className="w-4 h-4 mr-2" />
                     Tasks ({results.results.tasks.length})
                   </h3>
@@ -209,11 +209,11 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                     {results.results.tasks.map((task) => (
                       <div
                         key={task.id}
-                        className="p-3 rounded-lg bg-slate-50 border border-slate-200"
+                        className="p-3 rounded-lg bg-green-50 border border-green-200"
                       >
-                        <p className="font-medium text-slate-900">{task.title}</p>
+                        <p className="font-medium text-primary-900">{task.title}</p>
                         {task.description && (
-                          <p className="text-sm text-slate-600 mt-1">{task.description}</p>
+                          <p className="text-sm text-primary-600 mt-1">{task.description}</p>
                         )}
                         <div className="flex items-center space-x-2 mt-2">
                           <span className={`text-xs px-2 py-0.5 rounded ${
@@ -235,7 +235,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
               {/* Approvals */}
               {results.results.approvals.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-2 flex items-center">
+                  <h3 className="text-sm font-semibold text-primary-700 mb-2 flex items-center">
                     <ClipboardCheck className="w-4 h-4 mr-2" />
                     Approvals ({results.results.approvals.length})
                   </h3>
@@ -243,11 +243,11 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                     {results.results.approvals.map((approval) => (
                       <div
                         key={approval.id}
-                        className="p-3 rounded-lg bg-slate-50 border border-slate-200"
+                        className="p-3 rounded-lg bg-green-50 border border-green-200"
                       >
-                        <p className="font-medium text-slate-900">{approval.title}</p>
+                        <p className="font-medium text-primary-900">{approval.title}</p>
                         {approval.description && (
-                          <p className="text-sm text-slate-600 mt-1">{approval.description}</p>
+                          <p className="text-sm text-primary-600 mt-1">{approval.description}</p>
                         )}
                         <div className="flex items-center space-x-2 mt-2">
                           <span className={`text-xs px-2 py-0.5 rounded ${
@@ -255,7 +255,7 @@ const GlobalSearch = ({ isOpen, onClose, onSelectWorkflow, onSelectForm, onOpenM
                               ? 'bg-green-100 text-green-700'
                               : approval.status === 'pending'
                               ? 'bg-gold-100 text-gold-700'
-                              : 'bg-red-100 text-red-700'
+                              : 'bg-gold-100 text-gold-700'
                           }`}>
                             {approval.status}
                           </span>

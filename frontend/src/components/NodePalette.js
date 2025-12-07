@@ -112,23 +112,23 @@ const NodePalette = ({ onAddNode }) => {
   const categoryOrder = ['Flow Components', 'User Interaction', 'Logic', 'Data', 'Integrations'];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-slate-200 h-full flex flex-col">
+    <div className="bg-white rounded-lg shadow-lg border border-green-200 h-full flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-slate-200">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center">
+      <div className="p-4 border-b border-green-200">
+        <h3 className="text-sm font-semibold text-primary-700 mb-3 flex items-center">
           <Plus className="w-4 h-4 mr-2" />
           Node Palette
         </h3>
         
         {/* Search Bar */}
         <div className="relative">
-          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
           <input
             type="text"
             placeholder="Search nodes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent"
           />
         </div>
       </div>
@@ -147,17 +147,17 @@ const NodePalette = ({ onAddNode }) => {
               {/* Category Header */}
               <button
                 onClick={() => toggleCategory(category)}
-                className="w-full flex items-center justify-between px-2 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-lg transition-colors"
+                className="w-full flex items-center justify-between px-2 py-2 text-sm font-semibold text-primary-700 hover:bg-green-50 rounded-lg transition-colors"
               >
                 <div className="flex items-center space-x-2">
-                  <CategoryIcon className="w-4 h-4 text-slate-500" />
+                  <CategoryIcon className="w-4 h-4 text-green-500" />
                   <span>{category}</span>
-                  <span className="text-xs text-slate-400">({nodes.length})</span>
+                  <span className="text-xs text-green-400">({nodes.length})</span>
                 </div>
                 {isExpanded ? (
-                  <ChevronDown className="w-4 h-4 text-slate-400" />
+                  <ChevronDown className="w-4 h-4 text-green-400" />
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                  <ChevronRight className="w-4 h-4 text-green-400" />
                 )}
               </button>
               
@@ -194,7 +194,7 @@ const NodePalette = ({ onAddNode }) => {
         })}
         
         {Object.keys(filteredCategories).length === 0 && (
-          <div className="text-center py-8 text-slate-400">
+          <div className="text-center py-8 text-green-400">
             <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p className="text-sm">No nodes found</p>
             <p className="text-xs mt-1">Try a different search term</p>
@@ -203,8 +203,8 @@ const NodePalette = ({ onAddNode }) => {
       </div>
       
       {/* Footer Info */}
-      <div className="p-3 border-t border-slate-200 bg-slate-50">
-        <p className="text-xs text-slate-500 text-center">
+      <div className="p-3 border-t border-green-200 bg-green-50">
+        <p className="text-xs text-green-500 text-center">
           {Object.values(filteredCategories).reduce((acc, nodes) => acc + nodes.length, 0)} nodes available
         </p>
       </div>

@@ -150,11 +150,11 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <div className="mb-4 p-4 bg-gold-50 border border-gold-200 rounded-lg flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
               <div>
-                <p className="font-medium text-red-900">Error</p>
-                <p className="text-sm text-red-700">{error}</p>
+                <p className="font-medium text-gold-900">Error</p>
+                <p className="text-sm text-gold-700">{error}</p>
               </div>
             </div>
           )}
@@ -164,7 +164,7 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
             <div className="space-y-6">
               {/* Industry Selector */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-primary-700 mb-3">
                   Select your industry (optional)
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -175,11 +175,11 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
                       className={`p-3 rounded-lg border-2 transition text-left ${
                         industry === ind.value
                           ? 'border-gold-600 bg-gold-50'
-                          : 'border-gray-200 hover:border-gold-300'
+                          : 'border-green-200 hover:border-gold-300'
                       }`}
                     >
                       <div className="text-2xl mb-1">{ind.icon}</div>
-                      <div className="text-sm font-medium text-gray-900">{ind.label}</div>
+                      <div className="text-sm font-medium text-primary-900">{ind.label}</div>
                     </button>
                   ))}
                 </div>
@@ -187,16 +187,16 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
 
               {/* Description Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary-700 mb-2">
                   Describe your workflow
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="e.g., I need an employee onboarding workflow that collects documents, creates IT accounts, and schedules first-day orientation..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent resize-none"
+                  className="w-full h-32 px-4 py-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent resize-none"
                 />
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-green-500">
                   Be as detailed as possible. Include steps, approvals, notifications, and any specific requirements.
                 </p>
               </div>
@@ -205,7 +205,7 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Lightbulb className="w-4 h-4 text-amber-500" />
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-primary-700">
                     Need inspiration? Try these examples:
                   </label>
                 </div>
@@ -214,7 +214,7 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
                     <button
                       key={idx}
                       onClick={() => handleExampleClick(example)}
-                      className="w-full text-left p-3 text-sm text-gray-700 bg-gray-50 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition border border-transparent hover:border-gold-200"
+                      className="w-full text-left p-3 text-sm text-primary-700 bg-green-50 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition border border-transparent hover:border-gold-200"
                     >
                       {example}
                     </button>
@@ -231,11 +231,11 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
                 <Loader2 className="w-16 h-16 text-gold-600 animate-spin" />
                 <Sparkles className="w-8 h-8 text-amber-500 absolute top-0 right-0 animate-pulse" />
               </div>
-              <h3 className="mt-6 text-xl font-semibold text-gray-900">Generating your workflow...</h3>
-              <p className="mt-2 text-gray-600 text-center max-w-md">
+              <h3 className="mt-6 text-xl font-semibold text-primary-900">Generating your workflow...</h3>
+              <p className="mt-2 text-primary-600 text-center max-w-md">
                 Our AI is analyzing your requirements and creating a custom workflow with nodes, connections, and configurations.
               </p>
-              <div className="mt-8 space-y-3 text-sm text-gray-500">
+              <div className="mt-8 space-y-3 text-sm text-green-500">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-gold-600 rounded-full animate-pulse" />
                   <span>Analyzing requirements...</span>
@@ -264,31 +264,31 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
               </div>
 
               {/* Workflow Preview */}
-              <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{generatedWorkflow.name}</h3>
-                <p className="text-sm text-gray-600 mb-4">{generatedWorkflow.description}</p>
+              <div className="border border-green-200 rounded-lg p-6 bg-green-50">
+                <h3 className="text-lg font-semibold text-primary-900 mb-2">{generatedWorkflow.name}</h3>
+                <p className="text-sm text-primary-600 mb-4">{generatedWorkflow.description}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <div className="bg-white p-4 rounded-lg border border-gray-200">
-                    <p className="text-xs font-medium text-gray-500 uppercase">Nodes</p>
+                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                    <p className="text-xs font-medium text-green-500 uppercase">Nodes</p>
                     <p className="text-2xl font-bold text-gold-600">{generatedWorkflow.nodes?.length || 0}</p>
                   </div>
-                  <div className="bg-white p-4 rounded-lg border border-gray-200">
-                    <p className="text-xs font-medium text-gray-500 uppercase">Connections</p>
+                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                    <p className="text-xs font-medium text-green-500 uppercase">Connections</p>
                     <p className="text-2xl font-bold text-gold-600">{generatedWorkflow.edges?.length || 0}</p>
                   </div>
-                  <div className="bg-white p-4 rounded-lg border border-gray-200">
-                    <p className="text-xs font-medium text-gray-500 uppercase">Estimated Time</p>
+                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                    <p className="text-xs font-medium text-green-500 uppercase">Estimated Time</p>
                     <p className="text-2xl font-bold text-gold-600">{generatedWorkflow.metadata?.estimatedTime || '~5min'}</p>
                   </div>
                 </div>
 
                 {/* Node Types Summary */}
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Workflow Components:</p>
+                  <p className="text-sm font-medium text-primary-700 mb-2">Workflow Components:</p>
                   <div className="flex flex-wrap gap-2">
                     {generatedWorkflow.metadata?.nodeTypes?.map((type, idx) => (
-                      <span key={idx} className="px-3 py-1 bg-white border border-gray-300 rounded-full text-xs font-medium text-gray-700">
+                      <span key={idx} className="px-3 py-1 bg-white border border-green-300 rounded-full text-xs font-medium text-primary-700">
                         {type}
                       </span>
                     ))}
@@ -317,13 +317,13 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-6 bg-gray-50 flex justify-between">
+        <div className="border-t border-green-200 p-6 bg-green-50 flex justify-between">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onClose();
             }}
-            className="px-6 py-2 text-gray-700 hover:text-gray-900 font-medium transition"
+            className="px-6 py-2 text-primary-700 hover:text-primary-900 font-medium transition"
           >
             Cancel
           </button>
@@ -332,7 +332,7 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
               <button
                 onClick={handleGenerate}
                 disabled={!description.trim()}
-                className="px-6 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 disabled:bg-gray-300 disabled:cursor-not-allowed font-medium transition flex items-center gap-2"
+                className="px-6 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 disabled:bg-green-300 disabled:cursor-not-allowed font-medium transition flex items-center gap-2"
               >
                 <Wand2 className="w-4 h-4" />
                 Generate Workflow
@@ -345,7 +345,7 @@ const AIWorkflowWizard = ({ onClose, onWorkflowCreated }) => {
                     setStep(1);
                     setGeneratedWorkflow(null);
                   }}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition"
+                  className="px-6 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-100 font-medium transition"
                 >
                   Start Over
                 </button>

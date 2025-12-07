@@ -56,7 +56,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             placeholder={fieldMeta.placeholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           />
         );
       case 'textarea':
@@ -66,7 +66,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
             onChange={(e) => handleFieldChange(field, e.target.value)}
             placeholder={fieldMeta.placeholder}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent resize-none"
           />
         );
       case 'number':
@@ -78,7 +78,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
             placeholder={fieldMeta.placeholder}
             min={fieldMeta.min}
             max={fieldMeta.max}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           />
         );
       case 'select':
@@ -86,7 +86,7 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
           <select
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           >
             <option value="">Select...</option>
             {fieldMeta.options?.map(opt => (
@@ -101,9 +101,9 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
               type="checkbox"
               checked={value || false}
               onChange={(e) => handleFieldChange(field, e.target.checked)}
-              className="w-4 h-4 text-gold-600 border-gray-300 rounded focus:ring-gold-500"
+              className="w-4 h-4 text-gold-600 border-green-300 rounded focus:ring-gold-500"
             />
-            <span className="text-sm text-gray-700">{fieldMeta.label}</span>
+            <span className="text-sm text-primary-700">{fieldMeta.label}</span>
           </label>
         );
       default:
@@ -136,13 +136,13 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg border border-green-200 overflow-hidden">
       {/* Header with AI Assist */}
-      <div className="bg-gradient-to-r from-gold-50 to-green-50 p-4 border-b border-gray-200">
+      <div className="bg-gradient-to-r from-gold-50 to-green-50 p-4 border-b border-green-200">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900">Configure {nodeType}</h3>
-            <p className="text-xs text-gray-600 mt-0.5">Customize this node's behavior</p>
+            <h3 className="font-semibold text-primary-900">Configure {nodeType}</h3>
+            <p className="text-xs text-primary-600 mt-0.5">Customize this node's behavior</p>
           </div>
           <Tooltip content="Get AI suggestions for configuration">
             <button
@@ -177,25 +177,25 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
       )}
 
       {/* Configuration Sections */}
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-green-200">
         {Object.entries(sections).map(([key, section]) => (
           <div key={key}>
             {/* Section Header */}
             <button
               onClick={() => toggleSection(key)}
-              className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition"
+              className="w-full px-4 py-3 flex items-center justify-between hover:bg-green-50 transition"
             >
               <div className="flex items-center gap-2">
                 {expandedSections[key] ? (
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
+                  <ChevronDown className="w-4 h-4 text-green-500" />
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-gray-500" />
+                  <ChevronRight className="w-4 h-4 text-green-500" />
                 )}
                 <span className="text-lg">{section.icon}</span>
-                <span className="font-medium text-gray-900 text-sm">{section.title}</span>
+                <span className="font-medium text-primary-900 text-sm">{section.title}</span>
               </div>
               {key !== 'basic' && (
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                <span className="text-xs text-green-500 bg-green-100 px-2 py-1 rounded">
                   Optional
                 </span>
               )}
@@ -209,12 +209,12 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
                   return (
                     <div key={field}>
                       <div className="flex items-center gap-2 mb-1">
-                        <label className="text-sm font-medium text-gray-700">
+                        <label className="text-sm font-medium text-primary-700">
                           {fieldMeta.label}
                         </label>
                         {fieldMeta.help && (
                           <Tooltip content={fieldMeta.help}>
-                            <HelpCircle className="w-3.5 h-3.5 text-gray-400" />
+                            <HelpCircle className="w-3.5 h-3.5 text-green-400" />
                           </Tooltip>
                         )}
                       </div>
@@ -229,10 +229,10 @@ const SmartNodeConfigPanel = ({ node, nodeType, config, onChange }) => {
       </div>
 
       {/* Info Box */}
-      <div className="bg-gray-50 p-4 border-t border-gray-200">
+      <div className="bg-green-50 p-4 border-t border-green-200">
         <div className="flex items-start gap-2">
           <Info className="w-4 h-4 text-green-500 mt-0.5" />
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-primary-600">
             <strong>Tip:</strong> Only configure what you need. Default values work for most cases.
             Use advanced settings when you need fine-grained control.
           </p>

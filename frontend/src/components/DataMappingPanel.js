@@ -138,7 +138,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-slate-700 flex items-center space-x-2">
+        <h4 className="text-sm font-semibold text-primary-700 flex items-center space-x-2">
           <Link className="w-4 h-4 text-green-500" />
           <span>Data Mapping</span>
         </h4>
@@ -152,31 +152,31 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
         </button>
       </div>
 
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-green-500">
         Map workflow variables to node inputs and outputs
       </p>
 
       {/* Available Variables (Drag Source) */}
-      <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
-        <h5 className="text-xs font-semibold text-slate-600 mb-2 flex items-center space-x-1">
+      <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+        <h5 className="text-xs font-semibold text-primary-600 mb-2 flex items-center space-x-1">
           <VariableIcon className="w-3 h-3" />
           <span>Available Variables</span>
         </h5>
         <div className="space-y-1 max-h-32 overflow-y-auto">
           {workflowVariables.length === 0 ? (
-            <p className="text-xs text-slate-400">No variables defined</p>
+            <p className="text-xs text-green-400">No variables defined</p>
           ) : (
             workflowVariables.map((variable, index) => (
               <div
                 key={`var-${index}`}
                 draggable
                 onDragStart={(e) => handleDragStart(e, variable)}
-                className="flex items-center space-x-2 px-2 py-1 bg-white border border-slate-200 rounded cursor-move hover:border-green-300 hover:bg-green-50 transition-all"
+                className="flex items-center space-x-2 px-2 py-1 bg-white border border-green-200 rounded cursor-move hover:border-green-300 hover:bg-green-50 transition-all"
                 data-testid="draggable-variable"
               >
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                <span className="text-xs font-mono text-slate-700">{variable.name}</span>
-                <span className="text-[10px] text-slate-500">({variable.type})</span>
+                <span className="text-xs font-mono text-primary-700">{variable.name}</span>
+                <span className="text-[10px] text-green-500">({variable.type})</span>
               </div>
             ))
           )}
@@ -201,8 +201,8 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
               }`}
               data-testid="drop-target-input"
             >
-              <span className="text-xs font-mono text-slate-700">{field}</span>
-              <span className="text-[10px] text-slate-400">Drop here</span>
+              <span className="text-xs font-mono text-primary-700">{field}</span>
+              <span className="text-[10px] text-green-400">Drop here</span>
             </div>
           ))}
         </div>
@@ -211,27 +211,27 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
       {/* Current Mappings */}
       {mappings.length > 0 && (
         <div className="space-y-2">
-          <h5 className="text-xs font-semibold text-slate-600">Active Mappings</h5>
+          <h5 className="text-xs font-semibold text-primary-600">Active Mappings</h5>
           {mappings.map((mapping) => (
             <div
               key={mapping.id}
-              className="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg hover:shadow-md transition-shadow"
+              className="flex items-center space-x-2 p-2 bg-white border border-green-200 rounded-lg hover:shadow-md transition-shadow"
               data-testid="mapping-item"
             >
               <div className="flex-1 flex items-center space-x-2 text-xs">
-                <span className="font-mono text-slate-700 px-2 py-0.5 bg-slate-100 rounded">
+                <span className="font-mono text-primary-700 px-2 py-0.5 bg-green-100 rounded">
                   {mapping.sourceType === 'variable' ? mapping.source : 
                    mapping.sourceType === 'expression' ? '{ expr }' : 
                    `"${mapping.constant}"`}
                 </span>
-                <ArrowRight className="w-3 h-3 text-slate-400" />
-                <span className="font-mono text-slate-700 px-2 py-0.5 bg-green-100 rounded">
+                <ArrowRight className="w-3 h-3 text-green-400" />
+                <span className="font-mono text-primary-700 px-2 py-0.5 bg-green-100 rounded">
                   {mapping.target}
                 </span>
               </div>
               <button
                 onClick={() => removeMapping(mapping.id)}
-                className="p-1 hover:bg-red-100 rounded transition-colors text-red-600"
+                className="p-1 hover:bg-gold-100 rounded transition-colors text-gold-600"
                 title="Remove mapping"
                 data-testid="remove-mapping-btn"
               >
@@ -243,8 +243,8 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
       )}
 
       {/* Add New Mapping (Dropdown Method) */}
-      <div className="bg-slate-50 rounded-lg p-3 border border-slate-200 space-y-2">
-        <h5 className="text-xs font-semibold text-slate-600 flex items-center space-x-1">
+      <div className="bg-green-50 rounded-lg p-3 border border-green-200 space-y-2">
+        <h5 className="text-xs font-semibold text-primary-600 flex items-center space-x-1">
           <Plus className="w-3 h-3" />
           <span>Add Mapping</span>
         </h5>
@@ -252,7 +252,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
         <select
           value={newMapping.sourceType}
           onChange={(e) => setNewMapping({ ...newMapping, sourceType: e.target.value })}
-          className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          className="w-full px-2 py-1.5 text-xs border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
           data-testid="mapping-source-type"
         >
           <option value="variable">Variable</option>
@@ -264,7 +264,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
           <select
             value={newMapping.source}
             onChange={(e) => setNewMapping({ ...newMapping, source: e.target.value })}
-            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-2 py-1.5 text-xs border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="mapping-source-variable"
           >
             <option value="">Select variable...</option>
@@ -283,10 +283,10 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
               onChange={(e) => setNewMapping({ ...newMapping, expression: e.target.value })}
               placeholder="e.g., ${variable1} + ${variable2}"
               rows={2}
-              className="w-full px-2 py-1.5 text-xs font-mono border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-2 py-1.5 text-xs font-mono border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
               data-testid="mapping-expression"
             />
-            <p className="text-[10px] text-slate-500 mt-1">
+            <p className="text-[10px] text-green-500 mt-1">
               Use ${'{'}variableName{'}'} to reference variables
             </p>
           </div>
@@ -298,7 +298,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
             value={newMapping.source}
             onChange={(e) => setNewMapping({ ...newMapping, source: e.target.value })}
             placeholder="Enter constant value"
-            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-2 py-1.5 text-xs border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="mapping-constant"
           />
         )}
@@ -306,7 +306,7 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
         <select
           value={newMapping.target}
           onChange={(e) => setNewMapping({ ...newMapping, target: e.target.value })}
-          className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          className="w-full px-2 py-1.5 text-xs border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
           data-testid="mapping-target"
         >
           <option value="">Select target field...</option>
@@ -335,11 +335,11 @@ const DataMappingPanel = ({ node, workflowVariables = [], onUpdate }) => {
               key={`output-${field}`}
               className="px-2 py-1 bg-white border border-green-300 rounded"
             >
-              <span className="text-xs font-mono text-slate-700">{field}</span>
+              <span className="text-xs font-mono text-primary-700">{field}</span>
             </div>
           ))}
         </div>
-        <p className="text-[10px] text-slate-500 mt-2">
+        <p className="text-[10px] text-green-500 mt-2">
           These fields will be available to downstream nodes
         </p>
       </div>

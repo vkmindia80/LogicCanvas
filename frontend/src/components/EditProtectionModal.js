@@ -52,7 +52,7 @@ const EditProtectionModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-primary-900/70 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-xl rounded-xl bg-white p-6 shadow-2xl">
         {/* Warning Header */}
         <div className="mb-4 flex items-center space-x-3 rounded-lg bg-gold-50 p-4">
@@ -68,18 +68,18 @@ const EditProtectionModal = ({
         </div>
 
         {/* Workflow Info */}
-        <div className="mb-4 space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <div className="mb-4 space-y-3 rounded-lg border border-green-200 bg-green-50 p-4">
           <div className="flex items-center space-x-3">
-            <Lock className="h-5 w-5 text-slate-500" />
+            <Lock className="h-5 w-5 text-green-500" />
             <div>
-              <div className="text-sm font-medium text-slate-700">Workflow Name</div>
-              <div className="text-slate-900">{workflowName}</div>
+              <div className="text-sm font-medium text-primary-700">Workflow Name</div>
+              <div className="text-primary-900">{workflowName}</div>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <FileText className="h-5 w-5 text-slate-500" />
+            <FileText className="h-5 w-5 text-green-500" />
             <div>
-              <div className="text-sm font-medium text-slate-700">Current State</div>
+              <div className="text-sm font-medium text-primary-700">Current State</div>
               <div className="inline-block rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
                 {currentState === 'published' ? 'Published' : currentState}
               </div>
@@ -89,8 +89,8 @@ const EditProtectionModal = ({
             <div className="flex items-center space-x-3">
               <Activity className="h-5 w-5 text-green-500" />
               <div>
-                <div className="text-sm font-medium text-slate-700">Active Instances</div>
-                <div className="text-slate-900">
+                <div className="text-sm font-medium text-primary-700">Active Instances</div>
+                <div className="text-primary-900">
                   {activeInstances} workflow instance{activeInstances !== 1 ? 's' : ''} currently running
                 </div>
               </div>
@@ -123,7 +123,7 @@ const EditProtectionModal = ({
 
         {/* Change Notes Input */}
         <div className="mb-4">
-          <label className="mb-2 flex items-center space-x-2 text-sm font-semibold text-slate-700">
+          <label className="mb-2 flex items-center space-x-2 text-sm font-semibold text-primary-700">
             <MessageSquare className="h-4 w-4" />
             <span>Reason for Changes (Required)</span>
           </label>
@@ -131,11 +131,11 @@ const EditProtectionModal = ({
             value={changeNotes}
             onChange={(e) => setChangeNotes(e.target.value)}
             placeholder="Describe why you're creating a new draft version (e.g., 'Adding new approval step', 'Fixing task assignment logic')..."
-            className="w-full rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
+            className="w-full rounded-lg border border-green-300 p-3 text-primary-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
             rows={3}
             autoFocus
           />
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-green-500">
             This will be recorded in the version history and audit trail
           </p>
         </div>
@@ -145,7 +145,7 @@ const EditProtectionModal = ({
           <button
             onClick={onCancel}
             disabled={loading}
-            className="flex-1 rounded-lg border border-slate-300 px-4 py-2.5 font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
+            className="flex-1 rounded-lg border border-green-300 px-4 py-2.5 font-medium text-primary-700 transition-colors hover:bg-green-50 disabled:opacity-50"
           >
             Cancel
           </button>
@@ -166,7 +166,7 @@ const EditProtectionModal = ({
         </div>
 
         {/* Info Footer */}
-        <div className="mt-4 rounded-lg bg-slate-100 p-3 text-xs text-slate-600">
+        <div className="mt-4 rounded-lg bg-green-100 p-3 text-xs text-primary-600">
           <strong>Note:</strong> You can also pause the workflow first if you want to prevent new instances from starting while you make changes.
         </div>
       </div>

@@ -80,7 +80,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
     return (
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-gray-700">API Configuration (JSON)</label>
+          <label className="text-sm font-semibold text-primary-700">API Configuration (JSON)</label>
           <button
             onClick={() => setViewMode('visual')}
             className="flex items-center space-x-1 text-xs text-primary-600 hover:text-primary-700"
@@ -100,7 +100,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
               // Invalid JSON, don't update
             }
           }}
-          className="w-full h-64 px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full h-64 px-3 py-2 border border-green-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         />
       </div>
     );
@@ -109,10 +109,10 @@ const VisualAPIBuilder = ({ value, onChange }) => {
   return (
     <div className="space-y-4" data-testid="visual-api-builder">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-semibold text-gray-700">API Configuration</label>
+        <label className="text-sm font-semibold text-primary-700">API Configuration</label>
         <button
           onClick={() => setViewMode('json')}
-          className="flex items-center space-x-1 text-xs text-gray-600 hover:text-gray-800"
+          className="flex items-center space-x-1 text-xs text-primary-600 hover:text-primary-800"
         >
           <Code className="w-4 h-4" />
           <span>JSON View</span>
@@ -122,11 +122,11 @@ const VisualAPIBuilder = ({ value, onChange }) => {
       {/* URL & Method */}
       <div className="grid grid-cols-12 gap-2">
         <div className="col-span-3">
-          <label className="block text-xs font-medium text-gray-700 mb-1">Method</label>
+          <label className="block text-xs font-medium text-primary-700 mb-1">Method</label>
           <select
             value={config.method}
             onChange={(e) => updateConfig({ method: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             data-testid="api-method"
           >
             {HTTP_METHODS.map(method => (
@@ -135,13 +135,13 @@ const VisualAPIBuilder = ({ value, onChange }) => {
           </select>
         </div>
         <div className="col-span-9">
-          <label className="block text-xs font-medium text-gray-700 mb-1">URL</label>
+          <label className="block text-xs font-medium text-primary-700 mb-1">URL</label>
           <input
             type="text"
             value={config.url}
             onChange={(e) => updateConfig({ url: e.target.value })}
             placeholder="https://api.example.com/endpoint"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             data-testid="api-url"
           />
         </div>
@@ -149,11 +149,11 @@ const VisualAPIBuilder = ({ value, onChange }) => {
 
       {/* Authentication */}
       <div className="border-t pt-3">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Authentication</label>
+        <label className="block text-sm font-semibold text-primary-700 mb-2">Authentication</label>
         <select
           value={config.auth?.type || 'none'}
           onChange={(e) => updateConfig({ auth: { ...config.auth, type: e.target.value } })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm mb-2"
+          className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm mb-2"
           data-testid="auth-type"
         >
           {AUTH_TYPES.map(type => (
@@ -167,7 +167,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
             value={config.auth?.token || ''}
             onChange={(e) => updateConfig({ auth: { ...config.auth, token: e.target.value } })}
             placeholder="Bearer token"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             data-testid="auth-token"
           />
         )}
@@ -179,14 +179,14 @@ const VisualAPIBuilder = ({ value, onChange }) => {
               value={config.auth?.username || ''}
               onChange={(e) => updateConfig({ auth: { ...config.auth, username: e.target.value } })}
               placeholder="Username"
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
             <input
               type="password"
               value={config.auth?.password || ''}
               onChange={(e) => updateConfig({ auth: { ...config.auth, password: e.target.value } })}
               placeholder="Password"
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
           </div>
         )}
@@ -198,14 +198,14 @@ const VisualAPIBuilder = ({ value, onChange }) => {
               value={config.auth?.keyName || ''}
               onChange={(e) => updateConfig({ auth: { ...config.auth, keyName: e.target.value } })}
               placeholder="Key name (e.g., X-API-Key)"
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
             <input
               type="text"
               value={config.auth?.keyValue || ''}
               onChange={(e) => updateConfig({ auth: { ...config.auth, keyValue: e.target.value } })}
               placeholder="API key value"
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             />
           </div>
         )}
@@ -214,7 +214,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
       {/* Headers */}
       <div className="border-t pt-3">
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-semibold text-gray-700">Headers</label>
+          <label className="text-sm font-semibold text-primary-700">Headers</label>
           <button
             onClick={addHeader}
             className="flex items-center space-x-1 text-xs text-primary-600 hover:text-primary-700"
@@ -232,18 +232,18 @@ const VisualAPIBuilder = ({ value, onChange }) => {
                 value={header.key}
                 onChange={(e) => updateHeader(index, 'key', e.target.value)}
                 placeholder="Header name"
-                className="col-span-5 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                className="col-span-5 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               />
               <input
                 type="text"
                 value={header.value}
                 onChange={(e) => updateHeader(index, 'value', e.target.value)}
                 placeholder="Header value"
-                className="col-span-6 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                className="col-span-6 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               />
               <button
                 onClick={() => removeHeader(index)}
-                className="col-span-1 flex items-center justify-center text-red-600 hover:text-red-700"
+                className="col-span-1 flex items-center justify-center text-gold-600 hover:text-gold-700"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -255,7 +255,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
       {/* Query Parameters */}
       <div className="border-t pt-3">
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-semibold text-gray-700">Query Parameters</label>
+          <label className="text-sm font-semibold text-primary-700">Query Parameters</label>
           <button
             onClick={addQueryParam}
             className="flex items-center space-x-1 text-xs text-primary-600 hover:text-primary-700"
@@ -273,18 +273,18 @@ const VisualAPIBuilder = ({ value, onChange }) => {
                 value={param.key}
                 onChange={(e) => updateQueryParam(index, 'key', e.target.value)}
                 placeholder="Parameter name"
-                className="col-span-5 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                className="col-span-5 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               />
               <input
                 type="text"
                 value={param.value}
                 onChange={(e) => updateQueryParam(index, 'value', e.target.value)}
                 placeholder="Parameter value (use ${variable} for dynamic)"
-                className="col-span-6 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                className="col-span-6 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               />
               <button
                 onClick={() => removeQueryParam(index)}
-                className="col-span-1 flex items-center justify-center text-red-600 hover:text-red-700"
+                className="col-span-1 flex items-center justify-center text-gold-600 hover:text-gold-700"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -296,7 +296,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
       {/* Request Body (for POST/PUT/PATCH) */}
       {['POST', 'PUT', 'PATCH'].includes(config.method) && (
         <div className="border-t pt-3">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Request Body</label>
+          <label className="block text-sm font-semibold text-primary-700 mb-2">Request Body</label>
           <div className="relative">
             <textarea
               value={typeof config.body === 'string' ? config.body : JSON.stringify(config.body, null, 2)}
@@ -309,7 +309,7 @@ const VisualAPIBuilder = ({ value, onChange }) => {
                 }
               }}
               placeholder='{\n  "key": "value",\n  "userId": "${userId}",\n  "amount": ${amount}\n}'
-              className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full h-32 px-3 py-2 border border-green-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               data-testid="request-body"
               style={{
                 tabSize: 2,
@@ -319,8 +319,8 @@ const VisualAPIBuilder = ({ value, onChange }) => {
             />
           </div>
           <div className="flex items-start space-x-2 mt-2 text-xs">
-            <div className="flex-1 text-gray-600">
-              💡 Use <code className="bg-gray-100 px-1 py-0.5 rounded">${'{variable}'}</code> to insert workflow variables
+            <div className="flex-1 text-primary-600">
+              💡 Use <code className="bg-green-100 px-1 py-0.5 rounded">${'{variable}'}</code> to insert workflow variables
             </div>
             <button
               onClick={() => {
@@ -343,18 +343,18 @@ const VisualAPIBuilder = ({ value, onChange }) => {
       {/* Response Mapping (Optional) */}
       <div className="border-t pt-3">
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-semibold text-gray-700">Response Mapping (Optional)</label>
-          <span className="text-xs text-gray-500">Extract data from API response</span>
+          <label className="text-sm font-semibold text-primary-700">Response Mapping (Optional)</label>
+          <span className="text-xs text-green-500">Extract data from API response</span>
         </div>
         <textarea
           value={config.responseMapping || ''}
           onChange={(e) => updateConfig({ responseMapping: e.target.value })}
           placeholder='Example:\nuserId = response.data.id\nuserName = response.data.name\nemail = response.data.email'
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-green-300 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           data-testid="response-mapping"
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-green-500 mt-1">
           Map response fields to workflow variables (one per line)
         </p>
       </div>

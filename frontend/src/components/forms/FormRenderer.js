@@ -40,7 +40,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       return null;
     }
 
-    const commonClasses = "w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent";
+    const commonClasses = "w-full px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent";
     const value = localData[field.id] || '';
 
     switch (field.type) {
@@ -50,9 +50,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'phone':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <input
               type={field.type === 'text' ? 'text' : field.type}
@@ -72,9 +72,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'textarea':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <textarea
               value={value}
@@ -93,9 +93,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'number':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <input
               type="number"
@@ -115,9 +115,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'date':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <input
               type="date"
@@ -135,9 +135,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'datetime':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <input
               type="datetime-local"
@@ -153,9 +153,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'dropdown':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <select
               value={value}
@@ -175,13 +175,13 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'multiselect':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <div className="space-y-2">
               {(field.options || []).map((option, idx) => (
-                <label key={idx} className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <label key={idx} className="flex items-center space-x-3 p-3 border border-green-200 rounded-lg hover:bg-green-50 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={(value || []).includes(option)}
@@ -193,9 +193,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                       handleFieldChange(field.id, newValues);
                     }}
                     disabled={readOnly}
-                    className="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
+                    className="w-4 h-4 text-primary-600 border-green-300 rounded focus:ring-primary-500"
                   />
-                  <span className="text-slate-700">{option}</span>
+                  <span className="text-primary-700">{option}</span>
                 </label>
               ))}
             </div>
@@ -205,19 +205,19 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'checkbox':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="flex items-center space-x-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer">
+            <label className="flex items-center space-x-3 p-4 border border-green-200 rounded-lg hover:bg-green-50 cursor-pointer">
               <input
                 type="checkbox"
                 checked={value || false}
                 onChange={(e) => handleFieldChange(field.id, e.target.checked)}
                 required={field.required}
                 disabled={readOnly}
-                className="w-5 h-5 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
+                className="w-5 h-5 text-primary-600 border-green-300 rounded focus:ring-primary-500"
               />
               <div>
-                <span className="text-sm font-medium text-slate-700">
+                <span className="text-sm font-medium text-primary-700">
                   {field.text || field.label}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
+                  {field.required && <span className="text-gold-500 ml-1">*</span>}
                 </span>
               </div>
             </label>
@@ -227,13 +227,13 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'radio':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <div className="space-y-2">
               {(field.options || []).map((option, idx) => (
-                <label key={idx} className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <label key={idx} className="flex items-center space-x-3 p-3 border border-green-200 rounded-lg hover:bg-green-50 cursor-pointer">
                   <input
                     type="radio"
                     name={field.id}
@@ -242,9 +242,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                     onChange={(e) => handleFieldChange(field.id, e.target.value)}
                     required={field.required}
                     disabled={readOnly}
-                    className="w-4 h-4 text-primary-600 border-slate-300 focus:ring-primary-500"
+                    className="w-4 h-4 text-primary-600 border-green-300 focus:ring-primary-500"
                   />
-                  <span className="text-slate-700">{option}</span>
+                  <span className="text-primary-700">{option}</span>
                 </label>
               ))}
             </div>
@@ -254,11 +254,11 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'toggle':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
+            <div className="flex items-center justify-between p-4 border border-green-200 rounded-lg">
               <div>
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-primary-700">
                   {field.text || field.label}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
+                  {field.required && <span className="text-gold-500 ml-1">*</span>}
                 </label>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -269,7 +269,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                   disabled={readOnly}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                <div className="w-11 h-6 bg-green-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-green-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
               </label>
             </div>
           </div>
@@ -279,11 +279,11 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'image':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
-            <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors">
+            <div className="border-2 border-dashed border-green-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors">
               <input
                 type="file"
                 accept={field.accept || '*'}
@@ -301,7 +301,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                 id={`file-${field.id}`}
               />
               <label htmlFor={`file-${field.id}`} className="cursor-pointer">
-                <div className="text-slate-600">
+                <div className="text-primary-600">
                   {value ? (
                     <span className="text-primary-600 font-medium">{value.name || 'File selected'}</span>
                   ) : (
@@ -319,11 +319,11 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'signature':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
-            <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
+            <div className="border-2 border-green-300 rounded-lg overflow-hidden">
               <canvas
                 ref={(ref) => canvasRefs.current[field.id] = ref}
                 width={600}
@@ -352,8 +352,8 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                   handleFieldChange(field.id, canvas.toDataURL());
                 }}
               />
-              <div className="p-2 bg-slate-50 flex justify-between items-center">
-                <span className="text-xs text-slate-500">Sign above</span>
+              <div className="p-2 bg-green-50 flex justify-between items-center">
+                <span className="text-xs text-green-500">Sign above</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -375,9 +375,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'rating':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <div className="flex space-x-2">
               {[...Array(field.maxRating || 5)].map((_, idx) => (
@@ -392,7 +392,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                     className={`w-8 h-8 ${
                       (value || 0) > idx
                         ? 'text-gold-400 fill-yellow-400'
-                        : 'text-slate-300'
+                        : 'text-green-300'
                     }`}
                   />
                 </button>
@@ -404,9 +404,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
       case 'slider':
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <div className="flex items-center space-x-4">
               <input
@@ -417,9 +417,9 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                 value={value || field.min || 0}
                 onChange={(e) => handleFieldChange(field.id, parseInt(e.target.value))}
                 disabled={readOnly}
-                className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                className="flex-1 h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
               />
-              <span className="text-lg font-semibold text-slate-900 w-12 text-right">
+              <span className="text-lg font-semibold text-primary-900 w-12 text-right">
                 {value || field.min || 0}
               </span>
             </div>
@@ -430,15 +430,15 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
         const items = value || [{}];
         return (
           <div key={field.id} className="mb-6" data-testid={`field-${field.id}`}>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
+              {field.required && <span className="text-gold-500 ml-1">*</span>}
             </label>
             <div className="space-y-4">
               {items.map((item, idx) => (
-                <div key={idx} className="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                <div key={idx} className="border border-green-200 rounded-lg p-4 bg-green-50">
                   <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-medium text-slate-700">Item {idx + 1}</span>
+                    <span className="text-sm font-medium text-primary-700">Item {idx + 1}</span>
                     {items.length > (field.minItems || 1) && (
                       <button
                         type="button"
@@ -447,7 +447,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                           handleFieldChange(field.id, newItems);
                         }}
                         disabled={readOnly}
-                        className="text-red-600 hover:text-red-700"
+                        className="text-gold-600 hover:text-gold-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -476,7 +476,7 @@ const FormRenderer = ({ fields, formData = {}, onChange = () => {}, readOnly = f
                     handleFieldChange(field.id, newItems);
                   }}
                   disabled={readOnly}
-                  className="w-full flex items-center justify-center space-x-2 py-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-primary-400 hover:text-primary-600 transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 py-3 border-2 border-dashed border-green-300 rounded-lg text-primary-600 hover:border-primary-400 hover:text-primary-600 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Item</span>

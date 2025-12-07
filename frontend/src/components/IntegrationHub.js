@@ -90,14 +90,14 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
       );
     } else if (status === 'error') {
       return (
-        <span className="inline-flex items-center space-x-1 rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
+        <span className="inline-flex items-center space-x-1 rounded-full bg-gold-100 px-2 py-1 text-xs font-medium text-gold-800">
           <XCircle className="h-3 w-3" />
           <span>Error</span>
         </span>
       );
     } else {
       return (
-        <span className="inline-flex items-center space-x-1 rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-800">
+        <span className="inline-flex items-center space-x-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-primary-800">
           <Clock className="h-3 w-3" />
           <span>Inactive</span>
         </span>
@@ -140,12 +140,12 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
       </div>
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-green-200 bg-green-50 px-6 py-4">
           <div className="flex items-center space-x-3">
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             >
               <option value="all">All Types</option>
               <option value="email">Email (SMTP)</option>
@@ -157,7 +157,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
             
             <button
               onClick={loadIntegrations}
-              className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              className="rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-green-50"
             >
               <RefreshCw className="h-4 w-4" />
             </button>
@@ -182,14 +182,14 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
             <div className="flex h-64 items-center justify-center">
               <div className="text-center">
                 <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary-600"></div>
-                <p className="text-sm text-slate-600">Loading integrations...</p>
+                <p className="text-sm text-primary-600">Loading integrations...</p>
               </div>
             </div>
           ) : integrations.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center">
-              <Globe className="mb-4 h-16 w-16 text-slate-300" />
-              <h3 className="mb-2 text-lg font-semibold text-slate-900">No Integrations Yet</h3>
-              <p className="mb-4 text-sm text-slate-600">Get started by adding your first integration</p>
+              <Globe className="mb-4 h-16 w-16 text-green-300" />
+              <h3 className="mb-2 text-lg font-semibold text-primary-900">No Integrations Yet</h3>
+              <p className="mb-4 text-sm text-primary-600">Get started by adding your first integration</p>
               <button
                 onClick={() => setShowAddModal(true)}
                 className="inline-flex items-center space-x-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-700"
@@ -203,7 +203,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
               {integrations.map((integration) => (
                 <div
                   key={integration.id}
-                  className="group rounded-xl border-2 border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-lg"
+                  className="group rounded-xl border-2 border-green-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-lg"
                 >
                   <div className="mb-4 flex items-start justify-between">
                     <div className="flex items-center space-x-3">
@@ -211,19 +211,19 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
                         {getIconComponent(integration.type)}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-slate-900">{integration.name}</h3>
-                        <p className="text-xs text-slate-500 capitalize">{integration.type}</p>
+                        <h3 className="font-semibold text-primary-900">{integration.name}</h3>
+                        <p className="text-xs text-green-500 capitalize">{integration.type}</p>
                       </div>
                     </div>
                     {getStatusBadge(integration.status)}
                   </div>
 
                   {integration.description && (
-                    <p className="mb-4 text-sm text-slate-600 line-clamp-2">{integration.description}</p>
+                    <p className="mb-4 text-sm text-primary-600 line-clamp-2">{integration.description}</p>
                   )}
 
                   {integration.last_tested && (
-                    <p className="mb-4 text-xs text-slate-500">
+                    <p className="mb-4 text-xs text-green-500">
                       Last tested: {new Date(integration.last_tested).toLocaleString()}
                     </p>
                   )}
@@ -232,7 +232,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
                     <button
                       onClick={() => handleTest(integration.id)}
                       disabled={testingId === integration.id}
-                      className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
+                      className="flex-1 rounded-lg border border-green-300 px-3 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-green-50 disabled:opacity-50"
                     >
                       {testingId === integration.id ? 'Testing...' : 'Test'}
                     </button>
@@ -241,13 +241,13 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
                         setEditingIntegration(integration);
                         setShowAddModal(true);
                       }}
-                      className="rounded-lg border border-slate-300 p-2 text-slate-600 transition-colors hover:bg-slate-50"
+                      className="rounded-lg border border-green-300 p-2 text-primary-600 transition-colors hover:bg-green-50"
                     >
                       <Edit2 className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(integration.id)}
-                      className="rounded-lg border border-red-300 p-2 text-red-600 transition-colors hover:bg-red-50"
+                      className="rounded-lg border border-gold-300 p-2 text-gold-600 transition-colors hover:bg-gold-50"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -325,58 +325,58 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">SMTP Host</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">SMTP Host</label>
               <input
                 type="text"
                 value={formData.config.smtp_host || ''}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, smtp_host: e.target.value } })}
                 placeholder="smtp.gmail.com"
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">SMTP Port</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">SMTP Port</label>
               <input
                 type="number"
                 value={formData.config.smtp_port || 587}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, smtp_port: parseInt(e.target.value) } })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Username</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Username</label>
               <input
                 type="text"
                 value={formData.config.username || ''}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, username: e.target.value } })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Password</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={formData.config.password || ''}
                   onChange={(e) => setFormData({ ...formData, config: { ...formData.config, password: e.target.value } })}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">From Email</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">From Email</label>
               <input
                 type="email"
                 value={formData.config.from_email || ''}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, from_email: e.target.value } })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
           </>
@@ -385,30 +385,30 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
       case 'slack':
         return (
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Webhook URL</label>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Webhook URL</label>
             <input
               type="url"
               value={formData.config.webhook_url || ''}
               onChange={(e) => setFormData({ ...formData, config: { ...formData.config, webhook_url: e.target.value } })}
               placeholder="https://hooks.slack.com/services/..."
-              className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
-            <p className="mt-1 text-xs text-slate-500">Get your webhook URL from Slack App settings</p>
+            <p className="mt-1 text-xs text-green-500">Get your webhook URL from Slack App settings</p>
           </div>
         );
 
       case 'teams':
         return (
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Webhook URL</label>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Webhook URL</label>
             <input
               type="url"
               value={formData.config.webhook_url || ''}
               onChange={(e) => setFormData({ ...formData, config: { ...formData.config, webhook_url: e.target.value } })}
               placeholder="https://outlook.office.com/webhook/..."
-              className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
-            <p className="mt-1 text-xs text-slate-500">Get your webhook URL from Teams channel connectors</p>
+            <p className="mt-1 text-xs text-green-500">Get your webhook URL from Teams channel connectors</p>
           </div>
         );
 
@@ -416,21 +416,21 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">API URL</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">API URL</label>
               <input
                 type="url"
                 value={formData.config.url || ''}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, url: e.target.value } })}
                 placeholder="https://api.example.com"
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Method</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Method</label>
               <select
                 value={formData.config.method || 'GET'}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, method: e.target.value } })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               >
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
@@ -439,12 +439,12 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
               </select>
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">API Key (Optional)</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">API Key (Optional)</label>
               <input
                 type="text"
                 value={formData.config.api_key || ''}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, api_key: e.target.value } })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
           </>
@@ -454,21 +454,21 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Webhook URL</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Webhook URL</label>
               <input
                 type="url"
                 value={formData.config.webhook_url || ''}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, webhook_url: e.target.value } })}
                 placeholder="https://example.com/webhook"
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Method</label>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Method</label>
               <select
                 value={formData.config.method || 'POST'}
                 onChange={(e) => setFormData({ ...formData, config: { ...formData.config, method: e.target.value } })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               >
                 <option value="POST">POST</option>
                 <option value="GET">GET</option>
@@ -483,50 +483,50 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-primary-900/50 backdrop-blur-sm">
       <div className="relative w-full max-w-2xl rounded-2xl bg-white p-8 shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+          className="absolute right-4 top-4 rounded-lg p-2 text-green-400 transition-colors hover:bg-green-100 hover:text-primary-600"
         >
           <X className="h-5 w-5" />
         </button>
 
-        <h3 className="mb-6 text-2xl font-bold text-slate-900">
+        <h3 className="mb-6 text-2xl font-bold text-primary-900">
           {integration ? 'Edit Integration' : 'Add Integration'}
         </h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Integration Name</label>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Integration Name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               placeholder="My Integration"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Description</label>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Description</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows="2"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               placeholder="Brief description of this integration"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Integration Type</label>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Integration Type</label>
             <select
               value={formData.type}
               onChange={(e) => setFormData({ ...formData, type: e.target.value, config: {} })}
               disabled={!!integration}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 disabled:opacity-50"
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 disabled:opacity-50"
             >
               <option value="email">Email (SMTP)</option>
               <option value="slack">Slack</option>
@@ -536,8 +536,8 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
             </select>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <h4 className="mb-3 text-sm font-semibold text-slate-700">Configuration</h4>
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+            <h4 className="mb-3 text-sm font-semibold text-primary-700">Configuration</h4>
             <div className="space-y-4">{renderConfigFields()}</div>
           </div>
 
@@ -545,7 +545,7 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-slate-300 px-6 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              className="rounded-lg border border-green-300 px-6 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-green-50"
             >
               Cancel
             </button>

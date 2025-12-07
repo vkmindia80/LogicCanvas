@@ -131,7 +131,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
       array: 'bg-pink-100 text-pink-700',
       date: 'bg-cyan-100 text-cyan-700'
     };
-    return colors[type] || 'bg-gray-100 text-gray-700';
+    return colors[type] || 'bg-green-100 text-primary-700';
   };
 
   const formatValue = (value) => {
@@ -144,7 +144,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-gradient-to-r from-primary-500 to-green-500">
+      <div className="flex items-center justify-between p-4 border-b border-green-200 bg-gradient-to-r from-primary-500 to-green-500">
         <div>
           <h3 className="text-lg font-bold text-white flex items-center">
             Variables
@@ -185,22 +185,22 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
 
       {/* Add New Variable */}
       {!instanceId && (
-        <div className="p-4 border-b border-slate-200 bg-slate-50">
-          <h4 className="text-sm font-semibold text-slate-700 mb-2">Add Variable</h4>
+        <div className="p-4 border-b border-green-200 bg-green-50">
+          <h4 className="text-sm font-semibold text-primary-700 mb-2">Add Variable</h4>
           <div className="space-y-2">
             <input
               type="text"
               value={newVarName}
               onChange={(e) => setNewVarName(e.target.value)}
               placeholder="Variable name"
-              className="w-full px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-1.5 text-sm border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               data-testid="new-var-name"
             />
             <div className="flex space-x-2">
               <select
                 value={newVarType}
                 onChange={(e) => setNewVarType(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="px-3 py-1.5 text-sm border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="new-var-type"
               >
                 <option value="string">String</option>
@@ -215,7 +215,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                 value={newVarValue}
                 onChange={(e) => setNewVarValue(e.target.value)}
                 placeholder="Value"
-                className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="flex-1 px-3 py-1.5 text-sm border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 data-testid="new-var-value"
               />
             </div>
@@ -234,7 +234,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
       {/* Variables List */}
       <div className="flex-1 overflow-y-auto p-4">
         {variables.length === 0 ? (
-          <div className="text-center py-8 text-slate-500 text-sm">
+          <div className="text-center py-8 text-green-500 text-sm">
             <p>No variables defined</p>
             {!instanceId && (
               <p className="text-xs mt-1">Add variables to store data in your workflow</p>
@@ -245,7 +245,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
             {variables.map((variable, index) => (
               <div
                 key={`${variable.name}-${index}`}
-                className="border border-slate-200 rounded-lg p-3 hover:shadow-md transition-shadow bg-white"
+                className="border border-green-200 rounded-lg p-3 hover:shadow-md transition-shadow bg-white"
               >
                 {editingVar && editingVar.index === index ? (
                   // Edit Mode
@@ -254,13 +254,13 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                       type="text"
                       value={editingVar.name}
                       onChange={(e) => setEditingVar({ ...editingVar, name: e.target.value })}
-                      className="w-full px-2 py-1 text-sm font-mono border border-slate-300 rounded focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-2 py-1 text-sm font-mono border border-green-300 rounded focus:ring-2 focus:ring-primary-500"
                       data-testid="edit-var-name"
                     />
                     <select
                       value={editingVar.type}
                       onChange={(e) => setEditingVar({ ...editingVar, type: e.target.value })}
-                      className="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-2 py-1 text-sm border border-green-300 rounded focus:ring-2 focus:ring-primary-500"
                       data-testid="edit-var-type"
                     >
                       <option value="string">String</option>
@@ -272,7 +272,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                       value={editingVar.value}
                       onChange={(e) => setEditingVar({ ...editingVar, value: e.target.value })}
                       rows={3}
-                      className="w-full px-2 py-1 text-xs font-mono border border-slate-300 rounded focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-2 py-1 text-xs font-mono border border-green-300 rounded focus:ring-2 focus:ring-primary-500"
                       data-testid="edit-var-value"
                     />
                     <div className="flex space-x-2">
@@ -285,7 +285,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                       </button>
                       <button
                         onClick={cancelEdit}
-                        className="flex-1 bg-slate-200 text-slate-700 px-3 py-1 rounded text-sm hover:bg-slate-300"
+                        className="flex-1 bg-green-200 text-primary-700 px-3 py-1 rounded text-sm hover:bg-green-300"
                         data-testid="cancel-edit-btn"
                       >
                         Cancel
@@ -298,14 +298,14 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                          <span className="font-mono text-sm font-semibold text-slate-800">
+                          <span className="font-mono text-sm font-semibold text-primary-800">
                             {variable.name}
                           </span>
                           <span className={`px-2 py-0.5 text-xs rounded-full ${getTypeColor(variable.type)}`}>
                             {variable.type}
                           </span>
                           {variable.scope && (
-                            <span className="px-2 py-0.5 text-xs rounded-full bg-slate-100 text-slate-600">
+                            <span className="px-2 py-0.5 text-xs rounded-full bg-green-100 text-primary-600">
                               {variable.scope}
                             </span>
                           )}
@@ -316,7 +316,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                         <div className="flex items-center space-x-1">
                           <button
                             onClick={() => startEdit(index)}
-                            className="p-1 hover:bg-slate-100 rounded transition-colors text-slate-600"
+                            className="p-1 hover:bg-green-100 rounded transition-colors text-primary-600"
                             title="Edit"
                             data-testid="edit-var-btn"
                           >
@@ -324,7 +324,7 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                           </button>
                           <button
                             onClick={() => deleteVariable(index)}
-                            className="p-1 hover:bg-red-100 rounded transition-colors text-red-600"
+                            className="p-1 hover:bg-gold-100 rounded transition-colors text-gold-600"
                             title="Delete"
                             data-testid="delete-var-btn"
                           >
@@ -335,8 +335,8 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
                     </div>
                     
                     {showValues && (
-                      <div className="bg-slate-50 rounded p-2 mt-2">
-                        <pre className="text-xs font-mono text-slate-700 whitespace-pre-wrap break-all">
+                      <div className="bg-green-50 rounded p-2 mt-2">
+                        <pre className="text-xs font-mono text-primary-700 whitespace-pre-wrap break-all">
                           {formatValue(variable.value)}
                         </pre>
                       </div>
@@ -350,10 +350,10 @@ const VariablePanel = ({ workflowId, instanceId, onClose }) => {
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-slate-200 bg-slate-50">
-        <div className="text-xs text-slate-600 text-center">
+      <div className="p-3 border-t border-green-200 bg-green-50">
+        <div className="text-xs text-primary-600 text-center">
           <p className="font-semibold">{variables.length} Variable{variables.length !== 1 ? 's' : ''}</p>
-          <p className="text-slate-500 mt-1">
+          <p className="text-green-500 mt-1">
             {instanceId ? 'Runtime variable values' : 'Define workflow variables'}
           </p>
         </div>

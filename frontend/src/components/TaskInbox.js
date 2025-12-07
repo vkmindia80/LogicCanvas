@@ -194,10 +194,10 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
 
   const getPriorityColor = (priority) => {
     const colors = {
-      low: 'bg-slate-100 text-slate-700 border-slate-300',
+      low: 'bg-green-100 text-primary-700 border-green-300',
       medium: 'bg-green-100 text-green-700 border-green-300',
       high: 'bg-gold-100 text-gold-700 border-gold-300',
-      urgent: 'bg-red-100 text-red-700 border-red-300 animate-pulse'
+      urgent: 'bg-gold-100 text-gold-700 border-gold-300 animate-pulse'
     };
     return colors[priority] || colors.medium;
   };
@@ -207,7 +207,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
       pending: 'bg-gold-100 text-gold-800',
       in_progress: 'bg-green-100 text-green-800',
       completed: 'bg-green-100 text-green-800',
-      cancelled: 'bg-gray-100 text-gray-800'
+      cancelled: 'bg-green-100 text-primary-800'
     };
     return colors[status] || colors.pending;
   };
@@ -225,7 +225,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
     const now = new Date();
     const diffHours = (dueDate - now) / (1000 * 60 * 60);
     
-    if (diffHours < 0) return { status: 'overdue', color: 'text-red-500 bg-red-50', label: 'Overdue', icon: AlertTriangle };
+    if (diffHours < 0) return { status: 'overdue', color: 'text-gold-500 bg-gold-50', label: 'Overdue', icon: AlertTriangle };
     if (diffHours < 2) return { status: 'critical', color: 'text-gold-500 bg-gold-50', label: 'Critical', icon: AlertCircle };
     if (diffHours < 24) return { status: 'warning', color: 'text-gold-600 bg-gold-50', label: 'Due Soon', icon: Clock };
     return { status: 'ok', color: 'text-green-500 bg-green-50', label: 'On Track', icon: CheckCircleIcon };
@@ -246,7 +246,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
   };
 
   return (
-    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-gradient-to-br from-slate-50 via-white to-slate-50 z-50 flex flex-col`} data-testid="task-inbox">
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-gradient-to-br from-green-50 via-white to-green-50 z-50 flex flex-col`} data-testid="task-inbox">
       {/* Header */}
       <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
@@ -290,7 +290,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-white border-b-2 border-slate-200 px-6 py-4 shadow-sm">
+      <div className="bg-white border-b-2 border-green-200 px-6 py-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="px-4 py-2 bg-gold-100 text-gold-800 rounded-xl flex items-center space-x-2 font-medium">
@@ -308,7 +308,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
           </div>
           <div className="flex items-center space-x-3">
             {overdueCount > 0 && (
-              <div className="flex items-center space-x-2 px-4 py-2 bg-red-100 text-red-700 rounded-xl text-sm font-semibold border border-red-200">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-gold-100 text-gold-700 rounded-xl text-sm font-semibold border border-gold-200">
                 <AlertTriangle className="w-4 h-4" />
                 <span>{overdueCount} Overdue</span>
               </div>
@@ -325,18 +325,18 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
 
       <div className="flex flex-1 overflow-hidden">
         {/* Task List */}
-        <div className="w-1/2 border-r border-gray-200 flex flex-col bg-gray-50">
+        <div className="w-1/2 border-r border-green-200 flex flex-col bg-green-50">
           {/* Filters */}
-          <div className="p-4 bg-white border-b border-gray-200">
+          <div className="p-4 bg-white border-b border-green-200">
             <div className="flex items-center space-x-4 mb-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-4 h-4" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search tasks..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="w-full pl-10 pr-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   data-testid="task-search-input"
                 />
               </div>
@@ -345,7 +345,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
+                className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
                 data-testid="task-filter-select"
               >
                 <option value="all">All Status</option>
@@ -356,7 +356,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
+                className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
                 data-testid="task-priority-filter"
               >
                 <option value="all">All Priorities</option>
@@ -365,7 +365,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
               </select>
-              <span className="text-sm text-gray-500">{filteredTasks.length} tasks</span>
+              <span className="text-sm text-green-500">{filteredTasks.length} tasks</span>
             </div>
           </div>
 
@@ -402,16 +402,16 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                       className={`bg-white rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
                         selectedTask?.id === task.id
                           ? 'border-green-500 ring-2 ring-green-200'
-                          : 'border-gray-200 hover:border-gray-300'
-                      } ${task.escalated ? 'border-l-4 border-l-red-500' : ''}`}
+                          : 'border-green-200 hover:border-green-300'
+                      } ${task.escalated ? 'border-l-4 border-l-gold-500' : ''}`}
                       data-testid={`task-item-${task.id}`}
                     >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                          <h3 className="font-semibold text-gray-900">{task.title}</h3>
+                          <h3 className="font-semibold text-primary-900">{task.title}</h3>
                           {task.escalated && (
-                            <span className="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded">Escalated</span>
+                            <span className="px-1.5 py-0.5 text-xs bg-gold-100 text-gold-700 rounded">Escalated</span>
                           )}
                         </div>
                       </div>
@@ -419,9 +419,9 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                         {task.priority}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{task.description || 'No description'}</p>
+                    <p className="text-sm text-primary-600 mb-3 line-clamp-2">{task.description || 'No description'}</p>
                     <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center space-x-3 text-gray-500">
+                      <div className="flex items-center space-x-3 text-green-500">
                         <span className={`px-2 py-1 rounded-full ${getStatusColor(task.status)}`}>
                           {task.status?.replace('_', ' ')}
                         </span>
@@ -452,10 +452,10 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
           {selectedTask ? (
             <>
               {/* Task Header */}
-              <div className="p-6 border-b border-gray-200">
+              <div className="p-6 border-b border-green-200">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedTask.title}</h2>
+                    <h2 className="text-xl font-bold text-primary-900 mb-2">{selectedTask.title}</h2>
                     <div className="flex items-center space-x-3 flex-wrap gap-y-2">
                       <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(selectedTask.status)}`}>
                         {selectedTask.status?.replace('_', ' ')}
@@ -465,7 +465,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                         {selectedTask.priority}
                       </span>
                       {selectedTask.escalated && (
-                        <span className="px-3 py-1 text-sm rounded-full bg-red-100 text-red-700">
+                        <span className="px-3 py-1 text-sm rounded-full bg-gold-100 text-gold-700">
                           <AlertTriangle className="w-3 h-3 inline mr-1" />
                           Escalated
                         </span>
@@ -474,20 +474,20 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                   </div>
                   <div className="relative">
                     <button
-                      className="p-2 hover:bg-gray-100 rounded-lg"
+                      className="p-2 hover:bg-green-100 rounded-lg"
                       onClick={() => setShowReassign(!showReassign)}
                       data-testid="task-actions-btn"
                     >
-                      <MoreVertical className="w-5 h-5 text-gray-500" />
+                      <MoreVertical className="w-5 h-5 text-green-500" />
                     </button>
                     {showReassign && (
-                      <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg border border-gray-200 py-2 w-56 z-10">
-                        <div className="px-3 py-2 border-b border-gray-100">
-                          <p className="text-xs text-gray-500 font-medium mb-2">Reassign to:</p>
+                      <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg border border-green-200 py-2 w-56 z-10">
+                        <div className="px-3 py-2 border-b border-green-100">
+                          <p className="text-xs text-green-500 font-medium mb-2">Reassign to:</p>
                           <select
                             value={reassignTo}
                             onChange={(e) => setReassignTo(e.target.value)}
-                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+                            className="w-full px-2 py-1 text-sm border border-green-300 rounded"
                             data-testid="reassign-user-select"
                           >
                             <option value="">Select user...</option>
@@ -508,7 +508,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                             const delegateTo = prompt('Enter email to delegate to:');
                             if (delegateTo) handleDelegate(selectedTask.id, delegateTo);
                           }}
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center space-x-2"
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-green-50 flex items-center space-x-2"
                           data-testid="delegate-task-btn"
                         >
                           <ArrowRight className="w-4 h-4" />
@@ -519,7 +519,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                             const reason = prompt('Enter escalation reason:');
                             if (reason) handleEscalate(selectedTask.id, reason);
                           }}
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-gold-600 flex items-center space-x-2"
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-green-50 text-gold-600 flex items-center space-x-2"
                           data-testid="escalate-task-btn"
                         >
                           <AlertTriangle className="w-4 h-4" />
@@ -531,30 +531,30 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                 </div>
 
                 {/* Task Info Grid */}
-                <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 rounded-lg p-4">
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <User className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-500">Assigned:</span>
+                <div className="grid grid-cols-2 gap-4 text-sm bg-green-50 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 text-primary-600">
+                    <User className="w-4 h-4 text-green-400" />
+                    <span className="text-green-500">Assigned:</span>
                     <span className="font-medium">{selectedTask.assigned_to || 'Unassigned'}</span>
                   </div>
                   {selectedTask.due_date && (
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-500">Due:</span>
+                    <div className="flex items-center space-x-2 text-primary-600">
+                      <Calendar className="w-4 h-4 text-green-400" />
+                      <span className="text-green-500">Due:</span>
                       <span className="font-medium">{new Date(selectedTask.due_date).toLocaleString()}</span>
                     </div>
                   )}
                   {selectedTask.assignment_strategy && (
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <Users className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-500">Strategy:</span>
+                    <div className="flex items-center space-x-2 text-primary-600">
+                      <Users className="w-4 h-4 text-green-400" />
+                      <span className="text-green-500">Strategy:</span>
                       <span className="font-medium capitalize">{selectedTask.assignment_strategy.replace('_', ' ')}</span>
                     </div>
                   )}
                   {selectedTask.sla_hours && (
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <Timer className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-500">SLA:</span>
+                    <div className="flex items-center space-x-2 text-primary-600">
+                      <Timer className="w-4 h-4 text-green-400" />
+                      <span className="text-green-500">SLA:</span>
                       <span className="font-medium">{selectedTask.sla_hours} hours</span>
                     </div>
                   )}
@@ -580,27 +580,27 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               </div>
 
               {/* Description */}
-              <div className="p-6 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-600">{selectedTask.description || 'No description provided'}</p>
+              <div className="p-6 border-b border-green-200">
+                <h3 className="font-semibold text-primary-900 mb-2">Description</h3>
+                <p className="text-primary-600">{selectedTask.description || 'No description provided'}</p>
               </div>
 
               {/* Comments Section */}
               <div className="flex-1 overflow-y-auto p-6">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+                <h3 className="font-semibold text-primary-900 mb-4 flex items-center">
                   <MessageSquare className="w-5 h-5 mr-2" />
                   Comments ({comments.length})
                 </h3>
                 <div className="space-y-4 mb-4">
                   {comments.map((c, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-lg p-4">
+                    <div key={idx} className="bg-green-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-gray-900">{c.author || 'Anonymous'}</span>
-                        <span className="text-xs text-gray-500">
+                        <span className="font-medium text-primary-900">{c.author || 'Anonymous'}</span>
+                        <span className="text-xs text-green-500">
                           {c.created_at ? new Date(c.created_at).toLocaleString() : ''}
                         </span>
                       </div>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-primary-600 text-sm">
                         {c.content.split(' ').map((word, i) => 
                           word.startsWith('@') ? 
                             <span key={i} className="text-green-600 font-medium">{word} </span> : 
@@ -608,7 +608,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                         )}
                       </p>
                       {c.mentions && c.mentions.length > 0 && (
-                        <div className="mt-2 flex items-center space-x-1 text-xs text-gray-400">
+                        <div className="mt-2 flex items-center space-x-1 text-xs text-green-400">
                           <Users className="w-3 h-3" />
                           <span>Mentioned: {c.mentions.join(', ')}</span>
                         </div>
@@ -616,7 +616,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                     </div>
                   ))}
                   {comments.length === 0 && (
-                    <p className="text-gray-400 text-sm">No comments yet</p>
+                    <p className="text-green-400 text-sm">No comments yet</p>
                   )}
                 </div>
 
@@ -627,7 +627,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="Add a comment... Use @username to mention"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                    className="flex-1 px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     onKeyDown={(e) => e.key === 'Enter' && handleAddComment(selectedTask.id)}
                     data-testid="comment-input"
                   />
@@ -642,7 +642,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
               </div>
 
               {/* Actions */}
-              <div className="p-6 border-t border-gray-200 bg-gray-50">
+              <div className="p-6 border-t border-green-200 bg-green-50">
                 <div className="flex items-center space-x-3">
                   {selectedTask.status !== 'completed' && (
                     <button
@@ -656,7 +656,7 @@ const TaskInbox = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapsed = 
                   )}
                   <button
                     onClick={() => setSelectedTask(null)}
-                    className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="px-6 py-3 border border-green-300 rounded-lg hover:bg-green-100 transition-colors"
                   >
                     Close
                   </button>

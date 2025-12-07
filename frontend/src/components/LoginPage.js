@@ -58,13 +58,13 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 via-primary-950 to-primary-900 px-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.3))]" style={{ backgroundSize: '30px 30px' }}></div>
       <div className="max-w-md w-full bg-white/5 border-2 border-white/10 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl shadow-primary-500/10 relative">
         <button
           type="button"
           onClick={onBack}
-          className="mb-6 text-xs text-slate-300 hover:text-white flex items-center space-x-1"
+          className="mb-6 text-xs text-green-300 hover:text-white flex items-center space-x-1"
           data-testid="login-back-btn"
         >
           <span className="inline-block rotate-180">➜</span>
@@ -77,30 +77,30 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Sign in to LogicCanvas</h1>
-            <p className="text-xs text-slate-300 mt-1">Use one of the pre-configured demo accounts to explore.</p>
+            <p className="text-xs text-green-300 mt-1">Use one of the pre-configured demo accounts to explore.</p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-4 flex items-start space-x-2 rounded-lg border border-red-400 bg-red-50/90 px-3 py-2">
-            <AlertCircle className="h-4 w-4 text-red-600 mt-0.5" />
-            <p className="text-xs text-red-700">{error}</p>
+          <div className="mb-4 flex items-start space-x-2 rounded-lg border border-gold-400 bg-gold-50/90 px-3 py-2">
+            <AlertCircle className="h-4 w-4 text-gold-600 mt-0.5" />
+            <p className="text-xs text-gold-700">{error}</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4" data-testid="login-form">
           <div>
-            <label className="block text-xs font-medium text-slate-200 mb-1" htmlFor="email">
+            <label className="block text-xs font-medium text-green-200 mb-1" htmlFor="email">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-400" />
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-slate-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                className="w-full rounded-lg border border-white/10 bg-primary-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-green-500 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
                 placeholder="you@example.com"
                 autoComplete="username"
                 required
@@ -110,17 +110,17 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-200 mb-1" htmlFor="password">
+            <label className="block text-xs font-medium text-green-200 mb-1" htmlFor="password">
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-400" />
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-slate-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                className="w-full rounded-lg border border-white/10 bg-primary-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-green-500 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
@@ -178,14 +178,14 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           >
             <span>🎲 Generate Sample Data (All Modules)</span>
           </button>
-          <p className="mt-2 text-[10px] text-slate-400 text-center">
+          <p className="mt-2 text-[10px] text-green-400 text-center">
             Creates workflows, forms, tasks, approvals, users, roles, audit logs & more
           </p>
 
         </form>
 
         <div className="mt-6 border-t border-white/10 pt-4">
-          <p className="text-[11px] uppercase tracking-wide text-slate-400 mb-2 flex items-center space-x-1">
+          <p className="text-[11px] uppercase tracking-wide text-green-400 mb-2 flex items-center space-x-1">
             <User className="h-3 w-3" />
             <span>Quick demo logins</span>
           </p>
@@ -195,15 +195,15 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
                 key={u.email}
                 type="button"
                 onClick={() => quickFill(u)}
-                className="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px] text-slate-100 hover:border-primary-400 hover:bg-primary-500/20 flex flex-col items-start"
+                className="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px] text-green-100 hover:border-primary-400 hover:bg-primary-500/20 flex flex-col items-start"
                 data-testid={`demo-login-btn-${u.role}`}
               >
                 <span className="font-medium">{u.label}</span>
-                <span className="text-[10px] text-slate-400">{u.email.split('@')[0]}</span>
+                <span className="text-[10px] text-green-400">{u.email.split('@')[0]}</span>
               </button>
             ))}
           </div>
-          <p className="mt-3 text-[10px] text-slate-400">
+          <p className="mt-3 text-[10px] text-green-400">
             Credentials are pre-seeded in the backend for easy evaluation: passwords match the role name (e.g. <code>admin123</code>).
           </p>
         </div>

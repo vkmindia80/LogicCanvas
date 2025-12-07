@@ -40,36 +40,36 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
     const icons = {
       created: <CheckCircle className="w-4 h-4 text-green-500" />,
       updated: <Edit className="w-4 h-4 text-green-500" />,
-      deleted: <Trash2 className="w-4 h-4 text-red-500" />,
+      deleted: <Trash2 className="w-4 h-4 text-gold-500" />,
       executed: <Play className="w-4 h-4 text-gold-500" />,
       completed: <CheckCircle className="w-4 h-4 text-green-500" />,
-      failed: <XCircle className="w-4 h-4 text-red-500" />,
+      failed: <XCircle className="w-4 h-4 text-gold-500" />,
       approved: <CheckCircle className="w-4 h-4 text-green-500" />,
-      rejected: <XCircle className="w-4 h-4 text-red-500" />,
+      rejected: <XCircle className="w-4 h-4 text-gold-500" />,
       assigned: <User className="w-4 h-4 text-green-500" />,
       reassigned: <User className="w-4 h-4 text-gold-500" />,
-      escalated: <Clock className="w-4 h-4 text-red-500" />,
+      escalated: <Clock className="w-4 h-4 text-gold-500" />,
       delegated: <User className="w-4 h-4 text-gold-500" />
     };
-    return icons[action] || <FileText className="w-4 h-4 text-gray-500" />;
+    return icons[action] || <FileText className="w-4 h-4 text-green-500" />;
   };
 
   const getActionColor = (action) => {
     const colors = {
       created: 'bg-green-100 text-green-800 border-green-300',
       updated: 'bg-green-100 text-green-800 border-green-300',
-      deleted: 'bg-red-100 text-red-800 border-red-300',
+      deleted: 'bg-gold-100 text-gold-800 border-gold-300',
       executed: 'bg-gold-100 text-gold-800 border-gold-300',
       completed: 'bg-green-100 text-green-800 border-green-300',
-      failed: 'bg-red-100 text-red-800 border-red-300',
+      failed: 'bg-gold-100 text-gold-800 border-gold-300',
       approved: 'bg-green-100 text-green-800 border-green-300',
-      rejected: 'bg-red-100 text-red-800 border-red-300',
+      rejected: 'bg-gold-100 text-gold-800 border-gold-300',
       assigned: 'bg-green-100 text-green-800 border-green-300',
       reassigned: 'bg-gold-100 text-gold-800 border-gold-300',
-      escalated: 'bg-red-100 text-red-800 border-red-300',
+      escalated: 'bg-gold-100 text-gold-800 border-gold-300',
       delegated: 'bg-gold-100 text-gold-800 border-gold-300'
     };
-    return colors[action] || 'bg-gray-100 text-gray-800 border-gray-300';
+    return colors[action] || 'bg-green-100 text-primary-800 border-green-300';
   };
 
   const getEntityTypeIcon = (type) => {
@@ -123,7 +123,7 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="audit-trail">
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-6 py-4 shadow-lg">
+      <div className="bg-gradient-to-r from-primary-700 to-primary-800 text-white px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             {/* Hamburger Menu for Mobile */}
@@ -138,7 +138,7 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
             <History className="w-8 h-8" />
             <div>
               <h1 className="text-2xl font-bold">Audit Trail</h1>
-              <p className="text-slate-300 text-sm">Complete activity history</p>
+              <p className="text-green-300 text-sm">Complete activity history</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -163,23 +163,23 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-b border-gray-200 p-4">
+      <div className="bg-white border-b border-green-200 p-4">
         <div className="flex items-center space-x-4 flex-wrap gap-y-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-4 h-4" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search logs..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500"
+              className="w-full pl-10 pr-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
               data-testid="audit-search-input"
             />
           </div>
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500"
+            className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
             data-testid="audit-filter-select"
           >
             <option value="all">All Actions</option>
@@ -195,57 +195,57 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
             <option value="escalated">Escalated</option>
           </select>
           <div className="flex items-center space-x-2">
-            <Calendar className="w-4 h-4 text-gray-400" />
+            <Calendar className="w-4 h-4 text-green-400" />
             <input
               type="date"
               value={dateRange.start}
               onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500"
+              className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
               data-testid="date-start-input"
             />
-            <span className="text-gray-400">to</span>
+            <span className="text-green-400">to</span>
             <input
               type="date"
               value={dateRange.end}
               onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500"
+              className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
               data-testid="date-end-input"
             />
           </div>
         </div>
-        <div className="mt-3 text-sm text-gray-600">
+        <div className="mt-3 text-sm text-primary-600">
           Showing {filteredLogs.length} of {logs.length} entries
         </div>
       </div>
 
       {/* Log List */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <div className="flex-1 overflow-y-auto bg-green-50 p-6">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
           </div>
         ) : Object.keys(groupedLogs).length === 0 ? (
           <div className="text-center py-12">
-            <History className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-600">No audit logs found</h3>
-            <p className="text-gray-400">Activity will appear here</p>
+            <History className="w-16 h-16 mx-auto text-green-300 mb-4" />
+            <h3 className="text-lg font-medium text-primary-600">No audit logs found</h3>
+            <p className="text-green-400">Activity will appear here</p>
           </div>
         ) : (
           <div className="space-y-6">
             {Object.entries(groupedLogs).map(([date, dateLogs]) => (
               <div key={date}>
-                <h3 className="text-sm font-semibold text-gray-500 mb-3 sticky top-0 bg-gray-50 py-2">
+                <h3 className="text-sm font-semibold text-green-500 mb-3 sticky top-0 bg-green-50 py-2">
                   {date}
                 </h3>
                 <div className="space-y-2">
                   {dateLogs.map((log) => (
                     <div
                       key={log.id}
-                      className="bg-white rounded-lg border border-gray-200 overflow-hidden"
+                      className="bg-white rounded-lg border border-green-200 overflow-hidden"
                       data-testid={`audit-log-${log.id}`}
                     >
                       <div
-                        className="flex items-center p-4 cursor-pointer hover:bg-gray-50"
+                        className="flex items-center p-4 cursor-pointer hover:bg-green-50"
                         onClick={() => setExpandedLog(expandedLog === log.id ? null : log.id)}
                       >
                         <div className="flex items-center space-x-3 flex-1">
@@ -255,52 +255,52 @@ const AuditTrail = ({ onClose, onOpenMobileSidebar, entityType, entityId, sideba
                               <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getActionColor(log.action)}`}>
                                 {log.action}
                               </span>
-                              <span className="text-gray-600">
+                              <span className="text-primary-600">
                                 {log.entity_type}
                               </span>
                               {log.entity_id && (
-                                <span className="text-gray-400 font-mono text-xs">
+                                <span className="text-green-400 font-mono text-xs">
                                   #{log.entity_id.slice(0, 8)}
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-green-500 mt-1">
                               {log.user && <span className="mr-2">by {log.user}</span>}
                               {new Date(log.timestamp).toLocaleTimeString()}
                             </div>
                           </div>
                         </div>
                         {expandedLog === log.id ? (
-                          <ChevronDown className="w-5 h-5 text-gray-400" />
+                          <ChevronDown className="w-5 h-5 text-green-400" />
                         ) : (
-                          <ChevronRight className="w-5 h-5 text-gray-400" />
+                          <ChevronRight className="w-5 h-5 text-green-400" />
                         )}
                       </div>
                       {expandedLog === log.id && (
-                        <div className="px-4 pb-4 border-t border-gray-100 bg-gray-50">
+                        <div className="px-4 pb-4 border-t border-green-100 bg-green-50">
                           <div className="pt-3 space-y-2 text-sm">
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <span className="text-gray-500">Entity Type:</span>
-                                <span className="ml-2 text-gray-900">{log.entity_type}</span>
+                                <span className="text-green-500">Entity Type:</span>
+                                <span className="ml-2 text-primary-900">{log.entity_type}</span>
                               </div>
                               <div>
-                                <span className="text-gray-500">Entity ID:</span>
-                                <span className="ml-2 text-gray-900 font-mono text-xs">{log.entity_id}</span>
+                                <span className="text-green-500">Entity ID:</span>
+                                <span className="ml-2 text-primary-900 font-mono text-xs">{log.entity_id}</span>
                               </div>
                               <div>
-                                <span className="text-gray-500">Action:</span>
-                                <span className="ml-2 text-gray-900">{log.action}</span>
+                                <span className="text-green-500">Action:</span>
+                                <span className="ml-2 text-primary-900">{log.action}</span>
                               </div>
                               <div>
-                                <span className="text-gray-500">Timestamp:</span>
-                                <span className="ml-2 text-gray-900">{new Date(log.timestamp).toLocaleString()}</span>
+                                <span className="text-green-500">Timestamp:</span>
+                                <span className="ml-2 text-primary-900">{new Date(log.timestamp).toLocaleString()}</span>
                               </div>
                             </div>
                             {log.details && (
                               <div className="mt-3">
-                                <span className="text-gray-500">Details:</span>
-                                <pre className="mt-1 p-2 bg-gray-100 rounded text-xs overflow-auto">
+                                <span className="text-green-500">Details:</span>
+                                <pre className="mt-1 p-2 bg-green-100 rounded text-xs overflow-auto">
                                   {JSON.stringify(log.details, null, 2)}
                                 </pre>
                               </div>

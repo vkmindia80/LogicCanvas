@@ -33,7 +33,7 @@ const DeletableEdge = (props) => {
         >
           <button
             onClick={handleDelete}
-            className="bg-white text-slate-600 border border-slate-300 rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-sm hover:bg-red-50 hover:text-red-600 hover:border-red-300"
+            className="bg-white text-primary-600 border border-green-300 rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-sm hover:bg-gold-50 hover:text-gold-600 hover:border-gold-300"
             data-testid={`edge-delete-${id}`}
             title="Delete connection"
           >

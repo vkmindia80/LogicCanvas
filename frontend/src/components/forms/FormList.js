@@ -110,14 +110,14 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">Form Library</h2>
-              <p className="text-lg text-slate-600">Create and manage reusable forms</p>
+              <h2 className="mb-2 bg-gradient-to-r from-primary-900 to-primary-700 bg-clip-text text-4xl font-bold text-transparent">Form Library</h2>
+              <p className="text-lg text-primary-600">Create and manage reusable forms</p>
             </div>
             {can('manageForms') && (
               <button
@@ -132,16 +132,16 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
           </div>
 
           {/* Search and Filter */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50">
+          <div className="rounded-2xl border border-green-200 bg-white p-6 shadow-xl shadow-green-200/50">
             <div className="flex gap-4">
               <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-green-400 w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search forms..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 bg-slate-50 rounded-xl text-sm font-medium placeholder:text-slate-400 focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-green-200 bg-green-50 rounded-xl text-sm font-medium placeholder:text-green-400 focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   data-testid="search-forms-input"
                 />
               </div>
@@ -149,7 +149,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                 <select
                   value={selectedTag}
                   onChange={(e) => setSelectedTag(e.target.value)}
-                  className="px-4 py-3 border-2 border-slate-200 bg-slate-50 rounded-xl text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="px-4 py-3 border-2 border-green-200 bg-green-50 rounded-xl text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   data-testid="filter-by-tag-select"
                 >
                   <option value="">All Tags</option>
@@ -201,7 +201,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                   onSelectForm(form);
                 }
               }}
-              className="bg-white border-2 border-slate-200 rounded-2xl p-6 hover:border-primary-300 hover:shadow-2xl hover:shadow-primary-500/20 shadow-lg shadow-slate-200/50 transition-all cursor-pointer group"
+              className="bg-white border-2 border-green-200 rounded-2xl p-6 hover:border-primary-300 hover:shadow-2xl hover:shadow-primary-500/20 shadow-lg shadow-green-200/50 transition-all cursor-pointer group"
               data-testid={`form-card-${form.id}`}
             >
               <div className="flex justify-between items-start mb-4">
@@ -210,27 +210,27 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                     <FileText className="w-6 h-6 text-primary-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 group-hover:text-primary-600 transition-colors">
+                    <h3 className="font-semibold text-primary-900 group-hover:text-primary-600 transition-colors">
                       {form.name}
                     </h3>
-                    <p className="text-sm text-slate-500">v{form.version}</p>
+                    <p className="text-sm text-green-500">v{form.version}</p>
                   </div>
                 </div>
               </div>
 
               {form.description && (
-                <p className="text-slate-600 text-sm mb-4 line-clamp-2">{form.description}</p>
+                <p className="text-primary-600 text-sm mb-4 line-clamp-2">{form.description}</p>
               )}
 
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">
+                <span className="text-green-500">
                   {form.fields?.length || 0} fields
                 </span>
                 <div className="flex space-x-2">
                   {can('duplicateForms') && (
                     <button
                       onClick={(e) => handleDuplicate(form, e)}
-                      className="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+                      className="p-2 text-green-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
                       title="Duplicate"
                       data-testid={`duplicate-form-${form.id}`}
                     >
@@ -243,7 +243,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                         e.stopPropagation();
                         onSelectForm(form);
                       }}
-                      className="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+                      className="p-2 text-green-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
                       title="Edit"
                       data-testid={`edit-form-${form.id}`}
                     >
@@ -253,7 +253,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
                   {can('deleteForms') && (
                     <button
                       onClick={(e) => handleDelete(form.id, e)}
-                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      className="p-2 text-green-400 hover:text-gold-600 hover:bg-gold-50 rounded transition-colors"
                       title="Delete"
                       data-testid={`delete-form-${form.id}`}
                     >
@@ -264,11 +264,11 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
               </div>
 
               {form.tags && form.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-slate-100">
+                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-green-100">
                   {form.tags.map(tag => (
                     <span
                       key={tag}
-                      className="inline-flex items-center space-x-1 px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full"
+                      className="inline-flex items-center space-x-1 px-2 py-1 bg-green-100 text-primary-600 text-xs rounded-full"
                     >
                       <Tag className="w-3 h-3" />
                       <span>{tag}</span>

@@ -329,14 +329,14 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
             className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
               isSelected
                 ? 'border-primary-500 bg-primary-50 shadow-lg shadow-primary-500/20'
-                : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
+                : 'border-green-200 hover:border-green-300 hover:shadow-md'
             }`}
             data-testid={`option-${opt.value}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <div className="font-semibold text-slate-900 mb-1">{opt.label}</div>
-                <div className="text-sm text-slate-600">{opt.description}</div>
+                <div className="font-semibold text-primary-900 mb-1">{opt.label}</div>
+                <div className="text-sm text-primary-600">{opt.description}</div>
               </div>
               {isSelected && (
                 <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 ml-3" />
@@ -354,8 +354,8 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-800 mb-1">
-                Workflow name <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold text-primary-800 mb-1">
+                Workflow name <span className="text-gold-500">*</span>
               </label>
               <input
                 type="text"
@@ -366,13 +366,13 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     basics: { ...prev.basics, name: e.target.value },
                   }))
                 }
-                className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 placeholder="Invoice approval, HR onboarding, IT ticketing…"
                 data-testid="wizard-basics-name"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-800 mb-1">
+              <label className="block text-sm font-semibold text-primary-800 mb-1">
                 Description
               </label>
               <textarea
@@ -384,13 +384,13 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     basics: { ...prev.basics, description: e.target.value },
                   }))
                 }
-                className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 resize-none"
+                className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 resize-none"
                 placeholder="Short description to help others understand this workflow."
                 data-testid="wizard-basics-description"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-800 mb-1">
+              <label className="block text-sm font-semibold text-primary-800 mb-1">
                 Category
               </label>
               <select
@@ -401,7 +401,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     basics: { ...prev.basics, category: e.target.value },
                   }))
                 }
-                className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 data-testid="wizard-basics-category"
               >
                 {CATEGORY_OPTIONS.map((cat) => (
@@ -441,14 +441,14 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                   className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                     isSelected
                       ? 'border-primary-500 bg-primary-50 shadow-lg shadow-primary-500/20'
-                      : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
+                      : 'border-green-200 hover:border-green-300 hover:shadow-md'
                   }`}
                   data-testid={`trigger-${opt.value}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <div className="font-semibold text-slate-900 mb-1">{opt.label}</div>
-                      <div className="text-sm text-slate-600">{opt.description}</div>
+                      <div className="font-semibold text-primary-900 mb-1">{opt.label}</div>
+                      <div className="text-sm text-primary-600">{opt.description}</div>
                     </div>
                     {isSelected && (
                       <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 ml-3" />
@@ -460,7 +460,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
 
             {answers.trigger.type === 'scheduled' && (
               <div className="mt-4 space-y-2">
-                <label className="block text-sm font-semibold text-slate-800 mb-1">
+                <label className="block text-sm font-semibold text-primary-800 mb-1">
                   Cron expression
                 </label>
                 <input
@@ -472,17 +472,17 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                       trigger: { ...prev.trigger, cron: e.target.value },
                     }))
                   }
-                  className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                   placeholder="0 0 * * * (daily at midnight)"
                   data-testid="wizard-trigger-cron"
                 />
-                <p className="text-xs text-slate-500">Format: minute hour day month weekday.</p>
+                <p className="text-xs text-green-500">Format: minute hour day month weekday.</p>
               </div>
             )}
 
             {answers.trigger.type === 'webhook' && (
               <div className="mt-4 space-y-2">
-                <label className="block text-sm font-semibold text-slate-800 mb-1">
+                <label className="block text-sm font-semibold text-primary-800 mb-1">
                   Webhook path
                 </label>
                 <input
@@ -494,11 +494,11 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                       trigger: { ...prev.trigger, webhookPath: e.target.value },
                     }))
                   }
-                  className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                   placeholder="/api/hooks/my-workflow"
                   data-testid="wizard-trigger-webhook"
                 />
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-green-500">
                   This will be used later with the Trigger configuration panel.
                 </p>
               </div>
@@ -512,7 +512,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-800 mb-1">
+              <label className="block text-sm font-semibold text-primary-800 mb-1">
                 Default assignment strategy
               </label>
               <select
@@ -523,7 +523,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     assignment: { ...prev.assignment, strategy: e.target.value },
                   }))
                 }
-                className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 data-testid="wizard-assignment-strategy"
               >
                 <option value="direct">Direct assignment to a user</option>
@@ -535,7 +535,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
 
             {strategy === 'direct' ? (
               <div>
-                <label className="block text-sm font-semibold text-slate-800 mb-1">
+                <label className="block text-sm font-semibold text-primary-800 mb-1">
                   Default assignee email
                 </label>
                 <input
@@ -547,14 +547,14 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                       assignment: { ...prev.assignment, userEmail: e.target.value },
                     }))
                   }
-                  className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                   placeholder="manager@example.com"
                   data-testid="wizard-assignment-email"
                 />
               </div>
             ) : (
               <div>
-                <label className="block text-sm font-semibold text-slate-800 mb-1">
+                <label className="block text-sm font-semibold text-primary-800 mb-1">
                   Default role / group name
                 </label>
                 <input
@@ -566,7 +566,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                       assignment: { ...prev.assignment, role: e.target.value },
                     }))
                   }
-                  className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                  className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                   placeholder="approver, manager, finance…"
                   data-testid="wizard-assignment-role"
                 />
@@ -580,7 +580,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-800 mb-1">
+              <label className="block text-sm font-semibold text-primary-800 mb-1">
                 Default task SLA (hours)
               </label>
               <input
@@ -593,11 +593,11 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     sla: { ...prev.sla, dueInHours: e.target.value },
                   }))
                 }
-                className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+                className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 placeholder="24"
                 data-testid="wizard-sla-hours"
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-green-500 mt-1">
                 Used as the default "due in" time for tasks generated by this wizard.
               </p>
             </div>
@@ -623,10 +623,10 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     },
                   }))
                 }
-                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-green-300 text-primary-600 focus:ring-primary-500"
                 data-testid="wizard-notif-task-created"
               />
-              <label htmlFor="notif-task-created" className="text-sm text-slate-800">
+              <label htmlFor="notif-task-created" className="text-sm text-primary-800">
                 Notify assignees when new tasks are created
               </label>
             </div>
@@ -644,10 +644,10 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     },
                   }))
                 }
-                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-green-300 text-primary-600 focus:ring-primary-500"
                 data-testid="wizard-notif-task-overdue"
               />
-              <label htmlFor="notif-task-overdue" className="text-sm text-slate-800">
+              <label htmlFor="notif-task-overdue" className="text-sm text-primary-800">
                 Alert owners when tasks are overdue
               </label>
             </div>
@@ -665,10 +665,10 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                     },
                   }))
                 }
-                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-green-300 text-primary-600 focus:ring-primary-500"
                 data-testid="wizard-notif-approval-required"
               />
-              <label htmlFor="notif-approval-required" className="text-sm text-slate-800">
+              <label htmlFor="notif-approval-required" className="text-sm text-primary-800">
                 Notify approvers when their approval is required
               </label>
             </div>
@@ -680,9 +680,9 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
         const { basics, purpose, complexity, features, trigger, assignment, sla, notifications } = answers;
         return (
           <div className="space-y-4">
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <h4 className="text-sm font-semibold text-slate-900 mb-2">Overview</h4>
-              <p className="text-sm text-slate-700">
+            <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+              <h4 className="text-sm font-semibold text-primary-900 mb-2">Overview</h4>
+              <p className="text-sm text-primary-700">
                 We will create a workflow called <span className="font-semibold">{basics.name || 'New Workflow'}</span>
                 {' '}with a {complexity || 'simple'} {purpose || 'approval/automation'} pattern, preconfigured
                 tasks, decisions, and nodes so you can start tailoring immediately.
@@ -690,9 +690,9 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <h4 className="font-semibold text-slate-900 mb-2">Basics</h4>
-                <ul className="space-y-1 text-slate-700">
+              <div className="rounded-xl border border-green-200 bg-white p-4">
+                <h4 className="font-semibold text-primary-900 mb-2">Basics</h4>
+                <ul className="space-y-1 text-primary-700">
                   <li><span className="font-medium">Name:</span> {basics.name || 'New Workflow'}</li>
                   <li><span className="font-medium">Category:</span> {basics.category}</li>
                   {basics.description && (
@@ -701,9 +701,9 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                 </ul>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <h4 className="font-semibold text-slate-900 mb-2">Structure</h4>
-                <ul className="space-y-1 text-slate-700">
+              <div className="rounded-xl border border-green-200 bg-white p-4">
+                <h4 className="font-semibold text-primary-900 mb-2">Structure</h4>
+                <ul className="space-y-1 text-primary-700">
                   <li><span className="font-medium">Purpose:</span> {purpose || 'Not specified'}</li>
                   <li><span className="font-medium">Complexity:</span> {complexity || 'simple'}</li>
                   <li>
@@ -713,9 +713,9 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                 </ul>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <h4 className="font-semibold text-slate-900 mb-2">Execution</h4>
-                <ul className="space-y-1 text-slate-700">
+              <div className="rounded-xl border border-green-200 bg-white p-4">
+                <h4 className="font-semibold text-primary-900 mb-2">Execution</h4>
+                <ul className="space-y-1 text-primary-700">
                   <li><span className="font-medium">Trigger:</span> {trigger.type}</li>
                   {trigger.type === 'scheduled' && (
                     <li><span className="font-medium">Cron:</span> {trigger.cron}</li>
@@ -734,9 +734,9 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                 </ul>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <h4 className="font-semibold text-slate-900 mb-2">Notifications</h4>
-                <ul className="space-y-1 text-slate-700">
+              <div className="rounded-xl border border-green-200 bg-white p-4">
+                <h4 className="font-semibold text-primary-900 mb-2">Notifications</h4>
+                <ul className="space-y-1 text-primary-700">
                   <li>Task created: {notifications.onTaskCreated ? 'Enabled' : 'Disabled'}</li>
                   <li>Task overdue: {notifications.onTaskOverdue ? 'Enabled' : 'Disabled'}</li>
                   <li>Approval required: {notifications.onApprovalRequired ? 'Enabled' : 'Disabled'}</li>
@@ -807,7 +807,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                       ? 'bg-primary-500 text-white'
                       : idx === currentStepIndex
                         ? 'bg-primary-600 text-white'
-                        : 'bg-slate-200 text-slate-400'
+                        : 'bg-green-200 text-green-400'
                   }`}
                 >
                   {idx < currentStepIndex ? <CheckCircle className="w-5 h-5" /> : idx + 1}
@@ -815,14 +815,14 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
                 {idx < WIZARD_STEPS.length - 1 && (
                   <div
                     className={`flex-1 h-1 mx-2 rounded ${
-                      idx < currentStepIndex ? 'bg-primary-500' : 'bg-slate-200'
+                      idx < currentStepIndex ? 'bg-primary-500' : 'bg-green-200'
                     }`}
                   />
                 )}
               </div>
             ))}
           </div>
-          <div className="text-sm text-slate-600 text-center">
+          <div className="text-sm text-primary-600 text-center">
             Step {currentStepIndex + 1} of {WIZARD_STEPS.length}
           </div>
         </div>
@@ -830,8 +830,8 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
         {/* Content */}
         <div className="p-6">
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">{step.title}</h3>
-            <p className="text-slate-600">{step.description}</p>
+            <h3 className="text-2xl font-bold text-primary-900 mb-2">{step.title}</h3>
+            <p className="text-primary-600">{step.description}</p>
           </div>
 
           {renderStepContent()}
@@ -858,7 +858,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
           {currentStepIndex > 0 && (
             <button
               onClick={goToPrev}
-              className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-colors"
+              className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 border-2 border-green-300 text-primary-700 rounded-xl font-semibold hover:bg-green-50 transition-colors"
               data-testid="wizard-back"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -871,7 +871,7 @@ const QuickStartWizard = ({ isOpen, onClose, onCreate }) => {
             className={`flex-1 flex items-center justify-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all ${
               canGoNext
                 ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:shadow-xl hover:shadow-primary-500/40'
-                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                : 'bg-green-200 text-green-400 cursor-not-allowed'
             }`}
             data-testid="wizard-next"
           >

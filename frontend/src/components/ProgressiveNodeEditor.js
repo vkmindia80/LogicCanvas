@@ -64,32 +64,32 @@ const ProgressiveNodeEditor = ({ node, children }) => {
         const IconComponent = section.icon;
 
         return (
-          <div key={section.id} className="border border-gray-200 rounded-lg overflow-hidden">
+          <div key={section.id} className="border border-green-200 rounded-lg overflow-hidden">
             {/* Section Header */}
             <button
               onClick={() => toggleSection(section.id)}
-              className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center justify-between p-3 bg-green-50 hover:bg-green-100 transition-colors"
               data-testid={`section-${section.id}`}
             >
               <div className="flex items-center space-x-3">
                 <div className={`p-1.5 rounded ${
-                  isExpanded ? 'bg-primary-100' : 'bg-gray-200'
+                  isExpanded ? 'bg-primary-100' : 'bg-green-200'
                 }`}>
                   <IconComponent className={`w-4 h-4 ${
-                    isExpanded ? 'text-primary-600' : 'text-gray-600'
+                    isExpanded ? 'text-primary-600' : 'text-primary-600'
                   }`} />
                 </div>
                 <div className="text-left">
-                  <div className="font-medium text-sm text-gray-900">{section.title}</div>
+                  <div className="font-medium text-sm text-primary-900">{section.title}</div>
                   {!isExpanded && (
-                    <div className="text-xs text-gray-500">{section.description}</div>
+                    <div className="text-xs text-green-500">{section.description}</div>
                   )}
                 </div>
               </div>
               {isExpanded ? (
-                <ChevronDown className="w-5 h-5 text-gray-500" />
+                <ChevronDown className="w-5 h-5 text-green-500" />
               ) : (
-                <ChevronRight className="w-5 h-5 text-gray-500" />
+                <ChevronRight className="w-5 h-5 text-green-500" />
               )}
             </button>
 

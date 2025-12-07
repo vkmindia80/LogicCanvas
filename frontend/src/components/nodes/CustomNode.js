@@ -259,10 +259,10 @@ const CustomNode = ({ data, selected }) => {
   if (!config) {
     return (
       <div
-        className="relative px-4 py-3 rounded-xl border-2 border-red-500 bg-red-100 min-w-[160px]"
+        className="relative px-4 py-3 rounded-xl border-2 border-gold-500 bg-gold-100 min-w-[160px]"
         data-testid={`node-${data.type}`}
       >
-        <div className="flex items-center space-x-2 text-red-700">
+        <div className="flex items-center space-x-2 text-gold-700">
           <AlertTriangle className="w-5 h-5" />
           <div>
             <div className="font-bold text-sm">Unknown Node Type</div>
@@ -304,7 +304,7 @@ const CustomNode = ({ data, selected }) => {
             </div>
           )}
           {isFailed && (
-            <div className="bg-red-500 rounded-full p-1.5 shadow-lg animate-shake">
+            <div className="bg-gold-500 rounded-full p-1.5 shadow-lg animate-shake">
               <AlertCircle className="w-4 h-4 text-white" />
             </div>
           )}
@@ -315,7 +315,7 @@ const CustomNode = ({ data, selected }) => {
       {validationStatus && (
         <div className="absolute -top-2 -left-2 z-10" data-testid="node-validation-indicator">
           {hasValidationError && (
-            <div className="bg-red-600 rounded-full p-1 shadow-md animate-pulse" title="This node has validation errors">
+            <div className="bg-gold-600 rounded-full p-1 shadow-md animate-pulse" title="This node has validation errors">
               <AlertCircle className="w-3 h-3 text-white" />
             </div>
           )}
@@ -339,10 +339,10 @@ const CustomNode = ({ data, selected }) => {
           </div>
           {/* Tooltip on hover */}
           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block">
-            <div className="bg-slate-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-xl">
+            <div className="bg-primary-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-xl">
               <div className="font-semibold mb-1">Configuration Needed</div>
-              <div className="text-slate-300">{configStatus.message}</div>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900"></div>
+              <div className="text-green-300">{configStatus.message}</div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-primary-900"></div>
             </div>
           </div>
         </div>
@@ -369,7 +369,7 @@ const CustomNode = ({ data, selected }) => {
         <Handle
           type="target"
           position={Position.Top}
-          className="w-3 h-3 !bg-white !border-2 !border-gray-300 shadow-md hover:scale-125 transition-transform"
+          className="w-3 h-3 !bg-white !border-2 !border-green-300 shadow-md hover:scale-125 transition-transform"
           data-testid="node-handle-input"
         />
       )}
@@ -399,7 +399,7 @@ const CustomNode = ({ data, selected }) => {
             <Handle
               type="source"
               position={Position.Bottom}
-              className="w-3 h-3 !bg-white !border-2 !border-gray-300 shadow-md hover:scale-125 transition-transform"
+              className="w-3 h-3 !bg-white !border-2 !border-green-300 shadow-md hover:scale-125 transition-transform"
               data-testid="node-handle-output"
             />
           )}
@@ -420,7 +420,7 @@ const CustomNode = ({ data, selected }) => {
                     id={handle.id}
                     type="source"
                     position={Position.Bottom}
-                    className="w-3 h-3 !bg-white !border-2 !border-gray-300 shadow-md hover:scale-125 transition-transform"
+                    className="w-3 h-3 !bg-white !border-2 !border-green-300 shadow-md hover:scale-125 transition-transform"
                     data-testid={`node-handle-output-${handle.id}`}
                   />
                   <span className="mt-1 bg-black/40 px-2 py-0.5 rounded-full whitespace-nowrap font-semibold drop-shadow-md backdrop-blur-sm">

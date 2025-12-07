@@ -208,8 +208,8 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
   const statusColors = {
     draft: 'bg-gold-100 text-gold-800 border-gold-300',
     published: 'bg-green-100 text-green-800 border-green-300',
-    paused: 'bg-gray-100 text-gray-800 border-gray-300',
-    archived: 'bg-red-100 text-red-800 border-red-300',
+    paused: 'bg-green-100 text-primary-800 border-green-300',
+    archived: 'bg-gold-100 text-gold-800 border-gold-300',
   };
 
   const allTags = useMemo(() => [...new Set(workflows.flatMap((w) => w.tags || []))], [workflows]);
@@ -223,15 +223,15 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
   }, [workflows]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
+            <h1 className="mb-2 bg-gradient-to-r from-primary-900 to-primary-700 bg-clip-text text-4xl font-bold text-transparent">
               Workflows
             </h1>
-            <p className="text-lg text-slate-600">Create and manage your visual workflows</p>
+            <p className="text-lg text-primary-600">Create and manage your visual workflows</p>
           </div>
           {can('createWorkflows') && (
             <div className="hidden items-center space-x-3 md:flex">
@@ -261,7 +261,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
               </button>
               <button
                 onClick={() => setShowAIWizard(true)}
-                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-green-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/30"
+                className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-green-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-green-500/30"
                 data-testid="ai-wizard-btn"
               >
                 <Sparkles className="h-4 w-4" />
@@ -305,16 +305,16 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
           <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-2 font-medium text-green-700">
             <span className="text-green-900">Published:</span> {statusCounts.published}
           </div>
-          <div className="rounded-xl border border-slate-200 bg-slate-100 px-4 py-2 font-medium text-slate-700">
-            <span className="text-slate-900">Paused:</span> {statusCounts.paused}
+          <div className="rounded-xl border border-green-200 bg-green-100 px-4 py-2 font-medium text-primary-700">
+            <span className="text-primary-900">Paused:</span> {statusCounts.paused}
           </div>
-          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 font-medium text-red-700">
-            <span className="text-red-900">Archived:</span> {statusCounts.archived}
+          <div className="rounded-xl border border-gold-200 bg-gold-50 px-4 py-2 font-medium text-gold-700">
+            <span className="text-gold-900">Archived:</span> {statusCounts.archived}
           </div>
         </div>
 
         {/* Action Bar */}
-        <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50">
+        <div className="mb-8 rounded-2xl border border-green-200 bg-white p-6 shadow-xl shadow-green-200/50">
           <div className="mb-4 flex items-center justify-between">
             {/* Search + filters */}
             <div className="flex flex-1 items-center space-x-4">
@@ -333,7 +333,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="rounded-xl border-2 border-green-200 bg-green-50 px-4 py-3 text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 data-testid="workflow-filter"
               >
                 <option value="all">All Status</option>
@@ -345,11 +345,11 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
               {allTags.length > 0 && (
                 <div className="flex items-center space-x-2">
-                  <Tag className="h-5 w-5 text-slate-500" />
+                  <Tag className="h-5 w-5 text-green-500" />
                   <select
                     value={tagFilter}
                     onChange={(e) => setTagFilter(e.target.value)}
-                    className="rounded-xl border-2 border-slate-200 bg-slate-50 px-3 py-3 text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    className="rounded-xl border-2 border-green-200 bg-green-50 px-3 py-3 text-sm font-medium focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     data-testid="workflow-tag-filter"
                   >
                     <option value="">All Tags</option>
@@ -380,11 +380,11 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
           {/* Bulk Actions Bar */}
           {selectedWorkflows.length > 0 && can('manageWorkflows') && (
-            <div className="flex items-center justify-between border-t border-slate-200 pt-4">
+            <div className="flex items-center justify-between border-t border-green-200 pt-4">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={toggleSelectAll}
-                  className="flex items-center space-x-2 text-sm text-slate-600 hover:text-slate-900"
+                  className="flex items-center space-x-2 text-sm text-primary-600 hover:text-primary-900"
                 >
                   {selectedWorkflows.length === filteredWorkflows.length ? (
                     <CheckSquare className="h-4 w-4" />
@@ -409,13 +409,13 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                 </button>
                 <button
                   onClick={() => handleBulkUpdateStatus('archived')}
-                  className="rounded bg-slate-500 px-3 py-1.5 text-white hover:bg-slate-600"
+                  className="rounded bg-green-500 px-3 py-1.5 text-white hover:bg-primary-600"
                 >
                   Archive
                 </button>
                 <button
                   onClick={handleBulkDelete}
-                  className="rounded bg-red-500 px-3 py-1.5 text-white hover:bg-red-600"
+                  className="rounded bg-gold-500 px-3 py-1.5 text-white hover:bg-gold-600"
                 >
                   Delete
                 </button>
@@ -477,12 +477,12 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                         e.stopPropagation();
                         toggleSelectWorkflow(workflow.id);
                       }}
-                      className="rounded p-1 hover:bg-slate-100"
+                      className="rounded p-1 hover:bg-green-100"
                     >
                       {selectedWorkflows.includes(workflow.id) ? (
                         <CheckSquare className="h-5 w-5 text-primary-600" />
                       ) : (
-                        <Square className="h-5 w-5 text-slate-400" />
+                        <Square className="h-5 w-5 text-green-400" />
                       )}
                     </button>
                   </div>
@@ -491,7 +491,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                 <div className="p-6 pl-14" onClick={() => onSelectWorkflow(workflow)}>
                   {/* Header */}
                   <div className="mb-4 flex items-start justify-between">
-                    <h3 className="text-lg font-semibold text-slate-900 transition-colors group-hover:text-primary-600">
+                    <h3 className="text-lg font-semibold text-primary-900 transition-colors group-hover:text-primary-600">
                       {workflow.name}
                     </h3>
                     <span className={getBadgeStyle(workflow.status)}>
@@ -500,12 +500,12 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                   </div>
 
                   {/* Description */}
-                  <p className="mb-4 line-clamp-2 text-sm text-slate-600">
+                  <p className="mb-4 line-clamp-2 text-sm text-primary-600">
                     {workflow.description || 'No description provided'}
                   </p>
 
                   {/* Stats */}
-                  <div className="mb-4 flex items-center space-x-4 text-xs text-slate-500">
+                  <div className="mb-4 flex items-center space-x-4 text-xs text-green-500">
                     <span>{workflow.nodes?.length || 0} nodes</span>
                     <span>•</span>
                     <span>{workflow.edges?.length || 0} connections</span>
@@ -517,7 +517,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                   {workflow.tags && workflow.tags.length > 0 && (
                     <div className="mb-4 flex flex-wrap gap-2">
                       {workflow.tags.slice(0, 3).map((tag, index) => (
-                        <span key={index} className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">
+                        <span key={index} className="rounded bg-green-100 px-2 py-1 text-xs text-primary-700">
                           {tag}
                         </span>
                       ))}
@@ -525,7 +525,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center space-x-1 border-t border-slate-100 pt-4 text-xs">
+                  <div className="flex items-center space-x-1 border-t border-green-100 pt-4 text-xs">
                     <Tooltip content="Open workflow in canvas editor" position="top">
                       <button
                         onClick={(e) => {
@@ -566,7 +566,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                       <Tooltip content="Permanently delete this workflow" position="top">
                         <button
                           onClick={(e) => deleteWorkflow(workflow.id, e)}
-                          className="flex items-center justify-center rounded px-2 py-2 text-red-600 transition-colors hover:bg-red-50"
+                          className="flex items-center justify-center rounded px-2 py-2 text-gold-600 transition-colors hover:bg-gold-50"
                           data-testid="workflow-delete-btn"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -577,8 +577,8 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
 
                   {/* Per-workflow lifecycle quick actions */}
                   {can('publishWorkflows') && (
-                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-600">
-                      <span className="text-slate-400">Status actions:</span>
+                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-primary-600">
+                      <span className="text-green-400">Status actions:</span>
                       <button
                         onClick={(e) => updateSingleWorkflowStatus(workflow.id, 'published', e)}
                         className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 hover:bg-emerald-100"
@@ -593,7 +593,7 @@ const WorkflowList = ({ onSelectWorkflow, onCreateNew, onLoadRecruitingSample, o
                       </button>
                       <button
                         onClick={(e) => updateSingleWorkflowStatus(workflow.id, 'archived', e)}
-                        className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 hover:bg-slate-100"
+                        className="rounded-full border border-green-200 bg-green-50 px-2 py-1 hover:bg-green-100"
                       >
                         Archive
                       </button>

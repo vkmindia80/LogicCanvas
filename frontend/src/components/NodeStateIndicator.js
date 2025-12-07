@@ -18,9 +18,9 @@ const NODE_STATES = {
   },
   error: {
     icon: AlertCircle,
-    color: 'text-red-600',
-    bg: 'bg-red-100',
-    border: 'border-red-300',
+    color: 'text-gold-600',
+    bg: 'bg-gold-100',
+    border: 'border-gold-300',
     label: 'Error'
   },
   running: {
@@ -32,9 +32,9 @@ const NODE_STATES = {
   },
   waiting: {
     icon: Clock,
-    color: 'text-gray-600',
-    bg: 'bg-gray-100',
-    border: 'border-gray-300',
+    color: 'text-primary-600',
+    bg: 'bg-green-100',
+    border: 'border-green-300',
     label: 'Waiting'
   }
 };
@@ -168,10 +168,10 @@ const NodeStateIndicator = ({ node, size = 'sm', showLabel = false }) => {
       <IconComponent className={`${iconSize} ${stateConfig.color}`} data-testid="node-state-icon" />
       
       {/* Tooltip */}
-      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-primary-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
         {stateConfig.label}
         <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-          <div className="border-4 border-transparent border-t-gray-900"></div>
+          <div className="border-4 border-transparent border-t-primary-900"></div>
         </div>
       </div>
     </div>

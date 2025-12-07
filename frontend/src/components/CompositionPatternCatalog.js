@@ -90,12 +90,12 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
       approval_chain: 'bg-green-100 text-green-700 border-green-200',
       data_pipeline: 'bg-green-100 text-green-700 border-green-200',
       notification_flow: 'bg-gold-100 text-gold-700 border-gold-200',
-      error_handling: 'bg-red-100 text-red-700 border-red-200',
+      error_handling: 'bg-gold-100 text-gold-700 border-gold-200',
       parallel_processing: 'bg-gold-100 text-gold-700 border-gold-200',
       sequential_approval: 'bg-green-100 text-green-700 border-green-200',
       conditional_routing: 'bg-pink-100 text-pink-700 border-pink-200'
     };
-    return colors[category] || 'bg-gray-100 text-gray-700 border-gray-200';
+    return colors[category] || 'bg-green-100 text-primary-700 border-green-200';
   };
 
   if (!isOpen) return null;
@@ -124,16 +124,16 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
         </div>
 
         {/* Filters */}
-        <div className="border-b border-gray-200 p-4 bg-gray-50">
+        <div className="border-b border-green-200 p-4 bg-green-50">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="flex gap-4 items-center flex-1">
               {/* Category Filter */}
               <div className="flex items-center space-x-2">
-                <Filter className="w-5 h-5 text-gray-500" />
+                <Filter className="w-5 h-5 text-green-500" />
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                  className="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold-500 focus:border-transparent"
                   data-testid="filter-pattern-category"
                 >
                   {categories.map(cat => (
@@ -150,26 +150,26 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                   type="checkbox"
                   checked={showFeaturedOnly}
                   onChange={(e) => setShowFeaturedOnly(e.target.checked)}
-                  className="w-4 h-4 text-gold-600 border-gray-300 rounded focus:ring-gold-500"
+                  className="w-4 h-4 text-gold-600 border-green-300 rounded focus:ring-gold-500"
                   data-testid="filter-featured"
                 />
                 <Star className="w-4 h-4 text-gold-500" />
-                <span className="text-sm text-gray-700">Featured Only</span>
+                <span className="text-sm text-primary-700">Featured Only</span>
               </label>
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg p-1">
+            <div className="flex items-center space-x-2 bg-white border border-green-300 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded ${viewMode === 'grid' ? 'bg-gold-100 text-gold-700' : 'text-gray-600'}`}
+                className={`p-2 rounded ${viewMode === 'grid' ? 'bg-gold-100 text-gold-700' : 'text-primary-600'}`}
                 data-testid="view-grid"
               >
                 <Grid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded ${viewMode === 'list' ? 'bg-gold-100 text-gold-700' : 'text-gray-600'}`}
+                className={`p-2 rounded ${viewMode === 'list' ? 'bg-gold-100 text-gold-700' : 'text-primary-600'}`}
                 data-testid="view-list"
               >
                 <List className="w-4 h-4" />
@@ -184,14 +184,14 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading patterns...</p>
+                <p className="text-primary-600">Loading patterns...</p>
               </div>
             </div>
           ) : patterns.length === 0 ? (
             <div className="text-center py-12">
-              <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Patterns Found</h3>
-              <p className="text-gray-500 mb-4">
+              <Sparkles className="w-16 h-16 text-green-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-primary-700 mb-2">No Patterns Found</h3>
+              <p className="text-green-500 mb-4">
                 Initialize default patterns to get started
               </p>
               <button
@@ -213,7 +213,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                 return (
                   <div
                     key={pattern.id}
-                    className={`border border-gray-200 rounded-lg p-4 hover:shadow-lg hover:border-gold-300 transition-all cursor-pointer bg-white ${
+                    className={`border border-green-200 rounded-lg p-4 hover:shadow-lg hover:border-gold-300 transition-all cursor-pointer bg-white ${
                       viewMode === 'list' ? 'flex items-start space-x-4' : ''
                     }`}
                     onClick={() => setSelectedPattern(pattern)}
@@ -231,7 +231,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="font-semibold text-gray-900">{pattern.name}</h3>
+                            <h3 className="font-semibold text-primary-900">{pattern.name}</h3>
                             {pattern.is_featured && (
                               <Star className="w-4 h-4 text-gold-500 fill-yellow-500" />
                             )}
@@ -242,12 +242,12 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                         </div>
                       </div>
 
-                      <p className="text-sm text-gray-600 mb-3">
+                      <p className="text-sm text-primary-600 mb-3">
                         {pattern.description}
                       </p>
 
                       {/* Stats */}
-                      <div className="flex items-center space-x-4 text-xs text-gray-500 mb-3">
+                      <div className="flex items-center space-x-4 text-xs text-green-500 mb-3">
                         <span>{pattern.template_nodes?.length || 0} nodes</span>
                         <span>{pattern.template_edges?.length || 0} connections</span>
                       </div>
@@ -256,12 +256,12 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                       {pattern.tags && pattern.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-3">
                           {pattern.tags.slice(0, 3).map((tag, idx) => (
-                            <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                            <span key={idx} className="text-xs bg-green-100 text-primary-600 px-2 py-0.5 rounded">
                               {tag}
                             </span>
                           ))}
                           {pattern.tags.length > 3 && (
-                            <span className="text-xs text-gray-400">+{pattern.tags.length - 3}</span>
+                            <span className="text-xs text-green-400">+{pattern.tags.length - 3}</span>
                           )}
                         </div>
                       )}
@@ -303,7 +303,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-2xl font-bold text-gray-900">{selectedPattern.name}</h3>
+                      <h3 className="text-2xl font-bold text-primary-900">{selectedPattern.name}</h3>
                       {selectedPattern.is_featured && (
                         <Star className="w-5 h-5 text-gold-500 fill-yellow-500" />
                       )}
@@ -315,13 +315,13 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
                 </div>
                 <button
                   onClick={() => setSelectedPattern(null)}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
+                  className="p-2 hover:bg-green-100 rounded-lg"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <p className="text-gray-600 mb-6">{selectedPattern.description}</p>
+              <p className="text-primary-600 mb-6">{selectedPattern.description}</p>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-gold-50 p-4 rounded-lg border border-gold-100">
@@ -336,10 +336,10 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
 
               {selectedPattern.tags && selectedPattern.tags.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Tags</h4>
+                  <h4 className="text-sm font-semibold text-primary-700 mb-2">Tags</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedPattern.tags.map((tag, idx) => (
-                      <span key={idx} className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
+                      <span key={idx} className="text-sm bg-green-100 text-primary-700 px-3 py-1 rounded-full">
                         {tag}
                       </span>
                     ))}
@@ -350,12 +350,12 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
               {/* Preview nodes list */}
               {selectedPattern.template_nodes && selectedPattern.template_nodes.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3">Included Nodes</h4>
+                  <h4 className="text-sm font-semibold text-primary-700 mb-3">Included Nodes</h4>
                   <div className="grid grid-cols-2 gap-2">
                     {selectedPattern.template_nodes.map((node, idx) => (
-                      <div key={idx} className="text-sm bg-gray-50 text-gray-700 px-3 py-2 rounded border border-gray-200">
+                      <div key={idx} className="text-sm bg-green-50 text-primary-700 px-3 py-2 rounded border border-green-200">
                         <span className="font-medium">{node.data?.label || node.type}</span>
-                        <span className="text-xs text-gray-500 ml-2">({node.type})</span>
+                        <span className="text-xs text-green-500 ml-2">({node.type})</span>
                       </div>
                     ))}
                   </div>
@@ -365,7 +365,7 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={() => setSelectedPattern(null)}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  className="px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
                 >
                   Close
                 </button>
@@ -385,14 +385,14 @@ const CompositionPatternCatalog = ({ isOpen, onClose, onInsertPattern }) => {
         )}
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4 bg-gray-50">
+        <div className="border-t border-green-200 p-4 bg-green-50">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-primary-600">
               {patterns.length} pattern{patterns.length !== 1 ? 's' : ''} available
             </div>
             <button
               onClick={onClose}
-              className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Close
             </button>

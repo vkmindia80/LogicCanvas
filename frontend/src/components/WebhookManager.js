@@ -94,8 +94,8 @@ const WebhookManager = ({ onClose }) => {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Webhook Manager</h2>
-              <p className="text-sm text-gray-500 mt-1">
+              <h2 className="text-2xl font-bold text-primary-900">Webhook Manager</h2>
+              <p className="text-sm text-green-500 mt-1">
                 Configure and monitor webhook endpoints
               </p>
             </div>
@@ -109,7 +109,7 @@ const WebhookManager = ({ onClose }) => {
               </button>
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2 text-green-400 hover:text-primary-600 rounded-lg hover:bg-green-100 transition-colors"
               >
                 <X size={20} />
               </button>
@@ -117,9 +117,9 @@ const WebhookManager = ({ onClose }) => {
           </div>
 
           {/* Search */}
-          <div className="p-4 border-b bg-gray-50">
+          <div className="p-4 border-b bg-green-50">
             <div className="relative">
-              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
               <input
                 type="text"
                 value={searchQuery}
@@ -133,7 +133,7 @@ const WebhookManager = ({ onClose }) => {
           {/* Webhooks List */}
           <div className="flex-1 overflow-auto p-6">
             {filteredWebhooks.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-green-500">
                 <Webhook size={48} className="mx-auto mb-4 opacity-30" />
                 <p className="text-lg">No webhooks found</p>
                 <p className="text-sm mt-2">
@@ -159,17 +159,17 @@ const WebhookManager = ({ onClose }) => {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-gray-900">{webhook.name}</h3>
+                          <h3 className="font-semibold text-primary-900">{webhook.name}</h3>
                           <span className={`px-2 py-0.5 text-xs rounded ${
                             webhook.active
                               ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-700'
+                              : 'bg-green-100 text-primary-700'
                           }`}>
                             {webhook.active ? 'Active' : 'Inactive'}
                           </span>
                         </div>
                         
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-primary-600">
                           <p className="flex items-center gap-2">
                             <Code size={14} />
                             <span className="font-mono text-xs">{webhook.url}</span>
@@ -183,14 +183,14 @@ const WebhookManager = ({ onClose }) => {
                             Total Calls: {webhook.total_calls || 0}
                           </p>
                           {webhook.last_called_at && (
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-green-500">
                               Last called: {new Date(webhook.last_called_at).toLocaleString()}
                             </p>
                           )}
                         </div>
 
-                        <div className="mt-3 p-3 bg-gray-50 rounded border">
-                          <p className="text-xs text-gray-600 mb-1">Webhook Endpoint:</p>
+                        <div className="mt-3 p-3 bg-green-50 rounded border">
+                          <p className="text-xs text-primary-600 mb-1">Webhook Endpoint:</p>
                           <code className="text-xs font-mono text-green-600">
                             {`${BACKEND_URL}/api/webhooks/${webhook.id}/receive`}
                           </code>
@@ -217,14 +217,14 @@ const WebhookManager = ({ onClose }) => {
                             setEditingWebhook(webhook);
                             setShowCreateModal(true);
                           }}
-                          className="p-2 text-gray-600 hover:bg-gray-50 rounded transition-colors"
+                          className="p-2 text-primary-600 hover:bg-green-50 rounded transition-colors"
                           title="Edit"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(webhook.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
+                          className="p-2 text-gold-600 hover:bg-gold-50 rounded transition-colors"
                           title="Delete"
                         >
                           <Trash2 size={16} />
@@ -344,17 +344,17 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-6 border-b">
-          <h3 className="text-xl font-bold text-gray-900">
+          <h3 className="text-xl font-bold text-primary-900">
             {webhook ? 'Edit Webhook' : 'Create Webhook'}
           </h3>
-          <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded">
+          <button onClick={onClose} className="p-2 text-green-400 hover:text-primary-600 rounded">
             <X size={20} />
           </button>
         </div>
 
         <div className="flex-1 overflow-auto p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               Name *
             </label>
             <input
@@ -367,7 +367,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               Target URL *
             </label>
             <input
@@ -380,7 +380,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               Events
             </label>
             <div className="flex gap-2 mb-2">
@@ -415,7 +415,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               Secret (Optional)
             </label>
             <input
@@ -428,7 +428,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               Custom Headers
             </label>
             <div className="flex gap-2 mb-2">
@@ -455,9 +455,9 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
             </div>
             <div className="space-y-2">
               {Object.entries(headers).map(([key, value]) => (
-                <div key={key} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                <div key={key} className="flex items-center gap-2 p-2 bg-green-50 rounded">
                   <span className="font-mono text-sm flex-1">{key}: {value}</span>
-                  <button onClick={() => removeHeader(key)} className="text-red-600 hover:text-red-800">
+                  <button onClick={() => removeHeader(key)} className="text-gold-600 hover:text-gold-800">
                     <X size={16} />
                   </button>
                 </div>
@@ -473,7 +473,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
               onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
               className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
             />
-            <label htmlFor="active" className="text-sm font-medium text-gray-700">
+            <label htmlFor="active" className="text-sm font-medium text-primary-700">
               Active
             </label>
           </div>
@@ -482,7 +482,7 @@ const WebhookForm = ({ webhook, onClose, onSave }) => {
         <div className="flex gap-2 p-6 border-t">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="flex-1 px-4 py-2 border border-green-300 rounded-lg hover:bg-green-50"
           >
             Cancel
           </button>
@@ -505,7 +505,7 @@ const WebhookLogs = ({ webhookId, logs, onClose, onRefresh }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-6 border-b">
-          <h3 className="text-xl font-bold text-gray-900">Webhook Logs</h3>
+          <h3 className="text-xl font-bold text-primary-900">Webhook Logs</h3>
           <div className="flex gap-2">
             <button
               onClick={onRefresh}
@@ -514,7 +514,7 @@ const WebhookLogs = ({ webhookId, logs, onClose, onRefresh }) => {
             >
               <RefreshCw size={18} />
             </button>
-            <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded">
+            <button onClick={onClose} className="p-2 text-green-400 hover:text-primary-600 rounded">
               <X size={20} />
             </button>
           </div>
@@ -522,7 +522,7 @@ const WebhookLogs = ({ webhookId, logs, onClose, onRefresh }) => {
 
         <div className="flex-1 overflow-auto p-6">
           {logs.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-green-500">
               <Activity size={48} className="mx-auto mb-4 opacity-30" />
               <p className="text-lg">No logs yet</p>
               <p className="text-sm mt-2">Webhook calls will appear here</p>
@@ -536,25 +536,25 @@ const WebhookLogs = ({ webhookId, logs, onClose, onRefresh }) => {
                       {log.status === 'processed' ? (
                         <CheckCircle className="text-green-600" size={20} />
                       ) : log.status === 'failed' ? (
-                        <XCircle className="text-red-600" size={20} />
+                        <XCircle className="text-gold-600" size={20} />
                       ) : (
                         <AlertCircle className="text-gold-600" size={20} />
                       )}
                       <span className="font-semibold capitalize">{log.status}</span>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-green-500">
                       {new Date(log.received_at).toLocaleString()}
                     </span>
                   </div>
-                  <div className="p-3 bg-gray-50 rounded">
-                    <p className="text-xs text-gray-600 mb-1">Payload:</p>
+                  <div className="p-3 bg-green-50 rounded">
+                    <p className="text-xs text-primary-600 mb-1">Payload:</p>
                     <pre className="text-xs font-mono overflow-auto max-h-32">
                       {JSON.stringify(log.payload, null, 2)}
                     </pre>
                   </div>
                   {log.error && (
-                    <div className="mt-2 p-2 bg-red-50 rounded">
-                      <p className="text-xs text-red-700">{log.error}</p>
+                    <div className="mt-2 p-2 bg-gold-50 rounded">
+                      <p className="text-xs text-gold-700">{log.error}</p>
                     </div>
                   )}
                 </div>

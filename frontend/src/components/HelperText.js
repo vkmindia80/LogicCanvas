@@ -54,10 +54,10 @@ const HelperText = ({
     },
     error: {
       icon: AlertTriangle,
-      bgColor: 'bg-red-50',
-      borderColor: 'border-red-200',
-      textColor: 'text-red-800',
-      iconColor: 'text-red-500'
+      bgColor: 'bg-gold-50',
+      borderColor: 'border-gold-200',
+      textColor: 'text-gold-800',
+      iconColor: 'text-gold-500'
     }
   };
 
@@ -101,7 +101,7 @@ export const InlineHelperText = ({ text, type = 'info' }) => {
     tip: 'text-gold-600',
     warning: 'text-amber-600',
     success: 'text-green-600',
-    error: 'text-red-600'
+    error: 'text-gold-600'
   };
 
   return (

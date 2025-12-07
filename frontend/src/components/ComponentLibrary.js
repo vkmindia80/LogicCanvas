@@ -84,18 +84,18 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
         </div>
 
         {/* Toolbar */}
-        <div className="border-b border-gray-200 p-4 bg-gray-50">
+        <div className="border-b border-green-200 p-4 bg-green-50">
           <div className="flex flex-wrap items-center gap-4">
             {/* Search */}
             <div className="flex-1 min-w-64">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-400" />
                 <input
                   type="text"
                   placeholder="Search components..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   data-testid="component-search"
                 />
               </div>
@@ -103,11 +103,11 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
 
             {/* Category Filter */}
             <div className="flex items-center space-x-2">
-              <Filter className="w-5 h-5 text-gray-600" />
+              <Filter className="w-5 h-5 text-primary-600" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="border border-green-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 data-testid="category-filter"
               >
                 <option value="all">All Categories</option>
@@ -121,7 +121,7 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="border border-green-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               data-testid="sort-by"
             >
               <option value="usage">Most Used</option>
@@ -130,17 +130,17 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
             </select>
 
             {/* View Mode */}
-            <div className="flex border border-gray-300 rounded-lg">
+            <div className="flex border border-green-300 rounded-lg">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 ${viewMode === 'grid' ? 'bg-violet-100 text-violet-600' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`p-2 ${viewMode === 'grid' ? 'bg-violet-100 text-violet-600' : 'text-primary-600 hover:bg-green-100'}`}
                 data-testid="view-grid"
               >
                 <Grid className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 ${viewMode === 'list' ? 'bg-violet-100 text-violet-600' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`p-2 ${viewMode === 'list' ? 'bg-violet-100 text-violet-600' : 'text-primary-600 hover:bg-green-100'}`}
                 data-testid="view-list"
               >
                 <List className="w-5 h-5" />
@@ -155,14 +155,14 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
             <div className="flex items-center justify-center h-64">
               <div className="text-center">
                 <div className="w-16 h-16 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading components...</p>
+                <p className="text-primary-600">Loading components...</p>
               </div>
             </div>
           ) : sortedComponents.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64">
-              <Package className="w-16 h-16 text-gray-300 mb-4" />
-              <p className="text-gray-600 text-lg">No components found</p>
-              <p className="text-gray-400 text-sm">Try adjusting your search or filters</p>
+              <Package className="w-16 h-16 text-green-300 mb-4" />
+              <p className="text-primary-600 text-lg">No components found</p>
+              <p className="text-green-400 text-sm">Try adjusting your search or filters</p>
             </div>
           ) : viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -207,7 +207,7 @@ const ComponentLibrary = ({ isOpen, onClose, onSelectComponent }) => {
 
 const ComponentCard = ({ component, onView, onUse }) => {
   return (
-    <div className="border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white group">
+    <div className="border border-green-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white group">
       {/* Thumbnail or Icon */}
       <div className="h-32 bg-gradient-to-br from-violet-500 to-gold-500 flex items-center justify-center">
         <Layers className="w-16 h-16 text-white opacity-80" />
@@ -216,28 +216,28 @@ const ComponentCard = ({ component, onView, onUse }) => {
       {/* Content */}
       <div className="p-4">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-gray-900 line-clamp-1">{component.name}</h3>
+          <h3 className="font-semibold text-primary-900 line-clamp-1">{component.name}</h3>
           <span className="text-xs bg-violet-100 text-violet-700 px-2 py-1 rounded-full">
             v{component.version}
           </span>
         </div>
 
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{component.description}</p>
+        <p className="text-sm text-primary-600 mb-3 line-clamp-2">{component.description}</p>
 
         {/* Meta */}
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <div className="flex items-center justify-between text-xs text-green-500 mb-3">
           <span className="flex items-center">
             <TrendingUp className="w-3 h-3 mr-1" />
             {component.usage_count || 0} uses
           </span>
-          <span className="bg-gray-100 px-2 py-1 rounded">{component.category}</span>
+          <span className="bg-green-100 px-2 py-1 rounded">{component.category}</span>
         </div>
 
         {/* Tags */}
         {component.tags && component.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-3">
             {component.tags.slice(0, 3).map((tag, idx) => (
-              <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+              <span key={idx} className="text-xs bg-green-100 text-primary-600 px-2 py-0.5 rounded">
                 {tag}
               </span>
             ))}
@@ -248,7 +248,7 @@ const ComponentCard = ({ component, onView, onUse }) => {
         <div className="flex space-x-2">
           <button
             onClick={onView}
-            className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
+            className="flex-1 px-3 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
             data-testid={`view-component-${component.id}`}
           >
             <Eye className="w-4 h-4" />
@@ -270,23 +270,23 @@ const ComponentCard = ({ component, onView, onUse }) => {
 
 const ComponentListItem = ({ component, onView, onUse }) => {
   return (
-    <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-200 bg-white flex items-center space-x-4">
+    <div className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-all duration-200 bg-white flex items-center space-x-4">
       <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-violet-500 to-gold-500 rounded-lg flex items-center justify-center">
         <Layers className="w-8 h-8 text-white" />
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center space-x-2 mb-1">
-          <h3 className="font-semibold text-gray-900 truncate">{component.name}</h3>
+          <h3 className="font-semibold text-primary-900 truncate">{component.name}</h3>
           <span className="text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full">
             v{component.version}
           </span>
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+          <span className="text-xs bg-green-100 text-primary-600 px-2 py-0.5 rounded">
             {component.category}
           </span>
         </div>
-        <p className="text-sm text-gray-600 line-clamp-1 mb-2">{component.description}</p>
-        <div className="flex items-center space-x-4 text-xs text-gray-500">
+        <p className="text-sm text-primary-600 line-clamp-1 mb-2">{component.description}</p>
+        <div className="flex items-center space-x-4 text-xs text-green-500">
           <span className="flex items-center">
             <TrendingUp className="w-3 h-3 mr-1" />
             {component.usage_count || 0} uses
@@ -298,7 +298,7 @@ const ComponentListItem = ({ component, onView, onUse }) => {
       <div className="flex-shrink-0 flex space-x-2">
         <button
           onClick={onView}
-          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
         >
           View
         </button>
@@ -332,28 +332,28 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
 
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mb-6">
-            <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
-            <p className="text-gray-700">{component.description}</p>
+            <h4 className="font-semibold text-primary-900 mb-2">Description</h4>
+            <p className="text-primary-700">{component.description}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Details</h4>
+              <h4 className="font-semibold text-primary-900 mb-2">Details</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Category:</span>
+                  <span className="text-primary-600">Category:</span>
                   <span className="font-medium">{component.category}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Nodes:</span>
+                  <span className="text-primary-600">Nodes:</span>
                   <span className="font-medium">{component.nodes?.length || 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Usage Count:</span>
+                  <span className="text-primary-600">Usage Count:</span>
                   <span className="font-medium">{component.usage_count || 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Created:</span>
+                  <span className="text-primary-600">Created:</span>
                   <span className="font-medium">
                     {new Date(component.created_at).toLocaleDateString()}
                   </span>
@@ -362,10 +362,10 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Variables</h4>
+              <h4 className="font-semibold text-primary-900 mb-2">Variables</h4>
               <div className="space-y-2 text-sm">
                 <div>
-                  <span className="text-gray-600">Inputs:</span>
+                  <span className="text-primary-600">Inputs:</span>
                   <div className="mt-1 space-y-1">
                     {component.input_variables?.length > 0 ? (
                       component.input_variables.map((v, idx) => (
@@ -374,12 +374,12 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
                         </span>
                       ))
                     ) : (
-                      <span className="text-gray-400">None</span>
+                      <span className="text-green-400">None</span>
                     )}
                   </div>
                 </div>
                 <div>
-                  <span className="text-gray-600">Outputs:</span>
+                  <span className="text-primary-600">Outputs:</span>
                   <div className="mt-1 space-y-1">
                     {component.output_variables?.length > 0 ? (
                       component.output_variables.map((v, idx) => (
@@ -388,7 +388,7 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
                         </span>
                       ))
                     ) : (
-                      <span className="text-gray-400">None</span>
+                      <span className="text-green-400">None</span>
                     )}
                   </div>
                 </div>
@@ -398,10 +398,10 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
 
           {component.tags && component.tags.length > 0 && (
             <div className="mb-6">
-              <h4 className="font-semibold text-gray-900 mb-2">Tags</h4>
+              <h4 className="font-semibold text-primary-900 mb-2">Tags</h4>
               <div className="flex flex-wrap gap-2">
                 {component.tags.map((tag, idx) => (
-                  <span key={idx} className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">
+                  <span key={idx} className="bg-green-100 text-primary-700 text-sm px-3 py-1 rounded-full">
                     {tag}
                   </span>
                 ))}
@@ -410,19 +410,19 @@ const ComponentDetailsModal = ({ component, onClose, onUse }) => {
           )}
 
           <div>
-            <h4 className="font-semibold text-gray-900 mb-2">Structure</h4>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <div className="text-sm text-gray-600">
+            <h4 className="font-semibold text-primary-900 mb-2">Structure</h4>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="text-sm text-primary-600">
                 This component contains {component.nodes?.length || 0} nodes and {component.edges?.length || 0} connections
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-200 p-4 flex justify-end space-x-3">
+        <div className="border-t border-green-200 p-4 flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            className="px-6 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
           >
             Close
           </button>

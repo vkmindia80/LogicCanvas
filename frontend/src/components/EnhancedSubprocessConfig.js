@@ -79,9 +79,9 @@ const EnhancedSubprocessConfig = ({
     const status = workflow?.lifecycle_state || workflow?.status || 'draft';
     const statusColors = {
       published: 'bg-green-100 text-green-800',
-      draft: 'bg-gray-100 text-gray-800',
+      draft: 'bg-green-100 text-primary-800',
       paused: 'bg-gold-100 text-gold-800',
-      archived: 'bg-red-100 text-red-800'
+      archived: 'bg-gold-100 text-gold-800'
     };
     return { status, color: statusColors[status] || statusColors.draft };
   };
@@ -96,7 +96,7 @@ const EnhancedSubprocessConfig = ({
     <div className="space-y-6">
       {/* Workflow Selection */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-2">
+        <label className="block text-sm font-medium text-primary-700 mb-2">
           <span className="flex items-center gap-2">
             <GitBranch className="w-4 h-4" />
             Select Subprocess Workflow
@@ -105,7 +105,7 @@ const EnhancedSubprocessConfig = ({
         <select
           value={subprocessWorkflowId}
           onChange={(e) => handleWorkflowChange(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           data-testid="subprocess-workflow-select"
         >
           <option value="">-- Select a workflow --</option>
@@ -120,10 +120,10 @@ const EnhancedSubprocessConfig = ({
         </select>
 
         {subprocessWorkflowId && selectedWorkflow && (
-          <div className="mt-2 p-3 bg-gray-50 rounded-lg">
+          <div className="mt-2 p-3 bg-green-50 rounded-lg">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm text-gray-700">{selectedWorkflow.description || 'No description'}</p>
+                <p className="text-sm text-primary-700">{selectedWorkflow.description || 'No description'}</p>
                 {selectedWorkflow.lifecycle_state && (
                   <div className="mt-2">
                     <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getWorkflowStatus(selectedWorkflow).color}`}>
@@ -157,7 +157,7 @@ const EnhancedSubprocessConfig = ({
                 {compatibilityCheck.message}
               </p>
               {subprocessMetadata && (
-                <div className="mt-2 text-xs text-gray-600 space-y-1">
+                <div className="mt-2 text-xs text-primary-600 space-y-1">
                   {subprocessMetadata.max_execution_time && (
                     <div>Max execution time: {subprocessMetadata.max_execution_time}s</div>
                   )}
@@ -174,13 +174,13 @@ const EnhancedSubprocessConfig = ({
       {/* Version Selection (Phase 3.1 Feature) */}
       {subprocessWorkflowId && (
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="block text-sm font-medium text-primary-700 mb-2">
             Workflow Version
           </label>
           <select
             value={selectedVersion}
             onChange={(e) => setSelectedVersion(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="subprocess-version-select"
             disabled={loadingVersions}
           >
@@ -191,7 +191,7 @@ const EnhancedSubprocessConfig = ({
               </option>
             ))}
           </select>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-green-500">
             <Info className="w-3 h-3 inline mr-1" />
             Using "Latest" ensures you always get the newest version
           </p>
@@ -203,7 +203,7 @@ const EnhancedSubprocessConfig = ({
         <>
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-primary-700">
                 <span className="flex items-center gap-2">
                   <ArrowRightLeft className="w-4 h-4" />
                   Input Mapping
@@ -221,7 +221,7 @@ const EnhancedSubprocessConfig = ({
               keyPlaceholder="Subprocess variable"
               valuePlaceholder="Parent variable (e.g., ${parentVar})"
             />
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-green-500">
               Map parent workflow variables to subprocess input variables
             </p>
             
@@ -239,7 +239,7 @@ const EnhancedSubprocessConfig = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary-700 mb-2">
               <span className="flex items-center gap-2">
                 <ArrowRightLeft className="w-4 h-4 transform rotate-180" />
                 Output Mapping
@@ -251,7 +251,7 @@ const EnhancedSubprocessConfig = ({
               keyPlaceholder="Parent variable"
               valuePlaceholder="Subprocess output variable"
             />
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-green-500">
               Map subprocess output variables back to parent workflow variables
             </p>
             
@@ -282,10 +282,10 @@ const EnhancedSubprocessConfig = ({
           </button>
 
           {showAdvanced && (
-            <div className="mt-3 p-4 bg-gray-50 rounded-lg space-y-3">
+            <div className="mt-3 p-4 bg-green-50 rounded-lg space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Error Propagation</span>
-                <select className="text-sm border border-gray-300 rounded px-2 py-1">
+                <span className="text-sm text-primary-700">Error Propagation</span>
+                <select className="text-sm border border-green-300 rounded px-2 py-1">
                   <option value="stop">Stop parent on error</option>
                   <option value="continue">Continue parent on error</option>
                   <option value="retry">Retry subprocess on error</option>
@@ -293,21 +293,21 @@ const EnhancedSubprocessConfig = ({
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Timeout (seconds)</span>
+                <span className="text-sm text-primary-700">Timeout (seconds)</span>
                 <input
                   type="number"
                   defaultValue={3600}
-                  className="text-sm border border-gray-300 rounded px-2 py-1 w-24"
+                  className="text-sm border border-green-300 rounded px-2 py-1 w-24"
                   min="0"
                 />
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Max Nesting Level</span>
+                <span className="text-sm text-primary-700">Max Nesting Level</span>
                 <input
                   type="number"
                   defaultValue={5}
-                  className="text-sm border border-gray-300 rounded px-2 py-1 w-24"
+                  className="text-sm border border-green-300 rounded px-2 py-1 w-24"
                   min="1"
                   max="10"
                 />

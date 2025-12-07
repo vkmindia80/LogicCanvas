@@ -116,7 +116,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
       array: 'bg-pink-100 text-pink-700 border-pink-200',
       date: 'bg-cyan-100 text-cyan-700 border-cyan-200'
     };
-    return colors[type] || 'bg-gray-100 text-gray-700 border-gray-200';
+    return colors[type] || 'bg-green-100 text-primary-700 border-green-200';
   };
 
   const formatValue = (value) => {
@@ -137,9 +137,9 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
   };
 
   return (
-    <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-slate-200 flex flex-col z-50 animate-slide-in">
+    <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-green-200 flex flex-col z-50 animate-slide-in">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-gradient-to-r from-green-500 to-gold-500">
+      <div className="flex items-center justify-between p-4 border-b border-green-200 bg-gradient-to-r from-green-500 to-gold-500">
         <div>
           <h3 className="text-lg font-bold text-white flex items-center space-x-2">
             <Eye className="w-5 h-5" />
@@ -170,16 +170,16 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
       </div>
 
       {/* Filters & Search */}
-      <div className="p-4 border-b border-slate-200 bg-slate-50 space-y-3">
+      <div className="p-4 border-b border-green-200 bg-green-50 space-y-3">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search variables..."
-            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="search-variables"
           />
         </div>
@@ -189,7 +189,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
           <select
             value={filterScope}
             onChange={(e) => setFilterScope(e.target.value)}
-            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="flex-1 px-3 py-1.5 text-sm border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="filter-scope"
           >
             <option value="all">All Scopes</option>
@@ -201,7 +201,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="flex-1 px-3 py-1.5 text-sm border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             data-testid="filter-type"
           >
             <option value="all">All Types</option>
@@ -215,7 +215,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
         </div>
 
         {/* Status */}
-        <div className="flex items-center justify-between text-xs text-slate-600">
+        <div className="flex items-center justify-between text-xs text-primary-600">
           <div className="flex items-center space-x-2">
             <Filter className="w-3 h-3" />
             <span>{filteredVariables.length} of {variables.length} variables</span>
@@ -232,8 +232,8 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
       {/* Variables List */}
       <div className="flex-1 overflow-y-auto p-4">
         {filteredVariables.length === 0 ? (
-          <div className="text-center py-8 text-slate-500 text-sm">
-            <AlertCircle className="w-8 h-8 mx-auto mb-2 text-slate-400" />
+          <div className="text-center py-8 text-green-500 text-sm">
+            <AlertCircle className="w-8 h-8 mx-auto mb-2 text-green-400" />
             <p>No variables found</p>
             {searchQuery && (
               <p className="text-xs mt-1">Try adjusting your filters</p>
@@ -247,7 +247,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
                 className={`border rounded-lg p-3 transition-all ${
                   variable.isActive 
                     ? 'border-green-400 bg-green-50 shadow-md animate-pulse-subtle' 
-                    : 'border-slate-200 bg-white hover:shadow-md'
+                    : 'border-green-200 bg-white hover:shadow-md'
                 }`}
                 data-testid="variable-item"
               >
@@ -257,7 +257,7 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
                       {variable.isActive && (
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Active in current node" />
                       )}
-                      <span className="font-mono text-sm font-semibold text-slate-800">
+                      <span className="font-mono text-sm font-semibold text-primary-800">
                         {variable.name}
                       </span>
                     </div>
@@ -265,11 +265,11 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
                       <span className={`px-2 py-0.5 text-xs rounded-full border ${getTypeColor(variable.type)}`}>
                         {variable.type}
                       </span>
-                      <span className="px-2 py-0.5 text-xs rounded-full bg-slate-100 text-slate-600">
+                      <span className="px-2 py-0.5 text-xs rounded-full bg-green-100 text-primary-600">
                         {variable.scope}
                       </span>
                       {variable.lastModified && (
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-green-500">
                           {formatTimeAgo(variable.lastModified)}
                         </span>
                       )}
@@ -277,8 +277,8 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
                   </div>
                 </div>
                 
-                <div className="bg-slate-50 rounded p-2 mt-2">
-                  <pre className="text-xs font-mono text-slate-700 whitespace-pre-wrap break-all max-h-32 overflow-y-auto">
+                <div className="bg-green-50 rounded p-2 mt-2">
+                  <pre className="text-xs font-mono text-primary-700 whitespace-pre-wrap break-all max-h-32 overflow-y-auto">
                     {formatValue(variable.value)}
                   </pre>
                 </div>
@@ -290,9 +290,9 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
 
       {/* Variable History */}
       {variableHistory.length > 0 && (
-        <div className="border-t border-slate-200 bg-slate-50 max-h-48 overflow-y-auto">
+        <div className="border-t border-green-200 bg-green-50 max-h-48 overflow-y-auto">
           <div className="p-3">
-            <h4 className="text-xs font-semibold text-slate-700 mb-2 flex items-center space-x-1">
+            <h4 className="text-xs font-semibold text-primary-700 mb-2 flex items-center space-x-1">
               <Clock className="w-3 h-3" />
               <span>Recent Changes</span>
             </h4>
@@ -300,15 +300,15 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
               {variableHistory.slice(0, 10).map((change, index) => (
                 <div 
                   key={`${change.name}-${index}`} 
-                  className="text-xs text-slate-600 bg-white rounded p-2 border border-slate-200"
+                  className="text-xs text-primary-600 bg-white rounded p-2 border border-green-200"
                 >
                   <div className="font-mono font-semibold">{change.name}</div>
-                  <div className="text-slate-500 mt-1">
+                  <div className="text-green-500 mt-1">
                     <span className="line-through">{formatValue(change.oldValue)}</span>
                     {' → '}
                     <span className="text-green-600 font-semibold">{formatValue(change.newValue)}</span>
                   </div>
-                  <div className="text-slate-400 text-[10px] mt-1">
+                  <div className="text-green-400 text-[10px] mt-1">
                     {formatTimeAgo(change.timestamp)}
                   </div>
                 </div>
@@ -319,10 +319,10 @@ const VariableInspector = ({ instanceId, currentNodeId, onClose }) => {
       )}
 
       {/* Footer */}
-      <div className="p-3 border-t border-slate-200 bg-white">
-        <div className="text-xs text-slate-600 text-center">
+      <div className="p-3 border-t border-green-200 bg-white">
+        <div className="text-xs text-primary-600 text-center">
           <p className="font-semibold">{filteredVariables.length} Active Variable{filteredVariables.length !== 1 ? 's' : ''}</p>
-          <p className="text-slate-500 mt-1">Real-time monitoring enabled</p>
+          <p className="text-green-500 mt-1">Real-time monitoring enabled</p>
         </div>
       </div>
     </div>

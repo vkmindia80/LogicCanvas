@@ -72,7 +72,7 @@ const OnboardingTour = ({ isOpen, onClose }) => {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600"
+          className="absolute right-4 top-4 text-green-400 hover:text-primary-600"
           aria-label="Close onboarding tour"
           data-testid="onboarding-close-btn"
         >
@@ -86,12 +86,12 @@ const OnboardingTour = ({ isOpen, onClose }) => {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary-600">Getting started</p>
-            <h2 className="text-xl font-bold text-slate-900">LogicCanvas Tour</h2>
+            <h2 className="text-xl font-bold text-primary-900">LogicCanvas Tour</h2>
           </div>
         </div>
 
         {/* Step content */}
-        <div className="mb-6 rounded-xl bg-slate-50 p-4">
+        <div className="mb-6 rounded-xl bg-green-50 p-4">
           <div className="mb-2 flex items-center space-x-2">
             {step.id === 'workflows' && <Workflow className="h-5 w-5 text-primary-600" />}
             {step.id === 'forms' && <FileText className="h-5 w-5 text-primary-600" />}
@@ -101,11 +101,11 @@ const OnboardingTour = ({ isOpen, onClose }) => {
             {!['workflows', 'forms', 'tasks_approvals', 'analytics', 'power_tools'].includes(step.id) && (
               <Download className="h-5 w-5 text-primary-600" />
             )}
-            <h3 className="text-lg font-semibold text-slate-900" data-testid="onboarding-step-title">
+            <h3 className="text-lg font-semibold text-primary-900" data-testid="onboarding-step-title">
               {step.title}
             </h3>
           </div>
-          <p className="text-sm text-slate-600" data-testid="onboarding-step-description">
+          <p className="text-sm text-primary-600" data-testid="onboarding-step-description">
             {step.description}
           </p>
         </div>
@@ -118,13 +118,13 @@ const OnboardingTour = ({ isOpen, onClose }) => {
                 key={s.id}
                 onClick={() => setStepIndex(index)}
                 className={`h-2.5 rounded-full transition-all ${
-                  index === stepIndex ? 'w-6 bg-primary-600' : 'w-2.5 bg-slate-300'
+                  index === stepIndex ? 'w-6 bg-primary-600' : 'w-2.5 bg-green-300'
                 }`}
                 aria-label={`Go to step ${index + 1}`}
               />
             ))}
           </div>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-green-500">
             Step {stepIndex + 1} of {steps.length}
           </span>
         </div>
@@ -133,7 +133,7 @@ const OnboardingTour = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between">
           <button
             onClick={onClose}
-            className="text-xs text-slate-500 underline-offset-2 hover:underline"
+            className="text-xs text-green-500 underline-offset-2 hover:underline"
             data-testid="onboarding-skip-btn"
           >
             Skip tour
@@ -142,7 +142,7 @@ const OnboardingTour = ({ isOpen, onClose }) => {
             <button
               onClick={goPrev}
               disabled={stepIndex === 0}
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg border border-green-300 px-4 py-2 text-sm text-primary-700 hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
               data-testid="onboarding-prev-btn"
             >
               Back

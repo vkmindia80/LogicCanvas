@@ -74,15 +74,15 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
 
   const getNotificationColor = (type, priority) => {
     if (priority === 'urgent' || priority === 'high') {
-      return 'border-l-red-500 bg-red-50';
+      return 'border-l-gold-500 bg-gold-50';
     }
     const colors = {
-      mention: 'border-l-blue-500 bg-green-50',
+      mention: 'border-l-green-500 bg-green-50',
       escalation: 'border-l-orange-500 bg-gold-50',
-      sla_breach: 'border-l-red-500 bg-red-50',
+      sla_breach: 'border-l-gold-500 bg-gold-50',
       approval_required: 'border-l-purple-500 bg-gold-50',
       task_assigned: 'border-l-green-500 bg-green-50',
-      default: 'border-l-gray-500 bg-gray-50'
+      default: 'border-l-green-500 bg-green-50'
     };
     return colors[type] || colors.default;
   };
@@ -144,32 +144,32 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
+      <div className="bg-white border-b border-green-200 px-6 py-3">
         <div className="flex items-center space-x-4">
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
             data-testid="notification-filter-select"
           >
             <option value="all">All Notifications</option>
             <option value="unread">Unread Only</option>
           </select>
-          <span className="text-sm text-gray-500">{notifications.length} notifications</span>
+          <span className="text-sm text-green-500">{notifications.length} notifications</span>
         </div>
       </div>
 
       {/* Notification List */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <div className="flex-1 overflow-y-auto bg-green-50 p-6">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
           </div>
         ) : notifications.length === 0 ? (
           <div className="text-center py-12">
-            <Bell className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-600">No notifications</h3>
-            <p className="text-gray-400">You&apos;re all caught up!</p>
+            <Bell className="w-16 h-16 mx-auto text-green-300 mb-4" />
+            <h3 className="text-lg font-medium text-primary-600">No notifications</h3>
+            <p className="text-green-400">You&apos;re all caught up!</p>
           </div>
         ) : (
           <div className="space-y-3 max-w-3xl mx-auto">
@@ -185,24 +185,24 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                 >
                   <div className="flex items-start space-x-4">
                     <div className={`p-2 rounded-lg ${
-                      notification.priority === 'urgent' ? 'bg-red-100' :
-                      notification.priority === 'high' ? 'bg-gold-100' : 'bg-gray-100'
+                      notification.priority === 'urgent' ? 'bg-gold-100' :
+                      notification.priority === 'high' ? 'bg-gold-100' : 'bg-green-100'
                     }`}>
                       <Icon className={`w-5 h-5 ${
-                        notification.priority === 'urgent' ? 'text-red-600' :
-                        notification.priority === 'high' ? 'text-gold-600' : 'text-gray-600'
+                        notification.priority === 'urgent' ? 'text-gold-600' :
+                        notification.priority === 'high' ? 'text-gold-600' : 'text-primary-600'
                       }`} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-semibold text-gray-900">{notification.title}</h4>
-                          <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                          <h4 className="font-semibold text-primary-900">{notification.title}</h4>
+                          <p className="text-sm text-primary-600 mt-1">{notification.message}</p>
                         </div>
                         {!notification.read && (
                           <button
                             onClick={() => markAsRead(notification.id)}
-                            className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-green-600"
+                            className="p-1 hover:bg-green-100 rounded text-green-400 hover:text-green-600"
                             title="Mark as read"
                             data-testid={`mark-read-${notification.id}`}
                           >
@@ -210,13 +210,13 @@ const NotificationsPanel = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
                           </button>
                         )}
                       </div>
-                      <div className="flex items-center space-x-4 mt-3 text-xs text-gray-400">
+                      <div className="flex items-center space-x-4 mt-3 text-xs text-green-400">
                         <span className="capitalize">{notification.type?.replace('_', ' ')}</span>
                         {notification.priority && (
                           <span className={`px-2 py-0.5 rounded-full ${
-                            notification.priority === 'urgent' ? 'bg-red-100 text-red-700' :
+                            notification.priority === 'urgent' ? 'bg-gold-100 text-gold-700' :
                             notification.priority === 'high' ? 'bg-gold-100 text-gold-700' :
-                            'bg-gray-100 text-gray-600'
+                            'bg-green-100 text-primary-600'
                           }`}>
                             {notification.priority}
                           </span>

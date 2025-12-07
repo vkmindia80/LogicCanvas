@@ -174,13 +174,13 @@ const EnhancedCanvasGuides = ({ nodes, edges, selectedNode, onNodeMove, enabled 
       ))}
 
       {/* Controls Toolbar */}
-      <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex items-center gap-2 z-50">
+      <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg border border-green-200 p-2 flex items-center gap-2 z-50">
         <button
           onClick={() => setShowGrid(!showGrid)}
           className={`p-2 rounded transition ${
             showGrid
               ? 'bg-gold-100 text-gold-700'
-              : 'text-gray-600 hover:bg-gray-100'
+              : 'text-primary-600 hover:bg-green-100'
           }`}
           title="Toggle Grid"
         >
@@ -191,17 +191,17 @@ const EnhancedCanvasGuides = ({ nodes, edges, selectedNode, onNodeMove, enabled 
           className={`p-2 rounded transition ${
             snapEnabled
               ? 'bg-gold-100 text-gold-700'
-              : 'text-gray-600 hover:bg-gray-100'
+              : 'text-primary-600 hover:bg-green-100'
           }`}
           title="Toggle Snap"
         >
           <Magnet className="w-4 h-4" />
         </button>
-        <div className="w-px h-6 bg-gray-300" />
+        <div className="w-px h-6 bg-green-300" />
         <select
           value={gridSize}
           onChange={(e) => setGridSize(parseInt(e.target.value))}
-          className="text-xs border border-gray-300 rounded px-2 py-1"
+          className="text-xs border border-green-300 rounded px-2 py-1"
           title="Grid Size"
         >
           <option value="10">10px</option>

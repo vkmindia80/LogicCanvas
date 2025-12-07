@@ -52,13 +52,13 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
       case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-600" />;
       case 'failed':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-gold-600" />;
       case 'running':
         return <Clock className="w-5 h-5 text-green-600 animate-spin" />;
       case 'waiting':
         return <Clock className="w-5 h-5 text-gold-600" />;
       default:
-        return <AlertCircle className="w-5 h-5 text-gray-400" />;
+        return <AlertCircle className="w-5 h-5 text-green-400" />;
     }
   };
 
@@ -67,13 +67,13 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
       case 'completed':
         return 'bg-green-50 border-green-200';
       case 'failed':
-        return 'bg-red-50 border-red-200';
+        return 'bg-gold-50 border-gold-200';
       case 'running':
         return 'bg-green-50 border-green-200';
       case 'waiting':
         return 'bg-gold-50 border-gold-200';
       default:
-        return 'bg-gray-50 border-gray-200';
+        return 'bg-green-50 border-green-200';
     }
   };
 
@@ -112,9 +112,9 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                   className="p-1 hover:bg-white/50 rounded transition-colors flex-shrink-0"
                 >
                   {isExpanded ? (
-                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                    <ChevronDown className="w-4 h-4 text-primary-600" />
                   ) : (
-                    <ChevronRight className="w-4 h-4 text-gray-600" />
+                    <ChevronRight className="w-4 h-4 text-primary-600" />
                   )}
                 </button>
               )}
@@ -128,7 +128,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
               {/* Node Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="font-semibold text-gray-900 truncate">
+                  <h4 className="font-semibold text-primary-900 truncate">
                     {node.workflow_name}
                   </h4>
                   {node.nesting_level > 0 && (
@@ -138,7 +138,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                   )}
                 </div>
 
-                <div className="flex items-center space-x-4 text-xs text-gray-600">
+                <div className="flex items-center space-x-4 text-xs text-primary-600">
                   <span className="flex items-center space-x-1">
                     <span className="font-medium">Status:</span>
                     <span className="capitalize">{node.status}</span>
@@ -158,12 +158,12 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                 </div>
 
                 {node.has_errors && (
-                  <div className="mt-2 text-xs text-red-700 bg-red-100 border border-red-200 rounded px-2 py-1">
+                  <div className="mt-2 text-xs text-gold-700 bg-gold-100 border border-gold-200 rounded px-2 py-1">
                     ⚠ Execution failed
                   </div>
                 )}
 
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-xs text-green-500">
                   ID: {node.instance_id}
                 </div>
               </div>
@@ -212,18 +212,18 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
                 <Clock className="w-12 h-12 text-green-600 animate-spin mx-auto mb-3" />
-                <p className="text-gray-600">Loading execution tree...</p>
+                <p className="text-primary-600">Loading execution tree...</p>
               </div>
             </div>
           )}
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="bg-gold-50 border border-gold-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-red-900">Error Loading Tree</h4>
-                  <p className="text-sm text-red-700 mt-1">{error}</p>
+                  <h4 className="font-semibold text-gold-900">Error Loading Tree</h4>
+                  <p className="text-sm text-gold-700 mt-1">{error}</p>
                 </div>
               </div>
             </div>
@@ -236,20 +236,20 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
                 <h3 className="font-semibold text-green-900 mb-2">Execution Summary</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
-                    <div className="text-gray-600">Root Workflow</div>
-                    <div className="font-semibold text-gray-900">{tree.workflow_name}</div>
+                    <div className="text-primary-600">Root Workflow</div>
+                    <div className="font-semibold text-primary-900">{tree.workflow_name}</div>
                   </div>
                   <div>
-                    <div className="text-gray-600">Status</div>
-                    <div className="font-semibold text-gray-900 capitalize">{tree.status}</div>
+                    <div className="text-primary-600">Status</div>
+                    <div className="font-semibold text-primary-900 capitalize">{tree.status}</div>
                   </div>
                   <div>
-                    <div className="text-gray-600">Duration</div>
-                    <div className="font-semibold text-gray-900">{formatDuration(tree.duration_seconds)}</div>
+                    <div className="text-primary-600">Duration</div>
+                    <div className="font-semibold text-primary-900">{formatDuration(tree.duration_seconds)}</div>
                   </div>
                   <div>
-                    <div className="text-gray-600">Subprocesses</div>
-                    <div className="font-semibold text-gray-900">{tree.child_count}</div>
+                    <div className="text-primary-600">Subprocesses</div>
+                    <div className="font-semibold text-primary-900">{tree.child_count}</div>
                   </div>
                 </div>
               </div>
@@ -260,15 +260,15 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
               </div>
 
               {/* Legend */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Legend</h4>
+              <div className="mt-6 pt-6 border-t border-green-200">
+                <h4 className="text-sm font-semibold text-primary-700 mb-3">Legend</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                   <div className="flex items-center space-x-2">
                     <CheckCircle className="w-4 h-4 text-green-600" />
                     <span>Completed</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <XCircle className="w-4 h-4 text-red-600" />
+                    <XCircle className="w-4 h-4 text-gold-600" />
                     <span>Failed</span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -286,7 +286,7 @@ const SubprocessExecutionTree = ({ instanceId, isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4 flex justify-end space-x-3">
+        <div className="border-t border-green-200 p-4 flex justify-end space-x-3">
           {!loading && !error && (
             <button
               onClick={loadTree}

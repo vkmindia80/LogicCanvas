@@ -149,13 +149,13 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Workflow Selection */}
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Select Subprocess Workflow <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-primary-900 mb-2">
+              Select Subprocess Workflow <span className="text-gold-500">*</span>
             </label>
             <select
               value={selectedWorkflow}
               onChange={(e) => setSelectedWorkflow(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               data-testid="subprocess-workflow-select"
             >
               <option value="">-- Select a workflow --</option>
@@ -166,22 +166,22 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
               ))}
             </select>
             {selectedWorkflowObj && (
-              <p className="mt-1 text-sm text-gray-600">{selectedWorkflowObj.description}</p>
+              <p className="mt-1 text-sm text-primary-600">{selectedWorkflowObj.description}</p>
             )}
           </div>
 
           {/* Version Selection */}
           {selectedWorkflow && (
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
+              <label className="block text-sm font-semibold text-primary-900 mb-2">
                 Workflow Version
               </label>
               <div className="flex items-center space-x-3">
-                <GitBranch className="w-5 h-5 text-gray-400" />
+                <GitBranch className="w-5 h-5 text-green-400" />
                 <select
                   value={selectedVersion}
                   onChange={(e) => setSelectedVersion(e.target.value)}
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="flex-1 border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   data-testid="subprocess-version-select"
                 >
                   <option value="latest">Latest Version</option>
@@ -193,7 +193,7 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
                   ))}
                 </select>
               </div>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-green-500">
                 Pin to a specific version for consistency, or use 'Latest' for automatic updates
               </p>
             </div>
@@ -202,20 +202,20 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
           {/* Validation Status */}
           {validation && (
             <div className={`border rounded-lg p-4 ${
-              validation.valid ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+              validation.valid ? 'border-green-200 bg-green-50' : 'border-gold-200 bg-gold-50'
             }`}>
               <div className="flex items-start space-x-3">
                 {validation.valid ? (
                   <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                 ) : (
-                  <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+                  <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
                 )}
                 <div className="flex-1">
-                  <h4 className={`font-semibold ${validation.valid ? 'text-green-900' : 'text-red-900'}`}>
+                  <h4 className={`font-semibold ${validation.valid ? 'text-green-900' : 'text-gold-900'}`}>
                     {validation.valid ? 'Workflow Valid' : 'Validation Failed'}
                   </h4>
                   {validation.errors && validation.errors.length > 0 && (
-                    <ul className="mt-2 text-sm text-red-800 space-y-1">
+                    <ul className="mt-2 text-sm text-gold-800 space-y-1">
                       {validation.errors.map((error, idx) => (
                         <li key={idx}>• {error}</li>
                       ))}
@@ -234,21 +234,21 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
           )}
 
           {/* Context Isolation */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="flex items-start space-x-3">
-              <Settings className="w-5 h-5 text-gray-600 mt-0.5" />
+              <Settings className="w-5 h-5 text-primary-600 mt-0.5" />
               <div className="flex-1">
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={contextIsolation}
                     onChange={(e) => setContextIsolation(e.target.checked)}
-                    className="w-4 h-4 text-violet-600 border-gray-300 rounded focus:ring-violet-500"
+                    className="w-4 h-4 text-violet-600 border-green-300 rounded focus:ring-violet-500"
                     data-testid="context-isolation-checkbox"
                   />
-                  <span className="font-medium text-gray-900">Enable Context Isolation</span>
+                  <span className="font-medium text-primary-900">Enable Context Isolation</span>
                 </label>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-primary-600 mt-1">
                   When enabled, the subprocess runs in an isolated context with only explicitly mapped variables
                 </p>
               </div>
@@ -258,7 +258,7 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
           {/* Input Mapping */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-900">Input Mapping</h3>
+              <h3 className="text-lg font-semibold text-primary-900">Input Mapping</h3>
               <button
                 onClick={addInputMapping}
                 className="flex items-center space-x-1 px-3 py-1 bg-violet-100 text-violet-700 rounded-lg hover:bg-violet-200 transition-colors text-sm"
@@ -270,7 +270,7 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
             </div>
             <div className="space-y-2">
               {Object.keys(inputMapping).length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-green-400">
                   <p>No input mappings defined</p>
                   <p className="text-sm">Click "Add Input" to map parent variables to subprocess inputs</p>
                 </div>
@@ -282,19 +282,19 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
                       value={key}
                       onChange={(e) => updateInputMapping(key, e.target.value, value)}
                       placeholder="Subprocess variable name"
-                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="flex-1 border border-green-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                     />
-                    <ArrowRight className="w-4 h-4 text-gray-400" />
+                    <ArrowRight className="w-4 h-4 text-green-400" />
                     <input
                       type="text"
                       value={value}
                       onChange={(e) => updateInputMapping(key, key, e.target.value)}
                       placeholder="Parent variable or ${expression}"
-                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="flex-1 border border-green-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                     />
                     <button
                       onClick={() => removeInputMapping(key)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-gold-600 hover:bg-gold-50 rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -307,7 +307,7 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
           {/* Output Mapping */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-900">Output Mapping</h3>
+              <h3 className="text-lg font-semibold text-primary-900">Output Mapping</h3>
               <button
                 onClick={addOutputMapping}
                 className="flex items-center space-x-1 px-3 py-1 bg-violet-100 text-violet-700 rounded-lg hover:bg-violet-200 transition-colors text-sm"
@@ -319,7 +319,7 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
             </div>
             <div className="space-y-2">
               {Object.keys(outputMapping).length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-green-400">
                   <p>No output mappings defined</p>
                   <p className="text-sm">Click "Add Output" to map subprocess results back to parent variables</p>
                 </div>
@@ -331,19 +331,19 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
                       value={key}
                       onChange={(e) => updateOutputMapping(key, e.target.value, value)}
                       placeholder="Parent variable name"
-                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="flex-1 border border-green-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                     />
-                    <ArrowRight className="w-4 h-4 text-gray-400" />
+                    <ArrowRight className="w-4 h-4 text-green-400" />
                     <input
                       type="text"
                       value={value}
                       onChange={(e) => updateOutputMapping(key, key, e.target.value)}
                       placeholder="Subprocess result variable"
-                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="flex-1 border border-green-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                     />
                     <button
                       onClick={() => removeOutputMapping(key)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-gold-600 hover:bg-gold-50 rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -355,17 +355,17 @@ const SubprocessConfig = ({ nodeData, onChange, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4 flex justify-end space-x-3">
+        <div className="border-t border-green-200 p-4 flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            className="px-6 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={!selectedWorkflow || (validation && !validation.valid)}
-            className="px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:bg-green-300 disabled:cursor-not-allowed"
             data-testid="save-subprocess-config"
           >
             Save Configuration

@@ -176,14 +176,14 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">OAuth 2.0 Flow Builder</h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <h2 className="text-2xl font-bold text-primary-900">OAuth 2.0 Flow Builder</h2>
+            <p className="text-sm text-green-500 mt-1">
               Configure and manage OAuth integrations
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 text-green-400 hover:text-primary-600 rounded-lg hover:bg-green-100 transition-colors"
           >
             <X size={20} />
           </button>
@@ -198,7 +198,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
               className={`px-4 py-3 font-medium capitalize transition-all ${
                 activeTab === tab
                   ? 'border-b-2 border-green-600 text-green-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-green-500 hover:text-primary-700'
               }`}
             >
               {tab}
@@ -212,7 +212,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
           {activeTab === 'configure' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary-700 mb-2">
                   Provider *
                 </label>
                 <select
@@ -228,7 +228,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-primary-700 mb-2">
                     Client ID *
                   </label>
                   <input
@@ -240,7 +240,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-primary-700 mb-2">
                     Client Secret *
                   </label>
                   <input
@@ -254,7 +254,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary-700 mb-2">
                   Redirect URI *
                 </label>
                 <input
@@ -267,7 +267,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary-700 mb-2">
                   Authorization URL *
                 </label>
                 <input
@@ -279,7 +279,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary-700 mb-2">
                   Token URL *
                 </label>
                 <input
@@ -292,7 +292,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-primary-700">
                     Scopes
                   </label>
                   <button
@@ -317,7 +317,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                       />
                       <button
                         onClick={() => removeScope(index)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded"
+                        className="p-2 text-gold-600 hover:bg-gold-50 rounded"
                       >
                         <X size={16} />
                       </button>
@@ -353,7 +353,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-primary-700 mb-2">
                       Authorization URL
                     </label>
                     <div className="flex gap-2">
@@ -361,11 +361,11 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                         type="text"
                         value={authUrl}
                         readOnly
-                        className="flex-1 px-3 py-2 border rounded-lg bg-gray-50 text-sm"
+                        className="flex-1 px-3 py-2 border rounded-lg bg-green-50 text-sm"
                       />
                       <button
                         onClick={handleCopyUrl}
-                        className="px-3 py-2 border rounded-lg hover:bg-gray-50"
+                        className="px-3 py-2 border rounded-lg hover:bg-green-50"
                         title="Copy URL"
                       >
                         <Copy size={16} />
@@ -374,14 +374,14 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-primary-700 mb-2">
                       State (for verification)
                     </label>
                     <input
                       type="text"
                       value={authState}
                       readOnly
-                      className="w-full px-3 py-2 border rounded-lg bg-gray-50 text-sm"
+                      className="w-full px-3 py-2 border rounded-lg bg-green-50 text-sm"
                     />
                   </div>
 
@@ -395,7 +395,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                     </button>
                     <button
                       onClick={() => setActiveTab('tokens')}
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex-1 px-4 py-3 border border-green-300 rounded-lg hover:bg-green-50 transition-colors"
                     >
                       View Tokens
                     </button>
@@ -409,7 +409,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                   </div>
                 </>
               ) : (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-green-500">
                   <Shield size={48} className="mx-auto mb-4 opacity-30" />
                   <p className="text-lg">No active authorization</p>
                   <p className="text-sm mt-2">
@@ -430,7 +430,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
           {activeTab === 'tokens' && (
             <div className="space-y-4">
               {tokens.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-green-500">
                   <Key size={48} className="mx-auto mb-4 opacity-30" />
                   <p className="text-lg">No tokens stored</p>
                   <p className="text-sm mt-2">
@@ -447,18 +447,18 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="font-semibold text-gray-900 capitalize">
+                            <span className="font-semibold text-primary-900 capitalize">
                               {token.provider}
                             </span>
                             <span className={`px-2 py-0.5 text-xs rounded ${
                               new Date(token.expires_at) > new Date()
                                 ? 'bg-green-100 text-green-700'
-                                : 'bg-red-100 text-red-700'
+                                : 'bg-gold-100 text-gold-700'
                             }`}>
                               {new Date(token.expires_at) > new Date() ? 'Valid' : 'Expired'}
                             </span>
                           </div>
-                          <div className="text-sm text-gray-600 space-y-1">
+                          <div className="text-sm text-primary-600 space-y-1">
                             <p>Token Type: {token.token_type}</p>
                             <p>Scope: {token.scope || 'N/A'}</p>
                             <p>Created: {new Date(token.created_at).toLocaleString()}</p>
@@ -475,7 +475,7 @@ const OAuthFlowBuilder = ({ onClose, connectorId = null }) => {
                           </button>
                           <button
                             onClick={() => handleRevokeToken(token.id)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded"
+                            className="p-2 text-gold-600 hover:bg-gold-50 rounded"
                             title="Revoke Token"
                           >
                             <X size={16} />

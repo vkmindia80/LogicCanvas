@@ -111,15 +111,15 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
               {/* Hamburger Menu for Mobile */}
               <button 
                 onClick={onOpenMobileSidebar}
-                className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="lg:hidden p-2 hover:bg-green-100 rounded-lg transition-colors"
                 data-testid="mobile-menu-btn"
                 aria-label="Open Menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">API Connector Library</h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <h2 className="text-2xl font-bold text-primary-900">API Connector Library</h2>
+                <p className="text-sm text-green-500 mt-1">
                   Manage and reuse API integrations across workflows
                 </p>
               </div>
@@ -162,7 +162,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
               </button>
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2 text-green-400 hover:text-primary-600 rounded-lg hover:bg-green-100 transition-colors"
               >
                 <X size={20} />
               </button>
@@ -177,7 +177,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                 className={`px-4 py-3 font-medium transition-all ${
                   viewMode === 'saved'
                     ? 'border-b-2 border-green-600 text-green-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    : 'text-green-500 hover:text-primary-700'
                 }`}
               >
                 My Connectors ({connectors.length})
@@ -187,7 +187,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                 className={`px-4 py-3 font-medium transition-all ${
                   viewMode === 'templates'
                     ? 'border-b-2 border-green-600 text-green-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    : 'text-green-500 hover:text-primary-700'
                 }`}
               >
                 Templates ({templates.length})
@@ -196,10 +196,10 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
           </div>
 
           {/* Filters */}
-          <div className="p-4 border-b bg-gray-50">
+          <div className="p-4 border-b bg-green-50">
             <div className="flex gap-4">
               <div className="flex-1 relative">
-                <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -234,7 +234,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
           {/* Connectors Grid */}
           <div className="flex-1 overflow-auto p-6">
             {filteredItems.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-green-500">
                 <Code size={48} className="mx-auto mb-4 opacity-30" />
                 <p className="text-lg">No connectors found</p>
                 <p className="text-sm mt-2">
@@ -270,7 +270,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{getCategoryIcon(item.category)}</span>
                         <div>
-                          <h3 className="font-semibold text-gray-900 group-hover:text-green-600">
+                          <h3 className="font-semibold text-primary-900 group-hover:text-green-600">
                             {item.name}
                           </h3>
                           {item.is_template && (
@@ -282,12 +282,12 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                       </div>
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="text-sm text-primary-600 mb-3 line-clamp-2">
                       {item.description || 'No description'}
                     </p>
 
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                      <span className="px-2 py-1 bg-gray-100 rounded">
+                    <div className="flex items-center justify-between text-xs text-green-500 mb-3">
+                      <span className="px-2 py-1 bg-green-100 rounded">
                         {item.config.method}
                       </span>
                       <span className="truncate ml-2" title={item.config.url}>
@@ -316,7 +316,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                               e.stopPropagation();
                               handleEdit(item);
                             }}
-                            className="flex-1 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+                            className="flex-1 px-3 py-2 text-sm bg-green-100 hover:bg-green-200 rounded transition-colors"
                           >
                             <Edit size={14} className="inline mr-1" />
                             Edit
@@ -326,7 +326,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                               e.stopPropagation();
                               handleDelete(item.id);
                             }}
-                            className="px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+                            className="px-3 py-2 text-sm text-gold-600 hover:bg-gold-50 rounded transition-colors"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -340,9 +340,9 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t bg-gray-50 text-sm text-gray-600">
+          <div className="p-4 border-t bg-green-50 text-sm text-primary-600">
             <p>
-              💡 <strong>Tip:</strong> Use <code className="px-2 py-0.5 bg-gray-200 rounded">{'${variable}'}</code> syntax in URLs, headers, and body to use workflow variables
+              💡 <strong>Tip:</strong> Use <code className="px-2 py-0.5 bg-green-200 rounded">{'${variable}'}</code> syntax in URLs, headers, and body to use workflow variables
             </p>
           </div>
         </div>

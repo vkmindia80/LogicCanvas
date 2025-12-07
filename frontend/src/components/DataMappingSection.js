@@ -134,8 +134,8 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
       <div>
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <h4 className="font-semibold text-gray-900">Input Mappings</h4>
-            <p className="text-xs text-gray-600">Map variables to node inputs</p>
+            <h4 className="font-semibold text-primary-900">Input Mappings</h4>
+            <p className="text-xs text-primary-600">Map variables to node inputs</p>
           </div>
           <button
             onClick={addInputMapping}
@@ -147,19 +147,19 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
         </div>
 
         {inputMappings.length === 0 ? (
-          <div className="rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center">
-            <Database className="mx-auto h-8 w-8 text-gray-300" />
-            <p className="mt-2 text-sm text-gray-600">No input mappings configured</p>
-            <p className="text-xs text-gray-500">Click "Add Input" to create a mapping</p>
+          <div className="rounded-lg border-2 border-dashed border-green-200 bg-green-50 p-6 text-center">
+            <Database className="mx-auto h-8 w-8 text-green-300" />
+            <p className="mt-2 text-sm text-primary-600">No input mappings configured</p>
+            <p className="text-xs text-green-500">Click "Add Input" to create a mapping</p>
           </div>
         ) : (
           <div className="space-y-3">
             {inputMappings.map((mapping) => (
-              <div key={mapping.id} className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <div key={mapping.id} className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <div className="flex items-start space-x-3">
                   {/* Source Variable */}
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="mb-1 block text-xs font-medium text-primary-700">
                       Source Variable
                     </label>
                     <select
@@ -167,7 +167,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                       onChange={(e) =>
                         updateInputMapping(mapping.id, 'sourceVariable', e.target.value)
                       }
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                      className="w-full rounded-md border border-green-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                     >
                       <option value="">Select variable...</option>
                       {availableVariables.map((v) => (
@@ -180,12 +180,12 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
 
                   {/* Arrow */}
                   <div className="mt-7">
-                    <ArrowRight className="h-5 w-5 text-gray-400" />
+                    <ArrowRight className="h-5 w-5 text-green-400" />
                   </div>
 
                   {/* Target Field */}
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="mb-1 block text-xs font-medium text-primary-700">
                       Target Field
                     </label>
                     <input
@@ -195,7 +195,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                         updateInputMapping(mapping.id, 'targetField', e.target.value)
                       }
                       placeholder="Field name"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                      className="w-full rounded-md border border-green-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                     />
                   </div>
 
@@ -203,7 +203,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                   <div className="mt-7 flex space-x-1">
                     <button
                       onClick={() => openExpressionBuilder(mapping, 'input')}
-                      className="rounded p-1.5 text-gray-600 hover:bg-gray-200"
+                      className="rounded p-1.5 text-primary-600 hover:bg-green-200"
                       title="Add transformation"
                     >
                       <Code className="h-4 w-4" />
@@ -215,7 +215,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                     )}
                     <button
                       onClick={() => removeInputMapping(mapping.id)}
-                      className="rounded p-1.5 text-red-600 hover:bg-red-50"
+                      className="rounded p-1.5 text-gold-600 hover:bg-gold-50"
                       title="Remove mapping"
                     >
                       <X className="h-4 w-4" />
@@ -225,8 +225,8 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
 
                 {/* Transformation Expression */}
                 {mapping.transformation && (
-                  <div className="mt-2 rounded-md bg-gray-700 p-2">
-                    <code className="text-xs text-gray-100">{mapping.transformation}</code>
+                  <div className="mt-2 rounded-md bg-primary-700 p-2">
+                    <code className="text-xs text-green-100">{mapping.transformation}</code>
                   </div>
                 )}
               </div>
@@ -239,8 +239,8 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
       <div>
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <h4 className="font-semibold text-gray-900">Output Mappings</h4>
-            <p className="text-xs text-gray-600">Map node outputs to variables</p>
+            <h4 className="font-semibold text-primary-900">Output Mappings</h4>
+            <p className="text-xs text-primary-600">Map node outputs to variables</p>
           </div>
           <button
             onClick={addOutputMapping}
@@ -252,19 +252,19 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
         </div>
 
         {outputMappings.length === 0 ? (
-          <div className="rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center">
-            <Database className="mx-auto h-8 w-8 text-gray-300" />
-            <p className="mt-2 text-sm text-gray-600">No output mappings configured</p>
-            <p className="text-xs text-gray-500">Click "Add Output" to create a mapping</p>
+          <div className="rounded-lg border-2 border-dashed border-green-200 bg-green-50 p-6 text-center">
+            <Database className="mx-auto h-8 w-8 text-green-300" />
+            <p className="mt-2 text-sm text-primary-600">No output mappings configured</p>
+            <p className="text-xs text-green-500">Click "Add Output" to create a mapping</p>
           </div>
         ) : (
           <div className="space-y-3">
             {outputMappings.map((mapping) => (
-              <div key={mapping.id} className="rounded-lg border border-gray-200 bg-green-50 p-4">
+              <div key={mapping.id} className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <div className="flex items-start space-x-3">
                   {/* Source Field */}
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="mb-1 block text-xs font-medium text-primary-700">
                       Source Field
                     </label>
                     <input
@@ -274,18 +274,18 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                         updateOutputMapping(mapping.id, 'sourceField', e.target.value)
                       }
                       placeholder="output.fieldName"
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+                      className="w-full rounded-md border border-green-300 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                     />
                   </div>
 
                   {/* Arrow */}
                   <div className="mt-7">
-                    <ArrowRight className="h-5 w-5 text-gray-400" />
+                    <ArrowRight className="h-5 w-5 text-green-400" />
                   </div>
 
                   {/* Target Variable */}
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="mb-1 block text-xs font-medium text-primary-700">
                       Target Variable
                     </label>
                     <input
@@ -295,7 +295,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                         updateOutputMapping(mapping.id, 'targetVariable', e.target.value)
                       }
                       placeholder="Variable name"
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+                      className="w-full rounded-md border border-green-300 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                     />
                   </div>
 
@@ -303,7 +303,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                   <div className="mt-7 flex space-x-1">
                     <button
                       onClick={() => openExpressionBuilder(mapping, 'output')}
-                      className="rounded p-1.5 text-gray-600 hover:bg-gray-200"
+                      className="rounded p-1.5 text-primary-600 hover:bg-green-200"
                       title="Add transformation"
                     >
                       <Code className="h-4 w-4" />
@@ -315,7 +315,7 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
                     )}
                     <button
                       onClick={() => removeOutputMapping(mapping.id)}
-                      className="rounded p-1.5 text-red-600 hover:bg-red-50"
+                      className="rounded p-1.5 text-gold-600 hover:bg-gold-50"
                       title="Remove mapping"
                     >
                       <X className="h-4 w-4" />
@@ -325,8 +325,8 @@ const DataMappingSection = ({ node, instanceId, onMappingChange }) => {
 
                 {/* Transformation Expression */}
                 {mapping.transformation && (
-                  <div className="mt-2 rounded-md bg-gray-700 p-2">
-                    <code className="text-xs text-gray-100">{mapping.transformation}</code>
+                  <div className="mt-2 rounded-md bg-primary-700 p-2">
+                    <code className="text-xs text-green-100">{mapping.transformation}</code>
                   </div>
                 )}
               </div>
@@ -371,12 +371,12 @@ const ExpressionBuilderModal = ({ mapping, variables, onSave, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="w-2/3 max-w-2xl rounded-xl bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-green-200 px-6 py-4">
           <div className="flex items-center space-x-2">
             <Settings className="h-5 w-5 text-primary-600" />
-            <h3 className="text-lg font-bold text-gray-900">Expression Builder</h3>
+            <h3 className="text-lg font-bold text-primary-900">Expression Builder</h3>
           </div>
-          <button onClick={onClose} className="rounded-lg p-1 text-gray-600 hover:bg-gray-100">
+          <button onClick={onClose} className="rounded-lg p-1 text-primary-600 hover:bg-green-100">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -384,25 +384,25 @@ const ExpressionBuilderModal = ({ mapping, variables, onSave, onClose }) => {
         <div className="p-6">
           {/* Expression Input */}
           <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-primary-700">
               Transformation Expression
             </label>
             <textarea
               value={expression}
               onChange={(e) => setExpression(e.target.value)}
               rows={4}
-              className="w-full rounded-lg border border-gray-300 p-3 font-mono text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="w-full rounded-lg border border-green-300 p-3 font-mono text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               placeholder="Enter JavaScript expression (e.g., ${variable}.toUpperCase())"
             />
-            <p className="mt-1 text-xs text-gray-600">
-              Use <code className="rounded bg-gray-100 px-1">${'{'}variable{'}'}</code> to reference
+            <p className="mt-1 text-xs text-primary-600">
+              Use <code className="rounded bg-green-100 px-1">${'{'}variable{'}'}</code> to reference
               variables
             </p>
           </div>
 
           {/* Available Variables */}
           <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-primary-700">
               Insert Variable
             </label>
             <div className="flex flex-wrap gap-2">
@@ -420,7 +420,7 @@ const ExpressionBuilderModal = ({ mapping, variables, onSave, onClose }) => {
 
           {/* Common Expressions */}
           <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-primary-700">
               Common Transformations
             </label>
             <div className="flex flex-wrap gap-2">
@@ -428,7 +428,7 @@ const ExpressionBuilderModal = ({ mapping, variables, onSave, onClose }) => {
                 <button
                   key={expr.label}
                   onClick={() => setExpression((prev) => prev + expr.value)}
-                  className="rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-200"
+                  className="rounded-md bg-green-100 px-3 py-1 text-xs font-medium text-primary-700 hover:bg-green-200"
                 >
                   {expr.label}
                 </button>
@@ -440,7 +440,7 @@ const ExpressionBuilderModal = ({ mapping, variables, onSave, onClose }) => {
           <div className="flex space-x-3">
             <button
               onClick={onClose}
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
+              className="flex-1 rounded-lg border border-green-300 px-4 py-2 font-medium text-primary-700 hover:bg-green-50"
             >
               Cancel
             </button>

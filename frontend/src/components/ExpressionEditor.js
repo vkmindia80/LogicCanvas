@@ -215,7 +215,7 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
     <div className="space-y-3">
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-semibold text-slate-800">
+          <label className="block text-sm font-semibold text-primary-800">
             Expression
           </label>
           <button
@@ -238,10 +238,10 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
             onKeyUp={(e) => setCursorPosition(e.target.selectionStart)}
             placeholder="e.g., ${amount} > 1000 or ${status} == 'approved'"
             rows={4}
-            className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm transition-all"
+            className="w-full px-3 py-2 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm transition-all"
             data-testid="expression-input"
           />
-          <div className="absolute bottom-2 right-2 text-xs text-slate-400">
+          <div className="absolute bottom-2 right-2 text-xs text-green-400">
             <Code className="w-4 h-4" />
           </div>
           
@@ -263,13 +263,13 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
                 >
                   <div className="flex items-start space-x-2">
                     <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                      index === selectedOption ? 'text-primary-600' : 'text-slate-400'
+                      index === selectedOption ? 'text-primary-600' : 'text-green-400'
                     }`} />
                     <div className="flex-1">
-                      <div className="text-sm font-semibold text-slate-800 font-mono">
+                      <div className="text-sm font-semibold text-primary-800 font-mono">
                         {option.label}
                       </div>
-                      <div className="text-xs text-slate-600 mt-0.5">
+                      <div className="text-xs text-primary-600 mt-0.5">
                         {option.description}
                       </div>
                     </div>
@@ -281,9 +281,9 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
         </div>
         
         {showAutocomplete && (
-          <div className="text-xs text-slate-500 flex items-center space-x-2">
+          <div className="text-xs text-green-500 flex items-center space-x-2">
             <Info className="w-3 h-3" />
-            <span>Press <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">↑</kbd> <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">↓</kbd> to navigate, <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">Enter</kbd> or <kbd className="px-1 py-0.5 bg-slate-200 rounded font-mono">Tab</kbd> to select</span>
+            <span>Press <kbd className="px-1 py-0.5 bg-green-200 rounded font-mono">↑</kbd> <kbd className="px-1 py-0.5 bg-green-200 rounded font-mono">↓</kbd> to navigate, <kbd className="px-1 py-0.5 bg-green-200 rounded font-mono">Enter</kbd> or <kbd className="px-1 py-0.5 bg-green-200 rounded font-mono">Tab</kbd> to select</span>
           </div>
         )}
       </div>
@@ -304,7 +304,7 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="text-xs font-semibold text-slate-700 mb-1">{expr.label}</div>
+                    <div className="text-xs font-semibold text-primary-700 mb-1">{expr.label}</div>
                     <code className="text-xs text-green-700 font-mono">{expr.example}</code>
                   </div>
                   <span className="text-xs text-green-600 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -319,10 +319,10 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
 
       {/* Variable Helpers - Enhanced */}
       {Object.keys(variables).length > 0 && (
-        <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-4">
-          <label className="block text-xs font-semibold text-slate-700 mb-3 flex items-center space-x-2">
+        <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+          <label className="block text-xs font-semibold text-primary-700 mb-3 flex items-center space-x-2">
             <span>Available Variables</span>
-            <span className="text-slate-500 font-normal">(click to insert)</span>
+            <span className="text-green-500 font-normal">(click to insert)</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {Object.keys(variables).map((varName) => (
@@ -345,7 +345,7 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
         <button
           onClick={handleTest}
           disabled={testing || !value}
-          className="flex items-center gap-2 bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
+          className="flex items-center gap-2 bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600 disabled:bg-green-300 disabled:cursor-not-allowed text-sm"
           data-testid="test-expression-button"
         >
           <Play className="w-4 h-4" />
@@ -354,26 +354,26 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
       </div>
 
       {testResult !== null && (
-        <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="text-sm font-medium text-gray-700 mb-1">Result:</div>
-          <div className="font-mono text-sm text-gray-900" data-testid="test-result">
+        <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+          <div className="text-sm font-medium text-primary-700 mb-1">Result:</div>
+          <div className="font-mono text-sm text-primary-900" data-testid="test-result">
             {typeof testResult === 'object' ? JSON.stringify(testResult, null, 2) : String(testResult)}
           </div>
         </div>
       )}
 
       {/* Help Text - Enhanced */}
-      <div className="bg-slate-100 border border-slate-300 rounded-lg p-3">
+      <div className="bg-green-100 border border-green-300 rounded-lg p-3">
         <div className="flex items-start space-x-2">
-          <Info className="w-4 h-4 text-slate-500 mt-0.5 flex-shrink-0" />
-          <div className="text-xs text-slate-700 space-y-2">
+          <Info className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+          <div className="text-xs text-primary-700 space-y-2">
             <div>
-              <span className="font-semibold text-slate-800">Quick Reference:</span>
+              <span className="font-semibold text-primary-800">Quick Reference:</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <div className="font-medium text-slate-700 mb-1">Comparisons</div>
-                <div className="space-y-0.5 text-slate-600">
+                <div className="font-medium text-primary-700 mb-1">Comparisons</div>
+                <div className="space-y-0.5 text-primary-600">
                   <div><code className="bg-white px-1 py-0.5 rounded">==</code> equals</div>
                   <div><code className="bg-white px-1 py-0.5 rounded">!=</code> not equals</div>
                   <div><code className="bg-white px-1 py-0.5 rounded">{'>'}</code> greater than</div>
@@ -381,8 +381,8 @@ const ExpressionEditor = ({ value, onChange, variables = {} }) => {
                 </div>
               </div>
               <div>
-                <div className="font-medium text-slate-700 mb-1">Logical</div>
-                <div className="space-y-0.5 text-slate-600">
+                <div className="font-medium text-primary-700 mb-1">Logical</div>
+                <div className="space-y-0.5 text-primary-600">
                   <div><code className="bg-white px-1 py-0.5 rounded">and</code> both true</div>
                   <div><code className="bg-white px-1 py-0.5 rounded">or</code> either true</div>
                   <div><code className="bg-white px-1 py-0.5 rounded">not</code> negate</div>

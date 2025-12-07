@@ -35,22 +35,22 @@ const EmptyState = ({
         <div className="mb-6">
           <div className="relative">
             {/* Background circle with gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full blur-2xl opacity-50"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-green-200 rounded-full blur-2xl opacity-50"></div>
             {/* Icon container */}
-            <div className="relative bg-gradient-to-br from-slate-50 to-slate-100 rounded-full p-6 shadow-xl shadow-slate-200/50">
-              <Icon className="w-16 h-16 text-slate-400" strokeWidth={1.5} />
+            <div className="relative bg-gradient-to-br from-green-50 to-green-100 rounded-full p-6 shadow-xl shadow-green-200/50">
+              <Icon className="w-16 h-16 text-green-400" strokeWidth={1.5} />
             </div>
           </div>
         </div>
       ) : null}
 
       {/* Title */}
-      <h3 className="mb-3 text-2xl font-bold text-slate-900">
+      <h3 className="mb-3 text-2xl font-bold text-primary-900">
         {title}
       </h3>
 
       {/* Description */}
-      <p className="mb-6 max-w-md text-base text-slate-600 leading-relaxed">
+      <p className="mb-6 max-w-md text-base text-primary-600 leading-relaxed">
         {description}
       </p>
 

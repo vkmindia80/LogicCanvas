@@ -201,14 +201,14 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
         </div>
 
         {/* Category Filter */}
-        <div className="border-b border-gray-200 p-4 bg-gray-50">
+        <div className="border-b border-green-200 p-4 bg-green-50">
           <div className="flex items-center space-x-2 overflow-x-auto">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
                 selectedCategory === 'all'
                   ? 'bg-cyan-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                  : 'bg-white text-primary-700 border border-green-300 hover:bg-green-100'
               }`}
             >
               All Patterns ({PATTERNS.length})
@@ -222,7 +222,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                   className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
                     selectedCategory === category
                       ? 'bg-cyan-600 text-white'
-                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                      : 'bg-white text-primary-700 border border-green-300 hover:bg-green-100'
                   }`}
                 >
                   {category} ({count})
@@ -240,7 +240,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
               return (
                 <div
                   key={pattern.id}
-                  className="border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white"
+                  className="border border-green-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white"
                   data-testid={`pattern-${pattern.id}`}
                 >
                   {/* Pattern Header */}
@@ -260,7 +260,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
 
                   {/* Pattern Body */}
                   <div className="p-4">
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{pattern.description}</p>
+                    <p className="text-sm text-primary-600 mb-4 line-clamp-2">{pattern.description}</p>
 
                     {/* Complexity Badge */}
                     <div className="mb-4">
@@ -271,10 +271,10 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
 
                     {/* Use Cases */}
                     <div className="mb-4">
-                      <p className="text-xs font-semibold text-gray-700 mb-2">Use Cases:</p>
+                      <p className="text-xs font-semibold text-primary-700 mb-2">Use Cases:</p>
                       <div className="flex flex-wrap gap-1">
                         {pattern.useCases.slice(0, 3).map((useCase, idx) => (
-                          <span key={idx} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                          <span key={idx} className="text-xs bg-green-100 text-primary-700 px-2 py-1 rounded">
                             {useCase}
                           </span>
                         ))}
@@ -285,7 +285,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => setSelectedPattern(pattern)}
-                        className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                        className="flex-1 px-4 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
                         data-testid={`view-${pattern.id}`}
                       >
                         View Details
@@ -328,14 +328,14 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                   <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${complexityColors[selectedPattern.complexity]}`}>
                     {selectedPattern.complexity.charAt(0).toUpperCase() + selectedPattern.complexity.slice(1)} Complexity
                   </span>
-                  <span className="ml-2 text-sm text-gray-600">{selectedPattern.category}</span>
+                  <span className="ml-2 text-sm text-primary-600">{selectedPattern.category}</span>
                 </div>
 
-                <p className="text-gray-700 mb-6">{selectedPattern.description}</p>
+                <p className="text-primary-700 mb-6">{selectedPattern.description}</p>
 
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Pattern Structure:</h4>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-primary-900 mb-3">Pattern Structure:</h4>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="space-y-3">
                       {selectedPattern.pattern.nodes.map((node, idx) => (
                         <div key={idx} className="flex items-start space-x-3">
@@ -344,11 +344,11 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center space-x-2">
-                              <span className="font-medium text-sm text-gray-900">{node.label}</span>
-                              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded">{node.type}</span>
+                              <span className="font-medium text-sm text-primary-900">{node.label}</span>
+                              <span className="text-xs bg-green-200 text-primary-700 px-2 py-0.5 rounded">{node.type}</span>
                             </div>
                             {node.config && Object.keys(node.config).length > 0 && (
-                              <pre className="text-xs text-gray-600 mt-1 bg-white p-2 rounded border border-gray-200 overflow-x-auto">
+                              <pre className="text-xs text-primary-600 mt-1 bg-white p-2 rounded border border-green-200 overflow-x-auto">
                                 {JSON.stringify(node.config, null, 2)}
                               </pre>
                             )}
@@ -356,8 +356,8 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4 pt-4 border-t border-gray-300">
-                      <p className="text-sm text-gray-700">
+                    <div className="mt-4 pt-4 border-t border-green-300">
+                      <p className="text-sm text-primary-700">
                         <strong>Implementation:</strong> {selectedPattern.pattern.description}
                       </p>
                     </div>
@@ -365,12 +365,12 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                 </div>
 
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Common Use Cases:</h4>
+                  <h4 className="font-semibold text-primary-900 mb-3">Common Use Cases:</h4>
                   <ul className="space-y-2">
                     {selectedPattern.useCases.map((useCase, idx) => (
                       <li key={idx} className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{useCase}</span>
+                        <span className="text-primary-700">{useCase}</span>
                       </li>
                     ))}
                   </ul>
@@ -379,7 +379,7 @@ const SubworkflowPatternLibrary = ({ isOpen, onClose, onUsePattern }) => {
                 <div className="flex justify-end space-x-3 pt-4 border-t">
                   <button
                     onClick={() => setSelectedPattern(null)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    className="px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
                   >
                     Close
                   </button>

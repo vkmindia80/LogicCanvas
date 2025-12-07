@@ -147,7 +147,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-green-600 to-gold-600 text-white">
+      <div className="flex items-center justify-between p-6 border-b border-green-200 bg-gradient-to-r from-green-600 to-gold-600 text-white">
         <div className="flex items-center gap-3">
           {/* Hamburger Menu for Mobile */}
           <button 
@@ -177,13 +177,13 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-200 px-6">
+      <div className="flex border-b border-green-200 px-6">
           <button
             onClick={() => setActiveTab('builder')}
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'builder'
                 ? 'text-green-600 border-green-600'
-                : 'text-slate-600 border-transparent hover:text-slate-900'
+                : 'text-primary-600 border-transparent hover:text-primary-900'
             }`}
             data-testid="tab-builder"
           >
@@ -194,7 +194,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'library'
                 ? 'text-green-600 border-green-600'
-                : 'text-slate-600 border-transparent hover:text-slate-900'
+                : 'text-primary-600 border-transparent hover:text-primary-900'
             }`}
             data-testid="tab-library"
           >
@@ -205,7 +205,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
             className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'examples'
                 ? 'text-green-600 border-green-600'
-                : 'text-slate-600 border-transparent hover:text-slate-900'
+                : 'text-primary-600 border-transparent hover:text-primary-900'
             }`}
             data-testid="tab-examples"
           >
@@ -241,7 +241,7 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                   </button>
                   <button
                     onClick={resetPlayground}
-                    className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50 transition-colors"
                     data-testid="reset-btn"
                   >
                     <RefreshCw className="w-4 h-4" />
@@ -249,12 +249,12 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                   </button>
                   <button
                     onClick={exportConfiguration}
-                    className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50 transition-colors"
                     title="Export configuration"
                   >
                     <Download className="w-4 h-4" />
                   </button>
-                  <label className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+                  <label className="flex items-center gap-2 px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50 transition-colors cursor-pointer">
                     <Upload className="w-4 h-4" />
                     <input
                       type="file"
@@ -267,14 +267,14 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
 
                 {/* Input Data */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  <label className="block text-sm font-semibold text-primary-700 mb-2">
                     Input Data
                   </label>
                   <textarea
                     value={inputData}
                     onChange={(e) => setInputData(e.target.value)}
                     rows={8}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+                    className="w-full px-4 py-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
                     placeholder="Enter JSON or plain text..."
                     data-testid="input-data"
                   />
@@ -293,16 +293,16 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
               {/* Right Column - Output */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  <label className="block text-sm font-semibold text-primary-700 mb-2">
                     Output
                   </label>
                   
                   {error && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="bg-gold-50 border border-gold-200 rounded-lg p-4 flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 text-gold-600 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
-                        <div className="font-medium text-red-800">Error</div>
-                        <div className="text-sm text-red-600 mt-1">{error}</div>
+                        <div className="font-medium text-gold-800">Error</div>
+                        <div className="text-sm text-gold-600 mt-1">{error}</div>
                       </div>
                     </div>
                   )}
@@ -320,8 +320,8 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                       </div>
 
                       <div>
-                        <div className="text-sm font-medium text-slate-700 mb-2">Final Result:</div>
-                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                        <div className="text-sm font-medium text-primary-700 mb-2">Final Result:</div>
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                           <pre className="text-sm font-mono overflow-x-auto">
                             {JSON.stringify(output.result, null, 2)}
                           </pre>
@@ -330,27 +330,27 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
 
                       {output.steps && output.steps.length > 0 && (
                         <div>
-                          <div className="text-sm font-medium text-slate-700 mb-2">Transformation Steps:</div>
+                          <div className="text-sm font-medium text-primary-700 mb-2">Transformation Steps:</div>
                           <div className="space-y-2">
                             {output.steps.map((step, idx) => (
-                              <div key={idx} className="bg-white border border-slate-200 rounded-lg p-3">
+                              <div key={idx} className="bg-white border border-green-200 rounded-lg p-3">
                                 <div className="flex items-center justify-between mb-2">
-                                  <span className="text-sm font-medium text-slate-700">
+                                  <span className="text-sm font-medium text-primary-700">
                                     Step {step.step}: <code className="text-green-600">{step.function}</code>
                                   </span>
                                   {step.execution_time_ms && (
-                                    <span className="text-xs text-slate-500">
+                                    <span className="text-xs text-green-500">
                                       {step.execution_time_ms.toFixed(2)}ms
                                     </span>
                                   )}
                                 </div>
                                 {step.success && (
-                                  <pre className="text-xs text-slate-600 bg-slate-50 rounded p-2 overflow-x-auto">
+                                  <pre className="text-xs text-primary-600 bg-green-50 rounded p-2 overflow-x-auto">
                                     {JSON.stringify(step.result, null, 2)}
                                   </pre>
                                 )}
                                 {step.error && (
-                                  <div className="text-xs text-red-600 bg-red-50 rounded p-2">{step.error}</div>
+                                  <div className="text-xs text-gold-600 bg-gold-50 rounded p-2">{step.error}</div>
                                 )}
                               </div>
                             ))}
@@ -361,10 +361,10 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                   )}
 
                   {!output && !error && (
-                    <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center">
-                      <Sparkles className="w-12 h-12 mx-auto mb-3 text-slate-400" />
-                      <p className="text-slate-600 font-medium">No output yet</p>
-                      <p className="text-sm text-slate-500 mt-1">
+                    <div className="bg-green-50 border-2 border-dashed border-green-300 rounded-lg p-8 text-center">
+                      <Sparkles className="w-12 h-12 mx-auto mb-3 text-green-400" />
+                      <p className="text-primary-600 font-medium">No output yet</p>
+                      <p className="text-sm text-green-500 mt-1">
                         Add transformations and click "Run" to see results
                       </p>
                     </div>
@@ -392,14 +392,14 @@ const TransformationPlayground = ({ onClose, onOpenMobileSidebar, sidebarCollaps
                   <div
                     key={idx}
                     onClick={() => loadExample(example)}
-                    className="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-lg hover:border-green-300 transition-all cursor-pointer group"
+                    className="bg-white border border-green-200 rounded-lg p-4 hover:shadow-lg hover:border-green-300 transition-all cursor-pointer group"
                     data-testid={`example-${idx}`}
                   >
-                    <h4 className="font-semibold text-slate-800 mb-1 group-hover:text-green-600 transition-colors">
+                    <h4 className="font-semibold text-primary-800 mb-1 group-hover:text-green-600 transition-colors">
                       {example.name}
                     </h4>
-                    <p className="text-sm text-slate-600 mb-3">{example.description}</p>
-                    <div className="flex items-center justify-between text-xs text-slate-500">
+                    <p className="text-sm text-primary-600 mb-3">{example.description}</p>
+                    <div className="flex items-center justify-between text-xs text-green-500">
                       <span>{example.transformations.length} steps</span>
                       <span className="text-green-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                         Load Example →

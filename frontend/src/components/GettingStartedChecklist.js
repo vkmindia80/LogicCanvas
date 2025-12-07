@@ -82,7 +82,7 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-40 animate-slide-up" data-testid="getting-started-checklist">
+    <div className="fixed bottom-6 right-6 w-96 bg-white rounded-xl shadow-2xl border border-green-200 z-40 animate-slide-up" data-testid="getting-started-checklist">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 rounded-t-xl">
         <div className="flex items-center justify-between mb-2">
@@ -122,8 +122,8 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h4 className="font-semibold text-gray-900 mb-1">All Done! 🎉</h4>
-            <p className="text-sm text-gray-600 mb-4">
+            <h4 className="font-semibold text-primary-900 mb-1">All Done! 🎉</h4>
+            <p className="text-sm text-primary-600 mb-4">
               You've completed the getting started checklist.
             </p>
             <button
@@ -144,7 +144,7 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
                 className={`group border rounded-lg p-3 transition-all cursor-pointer ${
                   isCompleted
                     ? 'border-green-200 bg-green-50 hover:bg-green-100'
-                    : 'border-gray-200 hover:border-primary-300 hover:shadow-md'
+                    : 'border-green-200 hover:border-primary-300 hover:shadow-md'
                 }`}
                 onClick={() => handleItemClick(item)}
                 data-testid={`checklist-item-${item.id}`}
@@ -162,7 +162,7 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
                     {isCompleted ? (
                       <CheckCircle className="w-5 h-5 text-green-600" />
                     ) : (
-                      <Circle className="w-5 h-5 text-gray-400 group-hover:text-primary-500" />
+                      <Circle className="w-5 h-5 text-green-400 group-hover:text-primary-500" />
                     )}
                   </button>
 
@@ -171,16 +171,16 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
                     <div className="flex items-center space-x-2 mb-1">
                       <IconComponent className="w-4 h-4 text-primary-600 flex-shrink-0" />
                       <h4 className={`font-medium text-sm ${
-                        isCompleted ? 'text-gray-600 line-through' : 'text-gray-900'
+                        isCompleted ? 'text-primary-600 line-through' : 'text-primary-900'
                       }`}>
                         {item.title}
                       </h4>
                     </div>
-                    <p className="text-xs text-gray-600 mb-1">
+                    <p className="text-xs text-primary-600 mb-1">
                       {item.description}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-green-500">
                         ⏱️ {item.estimatedTime}
                       </span>
                       {!isCompleted && (
@@ -199,8 +199,8 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
 
       {/* Footer */}
       {!allComplete && (
-        <div className="border-t border-gray-200 p-3 bg-gray-50 rounded-b-xl">
-          <p className="text-xs text-gray-600 text-center">
+        <div className="border-t border-green-200 p-3 bg-green-50 rounded-b-xl">
+          <p className="text-xs text-primary-600 text-center">
             Complete these steps to get the most out of LogicCanvas
           </p>
         </div>

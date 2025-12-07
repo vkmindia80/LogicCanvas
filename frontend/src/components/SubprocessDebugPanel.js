@@ -128,13 +128,13 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
       case 'completed':
         return <CheckCircle className="w-4 h-4 text-green-600" />;
       case 'failed':
-        return <AlertCircle className="w-4 h-4 text-red-600" />;
+        return <AlertCircle className="w-4 h-4 text-gold-600" />;
       case 'running':
         return <Activity className="w-4 h-4 text-green-600 animate-pulse" />;
       case 'waiting':
         return <Clock className="w-4 h-4 text-gold-600" />;
       default:
-        return <Info className="w-4 h-4 text-gray-400" />;
+        return <Info className="w-4 h-4 text-green-400" />;
     }
   };
 
@@ -158,13 +158,13 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-red-600 to-gold-600 text-white p-6">
+        <div className="bg-gradient-to-r from-gold-600 to-gold-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Bug className="w-8 h-8" />
               <div>
                 <h2 className="text-2xl font-bold">Subprocess Debug Panel</h2>
-                <p className="text-red-100 text-sm">Performance metrics and execution analysis</p>
+                <p className="text-gold-100 text-sm">Performance metrics and execution analysis</p>
               </div>
             </div>
             <button
@@ -183,65 +183,65 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
                 <Activity className="w-12 h-12 text-gold-600 animate-pulse mx-auto mb-3" />
-                <p className="text-gray-600">Loading debug data...</p>
+                <p className="text-primary-600">Loading debug data...</p>
               </div>
             </div>
           ) : error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="bg-gold-50 border border-gold-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-red-900">Error</h4>
-                  <p className="text-sm text-red-700 mt-1">{error}</p>
+                  <h4 className="font-semibold text-gold-900">Error</h4>
+                  <p className="text-sm text-gold-700 mt-1">{error}</p>
                 </div>
               </div>
             </div>
           ) : instance ? (
             <div className="space-y-4">
               {/* Overview Section */}
-              <div className="border border-gray-200 rounded-lg">
+              <div className="border border-green-200 rounded-lg">
                 <button
                   onClick={() => toggleSection('overview')}
-                  className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between p-4 hover:bg-green-50 transition-colors"
                 >
                   <div className="flex items-center space-x-3">
                     {expandedSections.has('overview') ? (
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
+                      <ChevronDown className="w-5 h-5 text-green-500" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-gray-500" />
+                      <ChevronRight className="w-5 h-5 text-green-500" />
                     )}
-                    <h3 className="text-lg font-semibold text-gray-900">Overview</h3>
+                    <h3 className="text-lg font-semibold text-primary-900">Overview</h3>
                   </div>
                   {getStatusIcon(instance.status)}
                 </button>
                 
                 {expandedSections.has('overview') && (
-                  <div className="p-4 border-t border-gray-200 bg-gray-50">
+                  <div className="p-4 border-t border-green-200 bg-green-50">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div>
-                        <div className="text-xs text-gray-600 mb-1">Status</div>
-                        <div className="font-semibold text-gray-900 capitalize">{instance.status}</div>
+                        <div className="text-xs text-primary-600 mb-1">Status</div>
+                        <div className="font-semibold text-primary-900 capitalize">{instance.status}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-gray-600 mb-1">Started At</div>
-                        <div className="font-semibold text-gray-900 text-sm">
+                        <div className="text-xs text-primary-600 mb-1">Started At</div>
+                        <div className="font-semibold text-primary-900 text-sm">
                           {instance.started_at ? new Date(instance.started_at).toLocaleString() : 'N/A'}
                         </div>
                       </div>
                       <div>
-                        <div className="text-xs text-gray-600 mb-1">Nesting Level</div>
-                        <div className="font-semibold text-gray-900">{instance.nesting_level || 0}</div>
+                        <div className="text-xs text-primary-600 mb-1">Nesting Level</div>
+                        <div className="font-semibold text-primary-900">{instance.nesting_level || 0}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-gray-600 mb-1">Total Subprocesses</div>
-                        <div className="font-semibold text-gray-900">{totalSubprocesses}</div>
+                        <div className="text-xs text-primary-600 mb-1">Total Subprocesses</div>
+                        <div className="font-semibold text-primary-900">{totalSubprocesses}</div>
                       </div>
                     </div>
                     
                     {instance.parent_instance_id && (
-                      <div className="mt-3 pt-3 border-t border-gray-200">
-                        <div className="text-xs text-gray-600 mb-1">Parent Instance</div>
-                        <div className="font-mono text-sm text-gray-900">{instance.parent_instance_id}</div>
+                      <div className="mt-3 pt-3 border-t border-green-200">
+                        <div className="text-xs text-primary-600 mb-1">Parent Instance</div>
+                        <div className="font-mono text-sm text-primary-900">{instance.parent_instance_id}</div>
                       </div>
                     )}
                   </div>
@@ -250,37 +250,37 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
 
               {/* Performance Metrics Section */}
               {metrics && (
-                <div className="border border-gray-200 rounded-lg">
+                <div className="border border-green-200 rounded-lg">
                   <button
                     onClick={() => toggleSection('performance')}
-                    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                    className="w-full flex items-center justify-between p-4 hover:bg-green-50 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       {expandedSections.has('performance') ? (
-                        <ChevronDown className="w-5 h-5 text-gray-500" />
+                        <ChevronDown className="w-5 h-5 text-green-500" />
                       ) : (
-                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                        <ChevronRight className="w-5 h-5 text-green-500" />
                       )}
-                      <h3 className="text-lg font-semibold text-gray-900">Performance Metrics</h3>
+                      <h3 className="text-lg font-semibold text-primary-900">Performance Metrics</h3>
                     </div>
                     <Activity className="w-5 h-5 text-green-600" />
                   </button>
                   
                   {expandedSections.has('performance') && (
-                    <div className="p-4 border-t border-gray-200 bg-gray-50">
+                    <div className="p-4 border-t border-green-200 bg-green-50">
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-                        <div className="bg-white p-3 rounded-lg border border-gray-200">
-                          <div className="text-xs text-gray-600 mb-1">Total Execution Time</div>
+                        <div className="bg-white p-3 rounded-lg border border-green-200">
+                          <div className="text-xs text-primary-600 mb-1">Total Execution Time</div>
                           <div className="text-xl font-bold text-green-600">
                             {formatDuration(metrics.totalExecutionTime)}
                           </div>
                         </div>
-                        <div className="bg-white p-3 rounded-lg border border-gray-200">
-                          <div className="text-xs text-gray-600 mb-1">Nodes Executed</div>
+                        <div className="bg-white p-3 rounded-lg border border-green-200">
+                          <div className="text-xs text-primary-600 mb-1">Nodes Executed</div>
                           <div className="text-xl font-bold text-green-600">{metrics.nodeCount}</div>
                         </div>
-                        <div className="bg-white p-3 rounded-lg border border-gray-200">
-                          <div className="text-xs text-gray-600 mb-1">Avg Node Time</div>
+                        <div className="bg-white p-3 rounded-lg border border-green-200">
+                          <div className="text-xs text-primary-600 mb-1">Avg Node Time</div>
                           <div className="text-xl font-bold text-gold-600">
                             {formatDuration(metrics.averageNodeTime)}
                           </div>
@@ -305,7 +305,7 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
 
                       {/* Node Execution Timeline */}
                       <div className="mt-4">
-                        <h4 className="text-sm font-semibold text-gray-700 mb-3">Node Execution Times</h4>
+                        <h4 className="text-sm font-semibold text-primary-700 mb-3">Node Execution Times</h4>
                         <div className="space-y-2 max-h-64 overflow-y-auto">
                           {Object.values(metrics.nodeExecutionTimes)
                             .sort((a, b) => b.duration - a.duration)
@@ -313,16 +313,16 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
                             <div key={idx} className="flex items-center space-x-3">
                               <div className="flex-1">
                                 <div className="flex items-center justify-between mb-1">
-                                  <span className="text-sm text-gray-700">{nodeMetric.node_type}</span>
-                                  <span className="text-sm font-medium text-gray-900">
+                                  <span className="text-sm text-primary-700">{nodeMetric.node_type}</span>
+                                  <span className="text-sm font-medium text-primary-900">
                                     {formatDuration(nodeMetric.duration)}
                                   </span>
                                 </div>
-                                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div className="h-2 bg-green-200 rounded-full overflow-hidden">
                                   <div
                                     className={`h-full ${
                                       nodeMetric.status === 'completed' ? 'bg-green-500' :
-                                      nodeMetric.status === 'failed' ? 'bg-red-500' : 'bg-green-500'
+                                      nodeMetric.status === 'failed' ? 'bg-gold-500' : 'bg-green-500'
                                     }`}
                                     style={{
                                       width: `${Math.min(100, (nodeMetric.duration / metrics.slowestNode.duration) * 100)}%`
@@ -341,31 +341,31 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
 
               {/* Variables Section */}
               {instance.variables && Object.keys(instance.variables).length > 0 && (
-                <div className="border border-gray-200 rounded-lg">
+                <div className="border border-green-200 rounded-lg">
                   <button
                     onClick={() => toggleSection('variables')}
-                    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                    className="w-full flex items-center justify-between p-4 hover:bg-green-50 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       {expandedSections.has('variables') ? (
-                        <ChevronDown className="w-5 h-5 text-gray-500" />
+                        <ChevronDown className="w-5 h-5 text-green-500" />
                       ) : (
-                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                        <ChevronRight className="w-5 h-5 text-green-500" />
                       )}
-                      <h3 className="text-lg font-semibold text-gray-900">Variables</h3>
+                      <h3 className="text-lg font-semibold text-primary-900">Variables</h3>
                     </div>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-primary-600">
                       {Object.keys(instance.variables).length} variables
                     </span>
                   </button>
                   
                   {expandedSections.has('variables') && (
-                    <div className="p-4 border-t border-gray-200 bg-gray-50">
+                    <div className="p-4 border-t border-green-200 bg-green-50">
                       <div className="space-y-2 max-h-64 overflow-y-auto">
                         {Object.entries(instance.variables).map(([key, value]) => (
-                          <div key={key} className="bg-white p-3 rounded border border-gray-200">
-                            <div className="text-sm font-medium text-gray-700 mb-1">{key}</div>
-                            <div className="text-sm text-gray-600 font-mono">
+                          <div key={key} className="bg-white p-3 rounded border border-green-200">
+                            <div className="text-sm font-medium text-primary-700 mb-1">{key}</div>
+                            <div className="text-sm text-primary-600 font-mono">
                               {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
                             </div>
                           </div>
@@ -378,15 +378,15 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
 
               {/* Error Details Section */}
               {instance.error && (
-                <div className="border border-red-200 rounded-lg bg-red-50">
+                <div className="border border-gold-200 rounded-lg bg-gold-50">
                   <div className="p-4">
                     <div className="flex items-start space-x-3">
-                      <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+                      <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-red-900 mb-2">Error Details</h3>
-                        <div className="text-sm text-red-800 mb-2">{instance.error}</div>
+                        <h3 className="text-lg font-semibold text-gold-900 mb-2">Error Details</h3>
+                        <div className="text-sm text-gold-800 mb-2">{instance.error}</div>
                         {instance.error_friendly && (
-                          <div className="text-sm text-red-700 bg-red-100 border border-red-200 rounded p-2">
+                          <div className="text-sm text-gold-700 bg-gold-100 border border-gold-200 rounded p-2">
                             💡 {instance.error_friendly}
                           </div>
                         )}
@@ -400,8 +400,8 @@ const SubprocessDebugPanel = ({ instanceId, isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-between items-center">
-          <div className="text-sm text-gray-600">
+        <div className="border-t border-green-200 p-4 bg-green-50 flex justify-between items-center">
+          <div className="text-sm text-primary-600">
             {instance?.status === 'running' && (
               <span className="flex items-center space-x-2">
                 <Activity className="w-4 h-4 animate-pulse text-green-600" />

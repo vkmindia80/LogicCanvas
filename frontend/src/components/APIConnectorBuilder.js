@@ -187,10 +187,10 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-primary-900">
               {connectorId ? 'Edit' : 'Create'} API Connector
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-green-500 mt-1">
               Build and configure API integrations visually
             </p>
           </div>
@@ -219,7 +219,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
             </button>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 text-green-400 hover:text-primary-600 rounded-lg hover:bg-green-100 transition-colors"
             >
               <X size={20} />
             </button>
@@ -241,7 +241,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                         className="p-3 border rounded-lg hover:border-green-500 hover:bg-green-50 cursor-pointer transition-all"
                       >
                         <div className="font-medium text-sm">{template.name}</div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-green-500 mt-1">
                           {template.description}
                         </div>
                         <div className="text-xs text-green-600 mt-1">
@@ -256,7 +256,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                   <h3 className="text-lg font-semibold mb-3">Basic Info</h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-primary-700 mb-1">
                         Name *
                       </label>
                       <input
@@ -268,7 +268,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-primary-700 mb-1">
                         Description
                       </label>
                       <textarea
@@ -280,7 +280,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-primary-700 mb-1">
                         Category
                       </label>
                       <select
@@ -316,7 +316,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                     className={`px-4 py-2 font-medium capitalize ${
                       activeTab === tab
                         ? 'border-b-2 border-green-600 text-green-600'
-                        : 'text-gray-500 hover:text-gray-700'
+                        : 'text-green-500 hover:text-primary-700'
                     }`}
                   >
                     {tab}
@@ -329,7 +329,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                 <div className="space-y-4">
                   <div className="grid grid-cols-4 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-primary-700 mb-1">
                         Method
                       </label>
                       <select
@@ -348,7 +348,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       </select>
                     </div>
                     <div className="col-span-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-primary-700 mb-1">
                         URL *
                       </label>
                       <input
@@ -361,7 +361,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         placeholder="https://api.example.com/endpoint"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-green-500 mt-1">
                         Use ${'{variable}'} for dynamic values
                       </p>
                     </div>
@@ -370,7 +370,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                   {/* Headers */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="block text-sm font-medium text-primary-700">
                         Headers
                       </label>
                       <button
@@ -387,7 +387,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                             type="text"
                             value={key}
                             disabled
-                            className="w-1/3 px-3 py-2 border rounded-lg bg-gray-50"
+                            className="w-1/3 px-3 py-2 border rounded-lg bg-green-50"
                           />
                           <input
                             type="text"
@@ -404,7 +404,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                           />
                           <button
                             onClick={() => removeHeader(key)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                            className="p-2 text-gold-600 hover:bg-gold-50 rounded-lg"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -416,7 +416,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                   {/* Body */}
                   {['POST', 'PUT', 'PATCH'].includes(connector.config.method) && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-primary-700 mb-1">
                         Request Body (JSON)
                       </label>
                       <textarea
@@ -450,7 +450,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
               {activeTab === 'auth' && (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-primary-700 mb-1">
                       Authentication Type
                     </label>
                     <select
@@ -474,7 +474,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
 
                   {connector.config.auth.type !== 'none' && (
                     <div className="p-4 bg-green-50 rounded-lg">
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-primary-700">
                         <Info size={16} className="inline mr-1" />
                         Configure authentication in headers using workflow variables.
                         Example: Authorization: Bearer ${'{api_token}'}
@@ -488,7 +488,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
               {activeTab === 'response' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-primary-700">
                       Response Mapping
                     </label>
                     <button
@@ -503,7 +503,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                       <div key={index} className="p-3 border rounded-lg">
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-medium text-primary-700 mb-1">
                               Source Path (JSONPath)
                             </label>
                             <input
@@ -515,7 +515,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-medium text-primary-700 mb-1">
                               Target Variable
                             </label>
                             <input
@@ -527,7 +527,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-medium text-primary-700 mb-1">
                               Type
                             </label>
                             <select
@@ -545,7 +545,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                           <div className="flex items-end">
                             <button
                               onClick={() => removeResponseMapping(index)}
-                              className="w-full px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
+                              className="w-full px-2 py-1 text-sm text-gold-600 hover:bg-gold-50 rounded"
                             >
                               Remove
                             </button>
@@ -555,7 +555,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
                     ))}
                   </div>
                   {connector.response_mapping.length === 0 && (
-                    <p className="text-sm text-gray-500 text-center py-8">
+                    <p className="text-sm text-green-500 text-center py-8">
                       No response mappings configured. Add mappings to extract data from API responses.
                     </p>
                   )}
@@ -566,7 +566,7 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
               {activeTab === 'test' && (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-primary-700 mb-2">
                       Test Variables (JSON)
                     </label>
                     <textarea
@@ -584,27 +584,27 @@ const APIConnectorBuilder = ({ onClose, connectorId = null, initialData = null, 
 
                   {testResult && (
                     <div className={`p-4 rounded-lg ${
-                      testResult.success ? 'bg-green-50' : 'bg-red-50'
+                      testResult.success ? 'bg-green-50' : 'bg-gold-50'
                     }`}>
                       <div className="flex items-center mb-2">
                         {testResult.success ? (
                           <Check size={18} className="text-green-600 mr-2" />
                         ) : (
-                          <X size={18} className="text-red-600 mr-2" />
+                          <X size={18} className="text-gold-600 mr-2" />
                         )}
                         <span className={`font-medium ${
-                          testResult.success ? 'text-green-900' : 'text-red-900'
+                          testResult.success ? 'text-green-900' : 'text-gold-900'
                         }`}>
                           {testResult.success ? 'Success' : 'Failed'}
                         </span>
                         {testResult.status_code && (
-                          <span className="ml-auto text-sm text-gray-600">
+                          <span className="ml-auto text-sm text-primary-600">
                             Status: {testResult.status_code}
                           </span>
                         )}
                       </div>
                       <div className="mt-2">
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-primary-700 mb-1">
                           Response:
                         </label>
                         <pre className="text-xs bg-white p-2 rounded border overflow-auto max-h-64">

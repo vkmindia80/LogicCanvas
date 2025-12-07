@@ -31,39 +31,39 @@ const ZoomControls = ({ currentZoom, onZoomChange, onFitView }) => {
   return (
     <div className="absolute bottom-6 left-6 z-10 flex flex-col space-y-2" data-testid="zoom-controls">
       {/* Zoom In/Out Buttons */}
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-lg border border-green-200 overflow-hidden">
         <button
           onClick={handleZoomIn}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 border-b border-gray-200 transition-colors"
+          className="w-10 h-10 flex items-center justify-center hover:bg-green-100 border-b border-green-200 transition-colors"
           title="Zoom In"
           data-testid="zoom-in"
         >
-          <ZoomIn className="w-5 h-5 text-gray-700" />
+          <ZoomIn className="w-5 h-5 text-primary-700" />
         </button>
-        <div className="px-2 py-1 text-xs font-medium text-center text-gray-700 border-b border-gray-200 bg-gray-50">
+        <div className="px-2 py-1 text-xs font-medium text-center text-primary-700 border-b border-green-200 bg-green-50">
           {Math.round(currentZoom * 100)}%
         </div>
         <button
           onClick={handleZoomOut}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 border-b border-gray-200 transition-colors"
+          className="w-10 h-10 flex items-center justify-center hover:bg-green-100 border-b border-green-200 transition-colors"
           title="Zoom Out"
           data-testid="zoom-out"
         >
-          <ZoomOut className="w-5 h-5 text-gray-700" />
+          <ZoomOut className="w-5 h-5 text-primary-700" />
         </button>
         <button
           onClick={onFitView}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors"
+          className="w-10 h-10 flex items-center justify-center hover:bg-green-100 transition-colors"
           title="Fit to View"
           data-testid="fit-view"
         >
-          <Maximize2 className="w-5 h-5 text-gray-700" />
+          <Maximize2 className="w-5 h-5 text-primary-700" />
         </button>
       </div>
 
       {/* Zoom Presets */}
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-2">
-        <div className="text-xs font-semibold text-gray-500 mb-2 px-1">Quick Zoom</div>
+      <div className="bg-white rounded-lg shadow-lg border border-green-200 p-2">
+        <div className="text-xs font-semibold text-green-500 mb-2 px-1">Quick Zoom</div>
         <div className="space-y-1">
           {ZOOM_PRESETS.map((preset) => (
             <button
@@ -73,7 +73,7 @@ const ZoomControls = ({ currentZoom, onZoomChange, onFitView }) => {
                 (preset.value === 'fit' && currentZoom === 1) ||
                 (preset.value === currentZoom)
                   ? 'bg-primary-100 text-primary-700 font-medium'
-                  : 'hover:bg-gray-100 text-gray-700'
+                  : 'hover:bg-green-100 text-primary-700'
               }`}
               data-testid={`zoom-preset-${preset.label.toLowerCase()}`}
             >
@@ -84,8 +84,8 @@ const ZoomControls = ({ currentZoom, onZoomChange, onFitView }) => {
       </div>
 
       {/* Mini Helper */}
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-2">
-        <div className="text-xs text-gray-600">
+      <div className="bg-white rounded-lg shadow-lg border border-green-200 p-2">
+        <div className="text-xs text-primary-600">
           <div className="font-semibold mb-1">Shortcuts</div>
           <div className="space-y-0.5">
             <div>Ctrl + Scroll: Zoom</div>

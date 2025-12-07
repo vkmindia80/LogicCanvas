@@ -106,14 +106,14 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <GitBranch className="w-4 h-4 text-amber-600" />
-          <h4 className="text-sm font-semibold text-slate-800">Visual Condition Builder</h4>
+          <h4 className="text-sm font-semibold text-primary-800">Visual Condition Builder</h4>
           <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">
             No Code Required
           </span>
         </div>
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-xs text-slate-600 hover:text-slate-800 underline"
+          className="text-xs text-primary-600 hover:text-primary-800 underline"
         >
           {showAdvanced ? 'Hide' : 'Show'} Generated Expression
         </button>
@@ -131,8 +131,8 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
 
       {/* Logic Operator Selector (for multiple conditions) */}
       {conditions.length > 1 && (
-        <div className="bg-white border-2 border-slate-200 rounded-lg p-3">
-          <label className="block text-xs font-semibold text-slate-700 mb-2">
+        <div className="bg-white border-2 border-green-200 rounded-lg p-3">
+          <label className="block text-xs font-semibold text-primary-700 mb-2">
             How should these conditions be combined?
           </label>
           <div className="flex space-x-2">
@@ -141,7 +141,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
               className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
                 logicOperator === 'AND'
                   ? 'bg-green-500 text-white shadow-lg'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  : 'bg-green-100 text-primary-700 hover:bg-green-200'
               }`}
             >
               <div className="flex items-center justify-center space-x-1">
@@ -154,7 +154,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
               className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
                 logicOperator === 'OR'
                   ? 'bg-gold-500 text-white shadow-lg'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  : 'bg-green-100 text-primary-700 hover:bg-green-200'
               }`}
             >
               <div className="flex items-center justify-center space-x-1">
@@ -171,21 +171,21 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
         {conditions.map((condition, index) => (
           <div
             key={condition.id}
-            className="bg-white border-2 border-slate-200 rounded-lg p-4 hover:border-primary-300 transition-all"
+            className="bg-white border-2 border-green-200 rounded-lg p-4 hover:border-primary-300 transition-all"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-xs font-bold">
                   {index + 1}
                 </div>
-                <span className="text-xs font-semibold text-slate-600">
+                <span className="text-xs font-semibold text-primary-600">
                   Condition {index + 1}
                 </span>
               </div>
               {conditions.length > 1 && (
                 <button
                   onClick={() => removeCondition(condition.id)}
-                  className="p-1 hover:bg-red-100 rounded transition-colors text-red-600"
+                  className="p-1 hover:bg-gold-100 rounded transition-colors text-gold-600"
                   title="Remove condition"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -196,13 +196,13 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
             <div className="grid grid-cols-12 gap-2">
               {/* Variable Selection */}
               <div className="col-span-4">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-primary-700 mb-1">
                   Variable
                 </label>
                 <select
                   value={condition.variable}
                   onChange={(e) => updateCondition(condition.id, 'variable', e.target.value)}
-                  className="w-full px-2 py-2 border-2 border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-2 py-2 border-2 border-green-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">Select variable...</option>
                   {Object.keys(variables).map((varName) => (
@@ -215,13 +215,13 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
 
               {/* Operator Selection */}
               <div className="col-span-3">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-primary-700 mb-1">
                   Operator
                 </label>
                 <select
                   value={condition.operator}
                   onChange={(e) => updateCondition(condition.id, 'operator', e.target.value)}
-                  className="w-full px-2 py-2 border-2 border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-2 py-2 border-2 border-green-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
                   {operators.map((op) => (
                     <option key={op.value} value={op.value}>
@@ -233,14 +233,14 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
 
               {/* Value Input */}
               <div className="col-span-5">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-primary-700 mb-1">
                   Compare To
                 </label>
                 <div className="flex space-x-1">
                   <select
                     value={condition.valueType}
                     onChange={(e) => updateCondition(condition.id, 'valueType', e.target.value)}
-                    className="w-24 px-2 py-2 border-2 border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-24 px-2 py-2 border-2 border-green-200 rounded-lg text-xs focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
                     <option value="constant">Value</option>
                     <option value="variable">Variable</option>
@@ -249,7 +249,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
                     <select
                       value={condition.value}
                       onChange={(e) => updateCondition(condition.id, 'value', e.target.value)}
-                      className="flex-1 px-2 py-2 border-2 border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="flex-1 px-2 py-2 border-2 border-green-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       <option value="">Select variable...</option>
                       {Object.keys(variables).map((varName) => (
@@ -264,7 +264,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
                       value={condition.value}
                       onChange={(e) => updateCondition(condition.id, 'value', e.target.value)}
                       placeholder="Enter value"
-                      className="flex-1 px-2 py-2 border-2 border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="flex-1 px-2 py-2 border-2 border-green-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     />
                   )}
                 </div>
@@ -285,9 +285,9 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
 
       {/* Generated Expression Preview */}
       {showAdvanced && value && (
-        <div className="bg-slate-900 text-slate-100 rounded-lg p-4 font-mono text-xs">
+        <div className="bg-primary-900 text-green-100 rounded-lg p-4 font-mono text-xs">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-slate-400 text-[10px] uppercase tracking-wide">Generated Expression</span>
+            <span className="text-green-400 text-[10px] uppercase tracking-wide">Generated Expression</span>
             <Play className="w-3 h-3 text-green-400" />
           </div>
           <code className="text-green-400">{value}</code>
@@ -313,7 +313,7 @@ const ConditionalBuilder = ({ value, onChange, variables = {} }) => {
                     {condition.valueType === 'variable' ? `$${condition.value}` : condition.value}
                   </span>
                   {index < conditions.filter(c => c.variable && c.value).length - 1 && (
-                    <span className="text-slate-500 font-bold">{logicOperator}</span>
+                    <span className="text-green-500 font-bold">{logicOperator}</span>
                   )}
                 </div>
               ))}

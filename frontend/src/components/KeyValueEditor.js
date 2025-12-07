@@ -129,7 +129,7 @@ const KeyValueEditor = ({
     return (
       <div className="space-y-2" data-testid={testId}>
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-slate-700">{label} (JSON)</label>
+          <label className="text-sm font-semibold text-primary-700">{label} (JSON)</label>
           <button
             onClick={() => setViewMode('form')}
             className="flex items-center space-x-1 text-xs text-primary-600 hover:text-primary-700 font-medium"
@@ -143,13 +143,13 @@ const KeyValueEditor = ({
           value={jsonValue}
           onChange={(e) => handleJSONChange(e.target.value)}
           className={`w-full h-32 px-3 py-2 border-2 rounded-lg font-mono text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none ${
-            jsonError ? 'border-red-300 bg-red-50' : 'border-slate-200'
+            jsonError ? 'border-gold-300 bg-gold-50' : 'border-green-200'
           }`}
           placeholder='{"key": "value"}'
           data-testid="json-textarea"
         />
         {jsonError && (
-          <div className="flex items-center space-x-1 text-xs text-red-600 bg-red-50 p-2 rounded">
+          <div className="flex items-center space-x-1 text-xs text-gold-600 bg-gold-50 p-2 rounded">
             <Info className="w-3 h-3" />
             <span>Invalid JSON: {jsonError}</span>
           </div>
@@ -162,12 +162,12 @@ const KeyValueEditor = ({
   return (
     <div className="space-y-3" data-testid={testId}>
       <div className="flex items-center justify-between">
-        <label className="text-sm font-semibold text-slate-700">{label}</label>
+        <label className="text-sm font-semibold text-primary-700">{label}</label>
         <div className="flex items-center space-x-2">
           {allowJSON && (
             <button
               onClick={() => setViewMode('json')}
-              className="flex items-center space-x-1 text-xs text-slate-600 hover:text-slate-800 font-medium"
+              className="flex items-center space-x-1 text-xs text-primary-600 hover:text-primary-800 font-medium"
               data-testid="switch-to-json"
             >
               <Code className="w-3 h-3" />
@@ -186,8 +186,8 @@ const KeyValueEditor = ({
       </div>
 
       {pairs.length === 0 ? (
-        <div className="text-center py-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg">
-          <p className="text-sm text-slate-500 mb-2">No entries added yet</p>
+        <div className="text-center py-6 bg-green-50 border-2 border-dashed border-green-200 rounded-lg">
+          <p className="text-sm text-green-500 mb-2">No entries added yet</p>
           <button
             onClick={addPair}
             className="text-xs text-primary-600 hover:text-primary-700 font-medium"
@@ -205,7 +205,7 @@ const KeyValueEditor = ({
                   value={pair.key}
                   onChange={(e) => updatePair(pair.id, 'key', e.target.value)}
                   placeholder={keyPlaceholder}
-                  className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all"
+                  className="w-full px-3 py-2 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all"
                   data-testid="pair-key"
                 />
               </div>
@@ -215,14 +215,14 @@ const KeyValueEditor = ({
                   value={pair.value}
                   onChange={(e) => updatePair(pair.id, 'value', e.target.value)}
                   placeholder={valuePlaceholder}
-                  className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all"
+                  className="w-full px-3 py-2 border-2 border-green-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all"
                   data-testid="pair-value"
                 />
               </div>
               <div className="col-span-1 flex items-center justify-center">
                 <button
                   onClick={() => removePair(pair.id)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-gold-600 hover:bg-gold-50 rounded-lg transition-colors"
                   title="Remove entry"
                   data-testid="remove-pair-btn"
                 >

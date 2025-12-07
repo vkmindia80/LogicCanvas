@@ -112,11 +112,11 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto bg-slate-50">
+      <div className="flex-1 overflow-auto bg-green-50">
         <div className="max-w-4xl mx-auto p-6">
 
           {/* Tabs */}
-          <div className="flex border-b border-slate-200 bg-white rounded-t-lg">
+          <div className="flex border-b border-green-200 bg-white rounded-t-lg">
           <button
             onClick={() => {
               setActiveTab('export');
@@ -125,7 +125,7 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
             className={`flex-1 px-6 py-3 font-medium transition-colors ${
               activeTab === 'export'
                 ? 'border-b-2 border-primary-500 text-primary-600'
-                : 'text-slate-600 hover:text-slate-900'
+                : 'text-primary-600 hover:text-primary-900'
             }`}
             data-testid="export-tab"
           >
@@ -140,7 +140,7 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
             className={`flex-1 px-6 py-3 font-medium transition-colors ${
               activeTab === 'import'
                 ? 'border-b-2 border-primary-500 text-primary-600'
-                : 'text-slate-600 hover:text-slate-900'
+                : 'text-primary-600 hover:text-primary-900'
             }`}
             data-testid="import-tab"
           >
@@ -182,12 +182,12 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
                 )}
               </button>
 
-              <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-                <h3 className="font-semibold text-slate-900 mb-2 flex items-center">
+              <div className="mt-6 p-4 bg-green-50 rounded-lg">
+                <h3 className="font-semibold text-primary-900 mb-2 flex items-center">
                   <FileJson className="w-4 h-4 mr-2" />
                   Export Format
                 </h3>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-primary-600">
                   Workflows are exported in JSON format with all nodes, edges, and metadata.
                   The exported file can be imported back or shared with others.
                 </p>
@@ -235,17 +235,17 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
                 <div className={`mt-6 p-4 rounded-lg border ${
                   importResult.success
                     ? 'bg-green-50 border-green-200'
-                    : 'bg-red-50 border-red-200'
+                    : 'bg-gold-50 border-gold-200'
                 }`}>
                   <div className="flex items-start space-x-3">
                     {importResult.success ? (
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     ) : (
-                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                      <AlertCircle className="w-5 h-5 text-gold-600 flex-shrink-0 mt-0.5" />
                     )}
                     <div className="flex-1">
                       <h3 className={`font-semibold ${
-                        importResult.success ? 'text-green-900' : 'text-red-900'
+                        importResult.success ? 'text-green-900' : 'text-gold-900'
                       }`}>
                         {importResult.success
                           ? `Successfully imported ${importResult.imported_count} workflow(s)`
@@ -253,9 +253,9 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
                       </h3>
                       {importResult.errors && importResult.errors.length > 0 && (
                         <div className="mt-2 space-y-1">
-                          <p className="text-sm font-medium text-red-800">Errors:</p>
+                          <p className="text-sm font-medium text-gold-800">Errors:</p>
                           {importResult.errors.map((error, index) => (
-                            <p key={index} className="text-sm text-red-700">
+                            <p key={index} className="text-sm text-gold-700">
                               • {error.workflow || 'Unknown'}: {error.error}
                             </p>
                           ))}
@@ -266,9 +266,9 @@ const ImportExport = ({ isOpen, onClose, selectedWorkflows = [], onImportComplet
                 </div>
               )}
 
-              <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-                <h3 className="font-semibold text-slate-900 mb-2">Import Notes</h3>
-                <ul className="text-sm text-slate-600 space-y-1">
+              <div className="mt-6 p-4 bg-green-50 rounded-lg">
+                <h3 className="font-semibold text-primary-900 mb-2">Import Notes</h3>
+                <ul className="text-sm text-primary-600 space-y-1">
                   <li>• Imported workflows receive new unique IDs</li>
                   <li>• All workflows are imported with 'draft' status</li>
                   <li>• Original workflow structure is preserved</li>

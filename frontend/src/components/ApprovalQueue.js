@@ -91,7 +91,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
     const colors = {
       pending: 'bg-gold-100 text-gold-800 border-gold-300',
       approved: 'bg-green-100 text-green-800 border-green-300',
-      rejected: 'bg-red-100 text-red-800 border-red-300',
+      rejected: 'bg-gold-100 text-gold-800 border-gold-300',
       changes_requested: 'bg-gold-100 text-gold-800 border-gold-300'
     };
     return colors[status] || colors.pending;
@@ -152,24 +152,24 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
     
     return (
       <div className="mt-3">
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+        <div className="flex items-center justify-between text-xs text-green-500 mb-1">
           <span>Progress: {approved + rejected} / {total} votes</span>
           <span className="capitalize">{approvalType?.replace('_', ' ')}</span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden flex">
+        <div className="h-2 bg-green-200 rounded-full overflow-hidden flex">
           <div 
             className="h-full bg-green-500 transition-all" 
             style={{ width: `${approvedPercent}%` }}
           />
           <div 
-            className="h-full bg-red-500 transition-all" 
+            className="h-full bg-gold-500 transition-all" 
             style={{ width: `${rejectedPercent}%` }}
           />
         </div>
         <div className="flex items-center justify-between mt-1 text-xs">
           <span className="text-green-600">{approved} approved</span>
-          <span className="text-red-600">{rejected} rejected</span>
-          <span className="text-gray-500">{progress.pending} pending</span>
+          <span className="text-gold-600">{rejected} rejected</span>
+          <span className="text-green-500">{progress.pending} pending</span>
         </div>
       </div>
     );
@@ -220,44 +220,44 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
+      <div className="bg-white border-b border-green-200 px-6 py-3">
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-gold-400 rounded-full"></div>
-            <span className="text-sm text-gray-600">Pending: <strong>{stats.pending}</strong></span>
+            <span className="text-sm text-primary-600">Pending: <strong>{stats.pending}</strong></span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-            <span className="text-sm text-gray-600">Approved: <strong>{stats.approved}</strong></span>
+            <span className="text-sm text-primary-600">Approved: <strong>{stats.approved}</strong></span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-            <span className="text-sm text-gray-600">Rejected: <strong>{stats.rejected}</strong></span>
+            <div className="w-3 h-3 bg-gold-400 rounded-full"></div>
+            <span className="text-sm text-primary-600">Rejected: <strong>{stats.rejected}</strong></span>
           </div>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Approval List */}
-        <div className="w-1/2 border-r border-gray-200 flex flex-col bg-gray-50">
+        <div className="w-1/2 border-r border-green-200 flex flex-col bg-green-50">
           {/* Filters */}
-          <div className="p-4 bg-white border-b border-gray-200">
+          <div className="p-4 bg-white border-b border-green-200">
             <div className="flex items-center space-x-4 mb-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-4 h-4" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search approvals..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500"
+                  className="w-full pl-10 pr-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500"
                   data-testid="approval-search-input"
                 />
               </div>
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500"
+                className="px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500"
                 data-testid="approval-filter-select"
               >
                 <option value="all">All Status</option>
@@ -267,7 +267,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                 <option value="changes_requested">Changes Requested</option>
               </select>
             </div>
-            <div className="flex items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center justify-between text-sm text-primary-600">
               <span>{filteredApprovals.length} approvals</span>
             </div>
           </div>
@@ -280,9 +280,9 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
               </div>
             ) : filteredApprovals.length === 0 ? (
               <div className="text-center py-12">
-                <ClipboardCheck className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-600">No approvals found</h3>
-                <p className="text-gray-400">All caught up!</p>
+                <ClipboardCheck className="w-16 h-16 mx-auto text-green-300 mb-4" />
+                <h3 className="text-lg font-medium text-primary-600">No approvals found</h3>
+                <p className="text-green-400">All caught up!</p>
               </div>
             ) : (
               filteredApprovals.map((approval) => {
@@ -294,20 +294,20 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                     className={`bg-white rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
                       selectedApproval?.id === approval.id
                         ? 'border-gold-500 ring-2 ring-gold-200'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-green-200 hover:border-green-300'
                     }`}
                     data-testid={`approval-item-${approval.id}`}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900">{approval.title}</h3>
+                      <h3 className="font-semibold text-primary-900">{approval.title}</h3>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(approval.status)}`}>
                         {approval.status?.replace('_', ' ')}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{approval.description || 'No description'}</p>
+                    <p className="text-sm text-primary-600 mb-3 line-clamp-2">{approval.description || 'No description'}</p>
                     
                     {/* Approval Type Badge */}
-                    <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+                    <div className="flex items-center space-x-2 text-xs text-green-500 mb-2">
                       <div className="flex items-center space-x-1 px-2 py-1 bg-gold-50 text-gold-700 rounded-full">
                         {getApprovalTypeIcon(approval.approval_type)}
                         <span>{getApprovalTypeLabel(approval.approval_type)}</span>
@@ -320,8 +320,8 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                     {/* Approvers */}
                     {approval.approvers && approval.approvers.length > 0 && (
                       <div className="mt-3 flex items-center space-x-2">
-                        <Users className="w-3 h-3 text-gray-400" />
-                        <span className="text-xs text-gray-500">
+                        <Users className="w-3 h-3 text-green-400" />
+                        <span className="text-xs text-green-500">
                           {approval.approvers.slice(0, 3).join(', ')}
                           {approval.approvers.length > 3 && ` +${approval.approvers.length - 3} more`}
                         </span>
@@ -339,15 +339,15 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
           {selectedApproval ? (
             <>
               {/* Approval Header */}
-              <div className="p-6 border-b border-gray-200">
+              <div className="p-6 border-b border-green-200">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedApproval.title}</h2>
+                    <h2 className="text-xl font-bold text-primary-900 mb-2">{selectedApproval.title}</h2>
                     <div className="flex items-center space-x-3 flex-wrap gap-y-2">
                       <span className={`px-3 py-1 text-sm rounded-full border ${getStatusColor(selectedApproval.status)}`}>
                         {selectedApproval.status?.replace('_', ' ')}
                       </span>
-                      <span className="flex items-center text-sm text-gray-600 bg-gold-50 px-3 py-1 rounded-full">
+                      <span className="flex items-center text-sm text-primary-600 bg-gold-50 px-3 py-1 rounded-full">
                         {getApprovalTypeIcon(selectedApproval.approval_type)}
                         <span className="ml-1">{getApprovalTypeLabel(selectedApproval.approval_type)}</span>
                       </span>
@@ -356,16 +356,16 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                 </div>
 
                 {/* Approval Type Description */}
-                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600">
+                <div className="mb-4 p-3 bg-green-50 rounded-lg">
+                  <p className="text-sm text-primary-600">
                     <strong>How it works:</strong> {getApprovalTypeDescription(selectedApproval.approval_type)}
                   </p>
                 </div>
 
                 {/* Description */}
                 <div className="mb-4">
-                  <h3 className="font-semibold text-gray-700 mb-2">Description</h3>
-                  <p className="text-gray-600">{selectedApproval.description || 'No description provided'}</p>
+                  <h3 className="font-semibold text-primary-700 mb-2">Description</h3>
+                  <p className="text-primary-600">{selectedApproval.description || 'No description provided'}</p>
                 </div>
 
                 {/* Progress Bar */}
@@ -373,31 +373,31 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
 
                 {/* Approvers List */}
                 <div className="mt-4">
-                  <h3 className="font-semibold text-gray-700 mb-2">Approvers</h3>
+                  <h3 className="font-semibold text-primary-700 mb-2">Approvers</h3>
                   <div className="space-y-2">
                     {(selectedApproval.approvers || []).map((approver, idx) => {
                       const decision = (selectedApproval.decisions || []).find(d => d.decided_by === approver);
                       return (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div key={idx} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                           <div className="flex items-center space-x-3">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium ${
                               decision?.decision === 'approved' ? 'bg-green-500' :
-                              decision?.decision === 'rejected' ? 'bg-red-500' :
-                              'bg-gray-400'
+                              decision?.decision === 'rejected' ? 'bg-gold-500' :
+                              'bg-green-400'
                             }`}>
                               {approver.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                              <span className="text-sm font-medium text-gray-700">{approver}</span>
+                              <span className="text-sm font-medium text-primary-700">{approver}</span>
                               {decision?.comment && (
-                                <p className="text-xs text-gray-500 mt-0.5">{decision.comment}</p>
+                                <p className="text-xs text-green-500 mt-0.5">{decision.comment}</p>
                               )}
                             </div>
                           </div>
                           {decision ? (
                             <span className={`px-3 py-1 text-xs rounded-full font-medium ${
                               decision.decision === 'approved' ? 'bg-green-100 text-green-800' :
-                              decision.decision === 'rejected' ? 'bg-red-100 text-red-800' :
+                              decision.decision === 'rejected' ? 'bg-gold-100 text-gold-800' :
                               'bg-gold-100 text-gold-800'
                             }`}>
                               {decision.decision === 'approved' && <CheckCircle className="w-3 h-3 inline mr-1" />}
@@ -405,7 +405,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                               {decision.decision}
                             </span>
                           ) : (
-                            <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-600">Pending</span>
+                            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-primary-600">Pending</span>
                           )}
                         </div>
                       );
@@ -416,45 +416,45 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
 
               {/* Decision History */}
               <div className="flex-1 overflow-y-auto p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Decision History</h3>
+                <h3 className="font-semibold text-primary-900 mb-4">Decision History</h3>
                 <div className="space-y-4">
                   {(selectedApproval.decisions || []).map((decision, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-lg p-4">
+                    <div key={idx} className="bg-green-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-gray-900">{decision.decided_by || 'Unknown'}</span>
+                        <span className="font-medium text-primary-900">{decision.decided_by || 'Unknown'}</span>
                         <span className={`px-2 py-1 text-xs rounded-full ${
                           decision.decision === 'approved' ? 'bg-green-100 text-green-800' :
-                          decision.decision === 'rejected' ? 'bg-red-100 text-red-800' :
+                          decision.decision === 'rejected' ? 'bg-gold-100 text-gold-800' :
                           'bg-gold-100 text-gold-800'
                         }`}>
                           {decision.decision}
                         </span>
                       </div>
                       {decision.comment && (
-                        <p className="text-sm text-gray-600 mb-2">{decision.comment}</p>
+                        <p className="text-sm text-primary-600 mb-2">{decision.comment}</p>
                       )}
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-green-400">
                         {decision.timestamp ? new Date(decision.timestamp).toLocaleString() : ''}
                       </span>
                     </div>
                   ))}
                   {(!selectedApproval.decisions || selectedApproval.decisions.length === 0) && (
-                    <p className="text-gray-400 text-sm">No decisions yet</p>
+                    <p className="text-green-400 text-sm">No decisions yet</p>
                   )}
                 </div>
               </div>
 
               {/* Decision Actions */}
               {selectedApproval.status === 'pending' && (
-                <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="p-6 border-t border-green-200 bg-green-50">
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Comment (optional)</label>
+                    <label className="block text-sm font-medium text-primary-700 mb-2">Comment (optional)</label>
                     <textarea
                       value={decisionComment}
                       onChange={(e) => setDecisionComment(e.target.value)}
                       placeholder="Add a comment with your decision..."
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500"
+                      className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-gold-500"
                       data-testid="decision-comment-input"
                     />
                   </div>
@@ -469,7 +469,7 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
                     </button>
                     <button
                       onClick={() => handleDecision(selectedApproval.id, 'rejected')}
-                      className="flex-1 flex items-center justify-center space-x-2 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-colors"
+                      className="flex-1 flex items-center justify-center space-x-2 bg-gold-500 text-white px-6 py-3 rounded-lg hover:bg-gold-600 transition-colors"
                       data-testid="reject-btn"
                     >
                       <ThumbsDown className="w-5 h-5" />
@@ -490,9 +490,9 @@ const ApprovalQueue = ({ onClose, onNotify, onOpenMobileSidebar, sidebarCollapse
           ) : (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
-                <ClipboardCheck className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-600">Select an approval</h3>
-                <p className="text-gray-400">Click on an approval to review</p>
+                <ClipboardCheck className="w-16 h-16 mx-auto text-green-300 mb-4" />
+                <h3 className="text-lg font-medium text-primary-600">Select an approval</h3>
+                <p className="text-green-400">Click on an approval to review</p>
               </div>
             </div>
           )}

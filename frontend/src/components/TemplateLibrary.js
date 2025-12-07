@@ -99,28 +99,28 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="border-b border-gray-200 p-4 bg-gray-50">
+        <div className="border-b border-green-200 p-4 bg-green-50">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-400" />
               <input
                 type="text"
                 placeholder="Search templates..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 data-testid="template-search"
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center space-x-2">
-              <Filter className="w-5 h-5 text-gray-500" />
+              <Filter className="w-5 h-5 text-green-500" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 data-testid="category-filter"
               >
                 <option value="all">All Categories</option>
@@ -142,9 +142,9 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
             </div>
           ) : filteredTemplates.length === 0 ? (
             <div className="text-center py-12">
-              <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">No templates found</h3>
-              <p className="text-gray-500">Try adjusting your search or filters</p>
+              <Package className="w-16 h-16 text-green-300 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-primary-700 mb-2">No templates found</h3>
+              <p className="text-green-500">Try adjusting your search or filters</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -153,7 +153,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                 return (
                   <div
                     key={template.id}
-                    className="border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white group"
+                    className="border border-green-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white group"
                     data-testid={`template-${template.id}`}
                   >
                     {/* Template Header */}
@@ -173,10 +173,10 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
 
                     {/* Template Body */}
                     <div className="p-4">
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">{template.description}</p>
+                      <p className="text-sm text-primary-600 mb-4 line-clamp-2">{template.description}</p>
 
                       {/* Stats */}
-                      <div className="flex items-center justify-between mb-4 text-xs text-gray-500">
+                      <div className="flex items-center justify-between mb-4 text-xs text-green-500">
                         <div className="flex items-center space-x-1">
                           <Layers className="w-4 h-4" />
                           <span>{template.nodeCount} nodes</span>
@@ -196,8 +196,8 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
 
                       {/* Features */}
                       <div className="mb-4">
-                        <p className="text-xs font-semibold text-gray-700 mb-2">Key Features:</p>
-                        <ul className="text-xs text-gray-600 space-y-1">
+                        <p className="text-xs font-semibold text-primary-700 mb-2">Key Features:</p>
+                        <ul className="text-xs text-primary-600 space-y-1">
                           {template.features.slice(0, 3).map((feature, idx) => (
                             <li key={idx} className="flex items-start">
                               <CheckCircle className="w-3 h-3 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
@@ -211,7 +211,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => setSelectedTemplate(template)}
-                          className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                          className="flex-1 px-4 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
                           data-testid={`preview-${template.id}`}
                         >
                           Preview
@@ -247,25 +247,25 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                 </button>
               </div>
               <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
-                <p className="text-gray-700 mb-4">{selectedTemplate.description}</p>
+                <p className="text-primary-700 mb-4">{selectedTemplate.description}</p>
                 
                 <div className="mb-4">
-                  <h4 className="font-semibold text-gray-800 mb-2">Features:</h4>
+                  <h4 className="font-semibold text-primary-800 mb-2">Features:</h4>
                   <ul className="space-y-2">
                     {selectedTemplate.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
+                        <span className="text-primary-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="mb-4">
-                  <h4 className="font-semibold text-gray-800 mb-2">Use Cases:</h4>
+                  <h4 className="font-semibold text-primary-800 mb-2">Use Cases:</h4>
                   <ul className="space-y-1">
                     {selectedTemplate.useCases.map((useCase, idx) => (
-                      <li key={idx} className="text-gray-700 ml-4">• {useCase}</li>
+                      <li key={idx} className="text-primary-700 ml-4">• {useCase}</li>
                     ))}
                   </ul>
                 </div>
@@ -273,7 +273,7 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                 <div className="flex justify-end space-x-3 pt-4 border-t">
                   <button
                     onClick={() => setSelectedTemplate(null)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    className="px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
                   >
                     Close
                   </button>

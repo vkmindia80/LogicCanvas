@@ -155,7 +155,7 @@ const TUTORIAL_CATEGORIES = [
 const difficultyColors = {
   'Beginner': 'bg-green-100 text-green-800',
   'Intermediate': 'bg-gold-100 text-gold-800',
-  'Advanced': 'bg-red-100 text-red-800'
+  'Advanced': 'bg-gold-100 text-gold-800'
 };
 
 const VideoTutorials = ({ isOpen, onClose }) => {
@@ -221,8 +221,8 @@ const VideoTutorials = ({ isOpen, onClose }) => {
         {/* Content */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - Categories */}
-          <div className="w-64 border-r border-gray-200 bg-gray-50 p-4 overflow-y-auto">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Categories</h3>
+          <div className="w-64 border-r border-green-200 bg-green-50 p-4 overflow-y-auto">
+            <h3 className="text-sm font-semibold text-primary-700 mb-3">Categories</h3>
             <div className="space-y-1">
               {TUTORIAL_CATEGORIES.map(category => {
                 const categoryWatched = category.videos.filter(v => 
@@ -236,7 +236,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                       selectedCategory === category.id
                         ? 'bg-gold-100 text-gold-900 font-medium'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        : 'text-primary-700 hover:bg-green-100'
                     }`}
                     data-testid={`category-${category.id}`}
                   >
@@ -245,7 +245,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                         <span className="text-lg">{category.icon}</span>
                         <span className="text-sm">{category.name}</span>
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-green-500">
                         {categoryWatched}/{category.videos.length}
                       </span>
                     </div>
@@ -255,19 +255,19 @@ const VideoTutorials = ({ isOpen, onClose }) => {
             </div>
 
             {/* Quick Stats */}
-            <div className="mt-6 p-3 bg-white rounded-lg border border-gray-200">
-              <h4 className="text-xs font-semibold text-gray-700 mb-2">Your Stats</h4>
+            <div className="mt-6 p-3 bg-white rounded-lg border border-green-200">
+              <h4 className="text-xs font-semibold text-primary-700 mb-2">Your Stats</h4>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Total Videos:</span>
-                  <span className="font-medium text-gray-900">{totalVideos}</span>
+                  <span className="text-primary-600">Total Videos:</span>
+                  <span className="font-medium text-primary-900">{totalVideos}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Watched:</span>
+                  <span className="text-primary-600">Watched:</span>
                   <span className="font-medium text-green-600">{watchedCount}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Remaining:</span>
+                  <span className="text-primary-600">Remaining:</span>
                   <span className="font-medium text-gold-600">{totalVideos - watchedCount}</span>
                 </div>
               </div>
@@ -277,11 +277,11 @@ const VideoTutorials = ({ isOpen, onClose }) => {
           {/* Main Content - Video Grid */}
           <div className="flex-1 overflow-y-auto p-6">
             <div className="mb-6">
-              <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
+              <h3 className="text-xl font-bold text-primary-900 flex items-center space-x-2">
                 <span>{currentCategory?.icon}</span>
                 <span>{currentCategory?.name}</span>
               </h3>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-primary-600 mt-1">
                 {currentCategory?.videos.length} tutorials available
               </p>
             </div>
@@ -293,7 +293,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                 return (
                   <div
                     key={video.id}
-                    className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 bg-white group"
+                    className="border border-green-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 bg-white group"
                     data-testid={`video-${video.id}`}
                   >
                     {/* Thumbnail */}
@@ -334,13 +334,13 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                         </span>
                       </div>
 
-                      <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">{video.title}</h4>
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">{video.description}</p>
+                      <h4 className="font-semibold text-primary-900 mb-2 line-clamp-2">{video.title}</h4>
+                      <p className="text-sm text-primary-600 mb-3 line-clamp-2">{video.description}</p>
 
                       {/* Topics */}
                       <div className="flex flex-wrap gap-1 mb-3">
                         {video.topics.slice(0, 3).map((topic, idx) => (
-                          <span key={idx} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                          <span key={idx} className="text-xs bg-green-100 text-primary-700 px-2 py-1 rounded">
                             {topic}
                           </span>
                         ))}
@@ -397,7 +397,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${difficultyColors[selectedVideo.difficulty]}`}>
                     {selectedVideo.difficulty}
                   </span>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center space-x-4 text-sm text-primary-600">
                     <div className="flex items-center space-x-1">
                       <Clock className="w-4 h-4" />
                       <span>{selectedVideo.duration}</span>
@@ -405,10 +405,10 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                   </div>
                 </div>
 
-                <p className="text-gray-700 mb-4">{selectedVideo.description}</p>
+                <p className="text-primary-700 mb-4">{selectedVideo.description}</p>
 
                 <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-2">Topics Covered:</h4>
+                  <h4 className="text-sm font-semibold text-primary-900 mb-2">Topics Covered:</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedVideo.topics.map((topic, idx) => (
                       <span key={idx} className="bg-gold-100 text-gold-800 px-3 py-1 rounded-full text-sm">
@@ -432,7 +432,7 @@ const VideoTutorials = ({ isOpen, onClose }) => {
                     href={selectedVideo.embedUrl.replace('/embed/', '/watch?v=')}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="flex items-center space-x-2 px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50 transition-colors text-sm font-medium"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>Open in YouTube</span>

@@ -25,7 +25,7 @@ const LoadingSpinner = ({
   const colorClasses = {
     primary: 'border-primary-500 border-t-transparent',
     white: 'border-white border-t-transparent',
-    slate: 'border-slate-500 border-t-transparent',
+    slate: 'border-green-500 border-t-transparent',
     blue: 'border-green-500 border-t-transparent',
     green: 'border-green-500 border-t-transparent'
   };
@@ -41,7 +41,7 @@ const LoadingSpinner = ({
     <>
       <div className={`animate-spin rounded-full ${sizeClasses[size]} ${colorClasses[color]}`}></div>
       {text && (
-        <p className={`mt-3 font-medium text-slate-600 ${textSizeClasses[size]}`}>
+        <p className={`mt-3 font-medium text-primary-600 ${textSizeClasses[size]}`}>
           {text}
         </p>
       )}

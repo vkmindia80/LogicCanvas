@@ -93,21 +93,21 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-3xl max-h-[80vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+        <div className="flex items-center justify-between p-6 border-b border-green-200">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">Version History</h2>
-            <p className="text-sm text-slate-600 mt-1">View and manage workflow versions</p>
+            <h2 className="text-2xl font-bold text-primary-900">Version History</h2>
+            <p className="text-sm text-primary-600 mt-1">View and manage workflow versions</p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
+            className="text-green-400 hover:text-primary-600 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Create Version Button */}
-        <div className="p-6 border-b border-slate-200 bg-slate-50">
+        <div className="p-6 border-b border-green-200 bg-green-50">
           <button
             onClick={handleCreateVersion}
             disabled={creating}
@@ -126,7 +126,7 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
               </>
             )}
           </button>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-green-500 mt-2">
             Create a snapshot of the current workflow state
           </p>
         </div>
@@ -139,9 +139,9 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
             </div>
           ) : versions.length === 0 ? (
             <div className="text-center py-12">
-              <Clock className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">No Versions Yet</h3>
-              <p className="text-slate-600">
+              <Clock className="w-16 h-16 text-green-300 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-primary-900 mb-2">No Versions Yet</h3>
+              <p className="text-primary-600">
                 Create your first version to track workflow changes over time
               </p>
             </div>
@@ -150,13 +150,13 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
               {versions.map((version, index) => (
                 <div
                   key={version.id}
-                  className="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow"
                   data-testid={`version-${version.id}`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="font-semibold text-slate-900">
+                        <h3 className="font-semibold text-primary-900">
                           Version {version.version_number}
                         </h3>
                         {index === 0 && (
@@ -173,7 +173,7 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
                         </span>
                       </div>
 
-                      <div className="flex items-center space-x-4 text-sm text-slate-600 mb-2">
+                      <div className="flex items-center space-x-4 text-sm text-primary-600 mb-2">
                         <span className="flex items-center">
                           <Clock className="w-4 h-4 mr-1" />
                           {formatDate(version.created_at)}
@@ -185,7 +185,7 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
                       </div>
 
                       {version.description && (
-                        <p className="text-sm text-slate-600 mt-2">{version.description}</p>
+                        <p className="text-sm text-primary-600 mt-2">{version.description}</p>
                       )}
 
                       {version.tags && version.tags.length > 0 && (
@@ -193,7 +193,7 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
                           {version.tags.map((tag, tagIndex) => (
                             <span
                               key={tagIndex}
-                              className="px-2 py-1 bg-slate-100 text-slate-700 text-xs rounded"
+                              className="px-2 py-1 bg-green-100 text-primary-700 text-xs rounded"
                             >
                               {tag}
                             </span>
@@ -205,12 +205,12 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
                     <button
                       onClick={() => handleRollback(version.id)}
                       disabled={rolling === version.id || index === 0}
-                      className="ml-4 flex items-center space-x-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="ml-4 flex items-center space-x-2 px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       data-testid={`rollback-btn-${version.id}`}
                     >
                       {rolling === version.id ? (
                         <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-600"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
                           <span className="text-sm">Rolling back...</span>
                         </>
                       ) : (
@@ -230,7 +230,7 @@ const VersionHistory = ({ workflowId, onClose, onRollback, onNotify }) => {
         </div>
 
         {/* Info Panel */}
-        <div className="p-4 border-t border-slate-200 bg-green-50">
+        <div className="p-4 border-t border-green-200 bg-green-50">
           <div className="flex items-start space-x-2">
             <AlertCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-green-800">

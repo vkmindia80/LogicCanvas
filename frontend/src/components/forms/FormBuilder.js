@@ -184,29 +184,29 @@ const FormBuilder = ({ form, onBack }) => {
   const hasFieldError = (fieldId) => !!fieldErrors[fieldId];
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
+    <div className="h-screen flex flex-col bg-green-50">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+      <header className="bg-white border-b border-green-200 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
             onClick={onBack}
-            className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
+            className="flex items-center space-x-2 text-primary-600 hover:text-primary-900 transition-colors"
             data-testid="back-to-forms-btn"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Forms</span>
           </button>
-          <div className="h-6 w-px bg-slate-300" />
+          <div className="h-6 w-px bg-green-300" />
           <div>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="text-xl font-semibold text-slate-900 border-none focus:outline-none focus:ring-2 focus:ring-primary-500 rounded px-2 py-1"
+              className="text-xl font-semibold text-primary-900 border-none focus:outline-none focus:ring-2 focus:ring-primary-500 rounded px-2 py-1"
               placeholder="Form name"
               data-testid="form-name-input"
             />
-            <p className="text-sm text-slate-500 px-2">{formData.fields.length} fields</p>
+            <p className="text-sm text-green-500 px-2">{formData.fields.length} fields</p>
           </div>
         </div>
 
@@ -216,7 +216,7 @@ const FormBuilder = ({ form, onBack }) => {
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
               previewMode
                 ? 'bg-primary-100 text-primary-700 border border-primary-300'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                : 'bg-green-100 text-primary-700 hover:bg-green-200'
             }`}
             data-testid="toggle-preview-btn"
           >
@@ -251,22 +251,22 @@ const FormBuilder = ({ form, onBack }) => {
         <div className="flex-1 overflow-y-auto p-8">
           {previewMode ? (
             <div className="max-w-3xl mx-auto">
-              <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">{formData.name}</h2>
-                {formData.description && <p className="text-slate-600 mb-6">{formData.description}</p>}
+              <div className="bg-white rounded-lg shadow-sm border border-green-200 p-8">
+                <h2 className="text-2xl font-bold text-primary-900 mb-2">{formData.name}</h2>
+                {formData.description && <p className="text-primary-600 mb-6">{formData.description}</p>}
                 <FormRenderer fields={formData.fields} />
               </div>
             </div>
           ) : (
             <div className="max-w-4xl mx-auto">
-              <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8">
+              <div className="bg-white rounded-lg shadow-sm border border-green-200 p-8">
                 {/* Form Description */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Form Description</label>
+                  <label className="block text-sm font-medium text-primary-700 mb-2">Form Description</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                     rows="2"
                     placeholder="Optional form description"
                     data-testid="form-description-input"
@@ -275,10 +275,10 @@ const FormBuilder = ({ form, onBack }) => {
 
                 {/* Fields */}
                 {formData.fields.length === 0 ? (
-                  <div className="text-center py-16 border-2 border-dashed border-slate-300 rounded-lg">
-                    <Settings className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-slate-700 mb-2">No fields yet</h3>
-                    <p className="text-slate-500">Add fields from the palette on the left</p>
+                  <div className="text-center py-16 border-2 border-dashed border-green-300 rounded-lg">
+                    <Settings className="w-12 h-12 text-green-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-primary-700 mb-2">No fields yet</h3>
+                    <p className="text-green-500">Add fields from the palette on the left</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -299,31 +299,31 @@ const FormBuilder = ({ form, onBack }) => {
                           className={`group p-4 border-2 rounded-lg cursor-move transition-all ${
                             selectedField?.id === field.id
                               ? 'border-primary-500 bg-primary-50'
-                              : 'border-slate-200 hover:border-slate-300 bg-white'
-                          } ${hasError ? 'border-red-500 bg-red-50' : ''}`}
+                              : 'border-green-200 hover:border-green-300 bg-white'
+                          } ${hasError ? 'border-gold-500 bg-gold-50' : ''}`}
                           data-testid={`field-item-${field.id}`}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex items-start space-x-3 flex-1">
-                              <GripVertical className="w-5 h-5 text-slate-400 mt-1 cursor-grab active:cursor-grabbing" />
-                              {Icon && <Icon className="w-5 h-5 text-slate-600 mt-1" />}
+                              <GripVertical className="w-5 h-5 text-green-400 mt-1 cursor-grab active:cursor-grabbing" />
+                              {Icon && <Icon className="w-5 h-5 text-primary-600 mt-1" />}
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2">
-                                  <span className="font-medium text-slate-900">{field.label}</span>
-                                  {field.required && <span className="text-red-500 text-sm">*</span>}
+                                  <span className="font-medium text-primary-900">{field.label}</span>
+                                  {field.required && <span className="text-gold-500 text-sm">*</span>}
                                   {field.conditional_visibility && (
                                     <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
                                       Conditional
                                     </span>
                                   )}
                                   {hasError && (
-                                    <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                    <span className="text-xs bg-gold-100 text-gold-700 px-2 py-0.5 rounded flex items-center space-x-1">
                                       <AlertTriangle className="w-3 h-3" />
                                       <span>Fix field</span>
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-sm text-slate-500 mt-1">
+                                <p className="text-sm text-green-500 mt-1">
                                   {fieldType?.label} • {field.type}
                                 </p>
                               </div>
@@ -333,7 +333,7 @@ const FormBuilder = ({ form, onBack }) => {
                                 e.stopPropagation();
                                 handleDeleteField(field.id);
                               }}
-                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors opacity-0 group-hover:opacity-100"
+                              className="p-2 text-green-400 hover:text-gold-600 hover:bg-gold-50 rounded transition-colors opacity-0 group-hover:opacity-100"
                               data-testid={`delete-field-${field.id}`}
                             >
                               <Trash2 className="w-4 h-4" />

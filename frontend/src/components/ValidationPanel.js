@@ -195,31 +195,31 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
   const hasWarnings = categorizedIssues.warnings.length > 0;
 
   return (
-    <div className="fixed right-4 top-20 z-40 w-96 max-h-[calc(100vh-120px)] bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col">
+    <div className="fixed right-4 top-20 z-40 w-96 max-h-[calc(100vh-120px)] bg-white dark:bg-primary-800 rounded-lg shadow-2xl border border-green-200 dark:border-primary-700 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-700">
+      <div className="flex items-center justify-between p-4 border-b border-green-200 dark:border-primary-700 bg-gradient-to-r from-green-50 to-white dark:from-primary-800 dark:to-primary-700">
         <div className="flex items-center space-x-3">
           {hasErrors ? (
-            <AlertTriangle className="w-5 h-5 text-red-500" />
+            <AlertTriangle className="w-5 h-5 text-gold-500" />
           ) : hasWarnings ? (
             <AlertCircle className="w-5 h-5 text-gold-500" />
           ) : (
             <CheckCircle className="w-5 h-5 text-green-500" />
           )}
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+            <h3 className="text-sm font-semibold text-primary-900 dark:text-white">
               Workflow Validation
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-green-500 dark:text-green-400">
               {totalIssues === 0 ? 'No issues found' : `${totalIssues} issue${totalIssues > 1 ? 's' : ''} found`}
             </p>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+          className="p-1 rounded-lg hover:bg-green-200 dark:hover:bg-primary-600 transition-colors"
         >
-          <X className="w-4 h-4 text-slate-500" />
+          <X className="w-4 h-4 text-green-500" />
         </button>
       </div>
 
@@ -228,43 +228,43 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
         {totalIssues === 0 ? (
           <div className="p-8 text-center">
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-            <p className="text-sm font-medium text-slate-900 dark:text-white mb-1">Workflow is valid!</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">No validation issues found.</p>
+            <p className="text-sm font-medium text-primary-900 dark:text-white mb-1">Workflow is valid!</p>
+            <p className="text-xs text-green-500 dark:text-green-400">No validation issues found.</p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-200 dark:divide-slate-700">
+          <div className="divide-y divide-green-200 dark:divide-primary-700">
             {/* Errors */}
             {categorizedIssues.errors.length > 0 && (
               <div>
                 <button
                   onClick={() => toggleCategory('errors')}
-                  className="w-full flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                  className="w-full flex items-center justify-between p-3 hover:bg-green-50 dark:hover:bg-primary-700/50 transition-colors"
                 >
                   <div className="flex items-center space-x-2">
-                    <AlertTriangle className="w-4 h-4 text-red-500" />
-                    <span className="text-sm font-medium text-slate-900 dark:text-white">
+                    <AlertTriangle className="w-4 h-4 text-gold-500" />
+                    <span className="text-sm font-medium text-primary-900 dark:text-white">
                       Errors ({categorizedIssues.errors.length})
                     </span>
                   </div>
                   {expandedCategories.errors ? (
-                    <ChevronUp className="w-4 h-4 text-slate-400" />
+                    <ChevronUp className="w-4 h-4 text-green-400" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                    <ChevronDown className="w-4 h-4 text-green-400" />
                   )}
                 </button>
                 {expandedCategories.errors && (
-                  <div className="bg-red-50 dark:bg-red-900/10">
+                  <div className="bg-gold-50 dark:bg-gold-900/10">
                     {categorizedIssues.errors.map((issue, idx) => (
                       <div
                         key={idx}
-                        className="p-3 border-l-2 border-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 cursor-pointer transition-colors"
+                        className="p-3 border-l-2 border-gold-500 hover:bg-gold-100 dark:hover:bg-gold-900/20 cursor-pointer transition-colors"
                         onClick={() => handleIssueClick(issue)}
                       >
-                        <p className="text-sm font-medium text-red-900 dark:text-red-200 mb-1">
+                        <p className="text-sm font-medium text-gold-900 dark:text-gold-200 mb-1">
                           {issue.message}
                         </p>
                         {issue.suggestion && (
-                          <p className="text-xs text-red-700 dark:text-red-300 italic">
+                          <p className="text-xs text-gold-700 dark:text-gold-300 italic">
                             💡 {issue.suggestion}
                           </p>
                         )}
@@ -280,18 +280,18 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
               <div>
                 <button
                   onClick={() => toggleCategory('warnings')}
-                  className="w-full flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                  className="w-full flex items-center justify-between p-3 hover:bg-green-50 dark:hover:bg-primary-700/50 transition-colors"
                 >
                   <div className="flex items-center space-x-2">
                     <AlertCircle className="w-4 h-4 text-gold-500" />
-                    <span className="text-sm font-medium text-slate-900 dark:text-white">
+                    <span className="text-sm font-medium text-primary-900 dark:text-white">
                       Warnings ({categorizedIssues.warnings.length})
                     </span>
                   </div>
                   {expandedCategories.warnings ? (
-                    <ChevronUp className="w-4 h-4 text-slate-400" />
+                    <ChevronUp className="w-4 h-4 text-green-400" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                    <ChevronDown className="w-4 h-4 text-green-400" />
                   )}
                 </button>
                 {expandedCategories.warnings && (
@@ -322,8 +322,8 @@ const ValidationPanel = ({ nodes, edges, onNodeSelect, isOpen, onClose }) => {
 
       {/* Footer */}
       {totalIssues > 0 && (
-        <div className="p-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-          <p className="text-xs text-slate-600 dark:text-slate-400 text-center">
+        <div className="p-3 border-t border-green-200 dark:border-primary-700 bg-green-50 dark:bg-primary-800">
+          <p className="text-xs text-primary-600 dark:text-green-400 text-center">
             Click on an issue to navigate to the node
           </p>
         </div>

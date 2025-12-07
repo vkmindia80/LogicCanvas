@@ -137,9 +137,9 @@ const NodePaletteSalesforce = ({ onAddNode, lastNodeType }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-b from-slate-50 to-white">
+    <div className="h-full flex flex-col bg-gradient-to-b from-green-50 to-white">
       {/* Header */}
-      <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-slate-900 to-slate-800">
+      <div className="p-4 border-b border-green-200 bg-gradient-to-r from-primary-900 to-primary-800">
         <h3 className="text-sm font-bold text-white mb-2 flex items-center">
           <Plus className="w-4 h-4 mr-2" />
           Toolbox
@@ -147,13 +147,13 @@ const NodePaletteSalesforce = ({ onAddNode, lastNodeType }) => {
         
         {/* Search */}
         <div className="relative">
-          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search elements..."
-            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-600 bg-slate-800 text-white placeholder-slate-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-primary-600 bg-primary-800 text-white placeholder-green-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             data-testid="node-palette-search"
           />
         </div>
@@ -170,19 +170,19 @@ const NodePaletteSalesforce = ({ onAddNode, lastNodeType }) => {
               {/* Category Header */}
               <button
                 onClick={() => toggleCategory(category)}
-                className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-primary-700 hover:bg-green-100 rounded-lg transition-colors"
                 data-testid={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <div className="flex items-center space-x-2">
                   {isExpanded ? (
-                    <ChevronDown className="w-4 h-4 text-slate-500" />
+                    <ChevronDown className="w-4 h-4 text-green-500" />
                   ) : (
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                    <ChevronRight className="w-4 h-4 text-green-500" />
                   )}
-                  <CategoryIcon className="w-4 h-4 text-slate-600" />
+                  <CategoryIcon className="w-4 h-4 text-primary-600" />
                   <span>{category}</span>
                 </div>
-                <span className="text-xs text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full">
+                <span className="text-xs text-green-500 bg-green-200 px-2 py-0.5 rounded-full">
                   {nodes.length}
                 </span>
               </button>
@@ -232,7 +232,7 @@ const NodePaletteSalesforce = ({ onAddNode, lastNodeType }) => {
 
         {/* No Results */}
         {Object.keys(filteredCategories).length === 0 && (
-          <div className="text-center py-8 text-slate-500 text-sm">
+          <div className="text-center py-8 text-green-500 text-sm">
             <SearchIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p>No elements found</p>
             <p className="text-xs mt-1">Try a different search term</p>
@@ -241,10 +241,10 @@ const NodePaletteSalesforce = ({ onAddNode, lastNodeType }) => {
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-slate-200 bg-slate-50">
-        <div className="text-xs text-slate-600 text-center">
+      <div className="p-3 border-t border-green-200 bg-green-50">
+        <div className="text-xs text-primary-600 text-center">
           <p className="font-semibold">{Object.values(NODE_TYPES).length} Elements</p>
-          <p className="text-slate-500 mt-1">Drag or click to add to canvas</p>
+          <p className="text-green-500 mt-1">Drag or click to add to canvas</p>
         </div>
       </div>
     </div>

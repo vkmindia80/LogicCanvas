@@ -88,15 +88,15 @@ const HelpMenu = ({
                     option.action();
                     onClose();
                   }}
-                  className="flex items-start space-x-4 p-4 rounded-lg border-2 border-slate-200 hover:border-primary-300 hover:bg-primary-50 transition-all text-left group"
+                  className="flex items-start space-x-4 p-4 rounded-lg border-2 border-green-200 hover:border-primary-300 hover:bg-primary-50 transition-all text-left group"
                   data-testid={option.testId}
                 >
                   <div className={`p-3 ${option.color} rounded-lg group-hover:scale-110 transition-transform`}>
                     <IconComponent className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 mb-1">{option.title}</h3>
-                    <p className="text-sm text-slate-600">{option.description}</p>
+                    <h3 className="font-semibold text-primary-900 mb-1">{option.title}</h3>
+                    <p className="text-sm text-primary-600">{option.description}</p>
                   </div>
                 </button>
               );
@@ -104,9 +104,9 @@ const HelpMenu = ({
           </div>
 
           {/* Additional Help */}
-          <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <h3 className="text-sm font-semibold text-slate-900 mb-2">Need More Help?</h3>
-            <p className="text-xs text-slate-600 mb-3">
+          <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+            <h3 className="text-sm font-semibold text-primary-900 mb-2">Need More Help?</h3>
+            <p className="text-xs text-primary-600 mb-3">
               Check out our comprehensive documentation and community resources
             </p>
             <div className="flex space-x-2">
@@ -114,7 +114,7 @@ const HelpMenu = ({
                 href="https://docs.logiccanvas.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                className="text-xs px-3 py-1.5 bg-white border border-green-300 rounded-lg hover:bg-green-50 transition-colors"
               >
                 📚 Documentation
               </a>
@@ -122,13 +122,13 @@ const HelpMenu = ({
                 href="https://community.logiccanvas.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                className="text-xs px-3 py-1.5 bg-white border border-green-300 rounded-lg hover:bg-green-50 transition-colors"
               >
                 💬 Community
               </a>
               <a
                 href="mailto:support@logiccanvas.com"
-                className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                className="text-xs px-3 py-1.5 bg-white border border-green-300 rounded-lg hover:bg-green-50 transition-colors"
               >
                 ✉️ Support
               </a>

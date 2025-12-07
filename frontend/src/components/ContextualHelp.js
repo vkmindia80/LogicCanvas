@@ -165,14 +165,14 @@ export const ContextualTooltip = ({ content, type = 'info', children, placement 
           placement === 'left' ? 'right-full mr-2' :
           'left-full ml-2'
         } left-1/2 transform -translate-x-1/2 w-64`}>
-          <div className="bg-slate-900 text-white text-xs rounded-lg p-3 shadow-xl">
+          <div className="bg-primary-900 text-white text-xs rounded-lg p-3 shadow-xl">
             <div className="relative">
               {content}
               <div className={`absolute ${
                 placement === 'top' ? 'top-full left-1/2 transform -translate-x-1/2' :
                 placement === 'bottom' ? 'bottom-full left-1/2 transform -translate-x-1/2 rotate-180' :
                 ''
-              } w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900`}></div>
+              } w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-primary-900`}></div>
             </div>
           </div>
         </div>
@@ -229,11 +229,11 @@ export const InlineHelp = ({ topic, compact = false }) => {
                 <div>
                   <div className="flex items-center space-x-1.5 mb-1.5">
                     <Lightbulb className="w-3.5 h-3.5 text-amber-600" />
-                    <span className="text-xs font-semibold text-slate-800">Tips</span>
+                    <span className="text-xs font-semibold text-primary-800">Tips</span>
                   </div>
                   <ul className="space-y-1 ml-5">
                     {helpData.tips.map((tip, idx) => (
-                      <li key={idx} className="text-xs text-slate-700 list-disc">
+                      <li key={idx} className="text-xs text-primary-700 list-disc">
                         {tip}
                       </li>
                     ))}
@@ -245,7 +245,7 @@ export const InlineHelp = ({ topic, compact = false }) => {
                 <div>
                   <div className="flex items-center space-x-1.5 mb-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
-                    <span className="text-xs font-semibold text-slate-800">Examples</span>
+                    <span className="text-xs font-semibold text-primary-800">Examples</span>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {helpData.examples.map((example, idx) => (
@@ -284,11 +284,11 @@ export const HelpPanel = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden flex">
         {/* Sidebar */}
-        <div className="w-64 bg-slate-50 border-r border-slate-200 p-4 overflow-y-auto">
-          <h3 className="text-sm font-bold text-slate-900 mb-4 px-2">Help Topics</h3>
+        <div className="w-64 bg-green-50 border-r border-green-200 p-4 overflow-y-auto">
+          <h3 className="text-sm font-bold text-primary-900 mb-4 px-2">Help Topics</h3>
           {Object.entries(categories).map(([category, topics]) => (
             <div key={category} className="mb-4">
-              <h4 className="text-xs font-semibold text-slate-600 mb-2 px-2">
+              <h4 className="text-xs font-semibold text-primary-600 mb-2 px-2">
                 {category}
               </h4>
               <div className="space-y-1">
@@ -299,7 +299,7 @@ export const HelpPanel = ({ isOpen, onClose }) => {
                     className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                       selectedTopic === topic
                         ? 'bg-green-500 text-white'
-                        : 'text-slate-700 hover:bg-slate-100'
+                        : 'text-primary-700 hover:bg-green-100'
                     }`}
                   >
                     {HELP_CONTENT[topic]?.title || topic}
@@ -312,14 +312,14 @@ export const HelpPanel = ({ isOpen, onClose }) => {
 
         {/* Content */}
         <div className="flex-1 flex flex-col">
-          <div className="flex items-center justify-between p-6 border-b border-slate-200">
+          <div className="flex items-center justify-between p-6 border-b border-green-200">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">{helpData?.title}</h2>
-              <p className="text-sm text-slate-600 mt-1">Need help? We've got you covered.</p>
+              <h2 className="text-xl font-bold text-primary-900">{helpData?.title}</h2>
+              <p className="text-sm text-primary-600 mt-1">Need help? We've got you covered.</p>
             </div>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg p-2 transition-colors"
+              className="text-green-400 hover:text-primary-600 hover:bg-green-100 rounded-lg p-2 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -335,13 +335,13 @@ export const HelpPanel = ({ isOpen, onClose }) => {
                 <div className="mb-6">
                   <div className="flex items-center space-x-2 mb-3">
                     <Lightbulb className="w-5 h-5 text-amber-500" />
-                    <h3 className="text-lg font-bold text-slate-900">Tips & Best Practices</h3>
+                    <h3 className="text-lg font-bold text-primary-900">Tips & Best Practices</h3>
                   </div>
                   <ul className="space-y-2">
                     {helpData.tips.map((tip, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
                         <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-slate-700">{tip}</span>
+                        <span className="text-sm text-primary-700">{tip}</span>
                       </li>
                     ))}
                   </ul>
@@ -352,15 +352,15 @@ export const HelpPanel = ({ isOpen, onClose }) => {
                 <div>
                   <div className="flex items-center space-x-2 mb-3">
                     <Info className="w-5 h-5 text-green-500" />
-                    <h3 className="text-lg font-bold text-slate-900">Common Examples</h3>
+                    <h3 className="text-lg font-bold text-primary-900">Common Examples</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {helpData.examples.map((example, idx) => (
                       <div
                         key={idx}
-                        className="bg-slate-50 border border-slate-200 rounded-lg p-3"
+                        className="bg-green-50 border border-green-200 rounded-lg p-3"
                       >
-                        <code className="text-xs text-slate-800">{example}</code>
+                        <code className="text-xs text-primary-800">{example}</code>
                       </div>
                     ))}
                   </div>

@@ -107,7 +107,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
         </div>
 
         {/* Category Filter */}
-        <div className="border-b border-gray-200 p-4 bg-gray-50">
+        <div className="border-b border-green-200 p-4 bg-green-50">
           <div className="flex items-center space-x-2 overflow-x-auto">
             {categories.map(category => {
               const count = category.value === 'all' 
@@ -121,7 +121,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                   className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
                     selectedCategory === category.value
                       ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                      : 'bg-white text-primary-700 border border-green-300 hover:bg-green-100'
                   }`}
                 >
                   {category.label} ({count})
@@ -139,16 +139,16 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
             </div>
           ) : filteredComponents.length === 0 ? (
             <div className="text-center py-12">
-              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg font-medium">No components found</p>
-              <p className="text-gray-500 text-sm mt-2">Try adjusting your search or create a new component</p>
+              <Package className="w-16 h-16 text-green-400 mx-auto mb-4" />
+              <p className="text-primary-600 text-lg font-medium">No components found</p>
+              <p className="text-green-500 text-sm mt-2">Try adjusting your search or create a new component</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredComponents.map(component => (
                 <div
                   key={component.id}
-                  className="border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white"
+                  className="border border-green-200 rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden bg-white"
                   data-testid={`component-${component.id}`}
                 >
                   {/* Component Header */}
@@ -168,24 +168,24 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
 
                   {/* Component Body */}
                   <div className="p-4">
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{component.description || 'No description'}</p>
+                    <p className="text-sm text-primary-600 mb-4 line-clamp-2">{component.description || 'No description'}</p>
 
                     {/* Stats */}
                     <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                      <div className="text-center p-2 bg-gray-50 rounded">
-                        <Users className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-                        <div className="font-semibold text-gray-900">{component.usage_count || 0}</div>
-                        <div className="text-gray-500">Uses</div>
+                      <div className="text-center p-2 bg-green-50 rounded">
+                        <Users className="w-4 h-4 mx-auto mb-1 text-primary-600" />
+                        <div className="font-semibold text-primary-900">{component.usage_count || 0}</div>
+                        <div className="text-green-500">Uses</div>
                       </div>
-                      <div className="text-center p-2 bg-gray-50 rounded">
-                        <Package className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-                        <div className="font-semibold text-gray-900">{component.nodes?.length || 0}</div>
-                        <div className="text-gray-500">Nodes</div>
+                      <div className="text-center p-2 bg-green-50 rounded">
+                        <Package className="w-4 h-4 mx-auto mb-1 text-primary-600" />
+                        <div className="font-semibold text-primary-900">{component.nodes?.length || 0}</div>
+                        <div className="text-green-500">Nodes</div>
                       </div>
-                      <div className="text-center p-2 bg-gray-50 rounded">
-                        <Clock className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-                        <div className="font-semibold text-gray-900">{new Date(component.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
-                        <div className="text-gray-500">Created</div>
+                      <div className="text-center p-2 bg-green-50 rounded">
+                        <Clock className="w-4 h-4 mx-auto mb-1 text-primary-600" />
+                        <div className="font-semibold text-primary-900">{new Date(component.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                        <div className="text-green-500">Created</div>
                       </div>
                     </div>
 
@@ -194,13 +194,13 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                       <div className="mb-4">
                         <div className="flex flex-wrap gap-1">
                           {component.tags.slice(0, 3).map((tag, idx) => (
-                            <span key={idx} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded flex items-center gap-1">
+                            <span key={idx} className="text-xs bg-green-100 text-primary-700 px-2 py-1 rounded flex items-center gap-1">
                               <Tag className="w-3 h-3" />
                               {tag}
                             </span>
                           ))}
                           {component.tags.length > 3 && (
-                            <span className="text-xs text-gray-500">+{component.tags.length - 3} more</span>
+                            <span className="text-xs text-green-500">+{component.tags.length - 3} more</span>
                           )}
                         </div>
                       </div>
@@ -210,7 +210,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setSelectedComponent(component)}
-                        className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                        className="flex-1 px-3 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
                         data-testid={`view-${component.id}`}
                       >
                         <BookOpen className="w-4 h-4 inline mr-1" />
@@ -229,7 +229,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                       </button>
                       <button
                         onClick={() => handleDeleteComponent(component.id)}
-                        className="px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                        className="px-3 py-2 border border-gold-300 text-gold-600 rounded-lg hover:bg-gold-50 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -260,68 +260,68 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
 
               <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
-                  <p className="text-gray-700">{selectedComponent.description || 'No description provided'}</p>
+                  <h4 className="font-semibold text-primary-900 mb-2">Description</h4>
+                  <p className="text-primary-700">{selectedComponent.description || 'No description provided'}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-6 mb-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Input Variables</h4>
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-primary-900 mb-3">Input Variables</h4>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                       {selectedComponent.input_variables?.length > 0 ? (
                         <ul className="space-y-2">
                           {selectedComponent.input_variables.map((variable, idx) => (
                             <li key={idx} className="text-sm">
-                              <span className="font-medium text-gray-900">{variable.name}</span>
-                              <span className="text-gray-500"> ({variable.type})</span>
-                              {variable.required && <span className="text-red-500 ml-1">*</span>}
+                              <span className="font-medium text-primary-900">{variable.name}</span>
+                              <span className="text-green-500"> ({variable.type})</span>
+                              {variable.required && <span className="text-gold-500 ml-1">*</span>}
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-gray-500">No input variables</p>
+                        <p className="text-sm text-green-500">No input variables</p>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Output Variables</h4>
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-primary-900 mb-3">Output Variables</h4>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                       {selectedComponent.output_variables?.length > 0 ? (
                         <ul className="space-y-2">
                           {selectedComponent.output_variables.map((variable, idx) => (
                             <li key={idx} className="text-sm">
-                              <span className="font-medium text-gray-900">{variable.name}</span>
-                              <span className="text-gray-500"> ({variable.type})</span>
+                              <span className="font-medium text-primary-900">{variable.name}</span>
+                              <span className="text-green-500"> ({variable.type})</span>
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-gray-500">No output variables</p>
+                        <p className="text-sm text-green-500">No output variables</p>
                       )}
                     </div>
                   </div>
                 </div>
 
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Component Structure</h4>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-primary-900 mb-3">Component Structure</h4>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-600">Nodes:</span>
-                        <span className="ml-2 font-medium text-gray-900">{selectedComponent.nodes?.length || 0}</span>
+                        <span className="text-primary-600">Nodes:</span>
+                        <span className="ml-2 font-medium text-primary-900">{selectedComponent.nodes?.length || 0}</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">Connections:</span>
-                        <span className="ml-2 font-medium text-gray-900">{selectedComponent.edges?.length || 0}</span>
+                        <span className="text-primary-600">Connections:</span>
+                        <span className="ml-2 font-medium text-primary-900">{selectedComponent.edges?.length || 0}</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">Category:</span>
-                        <span className="ml-2 font-medium text-gray-900">{selectedComponent.category}</span>
+                        <span className="text-primary-600">Category:</span>
+                        <span className="ml-2 font-medium text-primary-900">{selectedComponent.category}</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">Usage Count:</span>
-                        <span className="ml-2 font-medium text-gray-900">{selectedComponent.usage_count || 0}</span>
+                        <span className="text-primary-600">Usage Count:</span>
+                        <span className="ml-2 font-medium text-primary-900">{selectedComponent.usage_count || 0}</span>
                       </div>
                     </div>
                   </div>
@@ -330,7 +330,7 @@ const WorkflowComponentsLibrary = ({ isOpen, onClose, onUseComponent }) => {
                 <div className="flex justify-end space-x-3 pt-4 border-t">
                   <button
                     onClick={() => setSelectedComponent(null)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    className="px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
                   >
                     Close
                   </button>

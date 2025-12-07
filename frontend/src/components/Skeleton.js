@@ -17,7 +17,7 @@ const Skeleton = ({
   width,
   height
 }) => {
-  const baseClasses = 'animate-pulse bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 bg-[length:200%_100%] rounded';
+  const baseClasses = 'animate-pulse bg-gradient-to-r from-green-200 via-green-100 to-green-200 bg-[length:200%_100%] rounded';
   
   const variants = {
     text: 'h-4 w-full',
@@ -64,7 +64,7 @@ const Skeleton = ({
  */
 export const SkeletonCard = ({ className = '' }) => {
   return (
-    <div className={`rounded-2xl border-2 border-slate-200 bg-white p-6 ${className}`}>
+    <div className={`rounded-2xl border-2 border-green-200 bg-white p-6 ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <Skeleton variant="title" width="60%" />
         <Skeleton variant="circle" width="60px" height="24px" />
@@ -89,7 +89,7 @@ export const SkeletonList = ({ count = 5 }) => {
   return (
     <div className="space-y-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex items-center space-x-4 p-4 bg-white rounded-lg border border-slate-200">
+        <div key={i} className="flex items-center space-x-4 p-4 bg-white rounded-lg border border-green-200">
           <Skeleton variant="avatar" />
           <div className="flex-1">
             <Skeleton width="40%" height="20px" className="mb-2" />

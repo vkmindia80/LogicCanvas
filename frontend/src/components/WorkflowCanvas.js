@@ -841,9 +841,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   }, [getZoom]);
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="flex h-screen bg-green-50">
       {/* Left Sidebar - Node Palette */}
-      <div className="w-72 bg-white border-r-2 border-slate-300 shadow-lg overflow-hidden">
+      <div className="w-72 bg-white border-r-2 border-green-300 shadow-lg overflow-hidden">
         <NodePaletteSalesforce 
           onAddNode={addNode} 
           lastNodeType={nodes[nodes.length - 1]?.type}
@@ -853,14 +853,14 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       {/* Main Canvas Area */}
       <div className="flex-1 flex flex-col">
         {/* Top Toolbar */}
-        <div className="bg-gradient-to-r from-slate-50 to-white border-b-2 border-slate-200 px-6 py-3 shadow-md">
+        <div className="bg-gradient-to-r from-green-50 to-white border-b-2 border-green-200 px-6 py-3 shadow-md">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-4 flex-1">
               <input
                 type="text"
                 value={workflowName}
                 onChange={(e) => setWorkflowName(e.target.value)}
-                className="text-xl font-bold text-slate-900 bg-white border-2 border-slate-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-lg px-3 py-2 transition-all"
+                className="text-xl font-bold text-primary-900 bg-white border-2 border-green-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-lg px-3 py-2 transition-all"
                 placeholder="Workflow Name"
                 data-testid="workflow-name-input"
               />
@@ -874,7 +874,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               </div>
             </div>
             <span
-              className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm font-medium"
+              className="px-3 py-1 bg-green-100 text-primary-600 rounded-lg text-sm font-medium"
               data-testid="workflow-save-status"
             >
               {isSaving ? '💾 Saving…' : formatLastSaved()}
@@ -885,55 +885,55 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             {/* Left: Undo/Redo + Zoom + Grid + Template & AI Builder */}
             <div className="flex items-center space-x-2">
               {/* Undo/Redo */}
-              <div className="flex items-center space-x-1 border-r border-slate-300 pr-2 mr-1">
+              <div className="flex items-center space-x-1 border-r border-green-300 pr-2 mr-1">
                 <button
                   onClick={handleUndo}
                   disabled={historyIndex <= 0}
-                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-2 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Undo (Ctrl+Z)"
                   data-testid="undo-btn"
                 >
-                  <Undo2 className="w-4 h-4 text-slate-700" />
+                  <Undo2 className="w-4 h-4 text-primary-700" />
                 </button>
                 <button
                   onClick={handleRedo}
                   disabled={historyIndex >= history.length - 1}
-                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-2 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Redo (Ctrl+Y)"
                   data-testid="redo-btn"
                 >
-                  <Redo2 className="w-4 h-4 text-slate-700" />
+                  <Redo2 className="w-4 h-4 text-primary-700" />
                 </button>
               </div>
 
               {/* Zoom Controls */}
-              <div className="flex items-center space-x-1 border-r border-slate-300 pr-2 mr-1">
+              <div className="flex items-center space-x-1 border-r border-green-300 pr-2 mr-1">
                 <button
                   onClick={handleZoomOut}
-                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-green-100 rounded-lg transition-colors"
                   title="Zoom Out"
                   data-testid="zoom-out-btn"
                 >
-                  <ZoomOut className="w-4 h-4 text-slate-700" />
+                  <ZoomOut className="w-4 h-4 text-primary-700" />
                 </button>
                 <div className="zoom-display min-w-[60px] text-center" title="Current zoom level">
                   {zoomLevel}%
                 </div>
                 <button
                   onClick={handleZoomIn}
-                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-green-100 rounded-lg transition-colors"
                   title="Zoom In"
                   data-testid="zoom-in-btn"
                 >
-                  <ZoomIn className="w-4 h-4 text-slate-700" />
+                  <ZoomIn className="w-4 h-4 text-primary-700" />
                 </button>
                 <button
                   onClick={handleFitView}
-                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-green-100 rounded-lg transition-colors"
                   title="Fit to View"
                   data-testid="fit-view-btn"
                 >
-                  <Maximize2 className="w-4 h-4 text-slate-700" />
+                  <Maximize2 className="w-4 h-4 text-primary-700" />
                 </button>
               </div>
 
@@ -943,7 +943,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 className={`p-2 rounded-lg transition-all ${
                   snapToGrid 
                     ? 'bg-primary-100 text-primary-700 hover:bg-primary-200' 
-                    : 'hover:bg-slate-100 text-slate-500'
+                    : 'hover:bg-green-100 text-green-500'
                 }`}
                 title={snapToGrid ? 'Grid Snap: ON' : 'Grid Snap: OFF'}
                 data-testid="grid-snap-toggle"
@@ -954,18 +954,18 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               {/* Export Controls */}
               <div className="relative group">
                 <button
-                  className="flex items-center space-x-1 p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="flex items-center space-x-1 p-2 hover:bg-green-100 rounded-lg transition-colors"
                   title="Export Workflow"
                   data-testid="export-menu-btn"
                   disabled={isExporting}
                 >
-                  <Download className="w-4 h-4 text-slate-700" />
+                  <Download className="w-4 h-4 text-primary-700" />
                 </button>
-                <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white rounded-lg shadow-xl border border-slate-200 py-1 min-w-[140px] z-50 animate-slide-in">
+                <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white rounded-lg shadow-xl border border-green-200 py-1 min-w-[140px] z-50 animate-slide-in">
                   <button
                     onClick={exportToPNG}
                     disabled={isExporting}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-green-50 transition-colors disabled:opacity-50"
                     data-testid="export-png-btn"
                   >
                     Export as PNG
@@ -973,7 +973,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                   <button
                     onClick={exportToPDF}
                     disabled={isExporting}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-green-50 transition-colors disabled:opacity-50"
                     data-testid="export-pdf-btn"
                   >
                     Export as PDF
@@ -981,7 +981,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
               </div>
 
-              <div className="border-r border-slate-300 pr-2 mr-1 h-8" />
+              <div className="border-r border-green-300 pr-2 mr-1 h-8" />
 
               {showTemplates && (
                 <button
@@ -1011,7 +1011,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setShowCapabilitiesPanel(true)}
-                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-primary-300"
+                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg border border-green-200 bg-white text-xs font-medium text-primary-700 hover:bg-green-50 hover:border-primary-300"
                 data-testid="designer-capabilities-btn"
                 title="View all designer capabilities"
               >
@@ -1168,7 +1168,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Right Sidebar - Node Editor */}
       {selectedNode && !showExecutionPanel && !showTriggerConfig && (
-        <div className="w-80 bg-slate-100 border-l border-slate-200 p-4 overflow-y-auto">
+        <div className="w-80 bg-green-100 border-l border-green-200 p-4 overflow-y-auto">
           <NodeEditor
             node={selectedNode}
             onUpdate={updateNode}
@@ -1190,12 +1190,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Trigger Config Panel */}
       {showTriggerConfig && workflow?.id && (
-        <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-gray-200 flex flex-col z-50 overflow-y-auto p-6">
+        <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-green-200 flex flex-col z-50 overflow-y-auto p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-800">Workflow Triggers</h2>
+            <h2 className="text-xl font-bold text-primary-800">Workflow Triggers</h2>
             <button
               onClick={() => setShowTriggerConfig(false)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-green-500 hover:text-primary-700"
               data-testid="close-trigger-panel"
             >
               ✕
@@ -1207,11 +1207,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Validation Results Panel - Enhanced */}
       {validationRan && validationResults && (
-        <div className="fixed bottom-4 right-4 w-[480px] bg-white shadow-2xl border-2 border-slate-300 rounded-xl z-50 max-h-[500px] overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between p-4 border-b-2 border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+        <div className="fixed bottom-4 right-4 w-[480px] bg-white shadow-2xl border-2 border-green-300 rounded-xl z-50 max-h-[500px] overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between p-4 border-b-2 border-green-200 bg-gradient-to-r from-green-50 to-white">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">Validation Results</h3>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <h3 className="text-lg font-bold text-primary-900">Validation Results</h3>
+              <p className="text-xs text-primary-600 mt-0.5">
                 {validationResults.length === 0 
                   ? 'All checks passed!' 
                   : `Found ${validationResults.length} issue${validationResults.length > 1 ? 's' : ''}`
@@ -1220,7 +1220,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             </div>
             <button
               onClick={handleValidationPanelClose}
-              className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg p-2 transition-colors"
+              className="text-green-400 hover:text-primary-600 hover:bg-green-100 rounded-lg p-2 transition-colors"
               data-testid="close-validation-panel"
             >
               ✕
@@ -1233,7 +1233,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <p className="text-green-800 font-semibold text-lg">Workflow is valid!</p>
-                <p className="text-slate-600 text-sm mt-1">No issues found. Ready to execute.</p>
+                <p className="text-primary-600 text-sm mt-1">No issues found. Ready to execute.</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -1242,26 +1242,26 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                     key={`${issue.message}-${issue.nodeId || 'global'}-${index}`}
                     className={`rounded-xl border-2 overflow-hidden ${
                       issue.type === 'error'
-                        ? 'bg-red-50 border-red-200'
+                        ? 'bg-gold-50 border-gold-200'
                         : 'bg-amber-50 border-amber-200'
                     }`}
                   >
                     <div className="p-4">
                       <div className="flex items-start space-x-3">
                         <div className={`mt-1 ${
-                          issue.type === 'error' ? 'text-red-600' : 'text-amber-600'
+                          issue.type === 'error' ? 'text-gold-600' : 'text-amber-600'
                         }`}>
                           <AlertCircle className="w-5 h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm font-semibold ${
-                            issue.type === 'error' ? 'text-red-900' : 'text-amber-900'
+                            issue.type === 'error' ? 'text-gold-900' : 'text-amber-900'
                           }`}>
                             {issue.message}
                           </p>
                           {issue.suggestion && (
                             <p className={`text-xs mt-1 ${
-                              issue.type === 'error' ? 'text-red-700' : 'text-amber-700'
+                              issue.type === 'error' ? 'text-gold-700' : 'text-amber-700'
                             }`}>
                               💡 {issue.suggestion}
                             </p>
@@ -1280,7 +1280,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                                 }}
                                 className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
                                   issue.type === 'error'
-                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    ? 'bg-gold-600 text-white hover:bg-gold-700'
                                     : 'bg-amber-600 text-white hover:bg-amber-700'
                                 }`}
                                 data-testid="validation-go-to-node-btn"
@@ -1349,10 +1349,10 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       {showCapabilitiesPanel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col" data-testid="designer-capabilities-panel">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-900 to-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-green-200 bg-gradient-to-r from-primary-900 to-primary-800">
               <div>
                 <h2 className="text-xl font-bold text-white">Workflow Designer Capabilities</h2>
-                <p className="text-xs text-slate-300">Everything available in this workflow designer</p>
+                <p className="text-xs text-green-300">Everything available in this workflow designer</p>
               </div>
               <button
                 onClick={() => setShowCapabilitiesPanel(false)}
@@ -1363,12 +1363,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+            <div className="flex-1 overflow-y-auto p-6 bg-green-50">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                 {/* Core Components */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Core Components</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Core Components</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Canvas</span> – build & visualize workflows using the drag-and-drop editor.</li>
                     <li><span className="font-medium">Nodes</span> – represent tasks, forms, approvals, actions, and gateways.</li>
                     <li><span className="font-medium">Connectors</span> – define flow and logic paths between nodes.</li>
@@ -1376,9 +1376,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
 
                 {/* Logic & Data */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Logic & Data</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Logic & Data</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Logic Engine</span> – decision nodes with conditional routing via expressions.</li>
                     <li><span className="font-medium">Branching & Parallelism</span> – decision, parallel and merge gateways.</li>
                     <li><span className="font-medium">Data Mapping</span> – configure node inputs/outputs and variables in node editor.</li>
@@ -1387,9 +1387,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
 
                 {/* Integrations & Triggers */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Integrations & Triggers</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Integrations & Triggers</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Integrations</span> – Action nodes for HTTP calls, webhooks and scripts.</li>
                     <li><span className="font-medium">Connector Library</span> – categorized node palette for integrations & flow control.</li>
                     <li><span className="font-medium">Triggers</span> – manual, scheduled & webhook triggers in Trigger Config panel.</li>
@@ -1397,9 +1397,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
 
                 {/* Execution & Debugging */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Execution & Debugging</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Execution & Debugging</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Simulation</span> – run workflows from the Execution panel.</li>
                     <li><span className="font-medium">Debugger</span> – live node execution states and per-node history.</li>
                     <li><span className="font-medium">Run History</span> – workflow instances list with statuses and timelines.</li>
@@ -1407,9 +1407,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
 
                 {/* Management & Collaboration */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Management & Collaboration</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Management & Collaboration</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Version Control</span> – version history, snapshots & rollback per workflow.</li>
                     <li><span className="font-medium">Publishing</span> – draft, published, paused and archived workflow statuses.</li>
                     <li><span className="font-medium">Permissions</span> – role-based access (admin, builder, approver, viewer).</li>
@@ -1418,9 +1418,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
 
                 {/* Monitoring & Audit */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Monitoring & Audit</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Monitoring & Audit</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Analytics</span> – dashboards for throughput, SLAs, success rates and nodes.</li>
                     <li><span className="font-medium">KPIs & Dashboards</span> – workflow and user performance charts.</li>
                     <li><span className="font-medium">Audit Logs</span> – full activity history across workflows, tasks and approvals.</li>
@@ -1428,9 +1428,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 </div>
 
                 {/* Templates & AI */}
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Templates & AI Tools</h3>
-                  <ul className="space-y-1 text-slate-700 text-xs">
+                <div className="bg-white rounded-xl border border-green-200 p-4">
+                  <h3 className="font-semibold text-primary-900 mb-2">Templates & AI Tools</h3>
+                  <ul className="space-y-1 text-primary-700 text-xs">
                     <li><span className="font-medium">Templates</span> – reusable workflow templates from the Template Library.</li>
                     <li><span className="font-medium">AI Tools</span> – Quick Start Wizard / AI Builder to auto-generate workflows.</li>
                     <li><span className="font-medium">Subflows</span> – subprocess node type for composing larger orchestrations.</li>

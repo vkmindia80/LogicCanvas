@@ -105,7 +105,7 @@ const AnalyticsDashboard = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
         <div className="bg-white rounded-lg p-8 shadow-xl">
           <div className="flex items-center space-x-3">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-            <p className="text-gray-700">Loading analytics...</p>
+            <p className="text-primary-700">Loading analytics...</p>
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@ const AnalyticsDashboard = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = f
   }
 
   return (
-    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-gray-50 overflow-auto z-50`}>
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-green-50 overflow-auto z-50`}>
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-600 text-white sticky top-0 z-10 shadow-xl">
         <div className="px-6 py-5">
@@ -307,24 +307,24 @@ const OverviewTab = ({ overview, throughput, successRate }) => {
       </div>
 
       {/* Recent Activity Summary */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity (Last 7 Days)</h3>
+      <div className="bg-white rounded-lg border border-green-200 p-6">
+        <h3 className="text-lg font-semibold text-primary-900 mb-4">Recent Activity (Last 7 Days)</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-green-50 rounded-lg">
             <div className="text-3xl font-bold text-green-600">{overview.recent_activity.last_7_days}</div>
-            <div className="text-sm text-gray-600 mt-1">Workflow Executions</div>
+            <div className="text-sm text-primary-600 mt-1">Workflow Executions</div>
           </div>
           <div className="text-center p-4 bg-green-50 rounded-lg">
             <div className="text-3xl font-bold text-green-600">{overview.workflows.completed}</div>
-            <div className="text-sm text-gray-600 mt-1">Completed</div>
+            <div className="text-sm text-primary-600 mt-1">Completed</div>
           </div>
-          <div className="text-center p-4 bg-red-50 rounded-lg">
-            <div className="text-3xl font-bold text-red-600">{overview.workflows.failed}</div>
-            <div className="text-sm text-gray-600 mt-1">Failed</div>
+          <div className="text-center p-4 bg-gold-50 rounded-lg">
+            <div className="text-3xl font-bold text-gold-600">{overview.workflows.failed}</div>
+            <div className="text-sm text-primary-600 mt-1">Failed</div>
           </div>
           <div className="text-center p-4 bg-gold-50 rounded-lg">
             <div className="text-3xl font-bold text-gold-600">{overview.approvals.pending}</div>
-            <div className="text-sm text-gray-600 mt-1">Pending Approvals</div>
+            <div className="text-sm text-primary-600 mt-1">Pending Approvals</div>
           </div>
         </div>
       </div>
@@ -374,29 +374,29 @@ const WorkflowsTab = ({ executionTime, popularity, throughput, successRate }) =>
 
       {/* Execution Time Details Table */}
       {executionTime.length > 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Workflow Performance Details</h3>
+        <div className="bg-white rounded-lg border border-green-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-green-200">
+            <h3 className="text-lg font-semibold text-primary-900">Workflow Performance Details</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-green-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Workflow</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Executions</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avg Time</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Min Time</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Max Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Workflow</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Executions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Avg Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Min Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Max Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-green-200">
                 {executionTime.slice(0, 10).map((wf, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-900">{wf.workflow_name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{wf.executions}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{wf.avg_execution_time}s</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{wf.min_time}s</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{wf.max_time}s</td>
+                  <tr key={idx} className="hover:bg-green-50">
+                    <td className="px-6 py-4 text-sm text-primary-900">{wf.workflow_name}</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{wf.executions}</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{wf.avg_execution_time}s</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{wf.min_time}s</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{wf.max_time}s</td>
                   </tr>
                 ))}
               </tbody>
@@ -437,8 +437,8 @@ const SLATab = ({ slaCompliance, slaTrends }) => {
           value={slaCompliance.overdue}
           icon={AlertTriangle}
           color="red"
-          bgColor="bg-red-100"
-          textColor="text-red-600"
+          bgColor="bg-gold-100"
+          textColor="text-gold-600"
         />
         <MetricCard
           label="At Risk (24h)"
@@ -486,26 +486,26 @@ const SLATab = ({ slaCompliance, slaTrends }) => {
           </ChartCard>
 
           {/* SLA Summary */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <Target className="w-5 h-5 mr-2 text-gray-600" />
+          <div className="bg-white rounded-lg border border-green-200 p-6">
+            <h3 className="text-lg font-semibold text-primary-900 mb-4 flex items-center">
+              <Target className="w-5 h-5 mr-2 text-primary-600" />
               SLA Summary
             </h3>
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <span className="text-gray-700">Total Tasks with SLA</span>
-                <span className="font-semibold text-gray-900">{slaCompliance.tasks_with_sla}</span>
+              <div className="flex justify-between items-center p-3 bg-green-50 rounded">
+                <span className="text-primary-700">Total Tasks with SLA</span>
+                <span className="font-semibold text-primary-900">{slaCompliance.tasks_with_sla}</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                <span className="text-gray-700">Completed On Time</span>
+                <span className="text-primary-700">Completed On Time</span>
                 <span className="font-semibold text-green-600">{slaCompliance.completed_on_time}</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                <span className="text-gray-700">Completed Late</span>
-                <span className="font-semibold text-red-600">{slaCompliance.completed_late}</span>
+              <div className="flex justify-between items-center p-3 bg-gold-50 rounded">
+                <span className="text-primary-700">Completed Late</span>
+                <span className="font-semibold text-gold-600">{slaCompliance.completed_late}</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-gold-50 rounded">
-                <span className="text-gray-700">Currently At Risk</span>
+                <span className="text-primary-700">Currently At Risk</span>
                 <span className="font-semibold text-gold-600">{slaCompliance.at_risk}</span>
               </div>
             </div>
@@ -524,8 +524,8 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
       {bottlenecks && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Slowest Nodes */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <div className="bg-white rounded-lg border border-green-200 p-6">
+            <h3 className="text-lg font-semibold text-primary-900 mb-4 flex items-center">
               <Clock className="w-5 h-5 mr-2 text-gold-600" />
               Slowest Nodes (Bottlenecks)
             </h3>
@@ -534,12 +534,12 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
                 {bottlenecks.slowest_nodes.map((node, idx) => (
                   <div key={idx} className="flex items-center justify-between p-3 bg-gold-50 rounded-lg">
                     <div>
-                      <div className="font-medium text-gray-900">{node.node_type}</div>
-                      <div className="text-sm text-gray-600">ID: {node.node_id.substring(0, 8)}...</div>
+                      <div className="font-medium text-primary-900">{node.node_type}</div>
+                      <div className="text-sm text-primary-600">ID: {node.node_id.substring(0, 8)}...</div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-gold-600">{node.avg_execution_time}s</div>
-                      <div className="text-xs text-gray-500">{node.executions} executions</div>
+                      <div className="text-xs text-green-500">{node.executions} executions</div>
                     </div>
                   </div>
                 ))}
@@ -550,22 +550,22 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
           </div>
 
           {/* Highest Failure Nodes */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <AlertTriangle className="w-5 h-5 mr-2 text-red-600" />
+          <div className="bg-white rounded-lg border border-green-200 p-6">
+            <h3 className="text-lg font-semibold text-primary-900 mb-4 flex items-center">
+              <AlertTriangle className="w-5 h-5 mr-2 text-gold-600" />
               Highest Failure Rate Nodes
             </h3>
             {bottlenecks.highest_failure_nodes.length > 0 ? (
               <div className="space-y-3">
                 {bottlenecks.highest_failure_nodes.map((node, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <div key={idx} className="flex items-center justify-between p-3 bg-gold-50 rounded-lg">
                     <div>
-                      <div className="font-medium text-gray-900">{node.node_type}</div>
-                      <div className="text-sm text-gray-600">ID: {node.node_id.substring(0, 8)}...</div>
+                      <div className="font-medium text-primary-900">{node.node_type}</div>
+                      <div className="text-sm text-primary-600">ID: {node.node_id.substring(0, 8)}...</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-red-600">{node.failure_rate}%</div>
-                      <div className="text-xs text-gray-500">{node.failures}/{node.executions} failed</div>
+                      <div className="font-bold text-gold-600">{node.failure_rate}%</div>
+                      <div className="text-xs text-green-500">{node.failures}/{node.executions} failed</div>
                     </div>
                   </div>
                 ))}
@@ -579,39 +579,39 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
 
       {/* Node Performance Table */}
       {nodePerformance.length > 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Node Performance Details</h3>
+        <div className="bg-white rounded-lg border border-green-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-green-200">
+            <h3 className="text-lg font-semibold text-primary-900">Node Performance Details</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-green-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Node ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Executions</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avg Time</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Success</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Failures</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Failure Rate</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Node ID</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Executions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Avg Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Success</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Failures</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Failure Rate</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-green-200">
                 {nodePerformance.map((node, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-600">{node.node_id.substring(0, 12)}...</td>
+                  <tr key={idx} className="hover:bg-green-50">
+                    <td className="px-6 py-4 text-sm text-primary-600">{node.node_id.substring(0, 12)}...</td>
                     <td className="px-6 py-4 text-sm">
                       <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
                         {node.node_type}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{node.executions}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{node.avg_execution_time}s</td>
+                    <td className="px-6 py-4 text-sm text-primary-900">{node.executions}</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{node.avg_execution_time}s</td>
                     <td className="px-6 py-4 text-sm text-green-600">{node.successes}</td>
-                    <td className="px-6 py-4 text-sm text-red-600">{node.failures}</td>
+                    <td className="px-6 py-4 text-sm text-gold-600">{node.failures}</td>
                     <td className="px-6 py-4 text-sm">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        node.failure_rate > 20 ? 'bg-red-100 text-red-800' :
+                        node.failure_rate > 20 ? 'bg-gold-100 text-gold-800' :
                         node.failure_rate > 10 ? 'bg-gold-100 text-gold-800' :
                         'bg-green-100 text-green-800'
                       }`}>
@@ -627,7 +627,7 @@ const NodesTab = ({ nodePerformance, bottlenecks }) => {
       )}
 
       {nodePerformance.length === 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-12">
+        <div className="bg-white rounded-lg border border-green-200 p-12">
           <EmptyState message="No node performance data available. Execute some workflows to see analytics." />
         </div>
       )}
@@ -686,32 +686,32 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
         </ChartCard>
 
         {/* Leaderboard */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <div className="bg-white rounded-lg border border-green-200 p-6">
+          <h3 className="text-lg font-semibold text-primary-900 mb-4 flex items-center">
             <Award className="w-5 h-5 mr-2 text-gold-600" />
             Top Performers
           </h3>
           {userProductivity.length > 0 ? (
             <div className="space-y-3">
               {userProductivity.slice(0, 5).map((user, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={idx} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
                       idx === 0 ? 'bg-gold-500' :
-                      idx === 1 ? 'bg-gray-400' :
+                      idx === 1 ? 'bg-green-400' :
                       idx === 2 ? 'bg-gold-500' :
                       'bg-green-500'
                     }`}>
                       {idx + 1}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">{user.name}</div>
-                      <div className="text-sm text-gray-600">{user.email}</div>
+                      <div className="font-medium text-primary-900">{user.name}</div>
+                      <div className="text-sm text-primary-600">{user.email}</div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="font-bold text-green-600">{user.completed}</div>
-                    <div className="text-xs text-gray-500">tasks completed</div>
+                    <div className="text-xs text-green-500">tasks completed</div>
                   </div>
                 </div>
               ))}
@@ -724,44 +724,44 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
 
       {/* User Productivity Table */}
       {userProductivity.length > 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Team Productivity Details</h3>
+        <div className="bg-white rounded-lg border border-green-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-green-200">
+            <h3 className="text-lg font-semibold text-primary-900">Team Productivity Details</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-green-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Tasks</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Completed</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pending</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Completion Rate</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avg Time (hrs)</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">User</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Total Tasks</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Completed</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Pending</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Completion Rate</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-green-500 uppercase">Avg Time (hrs)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-green-200">
                 {userProductivity.map((user, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50">
+                  <tr key={idx} className="hover:bg-green-50">
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <div className="text-sm font-medium text-primary-900">{user.name}</div>
+                        <div className="text-sm text-green-500">{user.email}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{user.total_tasks}</td>
+                    <td className="px-6 py-4 text-sm text-primary-900">{user.total_tasks}</td>
                     <td className="px-6 py-4 text-sm text-green-600">{user.completed}</td>
                     <td className="px-6 py-4 text-sm text-gold-600">{user.pending}</td>
                     <td className="px-6 py-4 text-sm">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         user.completion_rate >= 80 ? 'bg-green-100 text-green-800' :
                         user.completion_rate >= 50 ? 'bg-gold-100 text-gold-800' :
-                        'bg-red-100 text-red-800'
+                        'bg-gold-100 text-gold-800'
                       }`}>
                         {user.completion_rate}%
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{user.avg_completion_hours}</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{user.avg_completion_hours}</td>
                   </tr>
                 ))}
               </tbody>
@@ -776,13 +776,13 @@ const UsersTab = ({ userProductivity, userWorkload }) => {
 // ==================== REUSABLE COMPONENTS ====================
 const MetricCard = ({ label, value, change, icon: Icon, bgColor, textColor }) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-green-200 p-6">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm text-gray-600 mb-1">{label}</p>
-          <p className="text-3xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm text-primary-600 mb-1">{label}</p>
+          <p className="text-3xl font-bold text-primary-900">{value}</p>
           {change && (
-            <p className="text-sm text-gray-500 mt-1">{change}</p>
+            <p className="text-sm text-green-500 mt-1">{change}</p>
           )}
         </div>
         <div className={`${bgColor} p-3 rounded-lg`}>
@@ -795,10 +795,10 @@ const MetricCard = ({ label, value, change, icon: Icon, bgColor, textColor }) =>
 
 const ChartCard = ({ title, icon: Icon, children }) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-green-200 p-6">
       <div className="flex items-center space-x-2 mb-4">
-        {Icon && <Icon className="w-5 h-5 text-gray-600" />}
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        {Icon && <Icon className="w-5 h-5 text-primary-600" />}
+        <h3 className="text-lg font-semibold text-primary-900">{title}</h3>
       </div>
       {children}
     </div>
@@ -807,8 +807,8 @@ const ChartCard = ({ title, icon: Icon, children }) => {
 
 const EmptyState = ({ message }) => {
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-      <FileText className="w-12 h-12 mb-3 text-gray-300" />
+    <div className="flex flex-col items-center justify-center py-12 text-green-500">
+      <FileText className="w-12 h-12 mb-3 text-green-300" />
       <p className="text-sm">{message}</p>
     </div>
   );

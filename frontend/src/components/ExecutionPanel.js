@@ -93,10 +93,10 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
     switch (status) {
       case 'running': return <Clock className="w-4 h-4 text-green-500 animate-pulse" />;
       case 'completed': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'failed': return <XCircle className="w-4 h-4 text-red-500" />;
+      case 'failed': return <XCircle className="w-4 h-4 text-gold-500" />;
       case 'paused': return <Pause className="w-4 h-4 text-gold-500" />;
       case 'waiting': return <AlertCircle className="w-4 h-4 text-gold-500" />;
-      default: return <Clock className="w-4 h-4 text-gray-400" />;
+      default: return <Clock className="w-4 h-4 text-green-400" />;
     }
   };
 
@@ -104,22 +104,22 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
     switch (status) {
       case 'running': return 'bg-green-100 text-green-800';
       case 'completed': return 'bg-green-100 text-green-800';
-      case 'failed': return 'bg-red-100 text-red-800';
+      case 'failed': return 'bg-gold-100 text-gold-800';
       case 'paused': return 'bg-gold-100 text-gold-800';
       case 'waiting': return 'bg-gold-100 text-gold-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-green-100 text-primary-800';
     }
   };
 
   return (
-    <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-gray-200 flex flex-col z-50">
+    <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl border-l border-green-200 flex flex-col z-50">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-gold-50">
+      <div className="p-4 border-b border-green-200 bg-gradient-to-r from-green-50 to-gold-50">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold text-gray-800">Workflow Execution</h2>
+          <h2 className="text-lg font-bold text-primary-800">Workflow Execution</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-green-500 hover:text-primary-700"
             data-testid="close-execution-panel"
           >
             ✕
@@ -138,9 +138,9 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
       {/* Instance List */}
       <div className="flex-1 overflow-y-auto p-4">
         {loading ? (
-          <div className="text-center py-8 text-gray-500">Loading...</div>
+          <div className="text-center py-8 text-green-500">Loading...</div>
         ) : instances.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-green-400">
             <Clock className="w-12 h-12 mx-auto mb-2 opacity-50" />
             <p>No executions yet</p>
             <p className="text-sm mt-1">Click "Run Workflow" to start</p>
@@ -153,7 +153,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                 className={`border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md ${
                   selectedInstance?.id === instance.id
                     ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-green-200 hover:border-green-300'
                 }`}
                 onClick={() => setSelectedInstance(instance)}
                 data-testid={`instance-${instance.id}`}
@@ -165,12 +165,12 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                       {instance.status}
                     </span>
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-green-500">
                     {new Date(instance.started_at).toLocaleTimeString()}
                   </span>
                 </div>
 
-                <div className="text-xs text-gray-600 space-y-1">
+                <div className="text-xs text-primary-600 space-y-1">
                   <div>Triggered: {instance.triggered_by}</div>
                   {instance.current_node_id && (
                     <div className="text-green-600">Current: {instance.current_node_id.slice(0, 8)}...</div>
@@ -209,7 +209,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
                         e.stopPropagation();
                         handleCancel(instance.id);
                       }}
-                      className="flex-1 text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 flex items-center justify-center gap-1"
+                      className="flex-1 text-xs bg-gold-500 text-white px-2 py-1 rounded hover:bg-gold-600 flex items-center justify-center gap-1"
                       data-testid={`cancel-instance-${instance.id}`}
                     >
                       <Square className="w-3 h-3" /> Cancel
@@ -224,22 +224,22 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
 
       {/* Selected Instance Details */}
       {selectedInstance && (
-        <div className="border-t border-gray-200 p-4 bg-gray-50 max-h-64 overflow-y-auto">
-          <h3 className="font-semibold text-sm mb-2 text-gray-700">Execution History</h3>
+        <div className="border-t border-green-200 p-4 bg-green-50 max-h-64 overflow-y-auto">
+          <h3 className="font-semibold text-sm mb-2 text-primary-700">Execution History</h3>
           <div className="space-y-2">
             {selectedInstance.execution_history?.map((entry, idx) => (
-              <div key={idx} className="text-xs bg-white p-2 rounded border border-gray-200">
+              <div key={idx} className="text-xs bg-white p-2 rounded border border-green-200">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">{entry.node_type}</span>
+                  <span className="font-medium text-primary-700">{entry.node_type}</span>
                   <span className={`px-2 py-0.5 rounded text-xs ${getStatusColor(entry.result?.status || 'unknown')}`}>
                     {entry.result?.status || 'unknown'}
                   </span>
                 </div>
-                <div className="text-gray-500 mt-1">
+                <div className="text-green-500 mt-1">
                   {new Date(entry.timestamp).toLocaleTimeString()}
                 </div>
                 {entry.result?.error && (
-                  <div className="text-red-600 mt-1 text-xs">{entry.result.error}</div>
+                  <div className="text-gold-600 mt-1 text-xs">{entry.result.error}</div>
                 )}
               </div>
             ))}

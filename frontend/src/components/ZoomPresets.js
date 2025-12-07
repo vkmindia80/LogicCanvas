@@ -15,18 +15,18 @@ const ZoomPresets = ({ currentZoom, onZoomChange, onFit, className = '' }) => {
   };
 
   return (
-    <div className={`flex items-center space-x-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-2 ${className}`}>
+    <div className={`flex items-center space-x-2 bg-white dark:bg-primary-800 rounded-lg shadow-lg border border-green-200 dark:border-primary-700 p-2 ${className}`}>
       {/* Zoom Out */}
       <button
         onClick={() => onZoomChange(Math.max(0.1, currentZoom - 0.1))}
-        className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        className="p-2 rounded-lg hover:bg-green-100 dark:hover:bg-primary-700 transition-colors"
         title="Zoom Out (Ctrl + -)" 
       >
-        <ZoomOut className="w-4 h-4 text-slate-700 dark:text-slate-300" />
+        <ZoomOut className="w-4 h-4 text-primary-700 dark:text-green-300" />
       </button>
 
       {/* Presets */}
-      <div className="flex items-center space-x-1 px-2 border-x border-slate-200 dark:border-slate-600">
+      <div className="flex items-center space-x-1 px-2 border-x border-green-200 dark:border-primary-600">
         {presets.map((preset) => (
           <button
             key={preset.value}
@@ -34,7 +34,7 @@ const ZoomPresets = ({ currentZoom, onZoomChange, onFit, className = '' }) => {
             className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
               Math.abs(currentZoom * 100 - preset.value) < 5
                 ? 'bg-primary-500 text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                : 'text-primary-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-primary-700'
             }`}
             title={`Set zoom to ${preset.label}`}
           >
@@ -46,24 +46,24 @@ const ZoomPresets = ({ currentZoom, onZoomChange, onFit, className = '' }) => {
       {/* Zoom In */}
       <button
         onClick={() => onZoomChange(Math.min(4, currentZoom + 0.1))}
-        className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        className="p-2 rounded-lg hover:bg-green-100 dark:hover:bg-primary-700 transition-colors"
         title="Zoom In (Ctrl + +)"
       >
-        <ZoomIn className="w-4 h-4 text-slate-700 dark:text-slate-300" />
+        <ZoomIn className="w-4 h-4 text-primary-700 dark:text-green-300" />
       </button>
 
       {/* Fit View */}
       <button
         onClick={onFit}
-        className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border-l border-slate-200 dark:border-slate-600 ml-1 pl-3"
+        className="p-2 rounded-lg hover:bg-green-100 dark:hover:bg-primary-700 transition-colors border-l border-green-200 dark:border-primary-600 ml-1 pl-3"
         title="Fit to View (Ctrl + 0)"
       >
-        <Maximize2 className="w-4 h-4 text-slate-700 dark:text-slate-300" />
+        <Maximize2 className="w-4 h-4 text-primary-700 dark:text-green-300" />
       </button>
 
       {/* Current Zoom Display */}
-      <div className="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 rounded-md border-l border-slate-200 dark:border-slate-600 ml-1 pl-3">
-        <span className="text-xs font-mono text-slate-700 dark:text-slate-300">
+      <div className="px-3 py-1.5 bg-green-100 dark:bg-primary-700 rounded-md border-l border-green-200 dark:border-primary-600 ml-1 pl-3">
+        <span className="text-xs font-mono text-primary-700 dark:text-green-300">
           {Math.round(currentZoom * 100)}%
         </span>
       </div>

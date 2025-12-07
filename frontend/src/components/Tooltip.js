@@ -47,10 +47,10 @@ const Tooltip = ({
   };
 
   const arrowClasses = {
-    top: 'top-full left-1/2 -translate-x-1/2 border-t-slate-900',
-    bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-slate-900',
-    left: 'left-full top-1/2 -translate-y-1/2 border-l-slate-900',
-    right: 'right-full top-1/2 -translate-y-1/2 border-r-slate-900'
+    top: 'top-full left-1/2 -translate-x-1/2 border-t-primary-900',
+    bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-primary-900',
+    left: 'left-full top-1/2 -translate-y-1/2 border-l-primary-900',
+    right: 'right-full top-1/2 -translate-y-1/2 border-r-primary-900'
   };
 
   return (
@@ -68,7 +68,7 @@ const Tooltip = ({
         >
           {/* Tooltip Content */}
           <div className="relative">
-            <div className="bg-slate-900 text-white text-sm font-medium px-3 py-2 rounded-lg shadow-xl max-w-xs whitespace-normal">
+            <div className="bg-primary-900 text-white text-sm font-medium px-3 py-2 rounded-lg shadow-xl max-w-xs whitespace-normal">
               {content}
             </div>
             {/* Arrow */}

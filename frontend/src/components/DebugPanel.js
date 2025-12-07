@@ -171,28 +171,28 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
 
   const getLevelColor = (level) => {
     switch (level) {
-      case 'error': return 'text-red-600 bg-red-50';
+      case 'error': return 'text-gold-600 bg-gold-50';
       case 'warning': return 'text-gold-600 bg-gold-50';
       case 'info': return 'text-green-600 bg-green-50';
-      case 'debug': return 'text-gray-600 bg-gray-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'debug': return 'text-primary-600 bg-green-50';
+      default: return 'text-primary-600 bg-green-50';
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed': return 'text-green-600 bg-green-100';
-      case 'error': return 'text-red-600 bg-red-100';
+      case 'error': return 'text-gold-600 bg-gold-100';
       case 'waiting': return 'text-gold-600 bg-gold-100';
       case 'running': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-primary-600 bg-green-100';
     }
   };
 
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-slate-700 to-slate-800 text-white">
+      <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-primary-700 to-primary-800 text-white">
         <div className="flex items-center space-x-3">
           {/* Hamburger Menu for Mobile */}
           <button 
@@ -205,7 +205,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
           </button>
           <div>
             <h2 className="text-xl font-bold">Debug Panel</h2>
-            <p className="text-sm text-slate-300">Instance: {instanceId}</p>
+            <p className="text-sm text-green-300">Instance: {instanceId}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -246,9 +246,9 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
 
       {/* Status Bar */}
       {debugState && (
-        <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between text-sm">
+        <div className="px-4 py-2 bg-green-50 border-b flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
-              <span className="text-gray-600">
+              <span className="text-primary-600">
                 Status: <span className="font-medium">{debugState.status}</span>
               </span>
               {debugState.debug_mode && (
@@ -257,12 +257,12 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                 </span>
               )}
               {debugState.current_node && (
-                <span className="text-gray-600">
+                <span className="text-primary-600">
                   Current: <span className="font-medium">{debugState.current_node}</span>
                 </span>
               )}
             </div>
-            <div className="text-gray-600">
+            <div className="text-primary-600">
               Breakpoints: <span className="font-medium">{breakpoints.length}</span>
             </div>
         </div>
@@ -282,7 +282,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
               className={`px-4 py-3 font-medium flex items-center gap-2 ${
                 activeTab === id
                   ? 'border-b-2 border-green-600 text-green-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-green-500 hover:text-primary-700'
               }`}
             >
               <Icon size={16} />
@@ -298,13 +298,13 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
             <div className="space-y-3">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Breakpoints</h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-green-500">
                   Click on workflow nodes to add/remove breakpoints
                 </p>
               </div>
 
               {breakpoints.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-green-500">
                   <Circle size={48} className="mx-auto mb-4 opacity-30" />
                   <p>No breakpoints set</p>
                   <p className="text-sm mt-1">
@@ -322,12 +322,12 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                         <div className="flex items-center gap-3">
                           <Circle
                             size={16}
-                            className={bp.enabled ? 'fill-red-600 text-red-600' : 'text-gray-400'}
+                            className={bp.enabled ? 'fill-gold-600 text-gold-600' : 'text-green-400'}
                           />
                           <div>
                             <div className="font-medium">Node: {bp.node_id}</div>
                             {bp.condition && (
-                              <div className="text-sm text-gray-500 mt-1">
+                              <div className="text-sm text-green-500 mt-1">
                                 Condition: {bp.condition}
                               </div>
                             )}
@@ -335,7 +335,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                         </div>
                         <button
                           onClick={() => toggleBreakpoint(bp.node_id)}
-                          className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
+                          className="px-3 py-1 text-sm text-gold-600 hover:bg-gold-50 rounded"
                         >
                           Remove
                         </button>
@@ -352,13 +352,13 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Execution Timeline</h3>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-green-500">
                   {timeline.length} steps
                 </div>
               </div>
 
               {timeline.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-green-500">
                   <Activity size={48} className="mx-auto mb-4 opacity-30" />
                   <p>No execution history yet</p>
                 </div>
@@ -377,21 +377,21 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="font-medium">{entry.node_label || entry.node_id}</div>
-                            <div className="text-sm text-gray-500">{entry.node_type}</div>
+                            <div className="text-sm text-green-500">{entry.node_type}</div>
                           </div>
                           <div className="text-right">
                             <div className={`text-sm font-medium ${getStatusColor(entry.status)} px-2 py-1 rounded`}>
                               {entry.status}
                             </div>
                             {entry.duration_seconds !== undefined && (
-                              <div className="text-xs text-gray-500 mt-1">
+                              <div className="text-xs text-green-500 mt-1">
                                 {entry.duration_seconds.toFixed(3)}s
                               </div>
                             )}
                           </div>
                         </div>
                         {entry.error && (
-                          <div className="mt-2 p-2 bg-red-50 rounded text-sm text-red-700">
+                          <div className="mt-2 p-2 bg-gold-50 rounded text-sm text-gold-700">
                             <AlertCircle size={14} className="inline mr-1" />
                             {entry.error}
                           </div>
@@ -410,7 +410,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Execution Logs</h3>
                 <div className="flex items-center gap-2">
-                  <Filter size={16} className="text-gray-500" />
+                  <Filter size={16} className="text-green-500" />
                   <select
                     value={logFilter}
                     onChange={(e) => setLogFilter(e.target.value)}
@@ -424,7 +424,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                   </select>
                   <button
                     onClick={downloadLogs}
-                    className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg"
+                    className="px-3 py-1 text-sm bg-green-100 hover:bg-green-200 rounded-lg"
                   >
                     <Download size={16} className="inline mr-1" />
                     Export
@@ -433,7 +433,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
               </div>
 
               {logs.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-green-500">
                   <Eye size={48} className="mx-auto mb-4 opacity-30" />
                   <p>No logs available</p>
                 </div>
@@ -441,9 +441,9 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                 <div className="space-y-1 font-mono text-sm">
                   {logs.map((log, index) => (
                     <div key={index} className={`p-2 rounded ${getLevelColor(log.level)}`}>
-                      <span className="text-gray-500">[{log.timestamp}]</span>
+                      <span className="text-green-500">[{log.timestamp}]</span>
                       <span className="ml-2 font-bold">[{log.level.toUpperCase()}]</span>
-                      <span className="ml-2 text-gray-600">[{log.node_id}]</span>
+                      <span className="ml-2 text-primary-600">[{log.node_id}]</span>
                       <span className="ml-2">{log.message}</span>
                       {log.data && Object.keys(log.data).length > 0 && (
                         <pre className="mt-1 text-xs opacity-75">
@@ -463,14 +463,14 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Performance Profile</h3>
                 {performance && (
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-green-500">
                     Total: {(performance.total_duration_ms / 1000).toFixed(2)}s
                   </div>
                 )}
               </div>
 
               {!performance || performance.nodes.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-green-500">
                   <Zap size={48} className="mx-auto mb-4 opacity-30" />
                   <p>No performance data available</p>
                 </div>
@@ -479,19 +479,19 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                   {/* Summary */}
                   <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="p-4 bg-green-50 rounded-lg">
-                      <div className="text-sm text-gray-600">Total Time</div>
+                      <div className="text-sm text-primary-600">Total Time</div>
                       <div className="text-2xl font-bold text-green-600">
                         {(performance.total_duration_ms / 1000).toFixed(2)}s
                       </div>
                     </div>
                     <div className="p-4 bg-green-50 rounded-lg">
-                      <div className="text-sm text-gray-600">Nodes Executed</div>
+                      <div className="text-sm text-primary-600">Nodes Executed</div>
                       <div className="text-2xl font-bold text-green-600">
                         {performance.nodes.length}
                       </div>
                     </div>
                     <div className="p-4 bg-gold-50 rounded-lg">
-                      <div className="text-sm text-gray-600">Avg per Node</div>
+                      <div className="text-sm text-primary-600">Avg per Node</div>
                       <div className="text-2xl font-bold text-gold-600">
                         {(performance.total_duration_ms / performance.nodes.length / 1000).toFixed(2)}s
                       </div>
@@ -513,7 +513,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                               {(node.duration_ms / 1000).toFixed(3)}s
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-green-200 rounded-full h-2">
                             <div
                               className="bg-green-600 h-2 rounded-full"
                               style={{
@@ -531,7 +531,7 @@ const DebugPanel = ({ instanceId, onClose, onOpenMobileSidebar, sidebarCollapsed
                     <h4 className="font-medium mb-2">All Nodes</h4>
                     <div className="space-y-1">
                       {performance.nodes.map((node, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                        <div key={index} className="flex items-center justify-between p-2 hover:bg-green-50 rounded">
                           <span className="text-sm">{node.node_id}</span>
                           <span className="text-sm font-medium">
                             {(node.duration_ms / 1000).toFixed(3)}s

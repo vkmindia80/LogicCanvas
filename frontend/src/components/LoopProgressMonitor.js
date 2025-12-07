@@ -114,9 +114,9 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
       case 'completed':
         return 'text-green-600 bg-green-50 border-green-200';
       case 'failed':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-gold-600 bg-gold-50 border-gold-200';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-primary-600 bg-green-50 border-green-200';
     }
   };
 
@@ -125,7 +125,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-8 shadow-xl">
           <Loader className="w-8 h-8 animate-spin text-green-500 mx-auto" />
-          <p className="mt-4 text-slate-600">Loading loop status...</p>
+          <p className="mt-4 text-primary-600">Loading loop status...</p>
         </div>
       </div>
     );
@@ -152,7 +152,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
         </div>
 
         {/* Controls */}
-        <div className="bg-slate-50 border-b border-slate-200 p-4 flex items-center justify-between">
+        <div className="bg-green-50 border-b border-green-200 p-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => {
@@ -172,11 +172,11 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                 onChange={(e) => setAutoRefresh(e.target.checked)}
                 className="w-4 h-4 text-green-600 rounded"
               />
-              <span className="text-sm text-slate-700">Auto-refresh (2s)</span>
+              <span className="text-sm text-primary-700">Auto-refresh (2s)</span>
             </label>
           </div>
           
-          <div className="text-sm text-slate-600">
+          <div className="text-sm text-primary-600">
             {loopStatus?.active_loops?.length || 0} active loop(s)
           </div>
         </div>
@@ -184,11 +184,11 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
-              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <div className="bg-gold-50 border border-gold-200 rounded-lg p-4 flex items-start space-x-3">
+              <AlertCircle className="w-5 h-5 text-gold-600 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-red-900">Error</h3>
-                <p className="text-sm text-red-700">{error}</p>
+                <h3 className="font-semibold text-gold-900">Error</h3>
+                <p className="text-sm text-gold-700">{error}</p>
               </div>
             </div>
           )}
@@ -196,7 +196,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
           {/* Active Loops */}
           {loopStatus?.active_loops && loopStatus.active_loops.length > 0 ? (
             <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
+              <h3 className="text-lg font-bold text-primary-900 mb-4 flex items-center space-x-2">
                 <TrendingUp className="w-5 h-5 text-gold-600" />
                 <span>Active Loops</span>
               </h3>
@@ -221,7 +221,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                       {loop.status === 'active' && (
                         <button
                           onClick={() => handleBreakLoop(loop.loop_id)}
-                          className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"
+                          className="px-3 py-1 bg-gold-500 text-white text-sm rounded hover:bg-gold-600 transition"
                         >
                           Break Loop
                         </button>
@@ -278,8 +278,8 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
           ) : (
             <div className="text-center py-12">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2">No Active Loops</h3>
-              <p className="text-slate-600">
+              <h3 className="text-xl font-bold text-primary-900 mb-2">No Active Loops</h3>
+              <p className="text-primary-600">
                 This workflow instance doesn't have any active loops at the moment.
               </p>
             </div>
@@ -288,7 +288,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
           {/* Statistics */}
           {statistics?.loop_statistics && statistics.loop_statistics.length > 0 && (
             <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
+              <h3 className="text-lg font-bold text-primary-900 mb-4 flex items-center space-x-2">
                 <Activity className="w-5 h-5 text-green-600" />
                 <span>Loop Statistics</span>
               </h3>
@@ -297,7 +297,7 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                 {statistics.loop_statistics.map((stat, index) => (
                   <div
                     key={index}
-                    className="bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-lg p-4"
+                    className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-4"
                   >
                     <div className="flex items-center space-x-2 mb-3">
                       <span className="text-2xl">{getLoopTypeIcon(stat.loop_type)}</span>
@@ -306,23 +306,23 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
                     
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Total Iterations:</span>
+                        <span className="text-primary-600">Total Iterations:</span>
                         <span className="font-semibold">{stat.total_iterations}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Successful:</span>
+                        <span className="text-primary-600">Successful:</span>
                         <span className="font-semibold text-green-600">{stat.successful_iterations}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Failed:</span>
-                        <span className="font-semibold text-red-600">{stat.failed_iterations}</span>
+                        <span className="text-primary-600">Failed:</span>
+                        <span className="font-semibold text-gold-600">{stat.failed_iterations}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Breaks:</span>
+                        <span className="text-primary-600">Breaks:</span>
                         <span className="font-semibold text-gold-600">{stat.breaks}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Continues:</span>
+                        <span className="text-primary-600">Continues:</span>
                         <span className="font-semibold text-green-600">{stat.continues}</span>
                       </div>
                     </div>
@@ -334,10 +334,10 @@ const LoopProgressMonitor = ({ instanceId, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="bg-slate-50 border-t border-slate-200 p-4 flex justify-end">
+        <div className="bg-green-50 border-t border-green-200 p-4 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition"
+            className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
           >
             Close
           </button>
