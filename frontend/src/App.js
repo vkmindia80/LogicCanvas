@@ -70,7 +70,6 @@ const AppShell = () => {
     const stored = localStorage.getItem('lc_user');
     return stored ? JSON.parse(stored) : null;
   });
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const [approvalCount, setApprovalCount] = useState(0);
