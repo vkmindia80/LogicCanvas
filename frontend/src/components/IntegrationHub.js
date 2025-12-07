@@ -4,7 +4,7 @@ import { modalHeaderStyles, modalOverlayStyles, cardStyles, buttonStyles, inputS
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-const IntegrationHub = ({ onClose }) => {
+const IntegrationHub = ({ onClose, sidebarCollapsed = false }) => {
   const [integrations, setIntegrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
