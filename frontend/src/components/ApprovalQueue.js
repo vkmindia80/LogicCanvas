@@ -176,7 +176,7 @@ const ApprovalQueue = ({ onClose, onNotify, sidebarCollapsed = false }) => {
   };
 
   return (
-    <div className="fixed inset-0 lg:left-72 bg-white z-50 flex flex-col" data-testid="approval-queue">
+    <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`} data-testid="approval-queue">
       {/* Header */}
       <div className={modalHeaderStyles.base}>
         <div className="flex items-center justify-between">
