@@ -198,13 +198,6 @@ const ApprovalQueue = ({ onClose, onNotify, sidebarCollapsed = false }) => {
               <RefreshCw className="w-4 h-4 mr-2 inline" />
               <span>Refresh</span>
             </button>
-            <button
-              onClick={onClose}
-              className={modalHeaderStyles.closeButton + " px-4 py-2 font-medium"}
-              data-testid="close-approval-queue-btn"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
