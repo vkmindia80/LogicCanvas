@@ -7286,6 +7286,159 @@ async def test_webhook(webhook_id: str, test_payload: Dict[str, Any]):
 
 
 # ============================================================================
+# CONNECTION POOL HEALTH AND STATISTICS ENDPOINTS
+# ============================================================================
+
+@app.get("/api/connectors/pool/health")
+async def get_connection_pool_health():
+    """Get health status of all connection pools"""
+    pool_health = {}
+    
+    for connector_id, client in http_clients.items():
+        try:
+            # Get connection pool statistics
+            pool_info = {
+                "connector_id": connector_id,
+                "is_closed": client.is_closed,
+                "active_connections": len(client._transport._pool._connections) if hasattr(client, '_transport') and hasattr(client._transport, '_pool') else 0,
+                "status": "healthy" if not client.is_closed else "closed"
+            }
+            
+            # Check semaphore availability
+            semaphore = client_semaphores.get(connector_id)
+            if semaphore:
+                pool_info["available_slots"] = semaphore._value
+                pool_info["max_concurrent"] = semaphore._initial_value
+                pool_info["in_use"] = semaphore._initial_value - semaphore._value
+            
+            pool_health[connector_id] = pool_info
+            
+        except Exception as e:
+            pool_health[connector_id] = {
+                "connector_id": connector_id,
+                "status": "error",
+                "error": str(e)
+            }
+    
+    overall_status = "healthy"
+    if any(pool.get("status") == "error" for pool in pool_health.values()):
+        overall_status = "degraded"
+    elif any(pool.get("status") == "closed" for pool in pool_health.values()):
+        overall_status = "partial"
+    
+    return {
+        "overall_status": overall_status,
+        "total_pools": len(pool_health),
+        "pools": pool_health,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+@app.get("/api/connectors/pool/statistics")
+async def get_connection_pool_statistics():
+    """Get detailed statistics for all connection pools"""
+    statistics = {}
+    
+    for connector_id, client in http_clients.items():
+        try:
+            connector = api_connectors_collection.find_one({"id": connector_id})
+            connector_name = connector.get("name", connector_id) if connector else connector_id
+            
+            stats = {
+                "connector_id": connector_id,
+                "connector_name": connector_name,
+                "client_status": "active" if not client.is_closed else "closed",
+                "created_at": getattr(client, '_created_at', None),
+            }
+            
+            # Connection pool stats
+            if hasattr(client, '_transport') and hasattr(client._transport, '_pool'):
+                pool = client._transport._pool
+                stats.update({
+                    "pool_connections": len(pool._connections),
+                    "max_keepalive": getattr(pool, '_max_keepalive_connections', 'unknown'),
+                    "max_connections": getattr(pool, '_max_connections', 'unknown')
+                })
+            
+            # Semaphore stats
+            semaphore = client_semaphores.get(connector_id)
+            if semaphore:
+                stats.update({
+                    "max_concurrent_requests": semaphore._initial_value,
+                    "available_slots": semaphore._value,
+                    "active_requests": semaphore._initial_value - semaphore._value,
+                    "utilization_percent": round(((semaphore._initial_value - semaphore._value) / semaphore._initial_value) * 100, 2)
+                })
+            
+            statistics[connector_id] = stats
+            
+        except Exception as e:
+            statistics[connector_id] = {
+                "connector_id": connector_id,
+                "error": str(e),
+                "status": "error"
+            }
+    
+    return {
+        "statistics": statistics,
+        "total_connectors": len(statistics),
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+@app.post("/api/connectors/{connector_id}/pool/reset")
+async def reset_connection_pool(connector_id: str):
+    """Reset connection pool for a specific connector"""
+    if connector_id not in http_clients:
+        raise HTTPException(status_code=404, detail="Connection pool not found for connector")
+    
+    try:
+        # Close existing client
+        old_client = http_clients[connector_id]
+        await old_client.aclose()
+        
+        # Remove from pool
+        del http_clients[connector_id]
+        
+        # Reset semaphore
+        if connector_id in client_semaphores:
+            del client_semaphores[connector_id]
+        
+        return {
+            "message": f"Connection pool reset successfully for connector {connector_id}",
+            "connector_id": connector_id,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to reset connection pool: {str(e)}")
+
+@app.post("/api/connectors/pool/cleanup")
+async def cleanup_connection_pools():
+    """Clean up all inactive connection pools"""
+    cleaned_pools = []
+    errors = []
+    
+    for connector_id, client in list(http_clients.items()):
+        try:
+            if client.is_closed:
+                del http_clients[connector_id]
+                if connector_id in client_semaphores:
+                    del client_semaphores[connector_id]
+                cleaned_pools.append(connector_id)
+        except Exception as e:
+            errors.append({
+                "connector_id": connector_id,
+                "error": str(e)
+            })
+    
+    return {
+        "message": f"Cleaned up {len(cleaned_pools)} inactive connection pools",
+        "cleaned_pools": cleaned_pools,
+        "errors": errors,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
+# ============================================================================
 # SPRINT 4: ADVANCED DEBUGGING ENDPOINTS
 # ============================================================================
 
