@@ -391,9 +391,8 @@ const TransformationPlayground = ({ onClose, sidebarCollapsed = false }) => {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
