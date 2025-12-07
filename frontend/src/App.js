@@ -267,9 +267,9 @@ const AppShell = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-950 via-primary-900 to-primary-950">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
         <div className="text-center text-white">
-          <div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-b-2 border-gold-400"></div>
+          <div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-b-2 border-indigo-400"></div>
           <p className="text-sm text-slate-300">Warming up LogicCanvas services…</p>
         </div>
       </div>
