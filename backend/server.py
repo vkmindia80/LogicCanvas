@@ -5313,8 +5313,8 @@ async def test_api_connector(request: APITestRequest):
         }
 
 @app.get("/api/connectors/templates/library")
-async def get_connector_templates():
-    """Get pre-built API connector templates"""
+async def get_connector_templates_library():
+    """Get pre-built API connector templates (legacy format)"""
     templates = [
         {
             "id": "template-rest-api",
