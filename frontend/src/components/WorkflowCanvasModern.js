@@ -1060,7 +1060,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Right Sidebar - Node Editor - Modernized */}
       {selectedNode && !showExecutionPanel && !showTriggerConfig && (
-        <div className="fixed md:relative right-0 top-0 w-full md:w-80 lg:w-96 h-screen bg-gradient-to-b from-white to-slate-50 border-l border-slate-200 shadow-2xl md:shadow-lg p-4 overflow-y-auto flex-shrink-0 z-40">
+        <div className="w-80 lg:w-96 xl:w-[28rem] h-screen bg-gradient-to-b from-white to-slate-50 border-l border-slate-200 shadow-lg p-4 overflow-y-auto flex-shrink-0">
           <NodeEditorModern
             node={selectedNode}
             onUpdate={updateNode}
