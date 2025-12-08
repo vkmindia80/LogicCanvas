@@ -102,14 +102,14 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
 
   return (
     <>
-      {/* Mobile/Tablet: Backdrop Overlay */}
+      {/* Backdrop Overlay */}
       <div 
-        className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+        className="fixed inset-0 bg-slate-900/20 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none z-40"
         onClick={onClose}
         data-testid="execution-panel-backdrop"
       />
       
-      <div className="fixed right-0 top-0 h-full w-full sm:w-96 lg:w-96 xl:w-[28rem] bg-white shadow-2xl border-l border-slate-200 flex flex-col z-50 transform transition-transform duration-300 ease-in-out">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-96 lg:w-96 xl:w-[28rem] bg-white shadow-2xl border-l border-slate-200 flex flex-col z-50">
       {/* Modern Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 p-6 border-b border-indigo-800">
         <div className="flex items-center justify-between mb-4">
