@@ -119,16 +119,16 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
       <div className="p-4 space-y-3 max-h-96 overflow-y-auto">
         {allComplete ? (
           <div className="text-center py-6">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <CheckCircle className="w-8 h-8 text-emerald-600" />
             </div>
-            <h4 className="font-semibold text-primary-900 mb-1">All Done! 🎉</h4>
-            <p className="text-sm text-primary-600 mb-4">
+            <h4 className="font-semibold text-slate-900 mb-1">All Done! 🎉</h4>
+            <p className="text-sm text-slate-600 mb-4">
               You've completed the getting started checklist.
             </p>
             <button
               onClick={handleDismiss}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
             >
               Dismiss Checklist
             </button>
@@ -143,8 +143,8 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
                 key={item.id}
                 className={`group border rounded-lg p-3 transition-all cursor-pointer ${
                   isCompleted
-                    ? 'border-green-200 bg-green-50 hover:bg-green-100'
-                    : 'border-green-200 hover:border-primary-300 hover:shadow-md'
+                    ? 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100'
+                    : 'border-slate-200 hover:border-indigo-300 hover:shadow-md'
                 }`}
                 onClick={() => handleItemClick(item)}
                 data-testid={`checklist-item-${item.id}`}
@@ -160,31 +160,31 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
                     data-testid={`toggle-${item.id}`}
                   >
                     {isCompleted ? (
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <CheckCircle className="w-5 h-5 text-emerald-600" />
                     ) : (
-                      <Circle className="w-5 h-5 text-green-400 group-hover:text-primary-500" />
+                      <Circle className="w-5 h-5 text-slate-400 group-hover:text-indigo-500" />
                     )}
                   </button>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2 mb-1">
-                      <IconComponent className="w-4 h-4 text-primary-600 flex-shrink-0" />
+                      <IconComponent className="w-4 h-4 text-indigo-600 flex-shrink-0" />
                       <h4 className={`font-medium text-sm ${
-                        isCompleted ? 'text-primary-600 line-through' : 'text-primary-900'
+                        isCompleted ? 'text-slate-600 line-through' : 'text-slate-900'
                       }`}>
                         {item.title}
                       </h4>
                     </div>
-                    <p className="text-xs text-primary-600 mb-1">
+                    <p className="text-xs text-slate-600 mb-1">
                       {item.description}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-green-500">
+                      <span className="text-xs text-indigo-500">
                         ⏱️ {item.estimatedTime}
                       </span>
                       {!isCompleted && (
-                        <span className="text-xs text-primary-600 font-medium group-hover:underline">
+                        <span className="text-xs text-indigo-600 font-medium group-hover:underline">
                           Start →
                         </span>
                       )}
@@ -199,8 +199,8 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
 
       {/* Footer */}
       {!allComplete && (
-        <div className="border-t border-green-200 p-3 bg-green-50 rounded-b-xl">
-          <p className="text-xs text-primary-600 text-center">
+        <div className="border-t border-indigo-200 p-3 bg-indigo-50 rounded-b-xl">
+          <p className="text-xs text-slate-600 text-center">
             Complete these steps to get the most out of LogicCanvas
           </p>
         </div>
