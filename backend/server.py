@@ -772,12 +772,58 @@ async def compare_workflow_versions(workflow_id: str, data: Dict[str, Any]):
     
     version_history = workflow.get("version_history", [])
     
+    # If version history is empty, use current workflow as version 1
+    if not version_history:
+        # Create a snapshot of current workflow
+        current_snapshot = {
+            "name": workflow.get("name", ""),
+            "description": workflow.get("description", ""),
+            "nodes": workflow.get("nodes", []),
+            "edges": workflow.get("edges", []),
+            "tags": workflow.get("tags", [])
+        }
+        
+        # If comparing version 1 with itself or comparing 1 with non-existent version
+        if version_a == 1 and version_b == 1:
+            return {
+                "workflow_id": workflow_id,
+                "version_a": version_a,
+                "version_b": version_b,
+                "diff": {
+                    "metadata_changes": {},
+                    "nodes_added": [],
+                    "nodes_removed": [],
+                    "nodes_modified": [],
+                    "edges_added": [],
+                    "edges_removed": []
+                },
+                "version_a_data": {
+                    "version": 1,
+                    "created_at": workflow.get("created_at"),
+                    "snapshot": current_snapshot
+                },
+                "version_b_data": {
+                    "version": 1,
+                    "created_at": workflow.get("created_at"),
+                    "snapshot": current_snapshot
+                }
+            }
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Version history not available. This workflow only has version {workflow.get('version', 1)}."
+            )
+    
     # Get version snapshots
     v_a_data = next((v for v in version_history if v.get("version") == version_a), None)
     v_b_data = next((v for v in version_history if v.get("version") == version_b), None)
     
     if not v_a_data or not v_b_data:
-        raise HTTPException(status_code=404, detail="One or both versions not found")
+        available_versions = [v.get("version") for v in version_history]
+        raise HTTPException(
+            status_code=404, 
+            detail=f"One or both versions not found. Available versions: {available_versions}"
+        )
     
     snapshot_a = v_a_data.get("snapshot", {})
     snapshot_b = v_b_data.get("snapshot", {})
