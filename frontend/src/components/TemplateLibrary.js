@@ -222,22 +222,44 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => setSelectedTemplate(template)}
-                          className="flex-1 px-4 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
-                          data-testid={`preview-${template.id}`}
-                        >
-                          Preview
-                        </button>
-                        <button
-                          onClick={() => handleUseTemplate(template)}
-                          className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
-                          data-testid={`use-${template.id}`}
-                        >
-                          <Star className="w-4 h-4" />
-                          <span>Use Template</span>
-                        </button>
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => setSelectedTemplate(template)}
+                            className="flex-1 px-3 py-2 bg-green-100 text-primary-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
+                            data-testid={`preview-${template.id}`}
+                          >
+                            Preview
+                          </button>
+                          <button
+                            onClick={() => handleUseTemplate(template, 'use')}
+                            className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
+                            data-testid={`use-${template.id}`}
+                          >
+                            <Star className="w-4 h-4" />
+                            <span>Use</span>
+                          </button>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleUseTemplate(template, 'copy')}
+                            className="flex-1 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
+                            data-testid={`copy-${template.id}`}
+                            title="Create a copy of this template"
+                          >
+                            <Copy className="w-4 h-4" />
+                            <span>Copy</span>
+                          </button>
+                          <button
+                            onClick={() => handleUseTemplate(template, 'edit')}
+                            className="flex-1 px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors text-sm font-medium flex items-center justify-center space-x-1"
+                            data-testid={`edit-${template.id}`}
+                            title="Edit this template"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            <span>Edit</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
