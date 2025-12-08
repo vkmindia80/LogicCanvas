@@ -579,6 +579,14 @@ const AppShell = () => {
 
         {/* User Section */}
         <div className="border-t border-slate-700 p-4 flex-shrink-0">
+          {/* User Info */}
+          {currentUser && (
+            <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+              <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
+              <div className="text-xs text-indigo-200">{currentUser.role}</div>
+            </div>
+          )}
+
           {/* Role Switcher */}
           <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
             <div className="mb-2 flex items-center space-x-2 text-xs text-indigo-200">
@@ -598,18 +606,10 @@ const AppShell = () => {
             </select>
           </div>
 
-          {/* User Info */}
-          {currentUser && (
-            <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
-              <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
-              <div className="text-xs text-indigo-200">{currentUser.role}</div>
-            </div>
-          )}
-
-          {/* Logout Button */}
+          {/* Logout Button - More Prominent */}
           <button
             onClick={handleLogout}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-rose-500/10 px-3 py-2 text-sm font-medium text-rose-400 transition-all hover:bg-rose-500/20"
+            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-rose-500 px-3 py-2.5 text-sm font-semibold text-white transition-all hover:bg-rose-600 shadow-lg hover:shadow-xl"
             data-testid="sidebar-logout"
           >
             <LogOut className="h-4 w-4" />
