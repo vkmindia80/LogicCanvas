@@ -58,13 +58,13 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 via-primary-950 to-primary-900 px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 px-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.3))]" style={{ backgroundSize: '30px 30px' }}></div>
-      <div className="max-w-md w-full bg-white/5 border-2 border-white/10 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl shadow-primary-500/10 relative">
+      <div className="max-w-md w-full bg-white/5 border-2 border-white/10 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl shadow-indigo-500/10 relative">
         <button
           type="button"
           onClick={onBack}
-          className="mb-6 text-xs text-green-300 hover:text-white flex items-center space-x-1"
+          className="mb-6 text-xs text-indigo-300 hover:text-white flex items-center space-x-1"
           data-testid="login-back-btn"
         >
           <span className="inline-block rotate-180">➜</span>
@@ -72,12 +72,12 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
         </button>
 
         <div className="flex items-center space-x-3 mb-6">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center">
             <Lock className="h-6 w-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Sign in to LogicCanvas</h1>
-            <p className="text-xs text-green-300 mt-1">Use one of the pre-configured demo accounts to explore.</p>
+            <p className="text-xs text-indigo-300 mt-1">Use one of the pre-configured demo accounts to explore.</p>
           </div>
         </div>
 
