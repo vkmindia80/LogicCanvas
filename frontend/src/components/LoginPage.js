@@ -90,17 +90,17 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4" data-testid="login-form">
           <div>
-            <label className="block text-xs font-medium text-green-200 mb-1" htmlFor="email">
+            <label className="block text-xs font-medium text-indigo-200 mb-1" htmlFor="email">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-400" />
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-primary-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-green-500 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                className="w-full rounded-lg border border-white/10 bg-indigo-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-indigo-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                 placeholder="you@example.com"
                 autoComplete="username"
                 required
@@ -110,17 +110,17 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-green-200 mb-1" htmlFor="password">
+            <label className="block text-xs font-medium text-indigo-200 mb-1" htmlFor="password">
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-400" />
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-primary-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-green-500 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                className="w-full rounded-lg border border-white/10 bg-indigo-900/60 py-2 pl-10 pr-3 text-sm text-white placeholder:text-indigo-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
@@ -132,7 +132,7 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 inline-flex w-full items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-3 text-sm font-bold text-white shadow-xl shadow-primary-500/40 transition-all hover:shadow-2xl hover:shadow-primary-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="mt-2 inline-flex w-full items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 py-3 text-sm font-bold text-white shadow-xl shadow-indigo-500/40 transition-all hover:shadow-2xl hover:shadow-indigo-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
             data-testid="login-submit-btn"
           >
             {loading ? (
