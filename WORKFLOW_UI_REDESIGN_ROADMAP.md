@@ -194,10 +194,10 @@ Complete modernization of the LogicCanvas workflow module with a professional, c
 
 ---
 
-### 3.4 Variable Panels
+### 3.4 Variable Panels ⚠️
 **Files**: 
-- `VariablePanel.js` → `VariablePanelModern.js`
-- `VariableManagementPanel.js` → `VariableManagementPanelModern.js`
+- `VariablePanel.js` (Not yet modernized)
+- `VariableManagementPanel.js` (Not yet modernized)
 
 **Changes**:
 - [ ] Redesign variable display
@@ -218,6 +218,7 @@ Complete modernization of the LogicCanvas workflow module with a professional, c
 **Dependencies**: Phase 2.1
 **Estimated Effort**: 2 hours
 **Testing**: Variables CRUD operations work, scoping correct, data persists
+**Note**: These components are functional but not yet modernized to indigo theme
 
 ---
 
