@@ -940,11 +940,11 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowCapabilitiesPanel(true)}
-                className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
+                className="hidden md:inline-flex items-center gap-2 rounded-xl bg-slate-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow-md"
                 data-testid="designer-capabilities-btn"
                 title="View all designer capabilities"
               >
-                <Activity className="w-4 h-4 text-slate-500" />
+                <Activity className="w-4 h-4" />
                 <span>Capabilities</span>
               </button>
 
