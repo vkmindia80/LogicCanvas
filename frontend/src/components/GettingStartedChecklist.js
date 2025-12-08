@@ -82,9 +82,9 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 bg-white rounded-xl shadow-2xl border border-green-200 z-40 animate-slide-up" data-testid="getting-started-checklist">
+    <div className="fixed bottom-6 right-6 w-96 bg-white rounded-xl shadow-2xl border border-indigo-200 z-40 animate-slide-up" data-testid="getting-started-checklist">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 rounded-t-xl">
+      <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4 rounded-t-xl">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <Sparkles className="w-5 h-5" />
@@ -102,11 +102,11 @@ const GettingStartedChecklist = ({ isOpen, onClose, onAction }) => {
         
         {/* Progress Bar */}
         <div className="space-y-1">
-          <div className="flex justify-between text-xs text-primary-100">
+          <div className="flex justify-between text-xs text-indigo-100">
             <span>{completedItems.length} of {CHECKLIST_ITEMS.length} completed</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="h-2 bg-primary-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-indigo-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-white transition-all duration-300"
               style={{ width: `${progress}%` }}
