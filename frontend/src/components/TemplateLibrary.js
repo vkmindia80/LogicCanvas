@@ -306,20 +306,38 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                   </ul>
                 </div>
 
-                <div className="flex justify-end space-x-3 pt-4 border-t">
+                <div className="flex justify-between pt-4 border-t">
                   <button
                     onClick={() => setSelectedTemplate(null)}
                     className="px-4 py-2 border border-green-300 text-primary-700 rounded-lg hover:bg-green-50"
                   >
                     Close
                   </button>
-                  <button
-                    onClick={() => handleUseTemplate(selectedTemplate)}
-                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
-                  >
-                    <Star className="w-4 h-4" />
-                    <span>Use This Template</span>
-                  </button>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleUseTemplate(selectedTemplate, 'copy')}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                      title="Create a copy of this template"
+                    >
+                      <Copy className="w-4 h-4" />
+                      <span>Copy</span>
+                    </button>
+                    <button
+                      onClick={() => handleUseTemplate(selectedTemplate, 'edit')}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center space-x-2"
+                      title="Edit this template"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => handleUseTemplate(selectedTemplate, 'use')}
+                      className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
+                    >
+                      <Star className="w-4 h-4" />
+                      <span>Use Template</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
