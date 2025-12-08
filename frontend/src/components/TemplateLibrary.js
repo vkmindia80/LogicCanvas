@@ -54,11 +54,25 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
     return matchesSearch && matchesCategory;
   });
 
-  const handleUseTemplate = async (template) => {
+  const handleUseTemplate = async (template, mode = 'use') => {
     try {
       // Load template workflow definition
       const response = await fetch(`/templates/${template.file}`);
       const workflowData = await response.json();
+      
+      // Modify workflow based on mode
+      if (mode === 'copy') {
+        // Create a copy with modified name
+        workflowData.name = `${workflowData.name || template.name} (Copy)`;
+        workflowData.id = null; // New workflow needs new ID
+      } else if (mode === 'edit') {
+        // Load as-is for editing
+        workflowData.name = workflowData.name || template.name;
+        workflowData.id = null; // New workflow needs new ID
+      } else {
+        // Use mode - load template
+        workflowData.name = workflowData.name || template.name;
+      }
       
       // Pass to parent
       onSelectTemplate(workflowData);
