@@ -34,7 +34,6 @@ import VariableManagementPanelModern from './VariableManagementPanelModern';
 import LifecyclePanel from './LifecyclePanel';
 import VersionComparison from './VersionComparison';
 import EditProtectionModal from './EditProtectionModal';
-import ZoomControls from './ZoomControls';
 import ZoomPresets from './ZoomPresets';
 import ValidationPanelModern from './ValidationPanelModern';
 import html2canvas from 'html2canvas';
