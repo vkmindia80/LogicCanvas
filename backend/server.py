@@ -38,6 +38,12 @@ class TokenData(BaseModel):
     role: Optional[str] = None
 
 
+class LoginRequest(BaseModel):
+    """Model for JSON-based login requests"""
+    username: str
+    password: str
+
+
 def verify_password(plain_password: str, password_hash: str) -> bool:
     try:
         return pwd_context.verify(plain_password, password_hash)
