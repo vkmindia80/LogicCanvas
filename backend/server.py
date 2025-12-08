@@ -2035,14 +2035,28 @@ def _extract_mentions(text: str) -> List[str]:
 # ==================== AUTH & RBAC ENDPOINTS ====================
 
 @app.post("/api/auth/login", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(
+    form_data: Optional[OAuth2PasswordRequestForm] = Depends(),
+    json_data: Optional[LoginRequest] = None
+):
     """Issue JWT access token for valid username/password.
-
+    
+    Accepts both form-encoded data (OAuth2 standard) and JSON format.
     We treat `username` as the email field. This endpoint is used by the
     frontend login page and by the auto-login shortcuts.
     """
-    user = get_user_by_email(form_data.username)
-    if not user or not verify_password(form_data.password, user.get("password_hash", "")):
+    # Support both form data and JSON
+    if json_data:
+        username = json_data.username
+        password = json_data.password
+    elif form_data:
+        username = form_data.username
+        password = form_data.password
+    else:
+        raise HTTPException(status_code=400, detail="No credentials provided")
+    
+    user = get_user_by_email(username)
+    if not user or not verify_password(password, user.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Incorrect username or password")
 
     access_token = create_access_token(
