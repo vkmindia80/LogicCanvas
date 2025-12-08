@@ -287,25 +287,49 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
               <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
                 <p className="text-primary-700 mb-4">{selectedTemplate.description}</p>
                 
-                <div className="mb-4">
-                  <h4 className="font-semibold text-primary-800 mb-2">Features:</h4>
-                  <ul className="space-y-2">
-                    {selectedTemplate.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-primary-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {selectedTemplate.features && selectedTemplate.features.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-primary-800 mb-2">Features:</h4>
+                    <ul className="space-y-2">
+                      {selectedTemplate.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start">
+                          <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                          <span className="text-primary-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                <div className="mb-4">
-                  <h4 className="font-semibold text-primary-800 mb-2">Use Cases:</h4>
-                  <ul className="space-y-1">
-                    {selectedTemplate.useCases.map((useCase, idx) => (
-                      <li key={idx} className="text-primary-700 ml-4">• {useCase}</li>
-                    ))}
-                  </ul>
+                {selectedTemplate.useCases && selectedTemplate.useCases.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-primary-800 mb-2">Use Cases:</h4>
+                    <ul className="space-y-1">
+                      {selectedTemplate.useCases.map((useCase, idx) => (
+                        <li key={idx} className="text-primary-700 ml-4">• {useCase}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {/* Template Details */}
+                <div className="grid grid-cols-2 gap-4 p-4 bg-green-50 rounded-lg">
+                  <div>
+                    <p className="text-xs text-green-600 font-medium">Category</p>
+                    <p className="text-sm text-primary-700">{selectedTemplate.category}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-green-600 font-medium">Complexity</p>
+                    <p className="text-sm text-primary-700 capitalize">{selectedTemplate.complexity}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-green-600 font-medium">Nodes</p>
+                    <p className="text-sm text-primary-700">{selectedTemplate.nodeCount} nodes</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-green-600 font-medium">Setup Time</p>
+                    <p className="text-sm text-primary-700">{selectedTemplate.estimatedSetupTime}</p>
+                  </div>
                 </div>
 
                 <div className="flex justify-between pt-4 border-t">
