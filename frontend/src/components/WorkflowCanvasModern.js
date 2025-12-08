@@ -1133,6 +1133,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
           </div>
           <TriggerConfigModern workflowId={workflow.id} />
         </div>
+        </>
       )}
 
       {/* Validation Results Panel - Modernized */}
