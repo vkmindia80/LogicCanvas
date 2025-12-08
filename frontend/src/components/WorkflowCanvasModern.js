@@ -1061,9 +1061,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       {/* Right Sidebar - Node Editor - Responsive with Mobile Slide-over */}
       {selectedNode && !showExecutionPanel && !showTriggerConfig && (
         <>
-          {/* Mobile/Tablet: Backdrop Overlay */}
+          {/* Backdrop Overlay - Optional on Desktop */}
           <div 
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-slate-900/20 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none z-40"
             onClick={() => setSelectedNode(null)}
             data-testid="node-editor-backdrop"
           />
