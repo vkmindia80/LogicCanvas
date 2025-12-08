@@ -97,7 +97,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
               >
                 <button
                   onClick={onGetStarted}
-                  className="group inline-flex items-center justify-center space-x-2 rounded-2xl bg-gradient-to-r from-primary-600 to-primary-700 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-primary-500/50 transition-all hover:shadow-3xl hover:shadow-primary-500/60 hover:-translate-y-1 w-full sm:w-auto"
+                  className="group inline-flex items-center justify-center space-x-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-indigo-500/50 transition-all hover:shadow-3xl hover:shadow-indigo-500/60 hover:-translate-y-1 w-full sm:w-auto"
                   data-testid="landing-get-started-btn"
                 >
                   <Play className="h-6 w-6" />
