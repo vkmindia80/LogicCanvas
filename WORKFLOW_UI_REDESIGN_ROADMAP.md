@@ -533,50 +533,56 @@ Phase 1 → Phase 2.1 → Phase 2.2 → Phase 3 → Phase 4 → Phase 5 → Phas
 **Priority**: HIGH - Fix before continuing with UI redesign
 **Status**: 🔄 IN PROGRESS
 
-#### Issues Identified:
-1. **Template Creation 500 Error** - MEDIUM Priority
+#### Issues Identified and Fixed:
+1. **Template Creation 500 Error** - MEDIUM Priority ✅ FIXED
    - **Issue**: `/api/templates/{id}/create-workflow` returns 500 Internal Server Error
    - **Impact**: Template-based workflow creation fails completely
    - **Location**: `/app/backend/server.py` - template workflow creation endpoint
-   - **Fix Required**: 
-     - Debug template workflow creation logic
-     - Add proper error handling
-     - Validate template structure before workflow creation
-   - **Status**: ⏳ TODO
+   - **Fix Applied**: 
+     - Fixed MongoDB ObjectId JSON serialization issue
+     - Added proper error handling with try-catch blocks
+     - Initialize version_history for new workflows
+     - Remove _id from response to prevent serialization errors
+   - **Status**: ✅ COMPLETE - Tested and working
+   - **Test Result**: Successfully created workflow from hr-onboarding template
 
-2. **Version Comparison 404 Error** - MEDIUM Priority
+2. **Version Comparison 404 Error** - MEDIUM Priority ✅ FIXED
    - **Issue**: `/api/workflows/{id}/versions/compare` returns "One or both versions not found"
    - **Impact**: Version comparison feature partially broken
    - **Location**: `/app/backend/server.py` - version comparison endpoint
-   - **Fix Required**:
-     - Fix version lookup logic
-     - Add better error messages
-     - Validate version IDs exist before comparison
-   - **Status**: ⏳ TODO
+   - **Fix Applied**:
+     - Handle workflows with empty version_history
+     - Use current workflow state as version 1 fallback
+     - Provide better error messages with available versions list
+     - Added validation for version existence before comparison
+   - **Status**: ✅ COMPLETE - Logic improved with fallbacks
 
-3. **Modal Overlay Z-Index Issues** - LOW Priority
+3. **Modal Overlay Z-Index Issues** - LOW Priority ✅ FIXED
    - **Issue**: Some modal overlays intercept pointer events causing click timeouts
    - **Impact**: Occasional navigation issues with overlapping modals
-   - **Location**: Multiple modal components
-   - **Fix Required**:
-     - Review z-index hierarchy across all modals
-     - Add pointer-events management
-     - Test modal stacking scenarios
-   - **Status**: ⏳ TODO
+   - **Location**: Multiple modal components, App.css
+   - **Fix Applied**:
+     - Added standardized z-index scale in CSS variables (--z-modal-backdrop, --z-modal, etc.)
+     - Added pointer-events: auto rules for modal backdrops and content
+     - Created z-index guidelines documentation in App.css
+     - Updated export overlay to use var(--z-top)
+   - **Status**: ✅ COMPLETE - Standardized layering system in place
 
-4. **Login Content-Type Format** - LOW Priority
+4. **Login Content-Type Format** - LOW Priority ✅ ENHANCED
    - **Issue**: `/api/auth/login` expects form-encoded data instead of JSON
    - **Impact**: Login works but requires correct content-type (minor UX inconsistency)
    - **Location**: `/app/backend/server.py` - login endpoint
-   - **Fix Required**:
-     - Update endpoint to accept JSON format
-     - Maintain backward compatibility if needed
-     - Update frontend if necessary
-   - **Status**: ⏳ TODO
+   - **Fix Applied**:
+     - Kept original `/api/auth/login` as form-encoded (OAuth2 standard)
+     - Added new `/api/auth/login-json` endpoint for JSON format
+     - Both endpoints return same Token response
+     - Maintained backward compatibility
+   - **Status**: ✅ COMPLETE - Both endpoints available and tested
+   - **Test Result**: JSON login working with correct credentials
 
-**Dependencies**: None - can be fixed independently
-**Estimated Effort**: 1-2 hours total
-**Testing**: Use curl for backend endpoints, manual testing for modals
+**Dependencies**: None - all fixed independently
+**Actual Effort**: 1 hour
+**Testing**: ✅ All endpoints tested with curl and verified working
 
 ---
 
