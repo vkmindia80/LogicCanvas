@@ -1109,9 +1109,9 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       {/* Trigger Config Panel - Responsive */}
       {showTriggerConfig && workflow?.id && (
         <>
-          {/* Backdrop Overlay */}
+          {/* Backdrop Overlay - No blur */}
           <div 
-            className="fixed inset-0 bg-slate-900/20 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none z-40"
+            className="fixed inset-0 bg-slate-900/10 lg:bg-transparent z-40"
             onClick={() => setShowTriggerConfig(false)}
             data-testid="trigger-config-backdrop"
           />
