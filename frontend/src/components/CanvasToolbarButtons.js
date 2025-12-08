@@ -3,7 +3,6 @@ import {
   Undo2, Redo2, ZoomIn, ZoomOut, Maximize2, Download, Grid,
   Save, Play, Eye, Zap, Layers, Variable, BookOpen, Sparkles
 } from 'lucide-react';
-import { modernButtonStyles } from '../utils/modernDesignSystem';
 
 /**
  * Reusable toolbar button groups for WorkflowCanvas
