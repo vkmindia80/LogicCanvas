@@ -927,24 +927,11 @@ const AppShell = () => {
 
               {/* User Info */}
               {currentUser && (
-                <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+                <div className="rounded-lg bg-slate-800/50 p-3">
                   <div className="mb-1 text-sm font-medium text-white">{currentUser.name || currentUser.email}</div>
                   <div className="text-xs text-indigo-200">{currentUser.role}</div>
                 </div>
               )}
-
-              {/* Logout Button - More Prominent */}
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setMobileSidebarOpen(false);
-                }}
-                className="flex w-full items-center justify-center space-x-2 rounded-lg bg-rose-500 px-3 py-2.5 text-sm font-semibold text-white transition-all hover:bg-rose-600 shadow-lg hover:shadow-xl"
-                data-testid="mobile-sidebar-logout"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Logout</span>
-              </button>
             </div>
           </aside>
         </div>
