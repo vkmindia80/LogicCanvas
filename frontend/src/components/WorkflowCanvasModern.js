@@ -28,9 +28,9 @@ import {
   TemplateAndAIButtons 
 } from './CanvasToolbarButtons';
 import { modernButtonStyles, modernInputStyles, modernBadgeStyles } from '../utils/modernDesignSystem';
-import VariablePanel from './VariablePanel';
+import VariablePanelModern from './VariablePanelModern';
 import VariableInspector from './VariableInspector';
-import VariableManagementPanel from './VariableManagementPanel';
+import VariableManagementPanelModern from './VariableManagementPanelModern';
 import LifecyclePanel from './LifecyclePanel';
 import VersionComparison from './VersionComparison';
 import EditProtectionModal from './EditProtectionModal';
