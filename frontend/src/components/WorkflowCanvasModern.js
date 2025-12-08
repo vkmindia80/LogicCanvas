@@ -915,14 +915,6 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 canRedo={historyIndex < history.length - 1}
               />
 
-              {/* Zoom Controls Group */}
-              <ZoomControlsGroup
-                onZoomIn={handleZoomIn}
-                onZoomOut={handleZoomOut}
-                onFitView={handleFitView}
-                zoomLevel={zoomLevel}
-              />
-
               {/* Grid Snap Toggle */}
               <GridSnapToggle
                 isActive={snapToGrid}
