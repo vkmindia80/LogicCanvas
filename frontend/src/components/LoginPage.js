@@ -178,14 +178,14 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
           >
             <span>🎲 Generate Sample Data (All Modules)</span>
           </button>
-          <p className="mt-2 text-[10px] text-green-400 text-center">
+          <p className="mt-2 text-[10px] text-indigo-400 text-center">
             Creates workflows, forms, tasks, approvals, users, roles, audit logs & more
           </p>
 
         </form>
 
         <div className="mt-6 border-t border-white/10 pt-4">
-          <p className="text-[11px] uppercase tracking-wide text-green-400 mb-2 flex items-center space-x-1">
+          <p className="text-[11px] uppercase tracking-wide text-indigo-400 mb-2 flex items-center space-x-1">
             <User className="h-3 w-3" />
             <span>Quick demo logins</span>
           </p>
@@ -195,15 +195,15 @@ const LoginPage = ({ onLoginSuccess, onBack }) => {
                 key={u.email}
                 type="button"
                 onClick={() => quickFill(u)}
-                className="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px] text-green-100 hover:border-primary-400 hover:bg-primary-500/20 flex flex-col items-start"
+                className="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px] text-indigo-100 hover:border-indigo-400 hover:bg-indigo-500/20 flex flex-col items-start"
                 data-testid={`demo-login-btn-${u.role}`}
               >
                 <span className="font-medium">{u.label}</span>
-                <span className="text-[10px] text-green-400">{u.email.split('@')[0]}</span>
+                <span className="text-[10px] text-indigo-400">{u.email.split('@')[0]}</span>
               </button>
             ))}
           </div>
-          <p className="mt-3 text-[10px] text-green-400">
+          <p className="mt-3 text-[10px] text-indigo-400">
             Credentials are pre-seeded in the backend for easy evaluation: passwords match the role name (e.g. <code>admin123</code>).
           </p>
         </div>
