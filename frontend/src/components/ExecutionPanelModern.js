@@ -258,6 +258,7 @@ const ExecutionPanel = ({ workflowId, onClose, onInstanceStart }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
