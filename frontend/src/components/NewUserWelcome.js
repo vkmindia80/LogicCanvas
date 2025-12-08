@@ -3,7 +3,7 @@ import { Sparkles, BookOpen, Zap, X, Play } from 'lucide-react';
 
 const NewUserWelcome = ({ onStartTour, onQuickStart, onTemplates, onDismiss }) => {
   return (
-    <div className="relative bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 rounded-xl shadow-2xl p-6 mb-6 overflow-hidden">
+    <div className="relative bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 rounded-xl shadow-2xl p-6 mb-6 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
