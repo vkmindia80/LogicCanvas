@@ -1107,9 +1107,17 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         />
       )}
 
-      {/* Trigger Config Panel - Modernized */}
+      {/* Trigger Config Panel - Responsive */}
       {showTriggerConfig && workflow?.id && (
-        <div className="fixed right-0 top-0 h-full w-96 bg-gradient-to-b from-white to-slate-50 shadow-2xl border-l border-slate-200 flex flex-col z-50 overflow-y-auto p-6">
+        <>
+          {/* Mobile/Tablet: Backdrop Overlay */}
+          <div 
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setShowTriggerConfig(false)}
+            data-testid="trigger-config-backdrop"
+          />
+          
+          <div className="fixed right-0 top-0 h-full w-full sm:w-96 lg:w-96 xl:w-[28rem] bg-gradient-to-b from-white to-slate-50 shadow-2xl border-l border-slate-200 flex flex-col z-50 overflow-y-auto p-6 transform transition-transform duration-300 ease-in-out">
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
             <div>
               <h2 className="text-xl font-bold text-slate-900">Workflow Triggers</h2>
