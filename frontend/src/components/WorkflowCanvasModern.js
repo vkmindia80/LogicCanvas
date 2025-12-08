@@ -1238,7 +1238,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
 
       {/* Variable Panels */}
       {showVariablePanel && activeInstance && (
-        <VariablePanel
+        <VariablePanelModern
           workflowId={workflow?.id}
           instanceId={activeInstance}
           onClose={() => setShowVariablePanel(false)}
@@ -1254,7 +1254,7 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       )}
 
       {showVariableManagement && activeInstance && (
-        <VariableManagementPanel
+        <VariableManagementPanelModern
           instanceId={activeInstance}
           onClose={() => setShowVariableManagement(false)}
         />
