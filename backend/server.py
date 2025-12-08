@@ -1498,20 +1498,30 @@ async def create_workflow_from_template(template_id: str, data: Dict[str, Any]):
         "updated_at": now,
         "tags": template_data.get("tags", []) + ["from-template"],
         "template_id": template_id,
-        "template_name": template_data.get("name")
+        "template_name": template_data.get("name"),
+        "version_history": []  # Initialize version history
     }
     
-    workflows_collection.insert_one(workflow_dict)
+    try:
+        workflows_collection.insert_one(workflow_dict.copy())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating workflow: {str(e)}")
     
     # Log audit
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "workflow",
-        "entity_id": workflow_id,
-        "action": "created_from_template",
-        "details": {"template_id": template_id, "template_name": template_data.get("name")},
-        "timestamp": now
-    })
+    try:
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "workflow",
+            "entity_id": workflow_id,
+            "action": "created_from_template",
+            "details": {"template_id": template_id, "template_name": template_data.get("name")},
+            "timestamp": now
+        })
+    except Exception:
+        pass  # Don't fail if audit log fails
+    
+    # Remove _id from response if present
+    workflow_dict.pop("_id", None)
     
     return {
         "message": "Workflow created successfully from template",
