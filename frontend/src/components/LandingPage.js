@@ -56,9 +56,9 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-green-200/50">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-gold-50/30" />
-        <div className="absolute inset-0 bg-grid-green-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" style={{ backgroundSize: '30px 30px' }} />
+      <section className="relative overflow-hidden border-b border-indigo-200/50">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-transparent to-purple-50/30" />
+        <div className="absolute inset-0 bg-grid-indigo-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" style={{ backgroundSize: '30px 30px' }} />
         
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:py-20 lg:py-28">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
