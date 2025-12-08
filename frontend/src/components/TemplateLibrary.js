@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   X, Search, Filter, Package, Users, DollarSign, ShoppingCart,
-  FileText, Headphones, Clock, Layers, CheckCircle, Star
+  FileText, Headphones, Clock, Layers, CheckCircle, Star, Copy, Edit2
 } from 'lucide-react';
 import { modalHeaderStyles, modalOverlayStyles, cardStyles, buttonStyles } from '../utils/designSystem';
 
