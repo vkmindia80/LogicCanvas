@@ -588,7 +588,7 @@ const AppShell = () => {
           )}
 
           {/* Role Switcher */}
-          <div className="mb-3 rounded-lg bg-slate-800/50 p-3">
+          <div className="rounded-lg bg-slate-800/50 p-3">
             <div className="mb-2 flex items-center space-x-2 text-xs text-indigo-200">
               <Shield className="h-3.5 w-3.5" />
               <span>Current Role</span>
@@ -605,16 +605,6 @@ const AppShell = () => {
               <option value="viewer">Viewer</option>
             </select>
           </div>
-
-          {/* Logout Button - More Prominent */}
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-rose-500 px-3 py-2.5 text-sm font-semibold text-white transition-all hover:bg-rose-600 shadow-lg hover:shadow-xl"
-            data-testid="sidebar-logout"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Logout</span>
-          </button>
         </div>
 
       </aside>
