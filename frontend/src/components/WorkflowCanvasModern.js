@@ -1065,19 +1065,6 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
               }}
             />
           </ReactFlow>
-          
-          {/* Zoom Controls */}
-          <ZoomControls
-            currentZoom={getZoom ? getZoom() : 1}
-            onZoomChange={(zoom) => {
-              if (reactFlowInstance.current) {
-                reactFlowInstance.current.zoomTo(zoom);
-              }
-            }}
-            onFitView={() => {
-              fitView({ duration: 300 });
-            }}
-          />
         </div>
       </div>
 
