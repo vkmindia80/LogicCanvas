@@ -527,7 +527,65 @@ Phase 1 → Phase 2.1 → Phase 2.2 → Phase 3 → Phase 4 → Phase 5 → Phas
 
 ---
 
+## Phase 8: Bug Fixes & Stability (In Progress) 🐛
+
+### 8.1 Critical Bug Fixes from iteration_5 Testing
+**Priority**: HIGH - Fix before continuing with UI redesign
+**Status**: 🔄 IN PROGRESS
+
+#### Issues Identified:
+1. **Template Creation 500 Error** - MEDIUM Priority
+   - **Issue**: `/api/templates/{id}/create-workflow` returns 500 Internal Server Error
+   - **Impact**: Template-based workflow creation fails completely
+   - **Location**: `/app/backend/server.py` - template workflow creation endpoint
+   - **Fix Required**: 
+     - Debug template workflow creation logic
+     - Add proper error handling
+     - Validate template structure before workflow creation
+   - **Status**: ⏳ TODO
+
+2. **Version Comparison 404 Error** - MEDIUM Priority
+   - **Issue**: `/api/workflows/{id}/versions/compare` returns "One or both versions not found"
+   - **Impact**: Version comparison feature partially broken
+   - **Location**: `/app/backend/server.py` - version comparison endpoint
+   - **Fix Required**:
+     - Fix version lookup logic
+     - Add better error messages
+     - Validate version IDs exist before comparison
+   - **Status**: ⏳ TODO
+
+3. **Modal Overlay Z-Index Issues** - LOW Priority
+   - **Issue**: Some modal overlays intercept pointer events causing click timeouts
+   - **Impact**: Occasional navigation issues with overlapping modals
+   - **Location**: Multiple modal components
+   - **Fix Required**:
+     - Review z-index hierarchy across all modals
+     - Add pointer-events management
+     - Test modal stacking scenarios
+   - **Status**: ⏳ TODO
+
+4. **Login Content-Type Format** - LOW Priority
+   - **Issue**: `/api/auth/login` expects form-encoded data instead of JSON
+   - **Impact**: Login works but requires correct content-type (minor UX inconsistency)
+   - **Location**: `/app/backend/server.py` - login endpoint
+   - **Fix Required**:
+     - Update endpoint to accept JSON format
+     - Maintain backward compatibility if needed
+     - Update frontend if necessary
+   - **Status**: ⏳ TODO
+
+**Dependencies**: None - can be fixed independently
+**Estimated Effort**: 1-2 hours total
+**Testing**: Use curl for backend endpoints, manual testing for modals
+
+---
+
 ## Next Steps
+
+**CURRENT PRIORITY: Phase 8 Bug Fixes**
+Fixing the 4 identified issues from iteration_5 testing before continuing with UI redesign.
+
+**After Phase 8 Completion:**
 
 **Option A - Continue Full Implementation**
 Proceed with Phase 2.1 to modernize the WorkflowCanvas component.
