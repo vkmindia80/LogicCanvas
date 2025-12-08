@@ -973,9 +973,39 @@ const AppShell = () => {
               </div>
               <h1 className="text-lg font-bold text-slate-900">LogicCanvas</h1>
             </div>
-            <div className="w-6"></div>
+            {currentUser && (
+              <button 
+                onClick={handleLogout}
+                className="flex items-center space-x-2 text-rose-600 hover:text-rose-700 font-medium"
+                title="Logout"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            )}
           </div>
         </header>
+        
+        {/* Desktop Header - User Info & Logout */}
+        <div className="hidden lg:block sticky top-0 z-30 border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm">
+          <div className="flex h-16 items-center justify-end px-6">
+            {currentUser && (
+              <div className="flex items-center space-x-3">
+                <div className="text-right">
+                  <div className="text-sm font-medium text-slate-900">{currentUser.name || currentUser.email}</div>
+                  <div className="text-xs text-slate-500">{currentUser.role}</div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 rounded-lg bg-rose-50 px-4 py-2 text-sm font-medium text-rose-600 transition-all hover:bg-rose-100"
+                  data-testid="header-logout-btn"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Content Area */}
         <div className="min-h-screen">
