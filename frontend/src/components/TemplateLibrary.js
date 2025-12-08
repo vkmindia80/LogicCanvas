@@ -209,17 +209,19 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
                       </div>
 
                       {/* Features */}
-                      <div className="mb-4">
-                        <p className="text-xs font-semibold text-primary-700 mb-2">Key Features:</p>
-                        <ul className="text-xs text-primary-600 space-y-1">
-                          {template.features.slice(0, 3).map((feature, idx) => (
-                            <li key={idx} className="flex items-start">
-                              <CheckCircle className="w-3 h-3 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      {template.features && template.features.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-xs font-semibold text-primary-700 mb-2">Key Features:</p>
+                          <ul className="text-xs text-primary-600 space-y-1">
+                            {template.features.slice(0, 3).map((feature, idx) => (
+                              <li key={idx} className="flex items-start">
+                                <CheckCircle className="w-3 h-3 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
                       {/* Actions */}
                       <div className="flex flex-col space-y-2">
