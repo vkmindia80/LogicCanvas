@@ -7,36 +7,36 @@ import {
 
 const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 text-primary-900">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-slate-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-green-200/50 bg-white/90 backdrop-blur-xl shadow-lg shadow-green-200/50">
+      <header className="sticky top-0 z-50 border-b border-indigo-200/50 bg-white/90 backdrop-blur-xl shadow-lg shadow-indigo-200/50">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-3" data-testid="landing-header-brand">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 shadow-lg shadow-primary-500/30">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 shadow-lg shadow-indigo-500/30">
               <Activity className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary-900 to-primary-700 bg-clip-text text-transparent">LogicCanvas</h1>
-              <p className="text-[10px] uppercase tracking-wider text-primary-600 font-semibold">Visual Workflow Platform</p>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-900 to-indigo-700 bg-clip-text text-transparent">LogicCanvas</h1>
+              <p className="text-[10px] uppercase tracking-wider text-indigo-600 font-semibold">Visual Workflow Platform</p>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
             {currentUser && (
               <div
-                className="hidden items-center space-x-2 rounded-full border border-green-200 bg-white px-4 py-1.5 text-xs text-primary-700 shadow-sm sm:flex"
+                className="hidden items-center space-x-2 rounded-full border border-indigo-200 bg-white px-4 py-1.5 text-xs text-slate-700 shadow-sm sm:flex"
                 data-testid="landing-current-user-chip"
               >
-                <Shield className="h-4 w-4 text-primary-500" />
+                <Shield className="h-4 w-4 text-indigo-500" />
                 <span className="font-medium">{currentUser.name || currentUser.email}</span>
-                <span className="text-green-400">· {currentUser.role}</span>
+                <span className="text-indigo-400">· {currentUser.role}</span>
               </div>
             )}
 
             {currentUser ? (
               <button
                 onClick={onLogout}
-                className="rounded-xl border-2 border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-primary-700 shadow-md hover:bg-green-50 transition-all"
+                className="rounded-xl border-2 border-indigo-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-md hover:bg-indigo-50 transition-all"
                 data-testid="landing-logout-btn"
               >
                 Logout
@@ -44,7 +44,7 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
             ) : (
               <button
                 onClick={onGetStarted}
-                className="group inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-primary-500/40 transition-all hover:shadow-2xl hover:shadow-primary-500/50"
+                className="group inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-indigo-500/40 transition-all hover:shadow-2xl hover:shadow-indigo-500/50"
                 data-testid="landing-login-btn"
               >
                 <span>Access Demo</span>
