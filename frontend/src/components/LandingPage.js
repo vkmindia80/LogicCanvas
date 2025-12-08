@@ -74,16 +74,16 @@ const LandingPage = ({ onGetStarted, currentUser, onLogout }) => {
 
               <div className="space-y-6">
                 <h1
-                  className="text-4xl font-extrabold leading-tight tracking-tight text-primary-900 sm:text-5xl lg:text-6xl"
+                  className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
                   data-testid="landing-hero-title"
                 >
                   Enterprise Workflow
-                  <span className="block mt-2 bg-gradient-to-r from-primary-600 via-primary-500 to-gold-600 bg-clip-text text-transparent">
+                  <span className="block mt-2 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
                     Automation Platform
                   </span>
                 </h1>
                 <p
-                  className="text-lg leading-relaxed text-primary-600 max-w-2xl mx-auto lg:mx-0"
+                  className="text-lg leading-relaxed text-slate-600 max-w-2xl mx-auto lg:mx-0"
                   data-testid="landing-hero-subtitle"
                 >
                   Design, automate, and optimize business processes with a visual workflow builder. 
