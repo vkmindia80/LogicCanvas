@@ -1058,17 +1058,44 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         </div>
       </div>
 
-      {/* Right Sidebar - Node Editor - Modernized */}
+      {/* Right Sidebar - Node Editor - Responsive with Mobile Slide-over */}
       {selectedNode && !showExecutionPanel && !showTriggerConfig && (
-        <div className="w-80 lg:w-96 xl:w-[28rem] h-screen bg-gradient-to-b from-white to-slate-50 border-l border-slate-200 shadow-lg p-4 overflow-y-auto flex-shrink-0">
-          <NodeEditorModern
-            node={selectedNode}
-            onUpdate={updateNode}
-            onDelete={deleteNode}
-            onDuplicate={duplicateNode}
-            onClose={() => setSelectedNode(null)}
+        <>
+          {/* Mobile/Tablet: Backdrop Overlay */}
+          <div 
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setSelectedNode(null)}
+            data-testid="node-editor-backdrop"
           />
-        </div>
+          
+          {/* Properties Panel - Responsive */}
+          <div 
+            className="
+              fixed lg:relative
+              right-0 top-0 bottom-0
+              w-full sm:w-96 lg:w-96 xl:w-[28rem]
+              h-screen
+              bg-gradient-to-b from-white to-slate-50 
+              border-l border-slate-200 
+              shadow-2xl lg:shadow-lg
+              p-4 
+              overflow-y-auto 
+              flex-shrink-0
+              z-50 lg:z-auto
+              transform transition-transform duration-300 ease-in-out
+              translate-x-0
+            "
+            data-testid="node-editor-panel"
+          >
+            <NodeEditorModern
+              node={selectedNode}
+              onUpdate={updateNode}
+              onDelete={deleteNode}
+              onDuplicate={duplicateNode}
+              onClose={() => setSelectedNode(null)}
+            />
+          </div>
+        </>
       )}
 
       {/* Execution Panel - Modernized */}
