@@ -101,12 +101,12 @@ export const ExportMenu = ({ onExportPNG, onExportPDF, isExporting }) => {
       onMouseLeave={() => setIsOpen(false)}
     >
       <button
-        className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+        className="inline-flex items-center gap-2 rounded-xl bg-slate-600 px-3 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow-md disabled:opacity-50"
         title="Export Workflow"
         data-testid="export-menu-btn"
         disabled={isExporting}
       >
-        <Download className="w-4 h-4 text-slate-700" />
+        <Download className="w-4 h-4" />
       </button>
       
       {isOpen && (
