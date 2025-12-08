@@ -641,6 +641,23 @@ select {
   border-radius: 4px;
 }
 
+/* Modal & Overlay Management */
+/* 
+  Z-Index Guidelines:
+  - Modal backdrop: var(--z-modal-backdrop) or z-40 (Tailwind)
+  - Modal content: var(--z-modal) or z-50 (Tailwind)
+  - Nested modals: Add +10 to parent z-index
+  - Always set pointer-events: auto on interactive elements within modals
+*/
+
+.modal-backdrop {
+  pointer-events: auto; /* Ensure backdrop catches clicks to close */
+}
+
+.modal-content {
+  pointer-events: auto; /* Ensure modal content is interactive */
+}
+
 /* Export loading overlay */
 .export-overlay {
   position: fixed;
@@ -649,8 +666,9 @@ select {
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 9999;
+  justify-center: center;
+  z-index: var(--z-top);
+  pointer-events: auto;
   animation: fade-in 0.2s ease-out;
 }
 
