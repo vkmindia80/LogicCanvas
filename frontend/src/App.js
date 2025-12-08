@@ -943,13 +943,14 @@ const AppShell = () => {
                 </div>
               )}
 
-              {/* Logout Button */}
+              {/* Logout Button - More Prominent */}
               <button
                 onClick={() => {
                   handleLogout();
                   setMobileSidebarOpen(false);
                 }}
-                className="flex w-full items-center justify-center space-x-2 rounded-lg bg-rose-500/10 px-3 py-2 text-sm font-medium text-rose-400 transition-all hover:bg-rose-500/20"
+                className="flex w-full items-center justify-center space-x-2 rounded-lg bg-rose-500 px-3 py-2.5 text-sm font-semibold text-white transition-all hover:bg-rose-600 shadow-lg hover:shadow-xl"
+                data-testid="mobile-sidebar-logout"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
