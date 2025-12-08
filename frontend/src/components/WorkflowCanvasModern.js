@@ -18,7 +18,7 @@ import ExecutionPanelModern from './ExecutionPanelModern';
 import TriggerConfigModern from './TriggerConfigModern';
 import DeletableEdgeModern from './edges/DeletableEdgeModern';
 import { createNodeData } from '../utils/nodeTypes';
-import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, GitBranch, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, Download, Grid, GitBranch, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { 
   UndoRedoGroup, 
   GridSnapToggle, 
