@@ -10,7 +10,7 @@ import {
 
 export const UndoRedoGroup = ({ onUndo, onRedo, canUndo, canRedo }) => {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       <button
         onClick={onUndo}
         disabled={!canUndo}
