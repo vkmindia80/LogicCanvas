@@ -11,25 +11,24 @@ import { modernButtonStyles } from '../utils/modernDesignSystem';
 
 export const UndoRedoGroup = ({ onUndo, onRedo, canUndo, canRedo }) => {
   return (
-    <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50 border border-slate-200">
+    <div className="flex items-center gap-1">
       <button
         onClick={onUndo}
         disabled={!canUndo}
-        className="p-2 hover:bg-white rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 rounded-xl bg-slate-600 px-3 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         title="Undo (Ctrl+Z)"
         data-testid="undo-btn"
       >
-        <Undo2 className="w-4 h-4 text-slate-700" />
+        <Undo2 className="w-4 h-4" />
       </button>
-      <div className="w-px h-4 bg-slate-300" />
       <button
         onClick={onRedo}
         disabled={!canRedo}
-        className="p-2 hover:bg-white rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 rounded-xl bg-slate-600 px-3 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-slate-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         title="Redo (Ctrl+Y)"
         data-testid="redo-btn"
       >
-        <Redo2 className="w-4 h-4 text-slate-700" />
+        <Redo2 className="w-4 h-4" />
       </button>
     </div>
   );
