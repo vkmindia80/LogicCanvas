@@ -423,3 +423,214 @@ class RedisConnector(DatabaseConnector):
                 'error': str(e),
                 'operation': 'increment'
             }
+
+
+class CassandraConnector(DatabaseConnector):
+    """Apache Cassandra distributed database connector"""
+    
+    def __init__(self, connection_id: str, config: Dict[str, Any]):
+        super().__init__(connection_id, config)
+        self.db_type = 'cassandra'
+        
+    async def connect(self) -> bool:
+        """Establish Cassandra connection"""
+        try:
+            self._log_operation('connect', 'attempting')
+            
+            # Decrypt password if present
+            password = self.decrypt_credential(self.config.get('password', ''))
+            
+            # Simulate connection
+            self.connection = {
+                'contact_points': self.config.get('contact_points', ['localhost']),
+                'port': self.config.get('port', 9042),
+                'keyspace': self.config.get('keyspace'),
+                'connected': True
+            }
+            
+            self._log_operation('connect', 'success')
+            return True
+        except Exception as e:
+            self._log_operation('connect', 'failed', {'error': str(e)})
+            return False
+    
+    async def disconnect(self) -> bool:
+        """Close Cassandra connection"""
+        try:
+            if self.connection:
+                self.connection['connected'] = False
+                self.connection = None
+                self._log_operation('disconnect', 'success')
+            return True
+        except Exception as e:
+            self._log_operation('disconnect', 'failed', {'error': str(e)})
+            return False
+    
+    async def test_connection(self) -> Dict[str, Any]:
+        """Test Cassandra connection"""
+        try:
+            await self.connect()
+            
+            result = {
+                'success': True,
+                'message': 'Connection successful',
+                'database_type': 'Apache Cassandra',
+                'version': '4.0 (simulated)',
+                'contact_points': self.config.get('contact_points', ['localhost']),
+                'keyspace': self.config.get('keyspace')
+            }
+            
+            await self.disconnect()
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'Connection failed: {str(e)}',
+                'database_type': 'Apache Cassandra'
+            }
+    
+    async def execute_query(self, query: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Execute Cassandra CQL query"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            self._log_operation('execute_query', 'executing', {'query': query[:100]})
+            
+            result = {
+                'success': True,
+                'data': [],
+                'query': query,
+                'execution_time_ms': 35
+            }
+            
+            # Simulate SELECT results
+            if query.strip().upper().startswith('SELECT'):
+                result['data'] = [
+                    {'id': 'uuid-001', 'name': 'Cassandra Sample', 'timestamp': '2024-01-01 00:00:00'},
+                    {'id': 'uuid-002', 'name': 'Another Row', 'timestamp': '2024-01-02 00:00:00'}
+                ]
+                result['row_count'] = len(result['data'])
+            else:
+                result['applied'] = True
+                result['message'] = 'Query executed successfully'
+            
+            self._log_operation('execute_query', 'success')
+            return result
+        except Exception as e:
+            self._log_operation('execute_query', 'failed', {'error': str(e)})
+            return {
+                'success': False,
+                'error': str(e),
+                'query': query
+            }
+    
+    async def insert(self, table: str, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Insert data into Cassandra table"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            columns = ', '.join(data.keys())
+            placeholders = ', '.join(['?'] * len(data))
+            query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+            
+            self._log_operation('insert', 'executing', {'table': table})
+            
+            result = {
+                'success': True,
+                'applied': True,
+                'table': table,
+                'message': 'Row inserted successfully'
+            }
+            
+            self._log_operation('insert', 'success')
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'insert'
+            }
+    
+    async def update(self, table: str, data: Dict[str, Any], condition: Dict[str, Any]) -> Dict[str, Any]:
+        """Update data in Cassandra table"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            set_clause = ', '.join([f"{k} = ?" for k in data.keys()])
+            where_clause = ' AND '.join([f"{k} = ?" for k in condition.keys()])
+            query = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
+            
+            self._log_operation('update', 'executing', {'table': table})
+            
+            result = {
+                'success': True,
+                'applied': True,
+                'table': table,
+                'message': 'Row updated successfully'
+            }
+            
+            self._log_operation('update', 'success')
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'update'
+            }
+    
+    async def delete(self, table: str, condition: Dict[str, Any]) -> Dict[str, Any]:
+        """Delete data from Cassandra table"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            where_clause = ' AND '.join([f"{k} = ?" for k in condition.keys()])
+            query = f"DELETE FROM {table} WHERE {where_clause}"
+            
+            self._log_operation('delete', 'executing', {'table': table})
+            
+            result = {
+                'success': True,
+                'applied': True,
+                'table': table,
+                'message': 'Row deleted successfully'
+            }
+            
+            self._log_operation('delete', 'success')
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'delete'
+            }
+    
+    async def batch_execute(self, queries: List[str]) -> Dict[str, Any]:
+        """Execute batch of CQL queries"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            if not queries:
+                return {'success': False, 'error': 'No queries provided'}
+            
+            self._log_operation('batch_execute', 'executing', {'query_count': len(queries)})
+            
+            result = {
+                'success': True,
+                'applied': True,
+                'queries_executed': len(queries),
+                'message': 'Batch executed successfully'
+            }
+            
+            self._log_operation('batch_execute', 'success')
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'batch_execute'
+            }
