@@ -584,81 +584,56 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50">
-                {/* Basic Information Section */}
-                <div className="bg-white rounded-xl border-2 border-green-200 p-5 space-y-4">
-                  <h4 className="text-lg font-bold text-slate-800 flex items-center space-x-2 mb-4">
-                    <Database className="h-5 w-5 text-green-600" />
-                    <span>Basic Information</span>
-                  </h4>
-                  
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Connection Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                      placeholder="My Database Connection"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Database Type <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      value={formData.db_type}
-                      onChange={(e) => handleDbTypeChange(e.target.value)}
-                      className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                      required
-                    >
-                      {dbTypes.map((type) => (
-                        <option key={type.id} value={type.id}>
-                          {type.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-slate-800">Connection Name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="My Database Connection"
+                    className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    required
+                  />
                 </div>
 
-                {/* Connection Details Section */}
-                {dbTypes.find(t => t.id === formData.db_type) && (
-                  <div className="bg-white rounded-xl border-2 border-green-200 p-5 space-y-4">
-                    <h4 className="text-lg font-bold text-slate-800 flex items-center space-x-2 mb-4">
-                      <Zap className="h-5 w-5 text-green-600" />
-                      <span>Connection Details</span>
-                    </h4>
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-slate-800">Database Type</label>
+                  <select
+                    value={formData.db_type}
+                    onChange={(e) => handleDbTypeChange(e.target.value)}
+                    className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    required
+                  >
+                    {dbTypes.map((type) => (
+                      <option key={type.id} value={type.id}>
+                        {type.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="border-t border-green-200 pt-6">
+                  <h4 className="mb-4 text-sm font-semibold text-slate-800">Connection Details</h4>
+                  <div className="space-y-5">
                     {renderFormFields()}
                   </div>
-                )}
-
-                {/* Additional Information Section */}
-                <div className="bg-white rounded-xl border-2 border-green-200 p-5 space-y-4">
-                  <h4 className="text-lg font-bold text-slate-800 flex items-center space-x-2 mb-4">
-                    <Edit2 className="h-5 w-5 text-green-600" />
-                    <span>Additional Information</span>
-                  </h4>
-                  
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Description (Optional)
-                    </label>
-                    <textarea
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                      rows="3"
-                      placeholder="Add a description for this database connection..."
-                    />
-                  </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex items-center justify-end space-x-3 pt-2">
+                <div className="border-t border-green-200 pt-6">
+                  <label className="mb-2 block text-sm font-semibold text-slate-800">
+                    Description <span className="text-xs font-normal text-green-500">(Optional)</span>
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Brief description of this connection..."
+                    rows={3}
+                    className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-6 border-t-2 border-green-200">
                   <button
                     type="button"
                     onClick={() => {
