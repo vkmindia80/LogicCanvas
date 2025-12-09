@@ -212,34 +212,39 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
     return (
       <div className="space-y-4">
-        {selectedType.fields.includes('host') && (
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Host
-            </label>
-            <input
-              type="text"
-              value={formData.host}
-              onChange={(e) => setFormData({ ...formData, host: e.target.value })}
-              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-              placeholder="localhost"
-              required
-            />
-          </div>
-        )}
+        {/* Host and Port in Grid */}
+        {(selectedType.fields.includes('host') || selectedType.fields.includes('port')) && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {selectedType.fields.includes('host') && (
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Host <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.host}
+                  onChange={(e) => setFormData({ ...formData, host: e.target.value })}
+                  className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                  placeholder="localhost"
+                  required
+                />
+              </div>
+            )}
 
-        {selectedType.fields.includes('port') && (
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Port
-            </label>
-            <input
-              type="number"
-              value={formData.port}
-              onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
-              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-              required
-            />
+            {selectedType.fields.includes('port') && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Port <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  value={formData.port}
+                  onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
+                  className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                  required
+                />
+              </div>
+            )}
           </div>
         )}
 
