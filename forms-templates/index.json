@@ -1,0 +1,697 @@
+{
+  "version": "1.0",
+  "total_templates": 38,
+  "categories": [
+    {
+      "id": "hr-people",
+      "name": "HR & People",
+      "description": "Human resources, hiring, and employee management forms",
+      "icon": "Users",
+      "template_count": 10
+    },
+    {
+      "id": "finance-accounting",
+      "name": "Finance & Accounting",
+      "description": "Financial operations, expenses, and accounting forms",
+      "icon": "DollarSign",
+      "template_count": 8
+    },
+    {
+      "id": "it-support",
+      "name": "IT Support",
+      "description": "Technical support, access requests, and IT services",
+      "icon": "Headphones",
+      "template_count": 6
+    },
+    {
+      "id": "legal-compliance",
+      "name": "Legal & Compliance",
+      "description": "Legal documents, contracts, and compliance forms",
+      "icon": "Scale",
+      "template_count": 4
+    },
+    {
+      "id": "operations-facilities",
+      "name": "Operations & Facilities",
+      "description": "Facility management, operations, and logistics forms",
+      "icon": "Package",
+      "template_count": 5
+    },
+    {
+      "id": "sales-crm",
+      "name": "Sales & CRM",
+      "description": "Sales processes, lead management, and customer relations",
+      "icon": "TrendingUp",
+      "template_count": 5
+    }
+  ],
+  "templates": [
+    {
+      "id": "budget-request",
+      "name": "Budget Request Form",
+      "description": "Request budget allocation or additional funding for projects and initiatives",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "DollarSign",
+      "version": 1,
+      "tags": [
+        "finance",
+        "budget",
+        "funding",
+        "allocation"
+      ],
+      "field_count": 12,
+      "file_path": "finance-accounting/budget-request.json"
+    },
+    {
+      "id": "credit-application",
+      "name": "Credit Application Form",
+      "description": "Apply for company credit account or increase credit limit",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "CreditCard",
+      "version": 1,
+      "tags": [
+        "finance",
+        "credit",
+        "application",
+        "account"
+      ],
+      "field_count": 16,
+      "file_path": "finance-accounting/credit-application.json"
+    },
+    {
+      "id": "expense-report",
+      "name": "Expense Report Form",
+      "description": "Consolidated monthly expense report for multiple business expenses",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "CreditCard",
+      "version": 1,
+      "tags": [
+        "finance",
+        "expense",
+        "report",
+        "reimbursement"
+      ],
+      "field_count": 14,
+      "file_path": "finance-accounting/expense-report.json"
+    },
+    {
+      "id": "invoice-submission",
+      "name": "Invoice Submission Form",
+      "description": "Submit invoices for payment processing and accounts payable",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "FileText",
+      "version": 1,
+      "tags": [
+        "finance",
+        "invoice",
+        "payment",
+        "accounts-payable"
+      ],
+      "field_count": 12,
+      "file_path": "finance-accounting/invoice-submission.json"
+    },
+    {
+      "id": "payment-request",
+      "name": "Payment Request Form",
+      "description": "Request immediate or scheduled payment for vendor bills and services",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "Banknote",
+      "version": 1,
+      "tags": [
+        "finance",
+        "payment",
+        "disbursement",
+        "vendor"
+      ],
+      "field_count": 12,
+      "file_path": "finance-accounting/payment-request.json"
+    },
+    {
+      "id": "purchase-order",
+      "name": "Purchase Order Form",
+      "description": "Create purchase orders for goods and services procurement",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "ShoppingCart",
+      "version": 1,
+      "tags": [
+        "finance",
+        "procurement",
+        "purchase-order",
+        "buying"
+      ],
+      "field_count": 14,
+      "file_path": "finance-accounting/purchase-order.json"
+    },
+    {
+      "id": "travel-authorization",
+      "name": "Travel Authorization Form",
+      "description": "Request approval for business travel with estimated costs and itinerary",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "Plane",
+      "version": 1,
+      "tags": [
+        "finance",
+        "travel",
+        "authorization",
+        "trip"
+      ],
+      "field_count": 16,
+      "file_path": "finance-accounting/travel-authorization.json"
+    },
+    {
+      "id": "vendor-registration",
+      "name": "Vendor Registration Form",
+      "description": "Register new vendors and suppliers in the system for payment processing",
+      "category": "finance-accounting",
+      "category_display": "Finance & Accounting",
+      "icon": "Briefcase",
+      "version": 1,
+      "tags": [
+        "finance",
+        "vendor",
+        "supplier",
+        "registration"
+      ],
+      "field_count": 16,
+      "file_path": "finance-accounting/vendor-registration.json"
+    },
+    {
+      "id": "benefits-enrollment",
+      "name": "Benefits Enrollment Form",
+      "description": "Employee benefits selection form for health insurance, retirement plans, and other benefits",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "Heart",
+      "version": 1,
+      "tags": [
+        "hr",
+        "benefits",
+        "insurance",
+        "enrollment"
+      ],
+      "field_count": 12,
+      "file_path": "hr-people/benefits-enrollment.json"
+    },
+    {
+      "id": "employee-info-update",
+      "name": "Employee Information Update Form",
+      "description": "Form for employees to update their personal information in HR systems",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "UserCog",
+      "version": 1,
+      "tags": [
+        "hr",
+        "update",
+        "employee",
+        "information"
+      ],
+      "field_count": 11,
+      "file_path": "hr-people/employee-info-update.json"
+    },
+    {
+      "id": "employee-onboarding",
+      "name": "Employee Onboarding Form",
+      "description": "Comprehensive form for collecting new employee information during onboarding process",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "UserPlus",
+      "version": 1,
+      "tags": [
+        "hr",
+        "onboarding",
+        "employee",
+        "hiring"
+      ],
+      "field_count": 12,
+      "file_path": "hr-people/employee-onboarding.json"
+    },
+    {
+      "id": "exit-interview",
+      "name": "Exit Interview Form",
+      "description": "Gather feedback from departing employees to improve workplace culture and retention",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "UserMinus",
+      "version": 1,
+      "tags": [
+        "hr",
+        "exit",
+        "offboarding",
+        "feedback"
+      ],
+      "field_count": 10,
+      "file_path": "hr-people/exit-interview.json"
+    },
+    {
+      "id": "expense-reimbursement",
+      "name": "Expense Reimbursement Form",
+      "description": "Submit business expenses for reimbursement with receipt documentation",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "Receipt",
+      "version": 1,
+      "tags": [
+        "hr",
+        "finance",
+        "expense",
+        "reimbursement"
+      ],
+      "field_count": 10,
+      "file_path": "hr-people/expense-reimbursement.json"
+    },
+    {
+      "id": "performance-review",
+      "name": "Performance Review Form",
+      "description": "Structured performance evaluation form with ratings and goal tracking",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "Award",
+      "version": 1,
+      "tags": [
+        "hr",
+        "performance",
+        "review",
+        "evaluation"
+      ],
+      "field_count": 12,
+      "file_path": "hr-people/performance-review.json"
+    },
+    {
+      "id": "referral-submission",
+      "name": "Employee Referral Form",
+      "description": "Submit candidate referrals for open positions with your company",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "Users",
+      "version": 1,
+      "tags": [
+        "hr",
+        "referral",
+        "recruitment",
+        "hiring"
+      ],
+      "field_count": 11,
+      "file_path": "hr-people/referral-submission.json"
+    },
+    {
+      "id": "time-off-request",
+      "name": "Time-Off Request Form",
+      "description": "Simple form for employees to request vacation, sick leave, or personal time off",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "Calendar",
+      "version": 1,
+      "tags": [
+        "hr",
+        "leave",
+        "vacation",
+        "pto",
+        "time-off"
+      ],
+      "field_count": 8,
+      "file_path": "hr-people/time-off-request.json"
+    },
+    {
+      "id": "training-request",
+      "name": "Training Request Form",
+      "description": "Request form for professional development, courses, conferences, and training programs",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "GraduationCap",
+      "version": 1,
+      "tags": [
+        "hr",
+        "training",
+        "development",
+        "learning"
+      ],
+      "field_count": 10,
+      "file_path": "hr-people/training-request.json"
+    },
+    {
+      "id": "workplace-incident",
+      "name": "Workplace Incident Report Form",
+      "description": "Report workplace accidents, injuries, safety hazards, or security incidents",
+      "category": "hr-people",
+      "category_display": "HR & People",
+      "icon": "AlertTriangle",
+      "version": 1,
+      "tags": [
+        "hr",
+        "safety",
+        "incident",
+        "report"
+      ],
+      "field_count": 14,
+      "file_path": "hr-people/workplace-incident.json"
+    },
+    {
+      "id": "access-request",
+      "name": "System Access Request Form",
+      "description": "Request access to systems, applications, databases, or network resources",
+      "category": "it-support",
+      "category_display": "IT Support",
+      "icon": "Key",
+      "version": 1,
+      "tags": [
+        "it",
+        "access",
+        "permissions",
+        "security"
+      ],
+      "field_count": 14,
+      "file_path": "it-support/access-request.json"
+    },
+    {
+      "id": "change-request",
+      "name": "IT Change Request Form",
+      "description": "Submit requests for IT infrastructure, system, or configuration changes",
+      "category": "it-support",
+      "category_display": "IT Support",
+      "icon": "Settings",
+      "version": 1,
+      "tags": [
+        "it",
+        "change",
+        "infrastructure",
+        "system"
+      ],
+      "field_count": 16,
+      "file_path": "it-support/change-request.json"
+    },
+    {
+      "id": "incident-report",
+      "name": "IT Incident Report Form",
+      "description": "Report IT security incidents, system outages, or data breaches",
+      "category": "it-support",
+      "category_display": "IT Support",
+      "icon": "ShieldAlert",
+      "version": 1,
+      "tags": [
+        "it",
+        "incident",
+        "security",
+        "outage"
+      ],
+      "field_count": 15,
+      "file_path": "it-support/incident-report.json"
+    },
+    {
+      "id": "it-support-ticket",
+      "name": "IT Support Ticket Form",
+      "description": "Submit IT support requests for technical issues and assistance",
+      "category": "it-support",
+      "category_display": "IT Support",
+      "icon": "Headphones",
+      "version": 1,
+      "tags": [
+        "it",
+        "support",
+        "helpdesk",
+        "ticket"
+      ],
+      "field_count": 13,
+      "file_path": "it-support/it-support-ticket.json"
+    },
+    {
+      "id": "service-request",
+      "name": "IT Service Request Form",
+      "description": "General IT service requests for setup, configuration, and routine tasks",
+      "category": "it-support",
+      "category_display": "IT Support",
+      "icon": "Wrench",
+      "version": 1,
+      "tags": [
+        "it",
+        "service",
+        "request",
+        "setup"
+      ],
+      "field_count": 10,
+      "file_path": "it-support/service-request.json"
+    },
+    {
+      "id": "software-hardware-request",
+      "name": "Software/Hardware Request Form",
+      "description": "Request new software licenses or hardware equipment",
+      "category": "it-support",
+      "category_display": "IT Support",
+      "icon": "Laptop",
+      "version": 1,
+      "tags": [
+        "it",
+        "hardware",
+        "software",
+        "equipment"
+      ],
+      "field_count": 13,
+      "file_path": "it-support/software-hardware-request.json"
+    },
+    {
+      "id": "compliance-checklist",
+      "name": "Compliance Checklist Form",
+      "description": "Complete compliance checklists for regulatory requirements and internal policies",
+      "category": "legal-compliance",
+      "category_display": "Legal & Compliance",
+      "icon": "CheckSquare",
+      "version": 1,
+      "tags": [
+        "legal",
+        "compliance",
+        "checklist",
+        "regulatory"
+      ],
+      "field_count": 16,
+      "file_path": "legal-compliance/compliance-checklist.json"
+    },
+    {
+      "id": "contract-request",
+      "name": "Contract Request Form",
+      "description": "Request legal review and creation of contracts and agreements",
+      "category": "legal-compliance",
+      "category_display": "Legal & Compliance",
+      "icon": "FileSignature",
+      "version": 1,
+      "tags": [
+        "legal",
+        "compliance",
+        "contract",
+        "agreement"
+      ],
+      "field_count": 13,
+      "file_path": "legal-compliance/contract-request.json"
+    },
+    {
+      "id": "nda-submission",
+      "name": "NDA Submission Form",
+      "description": "Submit and request Non-Disclosure Agreements for confidential information sharing",
+      "category": "legal-compliance",
+      "category_display": "Legal & Compliance",
+      "icon": "Lock",
+      "version": 1,
+      "tags": [
+        "legal",
+        "compliance",
+        "nda",
+        "confidentiality"
+      ],
+      "field_count": 13,
+      "file_path": "legal-compliance/nda-submission.json"
+    },
+    {
+      "id": "risk-assessment",
+      "name": "Risk Assessment Form",
+      "description": "Conduct risk assessments for projects, vendors, and business activities",
+      "category": "legal-compliance",
+      "category_display": "Legal & Compliance",
+      "icon": "AlertCircle",
+      "version": 1,
+      "tags": [
+        "legal",
+        "compliance",
+        "risk",
+        "assessment"
+      ],
+      "field_count": 15,
+      "file_path": "legal-compliance/risk-assessment.json"
+    },
+    {
+      "id": "asset-checkout",
+      "name": "Asset Check-out Form",
+      "description": "Check out company assets, equipment, and tools",
+      "category": "operations-facilities",
+      "category_display": "Operations & Facilities",
+      "icon": "Package",
+      "version": 1,
+      "tags": [
+        "operations",
+        "facilities",
+        "asset",
+        "equipment"
+      ],
+      "field_count": 13,
+      "file_path": "operations-facilities/asset-checkout.json"
+    },
+    {
+      "id": "maintenance-request",
+      "name": "Maintenance Request Form",
+      "description": "Submit requests for facility maintenance, repairs, and improvements",
+      "category": "operations-facilities",
+      "category_display": "Operations & Facilities",
+      "icon": "Wrench",
+      "version": 1,
+      "tags": [
+        "operations",
+        "facilities",
+        "maintenance",
+        "repair"
+      ],
+      "field_count": 10,
+      "file_path": "operations-facilities/maintenance-request.json"
+    },
+    {
+      "id": "meeting-room-booking",
+      "name": "Meeting Room Booking Form",
+      "description": "Reserve conference rooms and meeting spaces",
+      "category": "operations-facilities",
+      "category_display": "Operations & Facilities",
+      "icon": "Calendar",
+      "version": 1,
+      "tags": [
+        "operations",
+        "facilities",
+        "meeting",
+        "booking"
+      ],
+      "field_count": 12,
+      "file_path": "operations-facilities/meeting-room-booking.json"
+    },
+    {
+      "id": "vehicle-request",
+      "name": "Vehicle Request Form",
+      "description": "Request company vehicles for business travel and transportation",
+      "category": "operations-facilities",
+      "category_display": "Operations & Facilities",
+      "icon": "Car",
+      "version": 1,
+      "tags": [
+        "operations",
+        "facilities",
+        "vehicle",
+        "transportation"
+      ],
+      "field_count": 15,
+      "file_path": "operations-facilities/vehicle-request.json"
+    },
+    {
+      "id": "visitor-registration",
+      "name": "Visitor Registration Form",
+      "description": "Pre-register visitors and guests for facility access",
+      "category": "operations-facilities",
+      "category_display": "Operations & Facilities",
+      "icon": "UserPlus",
+      "version": 1,
+      "tags": [
+        "operations",
+        "facilities",
+        "visitor",
+        "security"
+      ],
+      "field_count": 13,
+      "file_path": "operations-facilities/visitor-registration.json"
+    },
+    {
+      "id": "customer-feedback",
+      "name": "Customer Feedback Form",
+      "description": "Collect customer feedback, satisfaction ratings, and improvement suggestions",
+      "category": "sales-crm",
+      "category_display": "Sales & CRM",
+      "icon": "MessageSquare",
+      "version": 1,
+      "tags": [
+        "sales",
+        "crm",
+        "feedback",
+        "satisfaction"
+      ],
+      "field_count": 13,
+      "file_path": "sales-crm/customer-feedback.json"
+    },
+    {
+      "id": "customer-onboarding",
+      "name": "Customer Onboarding Form",
+      "description": "Collect information from new customers to set up their account and services",
+      "category": "sales-crm",
+      "category_display": "Sales & CRM",
+      "icon": "UserCheck",
+      "version": 1,
+      "tags": [
+        "sales",
+        "crm",
+        "customer",
+        "onboarding"
+      ],
+      "field_count": 14,
+      "file_path": "sales-crm/customer-onboarding.json"
+    },
+    {
+      "id": "lead-capture",
+      "name": "Lead Capture Form",
+      "description": "Capture new sales leads and prospects from various sources",
+      "category": "sales-crm",
+      "category_display": "Sales & CRM",
+      "icon": "Users",
+      "version": 1,
+      "tags": [
+        "sales",
+        "crm",
+        "lead",
+        "prospect"
+      ],
+      "field_count": 12,
+      "file_path": "sales-crm/lead-capture.json"
+    },
+    {
+      "id": "quote-request",
+      "name": "Quote Request Form",
+      "description": "Request pricing quotes for products and services",
+      "category": "sales-crm",
+      "category_display": "Sales & CRM",
+      "icon": "Calculator",
+      "version": 1,
+      "tags": [
+        "sales",
+        "crm",
+        "quote",
+        "pricing"
+      ],
+      "field_count": 11,
+      "file_path": "sales-crm/quote-request.json"
+    },
+    {
+      "id": "sales-opportunity",
+      "name": "Sales Opportunity Form",
+      "description": "Create and track new sales opportunities and deals in the pipeline",
+      "category": "sales-crm",
+      "category_display": "Sales & CRM",
+      "icon": "TrendingUp",
+      "version": 1,
+      "tags": [
+        "sales",
+        "crm",
+        "opportunity",
+        "deal"
+      ],
+      "field_count": 13,
+      "file_path": "sales-crm/sales-opportunity.json"
+    }
+  ]
+}
