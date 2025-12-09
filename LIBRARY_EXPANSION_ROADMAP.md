@@ -280,8 +280,8 @@
 - ✅ `/app/backend/integrations/nosql_connectors.py` (MongoDB, Redis, Cassandra)
 - ✅ `/app/backend/integrations/cloud_db_connectors.py` (DynamoDB, Firestore, Cosmos DB)
 - ✅ `/app/backend/server.py` (all database integration endpoints added)
-- ✅ `/app/frontend/src/components/IntegrationHub.js` (database UI exists)
-- ✅ `/app/frontend/src/components/DatabaseConnectorConfig.js` (database configuration forms)
+- ✅ `/app/frontend/src/components/IntegrationHub.js` (✨ UPDATED: Now includes tabbed interface for databases)
+- ✅ `/app/frontend/src/components/DatabaseConnectorConfig.js` (database configuration forms - integrated into IntegrationHub)
 
 **Backend Endpoints (All Implemented):**
 - ✅ `GET /api/integrations/databases/types` (list supported database types)
