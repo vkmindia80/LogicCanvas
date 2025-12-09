@@ -41,10 +41,13 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
       const data = await response.json();
       setTemplates(data.templates || []);
       
-      // Load categories from index.json directly
-      const indexResponse = await fetch(`${backendUrl}/templates/index.json`);
-      const indexData = await indexResponse.json();
-      setCategories(indexData.categories || []);
+      // Extract unique categories from templates
+      const uniqueCategories = [...new Set(data.templates.map(t => t.category))];
+      const categoryObjects = uniqueCategories.map(cat => ({
+        id: cat.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and'),
+        name: cat
+      }));
+      setCategories(categoryObjects);
     } catch (error) {
       console.error('Error loading templates:', error);
     } finally {
