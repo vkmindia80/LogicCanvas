@@ -214,7 +214,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
             </div>
             <div>
               <h2 className={modalHeaderStyles.title}>Integration Hub</h2>
-              <p className={modalHeaderStyles.subtitle}>Manage your external service integrations</p>
+              <p className={modalHeaderStyles.subtitle}>Manage your external service integrations and databases</p>
             </div>
           </div>
           <button
@@ -228,24 +228,69 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="border-b border-green-200 bg-white">
+        <div className="flex px-6">
+          <button
+            onClick={() => setActiveTab('integrations')}
+            className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 ${
+              activeTab === 'integrations'
+                ? 'border-primary-600 text-primary-600'
+                : 'border-transparent text-green-600 hover:text-primary-600'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <Globe className="h-4 w-4" />
+              <span>Service Integrations</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('databases')}
+            className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 ${
+              activeTab === 'databases'
+                ? 'border-primary-600 text-primary-600'
+                : 'border-transparent text-green-600 hover:text-primary-600'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <Database className="h-4 w-4" />
+              <span>Database Connectors</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
         {/* Toolbar */}
         <div className="flex items-center justify-between border-b border-green-200 bg-green-50 px-6 py-4">
           <div className="flex items-center space-x-3">
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            >
-              <option value="all">All Types</option>
-              <option value="email">Email (SMTP)</option>
-              <option value="slack">Slack</option>
-              <option value="teams">Microsoft Teams</option>
-              <option value="rest">REST API</option>
-              <option value="webhook">Webhook</option>
-            </select>
+            {activeTab === 'integrations' ? (
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              >
+                <option value="all">All Types</option>
+                <option value="email">Email (SMTP)</option>
+                <option value="slack">Slack</option>
+                <option value="teams">Microsoft Teams</option>
+                <option value="rest">REST API</option>
+                <option value="webhook">Webhook</option>
+              </select>
+            ) : (
+              <select
+                value={dbCategoryFilter}
+                onChange={(e) => setDbCategoryFilter(e.target.value)}
+                className="rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              >
+                <option value="all">All Databases</option>
+                <option value="SQL">SQL Databases</option>
+                <option value="NoSQL">NoSQL Databases</option>
+                <option value="Cloud">Cloud Databases</option>
+              </select>
+            )}
             
             <button
-              onClick={loadIntegrations}
+              onClick={() => activeTab === 'integrations' ? loadIntegrations() : loadDatabases()}
               className="rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-green-50"
             >
               <RefreshCw className="h-4 w-4" />
@@ -261,7 +306,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
             data-testid="add-integration-btn"
           >
             <Plus className="h-4 w-4" />
-            <span>Add Integration</span>
+            <span>{activeTab === 'integrations' ? 'Add Integration' : 'Add Database'}</span>
           </button>
         </div>
 
