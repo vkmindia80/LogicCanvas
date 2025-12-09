@@ -58,7 +58,6 @@ const AppShell = () => {
   });
   const [showConnectorLibrary, setShowConnectorLibrary] = useState(false);
   const [showIntegrationHub, setShowIntegrationHub] = useState(false);
-  const [showDatabaseConnector, setShowDatabaseConnector] = useState(false);
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   const [debugInstanceId, setDebugInstanceId] = useState(null);
   const [showVideoTutorials, setShowVideoTutorials] = useState(false);
