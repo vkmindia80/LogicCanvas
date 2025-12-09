@@ -1,0 +1,90 @@
+{
+  "id": "lead-capture",
+  "name": "Lead Capture Form",
+  "description": "Capture new sales leads and prospects from various sources",
+  "category": "sales-crm",
+  "icon": "Users",
+  "version": 1,
+  "tags": ["sales", "crm", "lead", "prospect"],
+  "fields": [
+    {
+      "id": "lead_source",
+      "type": "select",
+      "label": "Lead Source",
+      "required": true,
+      "options": ["Website", "Trade Show", "Referral", "Cold Call", "LinkedIn", "Email Campaign", "Partner", "Other"]
+    },
+    {
+      "id": "company_name",
+      "type": "text",
+      "label": "Company Name",
+      "required": true
+    },
+    {
+      "id": "contact_name",
+      "type": "text",
+      "label": "Contact Name",
+      "required": true
+    },
+    {
+      "id": "job_title",
+      "type": "text",
+      "label": "Job Title",
+      "required": false
+    },
+    {
+      "id": "email",
+      "type": "email",
+      "label": "Email Address",
+      "required": true
+    },
+    {
+      "id": "phone",
+      "type": "phone",
+      "label": "Phone Number",
+      "required": false
+    },
+    {
+      "id": "company_size",
+      "type": "select",
+      "label": "Company Size",
+      "required": false,
+      "options": ["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"]
+    },
+    {
+      "id": "industry",
+      "type": "select",
+      "label": "Industry",
+      "required": false,
+      "options": ["Technology", "Healthcare", "Finance", "Retail", "Manufacturing", "Education", "Professional Services", "Other"]
+    },
+    {
+      "id": "interest_area",
+      "type": "checkbox",
+      "label": "Areas of Interest",
+      "required": true,
+      "options": ["Product Demo", "Pricing Information", "Partnership Opportunities", "Technical Support", "Other"]
+    },
+    {
+      "id": "budget",
+      "type": "select",
+      "label": "Budget Range",
+      "required": false,
+      "options": ["Under $10k", "$10k-$50k", "$50k-$100k", "$100k-$500k", "$500k+", "Not Sure"]
+    },
+    {
+      "id": "timeline",
+      "type": "radio",
+      "label": "Purchase Timeline",
+      "required": false,
+      "options": ["Immediate (0-30 days)", "Short-term (1-3 months)", "Long-term (3-12 months)", "Researching"]
+    },
+    {
+      "id": "notes",
+      "type": "textarea",
+      "label": "Additional Notes",
+      "required": false,
+      "placeholder": "Any additional information about this lead"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "id": "customer-onboarding",
+  "name": "Customer Onboarding Form",
+  "description": "Collect information from new customers to set up their account and services",
+  "category": "sales-crm",
+  "icon": "UserCheck",
+  "version": 1,
+  "tags": ["sales", "crm", "customer", "onboarding"],
+  "fields": [
+    {
+      "id": "company_name",
+      "type": "text",
+      "label": "Company Name",
+      "required": true
+    },
+    {
+      "id": "primary_contact_name",
+      "type": "text",
+      "label": "Primary Contact Name",
+      "required": true
+    },
+    {
+      "id": "primary_contact_email",
+      "type": "email",
+      "label": "Primary Contact Email",
+      "required": true
+    },
+    {
+      "id": "primary_contact_phone",
+      "type": "phone",
+      "label": "Primary Contact Phone",
+      "required": true
+    },
+    {
+      "id": "billing_address",
+      "type": "textarea",
+      "label": "Billing Address",
+      "required": true
+    },
+    {
+      "id": "shipping_address",
+      "type": "textarea",
+      "label": "Shipping Address",
+      "required": false,
+      "placeholder": "Leave blank if same as billing"
+    },
+    {
+      "id": "tax_id",
+      "type": "text",
+      "label": "Tax ID/EIN",
+      "required": false
+    },
+    {
+      "id": "plan_selected",
+      "type": "select",
+      "label": "Plan/Package Selected",
+      "required": true,
+      "options": ["Starter", "Professional", "Enterprise", "Custom"]
+    },
+    {
+      "id": "contract_start_date",
+      "type": "date",
+      "label": "Contract Start Date",
+      "required": true
+    },
+    {
+      "id": "contract_term",
+      "type": "radio",
+      "label": "Contract Term",
+      "required": true,
+      "options": ["Monthly", "Annual", "Multi-year"]
+    },
+    {
+      "id": "payment_method",
+      "type": "radio",
+      "label": "Preferred Payment Method",
+      "required": true,
+      "options": ["Credit Card", "ACH/Bank Transfer", "Invoice/Check"]
+    },
+    {
+      "id": "number_of_users",
+      "type": "number",
+      "label": "Number of Users/Licenses",
+      "required": true,
+      "validation": {
+        "min": 1
+      }
+    },
+    {
+      "id": "special_requirements",
+      "type": "textarea",
+      "label": "Special Requirements or Notes",
+      "required": false
+    },
+    {
+      "id": "implementation_support",
+      "type": "radio",
+      "label": "Implementation Support Needed?",
+      "required": true,
+      "options": ["Yes", "No", "Not Sure"]
+    }
+  ]
+}

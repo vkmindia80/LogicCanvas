@@ -1,0 +1,96 @@
+{
+  "id": "customer-feedback",
+  "name": "Customer Feedback Form",
+  "description": "Collect customer feedback, satisfaction ratings, and improvement suggestions",
+  "category": "sales-crm",
+  "icon": "MessageSquare",
+  "version": 1,
+  "tags": ["sales", "crm", "feedback", "satisfaction"],
+  "fields": [
+    {
+      "id": "customer_name",
+      "type": "text",
+      "label": "Customer Name",
+      "required": true
+    },
+    {
+      "id": "company_name",
+      "type": "text",
+      "label": "Company Name",
+      "required": false
+    },
+    {
+      "id": "email",
+      "type": "email",
+      "label": "Email Address",
+      "required": true
+    },
+    {
+      "id": "overall_satisfaction",
+      "type": "radio",
+      "label": "Overall Satisfaction",
+      "required": true,
+      "options": ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"]
+    },
+    {
+      "id": "product_rating",
+      "type": "radio",
+      "label": "Product/Service Rating",
+      "required": true,
+      "options": ["Excellent", "Good", "Fair", "Poor"]
+    },
+    {
+      "id": "support_rating",
+      "type": "radio",
+      "label": "Customer Support Rating",
+      "required": false,
+      "options": ["Excellent", "Good", "Fair", "Poor", "Not Applicable"]
+    },
+    {
+      "id": "ease_of_use",
+      "type": "radio",
+      "label": "Ease of Use",
+      "required": false,
+      "options": ["Very Easy", "Easy", "Moderate", "Difficult", "Very Difficult"]
+    },
+    {
+      "id": "value_for_money",
+      "type": "radio",
+      "label": "Value for Money",
+      "required": false,
+      "options": ["Excellent Value", "Good Value", "Fair Value", "Poor Value"]
+    },
+    {
+      "id": "recommend_likelihood",
+      "type": "radio",
+      "label": "How likely are you to recommend us?",
+      "required": true,
+      "options": ["Very Likely", "Likely", "Neutral", "Unlikely", "Very Unlikely"]
+    },
+    {
+      "id": "what_you_like",
+      "type": "textarea",
+      "label": "What do you like most about our product/service?",
+      "required": false
+    },
+    {
+      "id": "what_to_improve",
+      "type": "textarea",
+      "label": "What could we improve?",
+      "required": false
+    },
+    {
+      "id": "feature_requests",
+      "type": "textarea",
+      "label": "Feature Requests or Suggestions",
+      "required": false,
+      "placeholder": "Any features you'd like to see in the future?"
+    },
+    {
+      "id": "additional_comments",
+      "type": "textarea",
+      "label": "Additional Comments",
+      "required": false
+    }
+  ]
+}

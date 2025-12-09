@@ -1,0 +1,99 @@
+{
+  "id": "sales-opportunity",
+  "name": "Sales Opportunity Form",
+  "description": "Create and track new sales opportunities and deals in the pipeline",
+  "category": "sales-crm",
+  "icon": "TrendingUp",
+  "version": 1,
+  "tags": ["sales", "crm", "opportunity", "deal"],
+  "fields": [
+    {
+      "id": "opportunity_name",
+      "type": "text",
+      "label": "Opportunity Name",
+      "required": true,
+      "placeholder": "e.g., Acme Corp - Enterprise Package"
+    },
+    {
+      "id": "account_name",
+      "type": "text",
+      "label": "Account/Company Name",
+      "required": true
+    },
+    {
+      "id": "contact_name",
+      "type": "text",
+      "label": "Primary Contact Name",
+      "required": true
+    },
+    {
+      "id": "contact_email",
+      "type": "email",
+      "label": "Contact Email",
+      "required": true
+    },
+    {
+      "id": "opportunity_value",
+      "type": "number",
+      "label": "Opportunity Value (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "stage",
+      "type": "select",
+      "label": "Sales Stage",
+      "required": true,
+      "options": ["Prospecting", "Qualification", "Needs Analysis", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
+    },
+    {
+      "id": "probability",
+      "type": "select",
+      "label": "Probability of Closing",
+      "required": true,
+      "options": ["10%", "25%", "50%", "75%", "90%", "100%"]
+    },
+    {
+      "id": "expected_close_date",
+      "type": "date",
+      "label": "Expected Close Date",
+      "required": true
+    },
+    {
+      "id": "product_interest",
+      "type": "checkbox",
+      "label": "Products/Services of Interest",
+      "required": true,
+      "options": ["Product A", "Product B", "Product C", "Professional Services", "Training", "Support"]
+    },
+    {
+      "id": "competition",
+      "type": "text",
+      "label": "Known Competitors",
+      "required": false,
+      "placeholder": "List competitors being considered"
+    },
+    {
+      "id": "key_decision_makers",
+      "type": "textarea",
+      "label": "Key Decision Makers",
+      "required": false,
+      "placeholder": "List names and roles of decision makers"
+    },
+    {
+      "id": "next_steps",
+      "type": "textarea",
+      "label": "Next Steps",
+      "required": true,
+      "placeholder": "What are the next actions to move this forward?"
+    },
+    {
+      "id": "notes",
+      "type": "textarea",
+      "label": "Notes",
+      "required": false
+    }
+  ]
+}
