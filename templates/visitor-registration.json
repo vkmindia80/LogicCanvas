@@ -1,0 +1,21 @@
+{
+  "name": "Visitor Registration",
+  "description": "Register and track office visitors with host notification",
+  "category": "Operations",
+  "tags": ["operations", "security", "visitor", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "10 minutes",
+  "icon": "user-check",
+  "useCases": ["Office visitors", "Guest registration", "Vendor visits"],
+  "prerequisites": [],
+  "integrationRequirements": [],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 200}, "data": {"label": "Visitor Arrives"}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 200}, "data": {"label": "Visitor Form", "formFields": [{"id": "visitor_name", "label": "Visitor Name", "type": "text", "required": true}, {"id": "company", "label": "Company", "type": "text", "required": false}, {"id": "host_name", "label": "Host Name", "type": "text", "required": true}, {"id": "purpose", "label": "Purpose of Visit", "type": "text", "required": true}, {"id": "id_verified", "label": "ID Verified", "type": "checkbox", "required": true}]}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 200}, "data": {"label": "Issue Badge", "description": "Print visitor badge", "assignee": "security@company.com"}},
+    {"id": "action-1", "type": "action", "position": {"x": 700, "y": 200}, "data": {"label": "Notify Host", "actionType": "email", "config": {"to": "${form-1.host_email}", "subject": "Visitor Arrival", "body": "${form-1.visitor_name} has arrived"}}},
+    {"id": "end-1", "type": "end", "position": {"x": 900, "y": 200}, "data": {"label": "Registered"}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "task-1"}, {"id": "e3", "source": "task-1", "target": "action-1"}, {"id": "e4", "source": "action-1", "target": "end-1"}]
+}

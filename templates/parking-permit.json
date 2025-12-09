@@ -1,0 +1,21 @@
+{
+  "name": "Parking Permit Request",
+  "description": "Request and approve employee parking permits",
+  "category": "Operations",
+  "tags": ["operations", "parking", "facilities", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "1-2 days",
+  "icon": "car",
+  "useCases": ["Employee parking", "Visitor parking", "Temporary permits"],
+  "prerequisites": [],
+  "integrationRequirements": [],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 200}, "data": {"label": "Start Request"}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 200}, "data": {"label": "Permit Form", "formFields": [{"id": "employee_name", "label": "Employee Name", "type": "text", "required": true}, {"id": "vehicle_make", "label": "Vehicle Make", "type": "text", "required": true}, {"id": "vehicle_model", "label": "Vehicle Model", "type": "text", "required": true}, {"id": "license_plate", "label": "License Plate", "type": "text", "required": true}, {"id": "permit_type", "label": "Permit Type", "type": "dropdown", "required": true, "options": ["Daily", "Monthly", "Annual"]}]}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 500, "y": 200}, "data": {"label": "Facilities Approval", "approvers": ["facilities@company.com"], "approvalType": "single"}},
+    {"id": "task-1", "type": "task", "position": {"x": 700, "y": 200}, "data": {"label": "Issue Permit", "description": "Generate parking permit", "assignee": "facilities@company.com"}},
+    {"id": "end-1", "type": "end", "position": {"x": 900, "y": 200}, "data": {"label": "Issued"}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "approval-1"}, {"id": "e3", "source": "approval-1", "target": "task-1"}, {"id": "e4", "source": "task-1", "target": "end-1"}]
+}

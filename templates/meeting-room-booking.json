@@ -1,0 +1,23 @@
+{
+  "name": "Meeting Room Booking",
+  "description": "Reserve meeting rooms with automatic calendar sync",
+  "category": "Operations",
+  "tags": ["operations", "meeting", "booking", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "5 minutes",
+  "icon": "calendar",
+  "useCases": ["Conference room booking", "Meeting space reservation"],
+  "prerequisites": [],
+  "integrationRequirements": ["Google Calendar", "Outlook Calendar"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 200}, "data": {"label": "Start Booking"}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 200}, "data": {"label": "Booking Form", "formFields": [{"id": "organizer", "label": "Organizer", "type": "text", "required": true}, {"id": "room", "label": "Room", "type": "dropdown", "required": true, "options": ["Conference A", "Conference B", "Board Room", "Small Meeting Room"]}, {"id": "date", "label": "Date", "type": "date", "required": true}, {"id": "start_time", "label": "Start Time", "type": "text", "required": true}, {"id": "end_time", "label": "End Time", "type": "text", "required": true}, {"id": "purpose", "label": "Meeting Purpose", "type": "text", "required": true}]}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 200}, "data": {"label": "Check Availability", "taskType": "automated"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 700, "y": 200}, "data": {"label": "Available?", "conditions": [{"condition": "${task-1.available} == true", "label": "Yes", "targetId": "task-2"}, {"condition": "${task-1.available} == false", "label": "No", "targetId": "end-2"}]}},
+    {"id": "task-2", "type": "task", "position": {"x": 900, "y": 100}, "data": {"label": "Confirm Booking", "description": "Send calendar invite", "taskType": "automated"}},
+    {"id": "end-1", "type": "end", "position": {"x": 1100, "y": 100}, "data": {"label": "Booked"}},
+    {"id": "end-2", "type": "end", "position": {"x": 900, "y": 300}, "data": {"label": "Unavailable"}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "task-1"}, {"id": "e3", "source": "task-1", "target": "decision-1"}, {"id": "e4", "source": "decision-1", "target": "task-2"}, {"id": "e5", "source": "decision-1", "target": "end-2"}, {"id": "e6", "source": "task-2", "target": "end-1"}]
+}
