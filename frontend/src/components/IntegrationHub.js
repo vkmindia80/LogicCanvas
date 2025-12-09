@@ -150,9 +150,23 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
         return <Globe className="h-5 w-5" />;
       case 'webhook':
         return <Zap className="h-5 w-5" />;
+      case 'database':
+        return <Database className="h-5 w-5" />;
+      case 'cloud':
+        return <Cloud className="h-5 w-5" />;
       default:
         return <Globe className="h-5 w-5" />;
     }
+  };
+
+  const getDatabaseIcon = (dbType) => {
+    const type = dbTypes.find(t => t.id === dbType);
+    if (type?.category === 'Cloud') {
+      return <Cloud className="h-5 w-5" />;
+    } else if (type?.category === 'NoSQL') {
+      return <Server className="h-5 w-5" />;
+    }
+    return <Database className="h-5 w-5" />;
   };
 
   const getStatusBadge = (status) => {
