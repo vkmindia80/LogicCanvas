@@ -415,32 +415,34 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-200 border-t-green-600"></div>
             </div>
           ) : connections.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 text-center">
-              <Database className="h-16 w-16 text-slate-300 mb-4" />
-              <h3 className="text-lg font-semibold text-slate-700 mb-2">No Database Connections</h3>
-              <p className="text-slate-500 mb-4 max-w-md">
+              <div className="p-4 bg-green-100 rounded-2xl mb-4">
+                <Database className="h-16 w-16 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">No Database Connections</h3>
+              <p className="text-slate-600 mb-6 max-w-md">
                 Connect to PostgreSQL, MySQL, Redis, MongoDB, DynamoDB and more to integrate databases into your workflows.
               </p>
               <button
                 onClick={() => setShowAddModal(true)}
-                className={buttonStyles.primary + ' inline-flex items-center space-x-2'}
+                className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-5 w-5" />
                 <span>Add Your First Connection</span>
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {connections.map((connection) => (
                 <div
                   key={connection.id}
-                  className={cardStyles + ' group hover:shadow-lg transition-all'}
+                  className="bg-white rounded-xl border-2 border-green-200 shadow-lg p-5 group hover:shadow-xl hover:border-green-300 transition-all"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center space-x-3">
