@@ -1,0 +1,107 @@
+{
+  "id": "purchase-order",
+  "name": "Purchase Order Form",
+  "description": "Create purchase orders for goods and services procurement",
+  "category": "finance-accounting",
+  "icon": "ShoppingCart",
+  "version": 1,
+  "tags": ["finance", "procurement", "purchase-order", "buying"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "po_date",
+      "type": "date",
+      "label": "PO Date",
+      "required": true
+    },
+    {
+      "id": "vendor_name",
+      "type": "text",
+      "label": "Vendor/Supplier Name",
+      "required": true
+    },
+    {
+      "id": "vendor_contact",
+      "type": "text",
+      "label": "Vendor Contact Person",
+      "required": false
+    },
+    {
+      "id": "vendor_email",
+      "type": "email",
+      "label": "Vendor Email",
+      "required": true
+    },
+    {
+      "id": "item_description",
+      "type": "textarea",
+      "label": "Item/Service Description",
+      "required": true,
+      "placeholder": "Describe what is being purchased"
+    },
+    {
+      "id": "quantity",
+      "type": "number",
+      "label": "Quantity",
+      "required": true,
+      "validation": {
+        "min": 1
+      }
+    },
+    {
+      "id": "unit_price",
+      "type": "number",
+      "label": "Unit Price (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "total_amount",
+      "type": "number",
+      "label": "Total Amount (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "delivery_date",
+      "type": "date",
+      "label": "Required Delivery Date",
+      "required": true
+    },
+    {
+      "id": "shipping_address",
+      "type": "textarea",
+      "label": "Shipping Address",
+      "required": true
+    },
+    {
+      "id": "payment_terms",
+      "type": "select",
+      "label": "Payment Terms",
+      "required": true,
+      "options": ["Net 15", "Net 30", "Net 45", "Net 60", "Prepaid", "COD"]
+    },
+    {
+      "id": "business_justification",
+      "type": "textarea",
+      "label": "Business Justification",
+      "required": true,
+      "placeholder": "Why is this purchase necessary?"
+    }
+  ]
+}

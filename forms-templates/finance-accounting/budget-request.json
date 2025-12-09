@@ -1,0 +1,94 @@
+{
+  "id": "budget-request",
+  "name": "Budget Request Form",
+  "description": "Request budget allocation or additional funding for projects and initiatives",
+  "category": "finance-accounting",
+  "icon": "DollarSign",
+  "version": 1,
+  "tags": ["finance", "budget", "funding", "allocation"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department/Team",
+      "required": true
+    },
+    {
+      "id": "request_type",
+      "type": "radio",
+      "label": "Request Type",
+      "required": true,
+      "options": ["New Budget", "Budget Increase", "Budget Reallocation", "Emergency Funding"]
+    },
+    {
+      "id": "project_name",
+      "type": "text",
+      "label": "Project/Initiative Name",
+      "required": true
+    },
+    {
+      "id": "requested_amount",
+      "type": "number",
+      "label": "Requested Amount (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "budget_period",
+      "type": "select",
+      "label": "Budget Period",
+      "required": true,
+      "options": ["Q1", "Q2", "Q3", "Q4", "Annual", "Multi-year"]
+    },
+    {
+      "id": "priority",
+      "type": "radio",
+      "label": "Priority Level",
+      "required": true,
+      "options": ["Critical", "High", "Medium", "Low"]
+    },
+    {
+      "id": "business_case",
+      "type": "textarea",
+      "label": "Business Case",
+      "required": true,
+      "placeholder": "Explain the business need and expected benefits"
+    },
+    {
+      "id": "expected_roi",
+      "type": "textarea",
+      "label": "Expected ROI/Benefits",
+      "required": true,
+      "placeholder": "What is the expected return on investment?"
+    },
+    {
+      "id": "budget_breakdown",
+      "type": "textarea",
+      "label": "Budget Breakdown",
+      "required": true,
+      "placeholder": "Provide detailed breakdown of how funds will be used"
+    },
+    {
+      "id": "alternatives_considered",
+      "type": "textarea",
+      "label": "Alternatives Considered",
+      "required": false,
+      "placeholder": "What other options were considered?"
+    },
+    {
+      "id": "timeline",
+      "type": "textarea",
+      "label": "Project Timeline",
+      "required": true,
+      "placeholder": "When will this project start and end?"
+    }
+  ]
+}

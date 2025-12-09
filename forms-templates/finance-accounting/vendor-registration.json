@@ -1,0 +1,115 @@
+{
+  "id": "vendor-registration",
+  "name": "Vendor Registration Form",
+  "description": "Register new vendors and suppliers in the system for payment processing",
+  "category": "finance-accounting",
+  "icon": "Briefcase",
+  "version": 1,
+  "tags": ["finance", "vendor", "supplier", "registration"],
+  "fields": [
+    {
+      "id": "company_name",
+      "type": "text",
+      "label": "Company/Vendor Name",
+      "required": true
+    },
+    {
+      "id": "dba_name",
+      "type": "text",
+      "label": "Doing Business As (DBA)",
+      "required": false
+    },
+    {
+      "id": "business_type",
+      "type": "select",
+      "label": "Business Type",
+      "required": true,
+      "options": ["Corporation", "LLC", "Partnership", "Sole Proprietorship", "Non-Profit", "Government Entity"]
+    },
+    {
+      "id": "tax_id",
+      "type": "text",
+      "label": "Tax ID/EIN",
+      "required": true,
+      "placeholder": "XX-XXXXXXX"
+    },
+    {
+      "id": "business_address",
+      "type": "textarea",
+      "label": "Business Address",
+      "required": true,
+      "placeholder": "Street, City, State, ZIP"
+    },
+    {
+      "id": "contact_name",
+      "type": "text",
+      "label": "Primary Contact Name",
+      "required": true
+    },
+    {
+      "id": "contact_email",
+      "type": "email",
+      "label": "Primary Contact Email",
+      "required": true
+    },
+    {
+      "id": "contact_phone",
+      "type": "phone",
+      "label": "Primary Contact Phone",
+      "required": true
+    },
+    {
+      "id": "ap_email",
+      "type": "email",
+      "label": "Accounts Payable Email",
+      "required": true,
+      "placeholder": "Email for sending invoices"
+    },
+    {
+      "id": "payment_terms",
+      "type": "select",
+      "label": "Preferred Payment Terms",
+      "required": true,
+      "options": ["Net 15", "Net 30", "Net 45", "Net 60", "Due on Receipt"]
+    },
+    {
+      "id": "payment_method",
+      "type": "radio",
+      "label": "Preferred Payment Method",
+      "required": true,
+      "options": ["ACH/Direct Deposit", "Check", "Wire Transfer", "Credit Card"]
+    },
+    {
+      "id": "bank_name",
+      "type": "text",
+      "label": "Bank Name",
+      "required": false
+    },
+    {
+      "id": "account_number",
+      "type": "text",
+      "label": "Bank Account Number",
+      "required": false
+    },
+    {
+      "id": "routing_number",
+      "type": "text",
+      "label": "Bank Routing Number",
+      "required": false
+    },
+    {
+      "id": "services_provided",
+      "type": "textarea",
+      "label": "Services/Products Provided",
+      "required": true,
+      "placeholder": "Describe what this vendor will provide"
+    },
+    {
+      "id": "w9_attached",
+      "type": "checkbox",
+      "label": "Documentation",
+      "required": true,
+      "options": ["W-9 form attached"]
+    }
+  ]
+}

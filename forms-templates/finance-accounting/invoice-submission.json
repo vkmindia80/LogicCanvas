@@ -1,0 +1,89 @@
+{
+  "id": "invoice-submission",
+  "name": "Invoice Submission Form",
+  "description": "Submit invoices for payment processing and accounts payable",
+  "category": "finance-accounting",
+  "icon": "FileText",
+  "version": 1,
+  "tags": ["finance", "invoice", "payment", "accounts-payable"],
+  "fields": [
+    {
+      "id": "submitter_name",
+      "type": "text",
+      "label": "Submitter Name",
+      "required": true
+    },
+    {
+      "id": "submitter_email",
+      "type": "email",
+      "label": "Submitter Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department/Cost Center",
+      "required": true
+    },
+    {
+      "id": "vendor_name",
+      "type": "text",
+      "label": "Vendor Name",
+      "required": true
+    },
+    {
+      "id": "invoice_number",
+      "type": "text",
+      "label": "Invoice Number",
+      "required": true
+    },
+    {
+      "id": "invoice_date",
+      "type": "date",
+      "label": "Invoice Date",
+      "required": true
+    },
+    {
+      "id": "due_date",
+      "type": "date",
+      "label": "Payment Due Date",
+      "required": true
+    },
+    {
+      "id": "invoice_amount",
+      "type": "number",
+      "label": "Invoice Amount (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "category",
+      "type": "select",
+      "label": "Expense Category",
+      "required": true,
+      "options": ["Professional Services", "Software/Subscriptions", "Office Supplies", "Marketing", "Travel", "Equipment", "Utilities", "Other"]
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Description of Services/Products",
+      "required": true,
+      "placeholder": "What is this invoice for?"
+    },
+    {
+      "id": "purchase_order",
+      "type": "text",
+      "label": "Purchase Order Number",
+      "required": false
+    },
+    {
+      "id": "payment_terms",
+      "type": "select",
+      "label": "Payment Terms",
+      "required": true,
+      "options": ["Net 15", "Net 30", "Net 45", "Net 60", "Due on Receipt", "Other"]
+    }
+  ]
+}

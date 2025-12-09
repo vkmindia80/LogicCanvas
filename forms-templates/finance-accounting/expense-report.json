@@ -1,0 +1,117 @@
+{
+  "id": "expense-report",
+  "name": "Expense Report Form",
+  "description": "Consolidated monthly expense report for multiple business expenses",
+  "category": "finance-accounting",
+  "icon": "CreditCard",
+  "version": 1,
+  "tags": ["finance", "expense", "report", "reimbursement"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "employee_id",
+      "type": "text",
+      "label": "Employee ID",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "report_period",
+      "type": "text",
+      "label": "Report Period",
+      "required": true,
+      "placeholder": "e.g., January 2024"
+    },
+    {
+      "id": "submission_date",
+      "type": "date",
+      "label": "Submission Date",
+      "required": true
+    },
+    {
+      "id": "total_expenses",
+      "type": "number",
+      "label": "Total Expenses (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "travel_expenses",
+      "type": "number",
+      "label": "Travel Expenses",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "meals_expenses",
+      "type": "number",
+      "label": "Meals & Entertainment",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "accommodation_expenses",
+      "type": "number",
+      "label": "Accommodation",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "transportation_expenses",
+      "type": "number",
+      "label": "Local Transportation",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "other_expenses",
+      "type": "number",
+      "label": "Other Expenses",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "expense_details",
+      "type": "textarea",
+      "label": "Itemized Expense Details",
+      "required": true,
+      "placeholder": "List each expense with date, description, and amount"
+    },
+    {
+      "id": "business_purpose",
+      "type": "textarea",
+      "label": "Business Purpose",
+      "required": true,
+      "placeholder": "Explain the business purpose of these expenses"
+    },
+    {
+      "id": "receipts_attached",
+      "type": "checkbox",
+      "label": "Confirmation",
+      "required": true,
+      "options": ["I confirm that all receipts are attached and expenses are accurate"]
+    }
+  ]
+}

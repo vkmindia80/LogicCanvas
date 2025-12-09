@@ -1,0 +1,131 @@
+{
+  "id": "travel-authorization",
+  "name": "Travel Authorization Form",
+  "description": "Request approval for business travel with estimated costs and itinerary",
+  "category": "finance-accounting",
+  "icon": "Plane",
+  "version": 1,
+  "tags": ["finance", "travel", "authorization", "trip"],
+  "fields": [
+    {
+      "id": "traveler_name",
+      "type": "text",
+      "label": "Traveler Name",
+      "required": true
+    },
+    {
+      "id": "traveler_email",
+      "type": "email",
+      "label": "Traveler Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "trip_purpose",
+      "type": "textarea",
+      "label": "Purpose of Trip",
+      "required": true,
+      "placeholder": "Describe the business purpose of this travel"
+    },
+    {
+      "id": "destination",
+      "type": "text",
+      "label": "Destination (City, State/Country)",
+      "required": true
+    },
+    {
+      "id": "departure_date",
+      "type": "date",
+      "label": "Departure Date",
+      "required": true
+    },
+    {
+      "id": "return_date",
+      "type": "date",
+      "label": "Return Date",
+      "required": true
+    },
+    {
+      "id": "travel_type",
+      "type": "radio",
+      "label": "Travel Type",
+      "required": true,
+      "options": ["Domestic", "International"]
+    },
+    {
+      "id": "estimated_airfare",
+      "type": "number",
+      "label": "Estimated Airfare (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "estimated_hotel",
+      "type": "number",
+      "label": "Estimated Hotel Cost (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "estimated_meals",
+      "type": "number",
+      "label": "Estimated Meals (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "estimated_transportation",
+      "type": "number",
+      "label": "Estimated Local Transportation (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "estimated_other",
+      "type": "number",
+      "label": "Other Estimated Costs (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "total_estimated_cost",
+      "type": "number",
+      "label": "Total Estimated Cost (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "advance_needed",
+      "type": "radio",
+      "label": "Travel Advance Needed?",
+      "required": true,
+      "options": ["Yes", "No"]
+    },
+    {
+      "id": "advance_amount",
+      "type": "number",
+      "label": "Advance Amount (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    }
+  ]
+}
