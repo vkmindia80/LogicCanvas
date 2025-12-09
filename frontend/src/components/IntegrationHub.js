@@ -891,13 +891,13 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <label className="mb-2 block text-sm font-medium text-primary-800">Host</label>
               <input
                 type="text"
                 value={formData.host}
                 onChange={(e) => setFormData({ ...formData, host: e.target.value })}
                 placeholder="localhost"
-                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 required
               />
             </div>
@@ -968,13 +968,13 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <label className="mb-2 block text-sm font-medium text-primary-800">Host</label>
               <input
                 type="text"
                 value={formData.host}
                 onChange={(e) => setFormData({ ...formData, host: e.target.value })}
                 placeholder="localhost"
-                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 required
               />
             </div>
@@ -1045,13 +1045,13 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <label className="mb-2 block text-sm font-medium text-primary-800">Host</label>
               <input
                 type="text"
                 value={formData.host}
                 onChange={(e) => setFormData({ ...formData, host: e.target.value })}
                 placeholder="localhost"
-                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 required
               />
             </div>
@@ -1113,13 +1113,13 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
         return (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <label className="mb-2 block text-sm font-medium text-primary-800">Host</label>
               <input
                 type="text"
                 value={formData.host}
                 onChange={(e) => setFormData({ ...formData, host: e.target.value })}
                 placeholder="localhost"
-                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 required
               />
             </div>
