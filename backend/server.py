@@ -5530,11 +5530,19 @@ async def get_connector_templates_library():
 # ========== PHASE 3: DATABASE INTEGRATION CONNECTORS ==========
 
 from integrations import (
+    # SQL Databases
     PostgreSQLConnector,
     MySQLConnector,
+    MSSQLConnector,
+    OracleConnector,
+    # NoSQL Databases
     RedisConnector,
     MongoDBConnector,
-    DynamoDBConnector
+    CassandraConnector,
+    # Cloud Databases
+    DynamoDBConnector,
+    FirestoreConnector,
+    CosmosDBConnector
 )
 
 # Store active database connections in memory
