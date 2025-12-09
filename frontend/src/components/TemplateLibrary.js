@@ -35,11 +35,16 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
 
   const loadTemplates = async () => {
     try {
-      // Load template index
-      const response = await fetch('/templates/index.json');
+      // Load template index from backend API
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+      const response = await fetch(`${backendUrl}/api/templates`);
       const data = await response.json();
       setTemplates(data.templates || []);
-      setCategories(data.categories || []);
+      
+      // Load categories from index.json directly
+      const indexResponse = await fetch(`${backendUrl}/templates/index.json`);
+      const indexData = await indexResponse.json();
+      setCategories(indexData.categories || []);
     } catch (error) {
       console.error('Error loading templates:', error);
     } finally {
