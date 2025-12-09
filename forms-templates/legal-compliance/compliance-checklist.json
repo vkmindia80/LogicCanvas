@@ -1,0 +1,116 @@
+{
+  "id": "compliance-checklist",
+  "name": "Compliance Checklist Form",
+  "description": "Complete compliance checklists for regulatory requirements and internal policies",
+  "category": "legal-compliance",
+  "icon": "CheckSquare",
+  "version": 1,
+  "tags": ["legal", "compliance", "checklist", "regulatory"],
+  "fields": [
+    {
+      "id": "reviewer_name",
+      "type": "text",
+      "label": "Reviewer Name",
+      "required": true
+    },
+    {
+      "id": "reviewer_email",
+      "type": "email",
+      "label": "Reviewer Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department/Business Unit",
+      "required": true
+    },
+    {
+      "id": "compliance_area",
+      "type": "select",
+      "label": "Compliance Area",
+      "required": true,
+      "options": ["Data Privacy (GDPR/CCPA)", "Financial (SOX)", "Health (HIPAA)", "Security (ISO 27001)", "Quality (ISO 9001)", "Environmental", "Safety (OSHA)", "Industry-Specific", "Other"]
+    },
+    {
+      "id": "review_period",
+      "type": "text",
+      "label": "Review Period",
+      "required": true,
+      "placeholder": "e.g., Q1 2024, January 2024"
+    },
+    {
+      "id": "review_date",
+      "type": "date",
+      "label": "Review Date",
+      "required": true
+    },
+    {
+      "id": "policies_reviewed",
+      "type": "checkbox",
+      "label": "Policies and Procedures Reviewed",
+      "required": true,
+      "options": ["All relevant policies reviewed", "Procedures documented", "Staff training completed", "Records maintained"]
+    },
+    {
+      "id": "compliance_status",
+      "type": "radio",
+      "label": "Overall Compliance Status",
+      "required": true,
+      "options": ["Fully Compliant", "Substantially Compliant", "Partially Compliant", "Non-Compliant"]
+    },
+    {
+      "id": "areas_compliant",
+      "type": "textarea",
+      "label": "Areas of Compliance",
+      "required": true,
+      "placeholder": "List areas where compliance requirements are met"
+    },
+    {
+      "id": "areas_non_compliant",
+      "type": "textarea",
+      "label": "Areas of Non-Compliance",
+      "required": false,
+      "placeholder": "List areas where compliance requirements are not met"
+    },
+    {
+      "id": "gaps_identified",
+      "type": "textarea",
+      "label": "Gaps and Issues Identified",
+      "required": false,
+      "placeholder": "Describe any compliance gaps or concerns"
+    },
+    {
+      "id": "corrective_actions",
+      "type": "textarea",
+      "label": "Corrective Actions Required",
+      "required": false,
+      "placeholder": "What actions are needed to achieve compliance?"
+    },
+    {
+      "id": "action_owner",
+      "type": "text",
+      "label": "Action Owner",
+      "required": false,
+      "placeholder": "Who is responsible for corrective actions?"
+    },
+    {
+      "id": "target_completion_date",
+      "type": "date",
+      "label": "Target Completion Date",
+      "required": false
+    },
+    {
+      "id": "next_review_date",
+      "type": "date",
+      "label": "Next Scheduled Review Date",
+      "required": true
+    },
+    {
+      "id": "additional_notes",
+      "type": "textarea",
+      "label": "Additional Notes",
+      "required": false
+    }
+  ]
+}

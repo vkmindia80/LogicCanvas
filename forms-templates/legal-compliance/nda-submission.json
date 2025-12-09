@@ -1,0 +1,98 @@
+{
+  "id": "nda-submission",
+  "name": "NDA Submission Form",
+  "description": "Submit and request Non-Disclosure Agreements for confidential information sharing",
+  "category": "legal-compliance",
+  "icon": "Lock",
+  "version": 1,
+  "tags": ["legal", "compliance", "nda", "confidentiality"],
+  "fields": [
+    {
+      "id": "submitter_name",
+      "type": "text",
+      "label": "Submitter Name",
+      "required": true
+    },
+    {
+      "id": "submitter_email",
+      "type": "email",
+      "label": "Submitter Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "nda_type",
+      "type": "radio",
+      "label": "NDA Type",
+      "required": true,
+      "options": ["Unilateral (One-way)", "Mutual (Two-way)"]
+    },
+    {
+      "id": "request_type",
+      "type": "radio",
+      "label": "Request Type",
+      "required": true,
+      "options": ["We received NDA from counterparty - Need Review", "We need to send NDA to counterparty - Need Template", "Negotiate NDA terms"]
+    },
+    {
+      "id": "counterparty_name",
+      "type": "text",
+      "label": "Counterparty Name",
+      "required": true,
+      "placeholder": "Company or individual name"
+    },
+    {
+      "id": "counterparty_contact",
+      "type": "email",
+      "label": "Counterparty Contact Email",
+      "required": false
+    },
+    {
+      "id": "purpose",
+      "type": "textarea",
+      "label": "Purpose of NDA",
+      "required": true,
+      "placeholder": "Why is confidential information being shared?"
+    },
+    {
+      "id": "information_type",
+      "type": "checkbox",
+      "label": "Type of Confidential Information",
+      "required": true,
+      "options": ["Business Strategy", "Financial Information", "Technical/IP", "Customer Data", "Product Information", "Trade Secrets", "Other"]
+    },
+    {
+      "id": "term",
+      "type": "select",
+      "label": "NDA Term",
+      "required": true,
+      "options": ["1 year", "2 years", "3 years", "5 years", "Indefinite", "Custom"]
+    },
+    {
+      "id": "urgency",
+      "type": "radio",
+      "label": "Urgency",
+      "required": true,
+      "options": ["Urgent (1-2 days)", "Normal (3-5 days)", "Low Priority (1+ week)"]
+    },
+    {
+      "id": "special_terms",
+      "type": "textarea",
+      "label": "Special Terms or Concerns",
+      "required": false,
+      "placeholder": "Any specific clauses or concerns?"
+    },
+    {
+      "id": "document_attached",
+      "type": "checkbox",
+      "label": "Documentation",
+      "required": false,
+      "options": ["NDA document attached for review"]
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "risk-assessment",
+  "name": "Risk Assessment Form",
+  "description": "Conduct risk assessments for projects, vendors, and business activities",
+  "category": "legal-compliance",
+  "icon": "AlertCircle",
+  "version": 1,
+  "tags": ["legal", "compliance", "risk", "assessment"],
+  "fields": [
+    {
+      "id": "assessor_name",
+      "type": "text",
+      "label": "Assessor Name",
+      "required": true
+    },
+    {
+      "id": "assessor_email",
+      "type": "email",
+      "label": "Assessor Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "assessment_type",
+      "type": "select",
+      "label": "Type of Assessment",
+      "required": true,
+      "options": ["Vendor Risk", "Project Risk", "Operational Risk", "Compliance Risk", "Cybersecurity Risk", "Financial Risk", "Legal Risk", "Other"]
+    },
+    {
+      "id": "subject_name",
+      "type": "text",
+      "label": "Subject of Assessment",
+      "required": true,
+      "placeholder": "Project name, vendor name, activity, etc."
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Description",
+      "required": true,
+      "placeholder": "Describe the project, vendor, or activity being assessed"
+    },
+    {
+      "id": "identified_risks",
+      "type": "textarea",
+      "label": "Identified Risks",
+      "required": true,
+      "placeholder": "List and describe potential risks"
+    },
+    {
+      "id": "risk_likelihood",
+      "type": "radio",
+      "label": "Overall Risk Likelihood",
+      "required": true,
+      "options": ["Very Likely", "Likely", "Possible", "Unlikely", "Very Unlikely"]
+    },
+    {
+      "id": "risk_impact",
+      "type": "radio",
+      "label": "Potential Impact if Risk Occurs",
+      "required": true,
+      "options": ["Critical", "High", "Medium", "Low", "Negligible"]
+    },
+    {
+      "id": "overall_risk_level",
+      "type": "radio",
+      "label": "Overall Risk Level",
+      "required": true,
+      "options": ["Critical", "High", "Medium", "Low"]
+    },
+    {
+      "id": "mitigation_strategies",
+      "type": "textarea",
+      "label": "Proposed Mitigation Strategies",
+      "required": true,
+      "placeholder": "How can these risks be reduced or eliminated?"
+    },
+    {
+      "id": "contingency_plans",
+      "type": "textarea",
+      "label": "Contingency Plans",
+      "required": false,
+      "placeholder": "What will be done if the risk materializes?"
+    },
+    {
+      "id": "responsible_party",
+      "type": "text",
+      "label": "Responsible Party for Mitigation",
+      "required": true
+    },
+    {
+      "id": "review_date",
+      "type": "date",
+      "label": "Next Review Date",
+      "required": false
+    },
+    {
+      "id": "additional_notes",
+      "type": "textarea",
+      "label": "Additional Notes",
+      "required": false
+    }
+  ]
+}

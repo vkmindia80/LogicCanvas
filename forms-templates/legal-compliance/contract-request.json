@@ -1,0 +1,100 @@
+{
+  "id": "contract-request",
+  "name": "Contract Request Form",
+  "description": "Request legal review and creation of contracts and agreements",
+  "category": "legal-compliance",
+  "icon": "FileSignature",
+  "version": 1,
+  "tags": ["legal", "compliance", "contract", "agreement"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "contract_type",
+      "type": "select",
+      "label": "Type of Contract",
+      "required": true,
+      "options": ["Vendor Agreement", "Service Agreement", "NDA", "Employment Contract", "Partnership Agreement", "License Agreement", "Master Service Agreement", "Other"]
+    },
+    {
+      "id": "counterparty_name",
+      "type": "text",
+      "label": "Counterparty Name",
+      "required": true,
+      "placeholder": "Company or individual name"
+    },
+    {
+      "id": "contract_value",
+      "type": "number",
+      "label": "Contract Value (USD)",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "contract_term",
+      "type": "text",
+      "label": "Contract Term/Duration",
+      "required": true,
+      "placeholder": "e.g., 12 months, 3 years"
+    },
+    {
+      "id": "start_date",
+      "type": "date",
+      "label": "Proposed Start Date",
+      "required": true
+    },
+    {
+      "id": "urgency",
+      "type": "radio",
+      "label": "Urgency",
+      "required": true,
+      "options": ["Critical (1-2 days)", "High (3-5 days)", "Normal (1-2 weeks)", "Low (2+ weeks)"]
+    },
+    {
+      "id": "purpose",
+      "type": "textarea",
+      "label": "Purpose of Contract",
+      "required": true,
+      "placeholder": "Describe what this contract is for"
+    },
+    {
+      "id": "key_terms",
+      "type": "textarea",
+      "label": "Key Terms and Conditions",
+      "required": true,
+      "placeholder": "List important terms, deliverables, payment terms, etc."
+    },
+    {
+      "id": "special_provisions",
+      "type": "textarea",
+      "label": "Special Provisions or Concerns",
+      "required": false,
+      "placeholder": "Any unique clauses or legal concerns?"
+    },
+    {
+      "id": "draft_attached",
+      "type": "radio",
+      "label": "Do you have a draft contract?",
+      "required": true,
+      "options": ["Yes - Attached", "Yes - Will Send Separately", "No - Need Legal to Create"]
+    }
+  ]
+}
