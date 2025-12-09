@@ -135,6 +135,8 @@ api_connectors_collection = db['api_connectors']
 workflow_components_collection = db['workflow_components']  # Phase 3.1: Reusable components
 workflow_versions_collection = db['workflow_versions']  # Phase 3.1: Version management
 integrations_collection = db['integrations']  # Phase A Sprint 4: Integration Hub
+database_connections_collection = db['database_connections']  # Phase 3: Database Integration Connectors
+
 
 # Initialize Execution Engine
 execution_engine = WorkflowExecutionEngine(db)
