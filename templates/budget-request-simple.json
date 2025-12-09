@@ -1,0 +1,22 @@
+{
+  "name": "Budget Request (Simple)",
+  "description": "Simple departmental budget request workflow",
+  "category": "Finance",
+  "tags": ["finance", "budget", "request", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "3-5 days",
+  "icon": "dollar-sign",
+  "useCases": ["Department budgets", "Project funding", "Resource allocation"],
+  "prerequisites": [],
+  "integrationRequirements": [],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 200}, "data": {"label": "Start Request"}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 200}, "data": {"label": "Budget Request Form", "formFields": [{"id": "department", "label": "Department", "type": "text", "required": true}, {"id": "amount", "label": "Requested Amount ($)", "type": "number", "required": true}, {"id": "purpose", "label": "Purpose", "type": "textarea", "required": true}, {"id": "quarter", "label": "Quarter", "type": "dropdown", "required": true, "options": ["Q1", "Q2", "Q3", "Q4"]}]}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 500, "y": 200}, "data": {"label": "Department Head Approval", "approvers": ["dept-head@company.com"]}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 700, "y": 200}, "data": {"label": "Finance Approval", "approvers": ["cfo@company.com"]}},
+    {"id": "task-1", "type": "task", "position": {"x": 900, "y": 200}, "data": {"label": "Allocate Budget", "assignee": "finance@company.com"}},
+    {"id": "end-1", "type": "end", "position": {"x": 1100, "y": 200}, "data": {"label": "Approved"}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "approval-1"}, {"id": "e3", "source": "approval-1", "target": "approval-2"}, {"id": "e4", "source": "approval-2", "target": "task-1"}, {"id": "e5", "source": "task-1", "target": "end-1"}]
+}
