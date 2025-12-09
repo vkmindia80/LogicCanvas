@@ -1,0 +1,29 @@
+{
+  "name": "Capital Expenditure Approval",
+  "description": "Multi-level capital expenditure request with ROI analysis and board approval",
+  "category": "Finance",
+  "tags": ["finance", "capex", "investment", "complex"],
+  "complexity": "complex",
+  "estimatedSetupTime": "12 minutes",
+  "estimatedDuration": "4-8 weeks",
+  "icon": "trending-up",
+  "useCases": ["Equipment purchases", "Facility investments", "Technology projects"],
+  "prerequisites": ["Budget availability", "ROI templates"],
+  "integrationRequirements": ["Finance System", "Project Management"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 400}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 400}, "data": {"label": "CapEx Request"}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 400}, "data": {"label": "ROI Analysis", "description": "Financial analysis", "assignee": "finance@company.com"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 700, "y": 400}, "data": {"label": "Department Head"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 900, "y": 400}, "data": {"label": "Amount?", "conditions": [{"condition": "${amount} < 50000", "label": "<$50K", "targetId": "approval-2"}, {"condition": "${amount} >= 50000 && ${amount} < 250000", "label": "$50K-$250K", "targetId": "approval-3"}, {"condition": "${amount} >= 250000", "label": ">=$250K", "targetId": "approval-4"}]}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 1100, "y": 200}, "data": {"label": "VP Approval"}},
+    {"id": "approval-3", "type": "approval", "position": {"x": 1100, "y": 400}, "data": {"label": "CFO Approval"}},
+    {"id": "approval-4", "type": "approval", "position": {"x": 1100, "y": 600}, "data": {"label": "Board Approval"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 1300, "y": 400}},
+    {"id": "task-2", "type": "task", "position": {"x": 1500, "y": 400}, "data": {"label": "Create Project", "assignee": "pmo@company.com"}},
+    {"id": "task-3", "type": "task", "position": {"x": 1700, "y": 400}, "data": {"label": "Vendor Selection"}},
+    {"id": "task-4", "type": "task", "position": {"x": 1900, "y": 400}, "data": {"label": "Track Implementation"}},
+    {"id": "end-1", "type": "end", "position": {"x": 2100, "y": 400}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "task-1"}, {"id": "e3", "source": "task-1", "target": "approval-1"}, {"id": "e4", "source": "approval-1", "target": "decision-1"}, {"id": "e5", "source": "decision-1", "target": "approval-2"}, {"id": "e6", "source": "decision-1", "target": "approval-3"}, {"id": "e7", "source": "decision-1", "target": "approval-4"}, {"id": "e8", "source": "approval-2", "target": "merge-1"}, {"id": "e9", "source": "approval-3", "target": "merge-1"}, {"id": "e10", "source": "approval-4", "target": "merge-1"}, {"id": "e11", "source": "merge-1", "target": "task-2"}, {"id": "e12", "source": "task-2", "target": "task-3"}, {"id": "e13", "source": "task-3", "target": "task-4"}, {"id": "e14", "source": "task-4", "target": "end-1"}]
+}

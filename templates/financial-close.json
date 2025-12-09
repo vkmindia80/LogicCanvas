@@ -1,0 +1,31 @@
+{
+  "name": "Financial Close Process",
+  "description": "Month-end and quarter-end financial close with reconciliation and reporting",
+  "category": "Finance",
+  "tags": ["finance", "accounting", "close", "complex"],
+  "complexity": "complex",
+  "estimatedSetupTime": "15 minutes",
+  "estimatedDuration": "5-10 days",
+  "icon": "book-open",
+  "useCases": ["Month-end close", "Quarter-end close", "Year-end close"],
+  "prerequisites": ["GL accounts", "Reconciliation templates"],
+  "integrationRequirements": ["ERP", "GL System"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 400}, "data": {"triggerType": "schedule", "schedule": "0 0 1 * *"}},
+    {"id": "parallel-1", "type": "parallel", "position": {"x": 300, "y": 400}, "data": {"label": "Department Close"}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 100}, "data": {"label": "AR Reconciliation", "assignee": "ar@company.com", "sla": "2 days"}},
+    {"id": "task-2", "type": "task", "position": {"x": 500, "y": 250}, "data": {"label": "AP Reconciliation", "assignee": "ap@company.com", "sla": "2 days"}},
+    {"id": "task-3", "type": "task", "position": {"x": 500, "y": 400}, "data": {"label": "Payroll Accruals", "assignee": "payroll@company.com", "sla": "1 day"}},
+    {"id": "task-4", "type": "task", "position": {"x": 500, "y": 550}, "data": {"label": "Fixed Assets", "assignee": "fa@company.com", "sla": "2 days"}},
+    {"id": "task-5", "type": "task", "position": {"x": 500, "y": 700}, "data": {"label": "Inventory Count", "assignee": "inventory@company.com", "sla": "3 days"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 700, "y": 400}},
+    {"id": "task-6", "type": "task", "position": {"x": 900, "y": 400}, "data": {"label": "Journal Entries", "description": "Post closing entries", "assignee": "controller@company.com"}},
+    {"id": "task-7", "type": "task", "position": {"x": 1100, "y": 400}, "data": {"label": "Trial Balance Review", "assignee": "controller@company.com"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 1300, "y": 400}, "data": {"label": "Balanced?", "conditions": [{"condition": "${balanced} == true", "label": "Yes", "targetId": "task-8"}, {"condition": "${balanced} == false", "label": "No", "targetId": "task-6"}]}},
+    {"id": "task-8", "type": "task", "position": {"x": 1500, "y": 400}, "data": {"label": "Generate Reports", "description": "P&L, Balance Sheet, Cash Flow"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 1700, "y": 400}, "data": {"label": "CFO Approval", "approvers": ["cfo@company.com"]}},
+    {"id": "task-9", "type": "task", "position": {"x": 1900, "y": 400}, "data": {"label": "Close Period", "description": "Lock accounting period"}},
+    {"id": "end-1", "type": "end", "position": {"x": 2100, "y": 400}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "parallel-1"}, {"id": "e2", "source": "parallel-1", "target": "task-1"}, {"id": "e3", "source": "parallel-1", "target": "task-2"}, {"id": "e4", "source": "parallel-1", "target": "task-3"}, {"id": "e5", "source": "parallel-1", "target": "task-4"}, {"id": "e6", "source": "parallel-1", "target": "task-5"}, {"id": "e7", "source": "task-1", "target": "merge-1"}, {"id": "e8", "source": "task-2", "target": "merge-1"}, {"id": "e9", "source": "task-3", "target": "merge-1"}, {"id": "e10", "source": "task-4", "target": "merge-1"}, {"id": "e11", "source": "task-5", "target": "merge-1"}, {"id": "e12", "source": "merge-1", "target": "task-6"}, {"id": "e13", "source": "task-6", "target": "task-7"}, {"id": "e14", "source": "task-7", "target": "decision-1"}, {"id": "e15", "source": "decision-1", "target": "task-8"}, {"id": "e16", "source": "decision-1", "target": "task-6"}, {"id": "e17", "source": "task-8", "target": "approval-1"}, {"id": "e18", "source": "approval-1", "target": "task-9"}, {"id": "e19", "source": "task-9", "target": "end-1"}]
+}
