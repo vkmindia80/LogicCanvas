@@ -569,40 +569,57 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Connection Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                    placeholder="My Database Connection"
-                    required
-                  />
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50">
+                {/* Basic Information Section */}
+                <div className="bg-white rounded-xl border-2 border-green-200 p-5 space-y-4">
+                  <h4 className="text-lg font-bold text-slate-800 flex items-center space-x-2 mb-4">
+                    <Database className="h-5 w-5 text-green-600" />
+                    <span>Basic Information</span>
+                  </h4>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Connection Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                      placeholder="My Database Connection"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Database Type <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={formData.db_type}
+                      onChange={(e) => handleDbTypeChange(e.target.value)}
+                      className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                      required
+                    >
+                      {dbTypes.map((type) => (
+                        <option key={type.id} value={type.id}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Database Type <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={formData.db_type}
-                    onChange={(e) => handleDbTypeChange(e.target.value)}
-                    className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                    required
-                  >
-                    {dbTypes.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {renderFormFields()}
+                {/* Connection Details Section */}
+                {dbTypes.find(t => t.id === formData.db_type) && (
+                  <div className="bg-white rounded-xl border-2 border-green-200 p-5 space-y-4">
+                    <h4 className="text-lg font-bold text-slate-800 flex items-center space-x-2 mb-4">
+                      <Zap className="h-5 w-5 text-green-600" />
+                      <span>Connection Details</span>
+                    </h4>
+                    {renderFormFields()}
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
