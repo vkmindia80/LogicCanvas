@@ -1427,18 +1427,20 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
             </div>
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-primary-700">Description (Optional)</label>
+          <div className="border-t border-green-200 pt-6">
+            <label className="mb-2 block text-sm font-semibold text-primary-800">
+              Description <span className="text-xs font-normal text-green-500">(Optional)</span>
+            </label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Brief description of this connection..."
-              rows={2}
-              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              rows={3}
+              className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t border-green-200">
+          <div className="flex justify-end space-x-3 pt-6 border-t-2 border-green-200">
             <button
               type="button"
               onClick={onClose}
