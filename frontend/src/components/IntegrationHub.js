@@ -489,18 +489,34 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
 
       {/* Add/Edit Modal */}
       {showAddModal && (
-        <IntegrationModal
-          integration={editingIntegration}
-          onClose={() => {
-            setShowAddModal(false);
-            setEditingIntegration(null);
-          }}
-          onSave={() => {
-            setShowAddModal(false);
-            setEditingIntegration(null);
-            loadIntegrations();
-          }}
-        />
+        activeTab === 'integrations' ? (
+          <IntegrationModal
+            integration={editingIntegration}
+            onClose={() => {
+              setShowAddModal(false);
+              setEditingIntegration(null);
+            }}
+            onSave={() => {
+              setShowAddModal(false);
+              setEditingIntegration(null);
+              loadIntegrations();
+            }}
+          />
+        ) : (
+          <DatabaseModal
+            database={editingIntegration}
+            dbTypes={dbTypes}
+            onClose={() => {
+              setShowAddModal(false);
+              setEditingIntegration(null);
+            }}
+            onSave={() => {
+              setShowAddModal(false);
+              setEditingIntegration(null);
+              loadDatabases();
+            }}
+          />
+        )
       )}
     </div>
   );
