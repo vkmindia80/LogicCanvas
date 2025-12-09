@@ -5525,6 +5525,412 @@ async def get_connector_templates_library():
     return {"templates": templates, "count": len(templates)}
 
 
+
+
+# ========== PHASE 3: DATABASE INTEGRATION CONNECTORS ==========
+
+from integrations import (
+    PostgreSQLConnector,
+    MySQLConnector,
+    RedisConnector,
+    MongoDBConnector,
+    DynamoDBConnector
+)
+
+# Store active database connections in memory
+_active_db_connections: Dict[str, Any] = {}
+
+class DatabaseConnectionConfig(BaseModel):
+    """Database connection configuration model"""
+    name: str
+    db_type: str  # postgresql, mysql, redis, mongodb, dynamodb, firestore
+    host: Optional[str] = None
+    port: Optional[int] = None
+    database: Optional[str] = None
+    username: Optional[str] = None
+    password: Optional[str] = None
+    # Cloud-specific fields
+    region: Optional[str] = None
+    access_key: Optional[str] = None
+    secret_key: Optional[str] = None
+    project_id: Optional[str] = None
+    service_account_json: Optional[Dict[str, Any]] = None
+    # Additional options
+    ssl: Optional[bool] = False
+    options: Optional[Dict[str, Any]] = {}
+    description: Optional[str] = None
+    tags: Optional[List[str]] = []
+
+class DatabaseQueryRequest(BaseModel):
+    """Database query execution request"""
+    query: str
+    params: Optional[Dict[str, Any]] = None
+    table: Optional[str] = None
+
+class DatabaseOperationRequest(BaseModel):
+    """Database CRUD operation request"""
+    table: str
+    data: Dict[str, Any]
+    condition: Optional[Dict[str, Any]] = None
+
+def _get_connector_class(db_type: str):
+    """Get the appropriate connector class for database type"""
+    connector_map = {
+        'postgresql': PostgreSQLConnector,
+        'mysql': MySQLConnector,
+        'redis': RedisConnector,
+        'mongodb': MongoDBConnector,
+        'dynamodb': DynamoDBConnector
+    }
+    return connector_map.get(db_type.lower())
+
+@app.get("/api/integrations/databases")
+async def get_database_connections():
+    """Get all database connections"""
+    connections = list(database_connections_collection.find({}, {"_id": 0}))
+    
+    # Remove sensitive data
+    for conn in connections:
+        if 'password' in conn:
+            conn['password'] = '***REDACTED***'
+        if 'secret_key' in conn:
+            conn['secret_key'] = '***REDACTED***'
+        if 'access_key' in conn:
+            conn['access_key'] = '***REDACTED***'
+    
+    return {"connections": connections, "count": len(connections)}
+
+@app.get("/api/integrations/databases/{connection_id}")
+async def get_database_connection(connection_id: str):
+    """Get a specific database connection"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    # Remove sensitive data
+    if 'password' in connection:
+        connection['password'] = '***REDACTED***'
+    if 'secret_key' in connection:
+        connection['secret_key'] = '***REDACTED***'
+    if 'access_key' in connection:
+        connection['access_key'] = '***REDACTED***'
+    
+    return connection
+
+@app.post("/api/integrations/databases")
+async def create_database_connection(config: DatabaseConnectionConfig):
+    """Create a new database connection"""
+    connection_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    # Get connector class
+    connector_class = _get_connector_class(config.db_type)
+    if not connector_class:
+        raise HTTPException(status_code=400, detail=f"Unsupported database type: {config.db_type}")
+    
+    # Create connector instance to validate config
+    try:
+        connector = connector_class(connection_id, config.dict())
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid configuration: {str(e)}")
+    
+    connection_dict = config.dict()
+    connection_dict["id"] = connection_id
+    connection_dict["created_at"] = now
+    connection_dict["updated_at"] = now
+    connection_dict["status"] = "created"
+    
+    # Encrypt sensitive fields
+    if connection_dict.get('password'):
+        connection_dict['password'] = connector.encrypt_credential(connection_dict['password'])
+    if connection_dict.get('secret_key'):
+        connection_dict['secret_key'] = connector.encrypt_credential(connection_dict['secret_key'])
+    if connection_dict.get('access_key'):
+        connection_dict['access_key'] = connector.encrypt_credential(connection_dict['access_key'])
+    
+    database_connections_collection.insert_one(connection_dict)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "database_connection",
+        "entity_id": connection_id,
+        "action": "created",
+        "details": {"db_type": config.db_type, "name": config.name},
+        "timestamp": now
+    })
+    
+    return {"message": "Database connection created successfully", "id": connection_id}
+
+@app.put("/api/integrations/databases/{connection_id}")
+async def update_database_connection(connection_id: str, config: DatabaseConnectionConfig):
+    """Update an existing database connection"""
+    existing = database_connections_collection.find_one({"id": connection_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    now = datetime.utcnow().isoformat()
+    connection_dict = config.dict()
+    connection_dict["id"] = connection_id
+    connection_dict["created_at"] = existing.get("created_at")
+    connection_dict["updated_at"] = now
+    
+    # Get connector for encryption
+    connector_class = _get_connector_class(config.db_type)
+    if connector_class:
+        connector = connector_class(connection_id, config.dict())
+        
+        # Encrypt sensitive fields if they were updated
+        if connection_dict.get('password') and connection_dict['password'] != '***REDACTED***':
+            connection_dict['password'] = connector.encrypt_credential(connection_dict['password'])
+        elif connection_dict.get('password') == '***REDACTED***':
+            connection_dict['password'] = existing.get('password')
+            
+        if connection_dict.get('secret_key') and connection_dict['secret_key'] != '***REDACTED***':
+            connection_dict['secret_key'] = connector.encrypt_credential(connection_dict['secret_key'])
+        elif connection_dict.get('secret_key') == '***REDACTED***':
+            connection_dict['secret_key'] = existing.get('secret_key')
+    
+    database_connections_collection.replace_one({"id": connection_id}, connection_dict)
+    
+    # Clear cached connection if exists
+    if connection_id in _active_db_connections:
+        del _active_db_connections[connection_id]
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "database_connection",
+        "entity_id": connection_id,
+        "action": "updated",
+        "timestamp": now
+    })
+    
+    return {"message": "Database connection updated successfully"}
+
+@app.delete("/api/integrations/databases/{connection_id}")
+async def delete_database_connection(connection_id: str):
+    """Delete a database connection"""
+    result = database_connections_collection.delete_one({"id": connection_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    # Clear cached connection if exists
+    if connection_id in _active_db_connections:
+        try:
+            await _active_db_connections[connection_id].disconnect()
+        except:
+            pass
+        del _active_db_connections[connection_id]
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "database_connection",
+        "entity_id": connection_id,
+        "action": "deleted",
+        "timestamp": datetime.utcnow().isoformat()
+    })
+    
+    return {"message": "Database connection deleted successfully"}
+
+@app.post("/api/integrations/databases/{connection_id}/test")
+async def test_database_connection(connection_id: str):
+    """Test a database connection"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        connector = connector_class(connection_id, connection)
+        result = await connector.test_connection()
+        
+        # Update connection status in database
+        database_connections_collection.update_one(
+            {"id": connection_id},
+            {"$set": {
+                "status": "connected" if result.get('success') else "failed",
+                "last_tested": datetime.utcnow().isoformat(),
+                "last_test_result": result
+            }}
+        )
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Connection test failed: {str(e)}",
+            "database_type": connection.get('db_type')
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/query")
+async def execute_database_query(connection_id: str, request: DatabaseQueryRequest):
+    """Execute a query on a database connection"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        # Get or create connector
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.execute_query(request.query, request.params)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "database_query",
+            "entity_id": connection_id,
+            "action": "executed",
+            "details": {"query": request.query[:100]},  # First 100 chars only
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "query": request.query
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/insert")
+async def database_insert(connection_id: str, request: DatabaseOperationRequest):
+    """Insert data into database"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.insert(request.table, request.data)
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "operation": "insert"
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/update")
+async def database_update(connection_id: str, request: DatabaseOperationRequest):
+    """Update data in database"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.update(request.table, request.data, request.condition or {})
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "operation": "update"
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/delete")
+async def database_delete(connection_id: str, request: DatabaseOperationRequest):
+    """Delete data from database"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.delete(request.table, request.condition or {})
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "operation": "delete"
+        }
+
+@app.get("/api/integrations/databases/types")
+async def get_supported_database_types():
+    """Get list of supported database types"""
+    return {
+        "types": [
+            {
+                "id": "postgresql",
+                "name": "PostgreSQL",
+                "icon": "Database",
+                "category": "SQL",
+                "description": "Open-source relational database",
+                "fields": ["host", "port", "database", "username", "password", "ssl"]
+            },
+            {
+                "id": "mysql",
+                "name": "MySQL / MariaDB",
+                "icon": "Database",
+                "category": "SQL",
+                "description": "Popular open-source relational database",
+                "fields": ["host", "port", "database", "username", "password", "ssl"]
+            },
+            {
+                "id": "redis",
+                "name": "Redis",
+                "icon": "Zap",
+                "category": "NoSQL",
+                "description": "In-memory data structure store",
+                "fields": ["host", "port", "password", "database"]
+            },
+            {
+                "id": "mongodb",
+                "name": "MongoDB",
+                "icon": "Database",
+                "category": "NoSQL",
+                "description": "Document-oriented NoSQL database",
+                "fields": ["host", "port", "database", "username", "password"]
+            },
+            {
+                "id": "dynamodb",
+                "name": "AWS DynamoDB",
+                "icon": "Cloud",
+                "category": "Cloud",
+                "description": "Amazon's NoSQL database service",
+                "fields": ["region", "access_key", "secret_key"]
+            }
+        ]
+    }
+
+
 # ========== PHASE 8 SPRINT 4: ADVANCED DEBUGGING FEATURES ==========
 
 class BreakpointConfig(BaseModel):
