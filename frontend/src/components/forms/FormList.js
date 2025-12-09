@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, FileText, Edit, Trash2, Copy, Tag, ClipboardList } from 'lucide-react';
+import { Plus, Search, FileText, Edit, Trash2, Copy, Tag, ClipboardList, Package } from 'lucide-react';
 import { useRole } from '../../contexts/RoleContext';
 import EmptyState from '../EmptyState';
 import Tooltip from '../Tooltip';
 import { SkeletonCard } from '../Skeleton';
+import FormTemplateLibrary from './FormTemplateLibrary';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -12,6 +13,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
+  const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
 
   const { can } = useRole();
 
@@ -119,16 +121,26 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
               <h2 className="mb-2 bg-gradient-to-r from-primary-900 to-primary-700 bg-clip-text text-4xl font-bold text-transparent">Form Library</h2>
               <p className="text-lg text-primary-600">Create and manage reusable forms</p>
             </div>
-            {can('manageForms') && (
+            <div className="flex space-x-3">
               <button
-                onClick={onCreateNew}
-                className="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
-                data-testid="create-new-form-btn"
+                onClick={() => setShowTemplateLibrary(true)}
+                className="group flex items-center space-x-2 rounded-xl border-2 border-primary-500 bg-white px-6 py-3 text-primary-600 shadow-lg transition-all hover:bg-primary-50 hover:shadow-xl"
+                data-testid="browse-form-templates-btn"
               >
-                <Plus className="w-5 h-5" />
-                <span className="font-semibold">Create New Form</span>
+                <Package className="w-5 h-5" />
+                <span className="font-semibold">Browse Templates</span>
               </button>
-            )}
+              {can('manageForms') && (
+                <button
+                  onClick={onCreateNew}
+                  className="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-white shadow-lg shadow-primary-500/30 transition-all hover:shadow-xl hover:shadow-primary-500/40"
+                  data-testid="create-new-form-btn"
+                >
+                  <Plus className="w-5 h-5" />
+                  <span className="font-semibold">Create New Form</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Search and Filter */}
@@ -279,6 +291,44 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Form Template Library Modal */}
+      {showTemplateLibrary && (
+        <FormTemplateLibrary
+          isOpen={showTemplateLibrary}
+          onClose={() => setShowTemplateLibrary(false)}
+          onSelectTemplate={async (formTemplate) => {
+            // Create a new form from the template
+            try {
+              const response = await fetch(`${BACKEND_URL}/api/forms`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formTemplate),
+              });
+
+              if (response.ok) {
+                const result = await response.json();
+                onNotify?.('Form created from template successfully!', 'success');
+                fetchForms();
+                
+                // Open the newly created form in the form builder
+                const newFormResponse = await fetch(`${BACKEND_URL}/api/forms/${result.id}`);
+                if (newFormResponse.ok) {
+                  const newForm = await newFormResponse.json();
+                  onSelectForm(newForm);
+                }
+              } else {
+                const body = await response.json().catch(() => ({}));
+                onNotify?.(body.detail || 'Failed to create form from template', 'error');
+              }
+            } catch (error) {
+              console.error('Failed to create form from template:', error);
+              onNotify?.('Failed to create form from template', 'error');
+            }
+          }}
+          onNotify={onNotify}
+        />
       )}
     </div>
   );
