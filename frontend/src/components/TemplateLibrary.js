@@ -14,9 +14,11 @@ const iconMap = {
 };
 
 const complexityColors = {
+  'simple': 'bg-green-100 text-green-800',
   'low': 'bg-green-100 text-green-800',
-  'medium': 'bg-gold-100 text-gold-800',
-  'high': 'bg-gold-100 text-gold-800'
+  'medium': 'bg-blue-100 text-blue-800',
+  'high': 'bg-orange-100 text-orange-800',
+  'complex': 'bg-purple-100 text-purple-800'
 };
 
 const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
