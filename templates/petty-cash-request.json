@@ -1,0 +1,88 @@
+{
+  "name": "Petty Cash Request",
+  "description": "Request and track petty cash disbursements",
+  "category": "Finance",
+  "tags": ["finance", "cash", "expense", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "2-4 hours",
+  "icon": "dollar-sign",
+  "useCases": ["Small cash expenses", "Office supplies", "Minor purchases"],
+  "prerequisites": [],
+  "integrationRequirements": [],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 200},
+      "data": {
+        "label": "Start Request"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 200},
+      "data": {
+        "label": "Petty Cash Form",
+        "formFields": [
+          {"id": "requester", "label": "Requester Name", "type": "text", "required": true},
+          {"id": "amount", "label": "Amount ($)", "type": "number", "required": true},
+          {"id": "purpose", "label": "Purpose", "type": "textarea", "required": true},
+          {"id": "category", "label": "Category", "type": "dropdown", "required": true, "options": ["Office Supplies", "Travel", "Entertainment", "Miscellaneous"]},
+          {"id": "date_needed", "label": "Date Needed", "type": "date", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 500, "y": 200},
+      "data": {
+        "label": "Amount Check",
+        "conditions": [
+          {"condition": "${form-1.amount} <= 100", "label": "≤$100", "targetId": "task-1"},
+          {"condition": "${form-1.amount} > 100", "label": ">$100", "targetId": "approval-1"}
+        ]
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 700, "y": 300},
+      "data": {
+        "label": "Manager Approval",
+        "description": "Required for amounts >$100",
+        "approvers": ["manager@company.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 900, "y": 200},
+      "data": {
+        "label": "Disburse Cash",
+        "description": "Finance team disburses petty cash",
+        "assignee": "finance@company.com"
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1100, "y": 200},
+      "data": {
+        "label": "Complete",
+        "description": "Cash disbursed"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "target": "task-1"},
+    {"id": "e4", "source": "decision-1", "target": "approval-1"},
+    {"id": "e5", "source": "approval-1", "target": "task-1"},
+    {"id": "e6", "source": "task-1", "target": "end-1"}
+  ]
+}

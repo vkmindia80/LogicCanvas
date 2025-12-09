@@ -1,0 +1,107 @@
+{
+  "name": "Equipment Request",
+  "description": "Simple workflow for requesting office equipment or supplies",
+  "category": "Operations",
+  "tags": ["operations", "equipment", "request", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "1-2 days",
+  "icon": "package",
+  "useCases": ["Laptop request", "Office supplies", "Monitor request", "Keyboard/mouse"],
+  "prerequisites": [],
+  "integrationRequirements": [],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 200},
+      "data": {
+        "label": "Start Request",
+        "description": "Employee initiates equipment request"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 200},
+      "data": {
+        "label": "Equipment Request Form",
+        "formFields": [
+          {"id": "requester", "label": "Requester Name", "type": "text", "required": true},
+          {"id": "equipment_type", "label": "Equipment Type", "type": "dropdown", "required": true, "options": ["Laptop", "Monitor", "Keyboard", "Mouse", "Office Supplies", "Other"]},
+          {"id": "description", "label": "Description", "type": "textarea", "required": true},
+          {"id": "urgency", "label": "Urgency", "type": "dropdown", "required": true, "options": ["Low", "Medium", "High"]},
+          {"id": "justification", "label": "Business Justification", "type": "textarea", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "approval-1",
+      "type": "approval",
+      "position": {"x": 500, "y": 200},
+      "data": {
+        "label": "Manager Approval",
+        "approvers": ["manager@company.com"],
+        "approvalType": "single"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 700, "y": 200},
+      "data": {
+        "label": "Approved?",
+        "conditions": [
+          {"condition": "${approval-1.status} == 'approved'", "label": "Yes", "targetId": "task-1"},
+          {"condition": "${approval-1.status} == 'rejected'", "label": "No", "targetId": "end-2"}
+        ]
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 900, "y": 100},
+      "data": {
+        "label": "Process Order",
+        "description": "IT team orders equipment",
+        "assignee": "it@company.com"
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": {"x": 1100, "y": 100},
+      "data": {
+        "label": "Deliver Equipment",
+        "description": "Deliver to requester",
+        "assignee": "it@company.com"
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1300, "y": 100},
+      "data": {
+        "label": "Delivered",
+        "description": "Equipment delivered"
+      }
+    },
+    {
+      "id": "end-2",
+      "type": "end",
+      "position": {"x": 900, "y": 300},
+      "data": {
+        "label": "Rejected"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "approval-1"},
+    {"id": "e3", "source": "approval-1", "target": "decision-1"},
+    {"id": "e4", "source": "decision-1", "target": "task-1"},
+    {"id": "e5", "source": "decision-1", "target": "end-2"},
+    {"id": "e6", "source": "task-1", "target": "task-2"},
+    {"id": "e7", "source": "task-2", "target": "end-1"}
+  ]
+}

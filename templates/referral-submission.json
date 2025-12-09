@@ -1,0 +1,109 @@
+{
+  "name": "Employee Referral Submission",
+  "description": "Submit and track employee referrals for open positions",
+  "category": "Human Resources",
+  "tags": ["hr", "recruitment", "referral", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "4 minutes",
+  "estimatedDuration": "1-2 weeks",
+  "icon": "users",
+  "useCases": ["Employee referrals", "Candidate recommendations", "Referral bonus tracking"],
+  "prerequisites": [],
+  "integrationRequirements": [],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 200},
+      "data": {
+        "label": "Start Referral"
+      }
+    },
+    {
+      "id": "form-1",
+      "type": "form",
+      "position": {"x": 300, "y": 200},
+      "data": {
+        "label": "Referral Form",
+        "formFields": [
+          {"id": "referrer_name", "label": "Your Name", "type": "text", "required": true},
+          {"id": "candidate_name", "label": "Candidate Name", "type": "text", "required": true},
+          {"id": "candidate_email", "label": "Candidate Email", "type": "email", "required": true},
+          {"id": "candidate_phone", "label": "Candidate Phone", "type": "phone", "required": true},
+          {"id": "position", "label": "Position", "type": "text", "required": true},
+          {"id": "resume", "label": "Resume", "type": "file", "required": true},
+          {"id": "relationship", "label": "How do you know the candidate?", "type": "textarea", "required": true},
+          {"id": "recommendation", "label": "Why are they a good fit?", "type": "textarea", "required": true}
+        ]
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 500, "y": 200},
+      "data": {
+        "label": "Initial Screening",
+        "description": "HR reviews referral",
+        "assignee": "hr@company.com"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 700, "y": 200},
+      "data": {
+        "label": "Qualified?",
+        "conditions": [
+          {"condition": "${task-1.status} == 'qualified'", "label": "Yes", "targetId": "task-2"},
+          {"condition": "${task-1.status} == 'not_qualified'", "label": "No", "targetId": "task-3"}
+        ]
+      }
+    },
+    {
+      "id": "task-2",
+      "type": "task",
+      "position": {"x": 900, "y": 100},
+      "data": {
+        "label": "Schedule Interview",
+        "description": "Move candidate to interview process",
+        "assignee": "recruiting@company.com"
+      }
+    },
+    {
+      "id": "task-3",
+      "type": "task",
+      "position": {"x": 900, "y": 300},
+      "data": {
+        "label": "Send Rejection",
+        "description": "Notify referrer and candidate",
+        "assignee": "hr@company.com"
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1100, "y": 100},
+      "data": {
+        "label": "In Process",
+        "description": "Candidate in interview process"
+      }
+    },
+    {
+      "id": "end-2",
+      "type": "end",
+      "position": {"x": 1100, "y": 300},
+      "data": {
+        "label": "Not Qualified"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "form-1"},
+    {"id": "e2", "source": "form-1", "target": "task-1"},
+    {"id": "e3", "source": "task-1", "target": "decision-1"},
+    {"id": "e4", "source": "decision-1", "target": "task-2"},
+    {"id": "e5", "source": "decision-1", "target": "task-3"},
+    {"id": "e6", "source": "task-2", "target": "end-1"},
+    {"id": "e7", "source": "task-3", "target": "end-2"}
+  ]
+}

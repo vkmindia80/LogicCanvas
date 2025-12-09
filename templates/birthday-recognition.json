@@ -1,0 +1,114 @@
+{
+  "name": "Birthday/Anniversary Recognition",
+  "description": "Automated employee birthday and work anniversary celebration workflow",
+  "category": "Human Resources",
+  "tags": ["hr", "recognition", "celebration", "simple"],
+  "complexity": "simple",
+  "estimatedSetupTime": "3 minutes",
+  "estimatedDuration": "15 minutes",
+  "icon": "gift",
+  "useCases": ["Employee birthdays", "Work anniversaries", "Milestone celebrations"],
+  "prerequisites": [],
+  "integrationRequirements": ["Email (SMTP)", "Slack"],
+  "nodes": [
+    {
+      "id": "start-1",
+      "type": "start",
+      "position": {"x": 100, "y": 200},
+      "data": {
+        "label": "Scheduled Trigger",
+        "description": "Runs daily to check birthdays/anniversaries",
+        "triggerType": "schedule",
+        "schedule": "0 9 * * *"
+      }
+    },
+    {
+      "id": "task-1",
+      "type": "task",
+      "position": {"x": 300, "y": 200},
+      "data": {
+        "label": "Check Today's Celebrations",
+        "description": "Query database for today's birthdays and anniversaries",
+        "taskType": "automated"
+      }
+    },
+    {
+      "id": "decision-1",
+      "type": "decision",
+      "position": {"x": 500, "y": 200},
+      "data": {
+        "label": "Any Celebrations?",
+        "conditions": [
+          {"condition": "${task-1.count} > 0", "label": "Yes", "targetId": "parallel-1"},
+          {"condition": "${task-1.count} == 0", "label": "No", "targetId": "end-1"}
+        ]
+      }
+    },
+    {
+      "id": "parallel-1",
+      "type": "parallel",
+      "position": {"x": 700, "y": 200},
+      "data": {
+        "label": "Send Notifications",
+        "description": "Send via multiple channels"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {"x": 900, "y": 100},
+      "data": {
+        "label": "Send Email",
+        "actionType": "email",
+        "config": {
+          "to": "${task-1.employee_email}",
+          "subject": "Happy Birthday!",
+          "body": "Wishing you a wonderful birthday!"
+        }
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "position": {"x": 900, "y": 300},
+      "data": {
+        "label": "Post to Slack",
+        "actionType": "webhook",
+        "config": {
+          "url": "${slack_webhook_url}",
+          "method": "POST",
+          "body": {"text": "🎉 Happy Birthday to ${task-1.employee_name}!"}
+        }
+      }
+    },
+    {
+      "id": "merge-1",
+      "type": "merge",
+      "position": {"x": 1100, "y": 200},
+      "data": {
+        "label": "Continue",
+        "mergeType": "all"
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "position": {"x": 1300, "y": 200},
+      "data": {
+        "label": "Complete",
+        "description": "Celebrations sent"
+      }
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "start-1", "target": "task-1"},
+    {"id": "e2", "source": "task-1", "target": "decision-1"},
+    {"id": "e3", "source": "decision-1", "target": "parallel-1"},
+    {"id": "e4", "source": "decision-1", "target": "end-1"},
+    {"id": "e5", "source": "parallel-1", "target": "action-1"},
+    {"id": "e6", "source": "parallel-1", "target": "action-2"},
+    {"id": "e7", "source": "action-1", "target": "merge-1"},
+    {"id": "e8", "source": "action-2", "target": "merge-1"},
+    {"id": "e9", "source": "merge-1", "target": "end-1"}
+  ]
+}
