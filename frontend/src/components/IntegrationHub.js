@@ -17,8 +17,13 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
   const [dbCategoryFilter, setDbCategoryFilter] = useState('all'); // 'all', 'SQL', 'NoSQL', 'Cloud'
 
   useEffect(() => {
-    loadIntegrations();
-  }, [filterType]);
+    if (activeTab === 'integrations') {
+      loadIntegrations();
+    } else if (activeTab === 'databases') {
+      loadDatabases();
+      loadDatabaseTypes();
+    }
+  }, [activeTab, filterType, dbCategoryFilter]);
 
   const loadIntegrations = async () => {
     try {
@@ -31,6 +36,39 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
       console.error('Failed to load integrations:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadDatabases = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${BACKEND_URL}/api/integrations/databases`);
+      const data = await response.json();
+      let connections = data.connections || [];
+      
+      // Filter by category if needed
+      if (dbCategoryFilter !== 'all') {
+        connections = connections.filter(conn => {
+          const dbType = dbTypes.find(t => t.id === conn.db_type);
+          return dbType && dbType.category === dbCategoryFilter;
+        });
+      }
+      
+      setDatabases(connections);
+    } catch (error) {
+      console.error('Failed to load database connections:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadDatabaseTypes = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/integrations/databases/types`);
+      const data = await response.json();
+      setDbTypes(data.types || []);
+    } catch (error) {
+      console.error('Failed to load database types:', error);
     }
   };
 
