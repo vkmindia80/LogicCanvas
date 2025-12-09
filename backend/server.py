@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, Security
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pymongo import MongoClient
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
