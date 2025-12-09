@@ -282,12 +282,18 @@
 - ✅ `/app/frontend/src/components/IntegrationHub.js` (database UI exists)
 - ✅ `/app/frontend/src/components/DatabaseConnectorConfig.js` (database configuration forms)
 
-**Backend Endpoints:**
-- `POST /api/integrations/databases` (create database connection)
-- `GET /api/integrations/databases` (list connections)
-- `POST /api/integrations/databases/{id}/test` (test connection)
-- `POST /api/integrations/databases/{id}/query` (execute query)
-- `DELETE /api/integrations/databases/{id}` (delete connection)
+**Backend Endpoints (All Implemented):**
+- ✅ `GET /api/integrations/databases/types` (list supported database types)
+- ✅ `GET /api/integrations/databases` (list all connections)
+- ✅ `GET /api/integrations/databases/{id}` (get specific connection)
+- ✅ `POST /api/integrations/databases` (create database connection)
+- ✅ `PUT /api/integrations/databases/{id}` (update connection)
+- ✅ `DELETE /api/integrations/databases/{id}` (delete connection)
+- ✅ `POST /api/integrations/databases/{id}/test` (test connection)
+- ✅ `POST /api/integrations/databases/{id}/query` (execute query)
+- ✅ `POST /api/integrations/databases/{id}/insert` (insert data)
+- ✅ `POST /api/integrations/databases/{id}/update` (update data)
+- ✅ `POST /api/integrations/databases/{id}/delete` (delete data)
 
 ---
 
