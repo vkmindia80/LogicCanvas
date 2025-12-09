@@ -312,7 +312,9 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
-          {loading ? (
+        {activeTab === 'integrations' ? (
+          // Service Integrations View
+          loading ? (
             <div className="flex h-64 items-center justify-center">
               <div className="text-center">
                 <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary-600"></div>
@@ -389,7 +391,100 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
                 </div>
               ))}
             </div>
-          )}
+          )
+        ) : (
+          // Database Connectors View
+          loading ? (
+            <div className="flex h-64 items-center justify-center">
+              <div className="text-center">
+                <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary-600"></div>
+                <p className="text-sm text-primary-600">Loading database connections...</p>
+              </div>
+            </div>
+          ) : databases.length === 0 ? (
+            <div className="flex h-64 flex-col items-center justify-center">
+              <Database className="mb-4 h-16 w-16 text-green-300" />
+              <h3 className="mb-2 text-lg font-semibold text-primary-900">No Database Connections Yet</h3>
+              <p className="mb-4 text-sm text-primary-600">Connect to your first database</p>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="inline-flex items-center space-x-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-700"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add Database</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {databases.map((db) => {
+                const dbTypeInfo = dbTypes.find(t => t.id === db.db_type);
+                return (
+                  <div
+                    key={db.id}
+                    className="group rounded-xl border-2 border-green-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-lg"
+                  >
+                    <div className="mb-4 flex items-start justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="rounded-lg bg-primary-100 p-3 text-primary-600">
+                          {getDatabaseIcon(db.db_type)}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-primary-900">{db.name}</h3>
+                          <p className="text-xs text-green-500">{dbTypeInfo?.name || db.db_type}</p>
+                        </div>
+                      </div>
+                      <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                        dbTypeInfo?.category === 'SQL' ? 'bg-blue-100 text-blue-800' :
+                        dbTypeInfo?.category === 'NoSQL' ? 'bg-purple-100 text-purple-800' :
+                        'bg-cyan-100 text-cyan-800'
+                      }`}>
+                        {dbTypeInfo?.category || 'Database'}
+                      </span>
+                    </div>
+
+                    {db.description && (
+                      <p className="mb-4 text-sm text-primary-600 line-clamp-2">{db.description}</p>
+                    )}
+
+                    <div className="mb-4 space-y-1 text-xs text-green-500">
+                      {db.host && <p>Host: {db.host}</p>}
+                      {db.database && <p>Database: {db.database}</p>}
+                      {db.region && <p>Region: {db.region}</p>}
+                      {db.last_tested && (
+                        <p>Last tested: {new Date(db.last_tested).toLocaleString()}</p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleTestDatabase(db.id)}
+                        disabled={testingId === db.id}
+                        className="flex-1 rounded-lg border border-green-300 px-3 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-green-50 disabled:opacity-50"
+                      >
+                        {testingId === db.id ? 'Testing...' : 'Test'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingIntegration(db);
+                          setShowAddModal(true);
+                        }}
+                        className="rounded-lg border border-green-300 p-2 text-primary-600 transition-colors hover:bg-green-50"
+                      >
+                        <Edit2 className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteDatabase(db.id)}
+                        className="rounded-lg border border-gold-300 p-2 text-gold-600 transition-colors hover:bg-gold-50"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )
+        )}
         </div>
 
       {/* Add/Edit Modal */}
