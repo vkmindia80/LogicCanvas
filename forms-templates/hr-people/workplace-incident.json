@@ -1,0 +1,105 @@
+{
+  "id": "workplace-incident",
+  "name": "Workplace Incident Report Form",
+  "description": "Report workplace accidents, injuries, safety hazards, or security incidents",
+  "category": "hr-people",
+  "icon": "AlertTriangle",
+  "version": 1,
+  "tags": ["hr", "safety", "incident", "report"],
+  "fields": [
+    {
+      "id": "reporter_name",
+      "type": "text",
+      "label": "Reporter Name",
+      "required": true
+    },
+    {
+      "id": "reporter_email",
+      "type": "email",
+      "label": "Reporter Email",
+      "required": true
+    },
+    {
+      "id": "incident_date",
+      "type": "date",
+      "label": "Date of Incident",
+      "required": true
+    },
+    {
+      "id": "incident_time",
+      "type": "time",
+      "label": "Time of Incident",
+      "required": true
+    },
+    {
+      "id": "incident_location",
+      "type": "text",
+      "label": "Location of Incident",
+      "required": true,
+      "placeholder": "Building, floor, room number"
+    },
+    {
+      "id": "incident_type",
+      "type": "select",
+      "label": "Type of Incident",
+      "required": true,
+      "options": ["Injury", "Near Miss", "Property Damage", "Safety Hazard", "Security Issue", "Equipment Failure", "Other"]
+    },
+    {
+      "id": "severity",
+      "type": "radio",
+      "label": "Severity Level",
+      "required": true,
+      "options": ["Minor", "Moderate", "Severe", "Critical"]
+    },
+    {
+      "id": "persons_involved",
+      "type": "textarea",
+      "label": "Persons Involved",
+      "required": true,
+      "placeholder": "List names of all persons involved"
+    },
+    {
+      "id": "witnesses",
+      "type": "textarea",
+      "label": "Witnesses",
+      "required": false,
+      "placeholder": "List names and contact info of witnesses"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Detailed Description of Incident",
+      "required": true,
+      "placeholder": "Describe what happened in detail"
+    },
+    {
+      "id": "injuries",
+      "type": "textarea",
+      "label": "Injuries Sustained",
+      "required": false,
+      "placeholder": "Describe any injuries"
+    },
+    {
+      "id": "medical_attention",
+      "type": "radio",
+      "label": "Was medical attention required?",
+      "required": true,
+      "options": ["Yes", "No"]
+    },
+    {
+      "id": "immediate_action",
+      "type": "textarea",
+      "label": "Immediate Action Taken",
+      "required": true,
+      "placeholder": "What actions were taken immediately after the incident?"
+    },
+    {
+      "id": "preventive_measures",
+      "type": "textarea",
+      "label": "Suggested Preventive Measures",
+      "required": false,
+      "placeholder": "How can this be prevented in the future?"
+    }
+  ]
+}

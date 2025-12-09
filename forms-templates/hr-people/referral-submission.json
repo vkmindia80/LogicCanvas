@@ -1,0 +1,81 @@
+{
+  "id": "referral-submission",
+  "name": "Employee Referral Form",
+  "description": "Submit candidate referrals for open positions with your company",
+  "category": "hr-people",
+  "icon": "Users",
+  "version": 1,
+  "tags": ["hr", "referral", "recruitment", "hiring"],
+  "fields": [
+    {
+      "id": "referrer_name",
+      "type": "text",
+      "label": "Your Name (Referrer)",
+      "required": true
+    },
+    {
+      "id": "referrer_email",
+      "type": "email",
+      "label": "Your Email",
+      "required": true
+    },
+    {
+      "id": "referrer_department",
+      "type": "text",
+      "label": "Your Department",
+      "required": true
+    },
+    {
+      "id": "candidate_name",
+      "type": "text",
+      "label": "Candidate Full Name",
+      "required": true
+    },
+    {
+      "id": "candidate_email",
+      "type": "email",
+      "label": "Candidate Email",
+      "required": true
+    },
+    {
+      "id": "candidate_phone",
+      "type": "phone",
+      "label": "Candidate Phone Number",
+      "required": true
+    },
+    {
+      "id": "position_applied",
+      "type": "text",
+      "label": "Position/Role Applying For",
+      "required": true,
+      "placeholder": "e.g., Senior Software Engineer"
+    },
+    {
+      "id": "relationship",
+      "type": "select",
+      "label": "Relationship to Candidate",
+      "required": true,
+      "options": ["Former Colleague", "Friend", "Family Member", "Professional Network", "Academic Connection", "Other"]
+    },
+    {
+      "id": "candidate_linkedin",
+      "type": "url",
+      "label": "Candidate LinkedIn Profile",
+      "required": false,
+      "placeholder": "https://linkedin.com/in/..."
+    },
+    {
+      "id": "why_good_fit",
+      "type": "textarea",
+      "label": "Why is this candidate a good fit?",
+      "required": true,
+      "placeholder": "Describe the candidate's qualifications, skills, and why they would be a good fit"
+    },
+    {
+      "id": "additional_info",
+      "type": "textarea",
+      "label": "Additional Information",
+      "required": false
+    }
+  ]
+}

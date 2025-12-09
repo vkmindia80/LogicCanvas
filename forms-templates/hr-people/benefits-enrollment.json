@@ -1,0 +1,95 @@
+{
+  "id": "benefits-enrollment",
+  "name": "Benefits Enrollment Form",
+  "description": "Employee benefits selection form for health insurance, retirement plans, and other benefits",
+  "category": "hr-people",
+  "icon": "Heart",
+  "version": 1,
+  "tags": ["hr", "benefits", "insurance", "enrollment"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "employee_id",
+      "type": "text",
+      "label": "Employee ID",
+      "required": true
+    },
+    {
+      "id": "enrollment_type",
+      "type": "radio",
+      "label": "Enrollment Type",
+      "required": true,
+      "options": ["New Hire", "Annual Open Enrollment", "Life Event Change", "Other"]
+    },
+    {
+      "id": "health_insurance",
+      "type": "select",
+      "label": "Health Insurance Plan",
+      "required": true,
+      "options": ["PPO Plan", "HMO Plan", "High Deductible Plan", "Decline Coverage"]
+    },
+    {
+      "id": "coverage_level",
+      "type": "radio",
+      "label": "Coverage Level",
+      "required": true,
+      "options": ["Employee Only", "Employee + Spouse", "Employee + Child(ren)", "Family"]
+    },
+    {
+      "id": "dental_insurance",
+      "type": "radio",
+      "label": "Dental Insurance",
+      "required": true,
+      "options": ["Enroll", "Decline"]
+    },
+    {
+      "id": "vision_insurance",
+      "type": "radio",
+      "label": "Vision Insurance",
+      "required": true,
+      "options": ["Enroll", "Decline"]
+    },
+    {
+      "id": "retirement_plan",
+      "type": "radio",
+      "label": "401(k) Retirement Plan",
+      "required": true,
+      "options": ["Enroll", "Decline"]
+    },
+    {
+      "id": "contribution_percentage",
+      "type": "number",
+      "label": "401(k) Contribution Percentage",
+      "required": false,
+      "placeholder": "Enter percentage (e.g., 5 for 5%)",
+      "validation": {
+        "min": 0,
+        "max": 100
+      }
+    },
+    {
+      "id": "life_insurance",
+      "type": "select",
+      "label": "Life Insurance Coverage",
+      "required": true,
+      "options": ["1x Salary", "2x Salary", "3x Salary", "Decline"]
+    },
+    {
+      "id": "beneficiary_name",
+      "type": "text",
+      "label": "Primary Beneficiary Name",
+      "required": false
+    },
+    {
+      "id": "beneficiary_relationship",
+      "type": "text",
+      "label": "Beneficiary Relationship",
+      "required": false
+    }
+  ]
+}

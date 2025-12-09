@@ -1,0 +1,79 @@
+{
+  "id": "employee-info-update",
+  "name": "Employee Information Update Form",
+  "description": "Form for employees to update their personal information in HR systems",
+  "category": "hr-people",
+  "icon": "UserCog",
+  "version": 1,
+  "tags": ["hr", "update", "employee", "information"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Full Name",
+      "required": true
+    },
+    {
+      "id": "employee_id",
+      "type": "text",
+      "label": "Employee ID",
+      "required": true
+    },
+    {
+      "id": "update_type",
+      "type": "checkbox",
+      "label": "Information to Update",
+      "required": true,
+      "options": ["Address", "Phone Number", "Email", "Emergency Contact", "Banking Details", "Tax Information"]
+    },
+    {
+      "id": "new_address",
+      "type": "textarea",
+      "label": "New Address",
+      "required": false,
+      "placeholder": "Street, City, State, ZIP"
+    },
+    {
+      "id": "new_phone",
+      "type": "phone",
+      "label": "New Phone Number",
+      "required": false
+    },
+    {
+      "id": "new_email",
+      "type": "email",
+      "label": "New Email Address",
+      "required": false
+    },
+    {
+      "id": "emergency_contact_name",
+      "type": "text",
+      "label": "Emergency Contact Name",
+      "required": false
+    },
+    {
+      "id": "emergency_contact_phone",
+      "type": "phone",
+      "label": "Emergency Contact Phone",
+      "required": false
+    },
+    {
+      "id": "emergency_contact_relationship",
+      "type": "text",
+      "label": "Relationship to Emergency Contact",
+      "required": false
+    },
+    {
+      "id": "effective_date",
+      "type": "date",
+      "label": "Effective Date of Change",
+      "required": true
+    },
+    {
+      "id": "additional_notes",
+      "type": "textarea",
+      "label": "Additional Notes",
+      "required": false
+    }
+  ]
+}
