@@ -214,14 +214,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
       <>
         {selectedType.fields.includes('host') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Host
             </label>
             <input
               type="text"
               value={formData.host}
               onChange={(e) => setFormData({ ...formData, host: e.target.value })}
-              className={inputStyles}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
               placeholder="localhost"
               required
             />
@@ -230,14 +230,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('port') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Port
             </label>
             <input
               type="number"
               value={formData.port}
               onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
-              className={inputStyles}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
               required
             />
           </div>
@@ -245,14 +245,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('database') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Database Name
             </label>
             <input
               type="text"
               value={formData.database}
               onChange={(e) => setFormData({ ...formData, database: e.target.value })}
-              className={inputStyles}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
               placeholder="my_database"
               required
             />
@@ -261,14 +261,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('username') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Username
             </label>
             <input
               type="text"
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className={inputStyles}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
               placeholder="db_user"
               required
             />
@@ -277,7 +277,7 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('password') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Password
             </label>
             <div className="relative">
@@ -285,16 +285,16 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                 type={showPassword ? 'text' : 'password'}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className={inputStyles + ' pr-10'}
-                placeholder={editingConnection ? 'Leave blank to keep unchanged' : 'password'}
+                className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 pr-12 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                placeholder={editingConnection ? 'Leave blank to keep unchanged' : '••••••••'}
                 required={!editingConnection}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
           </div>
@@ -302,14 +302,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('region') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               AWS Region
             </label>
             <input
               type="text"
               value={formData.region}
               onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-              className={inputStyles}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
               placeholder="us-east-1"
               required
             />
@@ -318,14 +318,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('access_key') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Access Key
             </label>
             <input
               type="text"
               value={formData.access_key}
               onChange={(e) => setFormData({ ...formData, access_key: e.target.value })}
-              className={inputStyles}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
               placeholder="AKIAIOSFODNN7EXAMPLE"
               required={!editingConnection}
             />
@@ -334,31 +334,31 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {selectedType.fields.includes('secret_key') && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Secret Key
             </label>
             <input
               type="password"
               value={formData.secret_key}
               onChange={(e) => setFormData({ ...formData, secret_key: e.target.value })}
-              className={inputStyles}
-              placeholder={editingConnection ? 'Leave blank to keep unchanged' : 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'}
+              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+              placeholder={editingConnection ? 'Leave blank to keep unchanged' : '••••••••'}
               required={!editingConnection}
             />
           </div>
         )}
 
         {selectedType.fields.includes('ssl') && (
-          <div className="flex items-center">
+          <div className="flex items-center space-x-3 p-4 rounded-xl border-2 border-green-200 bg-green-50">
             <input
               type="checkbox"
               id="ssl"
               checked={formData.ssl}
               onChange={(e) => setFormData({ ...formData, ssl: e.target.checked })}
-              className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+              className="h-5 w-5 rounded border-green-300 text-green-600 focus:ring-green-500"
             />
-            <label htmlFor="ssl" className="ml-2 block text-sm text-slate-700">
-              Use SSL/TLS Connection
+            <label htmlFor="ssl" className="block text-sm font-semibold text-slate-700 cursor-pointer">
+              Enable SSL/TLS Connection
             </label>
           </div>
         )}
