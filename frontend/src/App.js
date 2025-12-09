@@ -1118,6 +1118,13 @@ const AppShell = () => {
           onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
       )}
+      <DatabaseConnectorConfig
+        isOpen={showDatabaseConnector}
+        onClose={() => { setShowDatabaseConnector(false); setActiveMenuItem(activeTab); }}
+        onSuccess={(message) => {
+          addToast(message, 'success');
+        }}
+      />
       {showDebugPanel && debugInstanceId && (
         <DebugPanel
           instanceId={debugInstanceId}
