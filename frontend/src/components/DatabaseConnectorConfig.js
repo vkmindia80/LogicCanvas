@@ -496,11 +496,11 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                     </div>
                   )}
 
-                  <div className="flex items-center space-x-2 pt-3 border-t border-slate-200">
+                  <div className="flex items-center space-x-2 pt-4 border-t-2 border-green-100">
                     <button
                       onClick={() => handleTest(connection.id)}
                       disabled={testingId === connection.id}
-                      className="flex-1 flex items-center justify-center space-x-1 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-100 transition-colors disabled:opacity-50"
+                      className="flex-1 flex items-center justify-center space-x-2 rounded-xl bg-green-50 px-3 py-2.5 text-sm font-semibold text-green-700 hover:bg-green-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {testingId === connection.id ? (
                         <>
@@ -516,14 +516,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                     </button>
                     <button
                       onClick={() => handleEdit(connection)}
-                      className="rounded-lg bg-slate-50 p-2 text-slate-600 hover:bg-slate-100 transition-colors"
+                      className="rounded-xl bg-slate-100 p-2.5 text-slate-600 hover:bg-slate-200 transition-all"
                       title="Edit"
                     >
                       <Edit2 className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(connection.id)}
-                      className="rounded-lg bg-red-50 p-2 text-red-600 hover:bg-red-100 transition-colors"
+                      className="rounded-xl bg-red-50 p-2.5 text-red-600 hover:bg-red-100 transition-all"
                       title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
