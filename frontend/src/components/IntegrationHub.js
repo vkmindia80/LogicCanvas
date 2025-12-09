@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Edit2, CheckCircle, XCircle, Clock, Mail, MessageSquare, Users, Globe, Zap, Eye, EyeOff, RefreshCw, Menu } from 'lucide-react';
+import { X, Plus, Trash2, Edit2, CheckCircle, XCircle, Clock, Mail, MessageSquare, Users, Globe, Zap, Eye, EyeOff, RefreshCw, Menu, Database, Cloud, Server } from 'lucide-react';
 import { modalHeaderStyles, modalOverlayStyles, cardStyles, buttonStyles, inputStyles, getBadgeStyle } from '../utils/designSystem';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false }) => {
+  const [activeTab, setActiveTab] = useState('integrations'); // 'integrations' or 'databases'
   const [integrations, setIntegrations] = useState([]);
+  const [databases, setDatabases] = useState([]);
+  const [dbTypes, setDbTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingIntegration, setEditingIntegration] = useState(null);
   const [testingId, setTestingId] = useState(null);
   const [filterType, setFilterType] = useState('all');
+  const [dbCategoryFilter, setDbCategoryFilter] = useState('all'); // 'all', 'SQL', 'NoSQL', 'Cloud'
 
   useEffect(() => {
     loadIntegrations();
