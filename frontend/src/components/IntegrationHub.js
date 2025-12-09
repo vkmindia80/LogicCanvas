@@ -16,16 +16,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
   const [filterType, setFilterType] = useState('all');
   const [dbCategoryFilter, setDbCategoryFilter] = useState('all'); // 'all', 'SQL', 'NoSQL', 'Cloud'
 
-  useEffect(() => {
-    if (activeTab === 'integrations') {
-      loadIntegrations();
-    } else if (activeTab === 'databases') {
-      loadDatabases();
-      loadDatabaseTypes();
-    }
-  }, [activeTab, filterType, dbCategoryFilter]);
-
-  const loadIntegrations = async () => {
+  const loadIntegrations = useCallback(async () => {
     try {
       setLoading(true);
       const query = filterType !== 'all' ? `?type=${filterType}` : '';
