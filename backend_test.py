@@ -667,7 +667,7 @@ class TemplateLibraryTester:
 
 def main():
     """Main test runner"""
-    tester = LogicCanvasAPITester()
+    tester = TemplateLibraryTester()
     return tester.run_all_tests()
 
 if __name__ == "__main__":
