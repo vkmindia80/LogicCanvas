@@ -24,7 +24,6 @@ import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage';
 import ConnectorLibrary from './components/ConnectorLibrary';
 import IntegrationHub from './components/IntegrationHub';
-import DatabaseConnectorConfig from './components/DatabaseConnectorConfig';
 import DebugPanel from './components/DebugPanel';
 import VideoTutorials from './components/VideoTutorials';
 import SubworkflowPatternLibrary from './components/SubworkflowPatternLibrary';
