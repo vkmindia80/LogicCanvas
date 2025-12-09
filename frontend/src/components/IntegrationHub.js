@@ -105,6 +105,39 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
     }
   };
 
+  const handleDeleteDatabase = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this database connection?')) return;
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/integrations/databases/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        loadDatabases();
+      }
+    } catch (error) {
+      console.error('Failed to delete database connection:', error);
+    }
+  };
+
+  const handleTestDatabase = async (id) => {
+    setTestingId(id);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/integrations/databases/${id}/test`, {
+        method: 'POST',
+      });
+      const result = await response.json();
+      
+      alert(result.success ? `✓ ${result.message}\n${result.database_type} - ${result.version || ''}` : `✗ ${result.message}`);
+      loadDatabases();
+    } catch (error) {
+      alert(`Test failed: ${error.message}`);
+    } finally {
+      setTestingId(null);
+    }
+  };
+
   const getIconComponent = (type) => {
     switch (type) {
       case 'email':
