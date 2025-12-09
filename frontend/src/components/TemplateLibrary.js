@@ -63,8 +63,9 @@ const TemplateLibrary = ({ isOpen, onClose, onSelectTemplate }) => {
 
   const handleUseTemplate = async (template, mode = 'use') => {
     try {
-      // Load template workflow definition
-      const response = await fetch(`/templates/${template.file}`);
+      // Load template workflow definition from backend API
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+      const response = await fetch(`${backendUrl}/api/templates/${template.id}`);
       const workflowData = await response.json();
       
       // Modify workflow based on mode
