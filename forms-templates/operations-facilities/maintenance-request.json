@@ -1,0 +1,77 @@
+{
+  "id": "maintenance-request",
+  "name": "Maintenance Request Form",
+  "description": "Submit requests for facility maintenance, repairs, and improvements",
+  "category": "operations-facilities",
+  "icon": "Wrench",
+  "version": 1,
+  "tags": ["operations", "facilities", "maintenance", "repair"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "requester_phone",
+      "type": "phone",
+      "label": "Contact Phone",
+      "required": true
+    },
+    {
+      "id": "location",
+      "type": "text",
+      "label": "Location",
+      "required": true,
+      "placeholder": "Building, Floor, Room Number"
+    },
+    {
+      "id": "request_type",
+      "type": "select",
+      "label": "Request Type",
+      "required": true,
+      "options": ["Plumbing", "Electrical", "HVAC", "Cleaning", "Carpentry", "Painting", "Landscaping", "Equipment Repair", "Other"]
+    },
+    {
+      "id": "priority",
+      "type": "radio",
+      "label": "Priority",
+      "required": true,
+      "options": ["Emergency", "Urgent", "Normal", "Low"]
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Problem Description",
+      "required": true,
+      "placeholder": "Describe the issue in detail"
+    },
+    {
+      "id": "safety_hazard",
+      "type": "radio",
+      "label": "Is this a safety hazard?",
+      "required": true,
+      "options": ["Yes", "No"]
+    },
+    {
+      "id": "preferred_date",
+      "type": "date",
+      "label": "Preferred Service Date",
+      "required": false
+    },
+    {
+      "id": "access_instructions",
+      "type": "textarea",
+      "label": "Access Instructions",
+      "required": false,
+      "placeholder": "Any special instructions for accessing the location?"
+    }
+  ]
+}

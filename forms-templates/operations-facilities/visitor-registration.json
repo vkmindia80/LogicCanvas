@@ -1,0 +1,93 @@
+{
+  "id": "visitor-registration",
+  "name": "Visitor Registration Form",
+  "description": "Pre-register visitors and guests for facility access",
+  "category": "operations-facilities",
+  "icon": "UserPlus",
+  "version": 1,
+  "tags": ["operations", "facilities", "visitor", "security"],
+  "fields": [
+    {
+      "id": "host_name",
+      "type": "text",
+      "label": "Host Name (Employee)",
+      "required": true
+    },
+    {
+      "id": "host_email",
+      "type": "email",
+      "label": "Host Email",
+      "required": true
+    },
+    {
+      "id": "host_department",
+      "type": "text",
+      "label": "Host Department",
+      "required": true
+    },
+    {
+      "id": "visitor_name",
+      "type": "text",
+      "label": "Visitor Full Name",
+      "required": true
+    },
+    {
+      "id": "visitor_email",
+      "type": "email",
+      "label": "Visitor Email",
+      "required": false
+    },
+    {
+      "id": "visitor_phone",
+      "type": "phone",
+      "label": "Visitor Phone Number",
+      "required": false
+    },
+    {
+      "id": "visitor_company",
+      "type": "text",
+      "label": "Visitor Company/Organization",
+      "required": false
+    },
+    {
+      "id": "visit_date",
+      "type": "date",
+      "label": "Visit Date",
+      "required": true
+    },
+    {
+      "id": "arrival_time",
+      "type": "time",
+      "label": "Expected Arrival Time",
+      "required": true
+    },
+    {
+      "id": "visit_purpose",
+      "type": "select",
+      "label": "Purpose of Visit",
+      "required": true,
+      "options": ["Business Meeting", "Interview", "Delivery", "Maintenance", "Training", "Tour", "Other"]
+    },
+    {
+      "id": "areas_to_access",
+      "type": "textarea",
+      "label": "Areas/Floors to Access",
+      "required": true,
+      "placeholder": "List specific areas the visitor will need to access"
+    },
+    {
+      "id": "parking_needed",
+      "type": "radio",
+      "label": "Parking Space Needed?",
+      "required": false,
+      "options": ["Yes", "No"]
+    },
+    {
+      "id": "special_requirements",
+      "type": "textarea",
+      "label": "Special Requirements",
+      "required": false,
+      "placeholder": "Accessibility needs, dietary restrictions, etc."
+    }
+  ]
+}

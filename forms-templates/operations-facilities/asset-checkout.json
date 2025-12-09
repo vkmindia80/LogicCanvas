@@ -1,0 +1,94 @@
+{
+  "id": "asset-checkout",
+  "name": "Asset Check-out Form",
+  "description": "Check out company assets, equipment, and tools",
+  "category": "operations-facilities",
+  "icon": "Package",
+  "version": 1,
+  "tags": ["operations", "facilities", "asset", "equipment"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "employee_id",
+      "type": "text",
+      "label": "Employee ID",
+      "required": true
+    },
+    {
+      "id": "employee_email",
+      "type": "email",
+      "label": "Employee Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "asset_type",
+      "type": "select",
+      "label": "Asset Type",
+      "required": true,
+      "options": ["Laptop", "Tablet", "Phone", "Monitor", "Camera", "Projector", "Tools", "Other Equipment"]
+    },
+    {
+      "id": "asset_id",
+      "type": "text",
+      "label": "Asset ID/Serial Number",
+      "required": false
+    },
+    {
+      "id": "asset_description",
+      "type": "text",
+      "label": "Asset Description",
+      "required": true,
+      "placeholder": "e.g., MacBook Pro 16-inch"
+    },
+    {
+      "id": "checkout_date",
+      "type": "date",
+      "label": "Check-out Date",
+      "required": true
+    },
+    {
+      "id": "expected_return_date",
+      "type": "date",
+      "label": "Expected Return Date",
+      "required": true
+    },
+    {
+      "id": "purpose",
+      "type": "textarea",
+      "label": "Purpose/Reason for Check-out",
+      "required": true
+    },
+    {
+      "id": "condition_at_checkout",
+      "type": "radio",
+      "label": "Condition at Check-out",
+      "required": true,
+      "options": ["Excellent", "Good", "Fair", "Poor"]
+    },
+    {
+      "id": "accessories_included",
+      "type": "textarea",
+      "label": "Accessories Included",
+      "required": false,
+      "placeholder": "List any cables, chargers, cases, etc."
+    },
+    {
+      "id": "terms_accepted",
+      "type": "checkbox",
+      "label": "Terms & Conditions",
+      "required": true,
+      "options": ["I agree to return the asset in good condition and am responsible for any damage or loss"]
+    }
+  ]
+}

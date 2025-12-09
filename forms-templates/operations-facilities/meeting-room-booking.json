@@ -1,0 +1,89 @@
+{
+  "id": "meeting-room-booking",
+  "name": "Meeting Room Booking Form",
+  "description": "Reserve conference rooms and meeting spaces",
+  "category": "operations-facilities",
+  "icon": "Calendar",
+  "version": 1,
+  "tags": ["operations", "facilities", "meeting", "booking"],
+  "fields": [
+    {
+      "id": "organizer_name",
+      "type": "text",
+      "label": "Organizer Name",
+      "required": true
+    },
+    {
+      "id": "organizer_email",
+      "type": "email",
+      "label": "Organizer Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "meeting_title",
+      "type": "text",
+      "label": "Meeting Title/Purpose",
+      "required": true
+    },
+    {
+      "id": "meeting_date",
+      "type": "date",
+      "label": "Meeting Date",
+      "required": true
+    },
+    {
+      "id": "start_time",
+      "type": "time",
+      "label": "Start Time",
+      "required": true
+    },
+    {
+      "id": "end_time",
+      "type": "time",
+      "label": "End Time",
+      "required": true
+    },
+    {
+      "id": "number_of_attendees",
+      "type": "number",
+      "label": "Number of Attendees",
+      "required": true,
+      "validation": {
+        "min": 1
+      }
+    },
+    {
+      "id": "room_preference",
+      "type": "select",
+      "label": "Room Preference",
+      "required": true,
+      "options": ["Conference Room A", "Conference Room B", "Conference Room C", "Board Room", "Training Room", "Any Available"]
+    },
+    {
+      "id": "equipment_needed",
+      "type": "checkbox",
+      "label": "Equipment Needed",
+      "required": false,
+      "options": ["Projector", "Video Conference", "Whiteboard", "Phone Conference", "TV Screen", "Microphone"]
+    },
+    {
+      "id": "catering_needed",
+      "type": "radio",
+      "label": "Catering Needed?",
+      "required": false,
+      "options": ["Yes", "No"]
+    },
+    {
+      "id": "special_requirements",
+      "type": "textarea",
+      "label": "Special Requirements",
+      "required": false
+    }
+  ]
+}

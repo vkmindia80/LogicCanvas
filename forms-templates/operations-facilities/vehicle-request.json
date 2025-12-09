@@ -1,0 +1,108 @@
+{
+  "id": "vehicle-request",
+  "name": "Vehicle Request Form",
+  "description": "Request company vehicles for business travel and transportation",
+  "category": "operations-facilities",
+  "icon": "Car",
+  "version": 1,
+  "tags": ["operations", "facilities", "vehicle", "transportation"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "driver_name",
+      "type": "text",
+      "label": "Primary Driver Name",
+      "required": true
+    },
+    {
+      "id": "driver_license",
+      "type": "text",
+      "label": "Driver's License Number",
+      "required": true
+    },
+    {
+      "id": "pickup_date",
+      "type": "date",
+      "label": "Pickup Date",
+      "required": true
+    },
+    {
+      "id": "pickup_time",
+      "type": "time",
+      "label": "Pickup Time",
+      "required": true
+    },
+    {
+      "id": "return_date",
+      "type": "date",
+      "label": "Return Date",
+      "required": true
+    },
+    {
+      "id": "return_time",
+      "type": "time",
+      "label": "Return Time",
+      "required": true
+    },
+    {
+      "id": "vehicle_type",
+      "type": "select",
+      "label": "Vehicle Type Needed",
+      "required": true,
+      "options": ["Sedan", "SUV", "Van", "Truck", "Any Available"]
+    },
+    {
+      "id": "number_of_passengers",
+      "type": "number",
+      "label": "Number of Passengers",
+      "required": true,
+      "validation": {
+        "min": 1
+      }
+    },
+    {
+      "id": "destination",
+      "type": "text",
+      "label": "Destination",
+      "required": true
+    },
+    {
+      "id": "estimated_mileage",
+      "type": "number",
+      "label": "Estimated Mileage",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "purpose",
+      "type": "textarea",
+      "label": "Purpose of Trip",
+      "required": true
+    },
+    {
+      "id": "special_requirements",
+      "type": "textarea",
+      "label": "Special Requirements",
+      "required": false
+    }
+  ]
+}
