@@ -537,56 +537,66 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
 
         {/* Add/Edit Modal */}
         {showAddModal && (
-          <div className={modalOverlayStyles} onClick={() => setShowAddModal(false)}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4" onClick={() => setShowAddModal(false)}>
             <div
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-t-2xl">
+              <div className="bg-gradient-to-r from-green-600 to-green-600 px-6 py-6 rounded-t-2xl">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-white">
-                    {editingConnection ? 'Edit Database Connection' : 'Add Database Connection'}
-                  </h3>
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-white/20 rounded-lg">
+                      <Database className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-white">
+                        {editingConnection ? 'Edit Database Connection' : 'Add Database Connection'}
+                      </h3>
+                      <p className="text-green-100 text-sm mt-1">
+                        {editingConnection ? 'Update connection details' : 'Configure a new database connection'}
+                      </p>
+                    </div>
+                  </div>
                   <button
                     onClick={() => {
                       setShowAddModal(false);
                       setEditingConnection(null);
                     }}
-                    className="rounded-lg bg-white/20 p-2 text-white hover:bg-white/30"
+                    className="rounded-xl bg-white/20 p-2.5 text-white hover:bg-white/30 transition-all"
                   >
                     <X className="h-5 w-5" />
                   </button>
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Connection Name *
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Connection Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className={inputStyles}
-                    placeholder="Production Database"
+                    className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                    placeholder="My Database Connection"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Database Type *
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Database Type <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.db_type}
                     onChange={(e) => handleDbTypeChange(e.target.value)}
-                    className={inputStyles}
+                    className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
                     required
                   >
                     {dbTypes.map((type) => (
                       <option key={type.id} value={type.id}>
-                        {type.name} - {type.description}
+                        {type.name}
                       </option>
                     ))}
                   </select>
@@ -595,32 +605,32 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                 {renderFormFields()}
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Description (Optional)
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className={inputStyles}
-                    rows="2"
-                    placeholder="Describe this database connection..."
+                    className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                    rows="3"
+                    placeholder="Add a description for this database connection..."
                   />
                 </div>
 
-                <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200">
+                <div className="flex items-center justify-end space-x-3 pt-5 border-t-2 border-green-100">
                   <button
                     type="button"
                     onClick={() => {
                       setShowAddModal(false);
                       setEditingConnection(null);
                     }}
-                    className={buttonStyles.secondary}
+                    className="inline-flex items-center space-x-2 rounded-xl border-2 border-green-300 bg-white px-6 py-3 text-sm font-semibold text-green-700 shadow-sm transition-all hover:bg-green-50 hover:shadow-md"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className={buttonStyles.primary}
+                    className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all"
                   >
                     {editingConnection ? 'Update Connection' : 'Add Connection'}
                   </button>
