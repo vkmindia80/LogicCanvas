@@ -1,0 +1,120 @@
+{
+  "id": "credit-application",
+  "name": "Credit Application Form",
+  "description": "Apply for company credit account or increase credit limit",
+  "category": "finance-accounting",
+  "icon": "CreditCard",
+  "version": 1,
+  "tags": ["finance", "credit", "application", "account"],
+  "fields": [
+    {
+      "id": "company_name",
+      "type": "text",
+      "label": "Company Name",
+      "required": true
+    },
+    {
+      "id": "business_type",
+      "type": "select",
+      "label": "Business Type",
+      "required": true,
+      "options": ["Corporation", "LLC", "Partnership", "Sole Proprietorship"]
+    },
+    {
+      "id": "years_in_business",
+      "type": "number",
+      "label": "Years in Business",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "tax_id",
+      "type": "text",
+      "label": "Federal Tax ID/EIN",
+      "required": true
+    },
+    {
+      "id": "business_address",
+      "type": "textarea",
+      "label": "Business Address",
+      "required": true
+    },
+    {
+      "id": "contact_name",
+      "type": "text",
+      "label": "Primary Contact Name",
+      "required": true
+    },
+    {
+      "id": "contact_title",
+      "type": "text",
+      "label": "Contact Title",
+      "required": true
+    },
+    {
+      "id": "contact_email",
+      "type": "email",
+      "label": "Contact Email",
+      "required": true
+    },
+    {
+      "id": "contact_phone",
+      "type": "phone",
+      "label": "Contact Phone",
+      "required": true
+    },
+    {
+      "id": "annual_revenue",
+      "type": "number",
+      "label": "Annual Revenue (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "requested_credit_limit",
+      "type": "number",
+      "label": "Requested Credit Limit (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "bank_name",
+      "type": "text",
+      "label": "Bank Name",
+      "required": true
+    },
+    {
+      "id": "bank_account_number",
+      "type": "text",
+      "label": "Bank Account Number",
+      "required": true
+    },
+    {
+      "id": "trade_references",
+      "type": "textarea",
+      "label": "Trade References (3 required)",
+      "required": true,
+      "placeholder": "List 3 trade references with company name, contact, and phone"
+    },
+    {
+      "id": "credit_purpose",
+      "type": "textarea",
+      "label": "Purpose of Credit",
+      "required": true,
+      "placeholder": "Describe how you plan to use this credit"
+    },
+    {
+      "id": "financial_statements",
+      "type": "checkbox",
+      "label": "Documentation",
+      "required": true,
+      "options": ["Financial statements attached"]
+    }
+  ]
+}

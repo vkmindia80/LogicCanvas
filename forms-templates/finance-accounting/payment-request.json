@@ -1,0 +1,91 @@
+{
+  "id": "payment-request",
+  "name": "Payment Request Form",
+  "description": "Request immediate or scheduled payment for vendor bills and services",
+  "category": "finance-accounting",
+  "icon": "Banknote",
+  "version": 1,
+  "tags": ["finance", "payment", "disbursement", "vendor"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department/Cost Center",
+      "required": true
+    },
+    {
+      "id": "payee_name",
+      "type": "text",
+      "label": "Payee Name",
+      "required": true
+    },
+    {
+      "id": "payment_amount",
+      "type": "number",
+      "label": "Payment Amount (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "payment_urgency",
+      "type": "radio",
+      "label": "Payment Urgency",
+      "required": true,
+      "options": ["Urgent (1-2 days)", "Normal (5-7 days)", "Scheduled"]
+    },
+    {
+      "id": "payment_date",
+      "type": "date",
+      "label": "Requested Payment Date",
+      "required": true
+    },
+    {
+      "id": "payment_method",
+      "type": "select",
+      "label": "Payment Method",
+      "required": true,
+      "options": ["ACH Transfer", "Check", "Wire Transfer", "Credit Card", "PayPal"]
+    },
+    {
+      "id": "invoice_reference",
+      "type": "text",
+      "label": "Invoice/Reference Number",
+      "required": false
+    },
+    {
+      "id": "purpose",
+      "type": "textarea",
+      "label": "Purpose of Payment",
+      "required": true,
+      "placeholder": "Describe what this payment is for"
+    },
+    {
+      "id": "gl_account",
+      "type": "text",
+      "label": "GL Account Code",
+      "required": false,
+      "placeholder": "General Ledger account number"
+    },
+    {
+      "id": "supporting_documents",
+      "type": "checkbox",
+      "label": "Documentation",
+      "required": true,
+      "options": ["All supporting documents attached"]
+    }
+  ]
+}
