@@ -185,6 +185,20 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
     }
   };
 
+  // Load database types on mount
+  useEffect(() => {
+    loadDatabaseTypes();
+  }, [loadDatabaseTypes]);
+
+  // Load data based on active tab
+  useEffect(() => {
+    if (activeTab === 'integrations') {
+      loadIntegrations();
+    } else {
+      loadDatabases();
+    }
+  }, [activeTab, filterType, dbCategoryFilter, loadIntegrations, loadDatabases]);
+
   return (
     <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
       {/* Header */}
