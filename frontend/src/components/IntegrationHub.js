@@ -28,9 +28,9 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterType]);
 
-  const loadDatabases = async () => {
+  const loadDatabases = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`${BACKEND_URL}/api/integrations/databases`);
