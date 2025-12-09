@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend API Testing for LogicCanvas Workflow Validation
-Tests the new /api/workflows/{workflow_id}/validate endpoint and related functionality
+Comprehensive Backend API Testing for LogicCanvas Template Library
+Tests template library functionality, static file serving, and workflow creation from templates
 """
 
 import requests
@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 
-class LogicCanvasAPITester:
+class TemplateLibraryTester:
     def __init__(self, base_url: str = "https://template-fix-6.preview.emergentagent.com"):
         self.base_url = base_url.rstrip('/')
         self.tests_run = 0
