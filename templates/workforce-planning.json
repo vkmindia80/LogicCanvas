@@ -1,0 +1,27 @@
+{
+  "name": "Workforce Planning & Headcount Approval",
+  "description": "Strategic workforce planning with multi-level headcount approval",
+  "category": "Human Resources",
+  "tags": ["hr", "planning", "headcount", "complex"],
+  "complexity": "complex",
+  "estimatedSetupTime": "12 minutes",
+  "estimatedDuration": "3-4 weeks",
+  "icon": "users",
+  "useCases": ["Headcount requests", "Department expansion", "Strategic hiring"],
+  "prerequisites": ["Budget data", "Organizational structure"],
+  "integrationRequirements": ["HR System", "Finance System"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 300}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 300}, "data": {"label": "Headcount Request", "formFields": [{"id": "department", "label": "Department", "type": "text", "required": true}, {"id": "positions", "label": "Number of Positions", "type": "number", "required": true}, {"id": "roles", "label": "Role Titles", "type": "textarea", "required": true}, {"id": "justification", "label": "Business Justification", "type": "textarea", "required": true}, {"id": "budget_impact", "label": "Annual Budget Impact ($)", "type": "number", "required": true}]}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 300}, "data": {"label": "HR Analysis", "description": "Analyze workforce needs", "assignee": "hr-planning@company.com"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 700, "y": 300}, "data": {"label": "Department Head", "approvers": ["${dept_head}"]}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 900, "y": 300}, "data": {"label": "Budget Impact?", "conditions": [{"condition": "${form-1.budget_impact} > 500000", "label": ">$500K", "targetId": "approval-3"}, {"condition": "${form-1.budget_impact} <= 500000", "label": "≤$500K", "targetId": "approval-2"}]}},
+    {"id": "approval-2", "type": "approval", "position": {"x": 1100, "y": 200}, "data": {"label": "VP Approval", "approvers": ["vp@company.com"]}},
+    {"id": "approval-3", "type": "approval", "position": {"x": 1100, "y": 400}, "data": {"label": "Executive Committee", "approvers": ["ceo@company.com", "cfo@company.com", "coo@company.com"], "approvalType": "majority"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 1300, "y": 300}},
+    {"id": "task-2", "type": "task", "position": {"x": 1500, "y": 300}, "data": {"label": "Create Job Requisitions", "assignee": "recruiting@company.com"}},
+    {"id": "task-3", "type": "task", "position": {"x": 1700, "y": 300}, "data": {"label": "Update Budget", "assignee": "finance@company.com"}},
+    {"id": "end-1", "type": "end", "position": {"x": 1900, "y": 300}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "task-1"}, {"id": "e3", "source": "task-1", "target": "approval-1"}, {"id": "e4", "source": "approval-1", "target": "decision-1"}, {"id": "e5", "source": "decision-1", "target": "approval-2"}, {"id": "e6", "source": "decision-1", "target": "approval-3"}, {"id": "e7", "source": "approval-2", "target": "merge-1"}, {"id": "e8", "source": "approval-3", "target": "merge-1"}, {"id": "e9", "source": "merge-1", "target": "task-2"}, {"id": "e10", "source": "task-2", "target": "task-3"}, {"id": "e11", "source": "task-3", "target": "end-1"}]
+}
