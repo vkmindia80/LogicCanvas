@@ -251,7 +251,7 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
         {selectedType.fields.includes('database') && (
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Database Name
+              Database Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -264,21 +264,24 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
           </div>
         )}
 
-        {selectedType.fields.includes('username') && (
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Username
-            </label>
-            <input
-              type="text"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-              placeholder="db_user"
-              required
-            />
-          </div>
-        )}
+        {/* Username and Password in Grid */}
+        {(selectedType.fields.includes('username') || selectedType.fields.includes('password')) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {selectedType.fields.includes('username') && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Username <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                  placeholder="db_user"
+                  required
+                />
+              </div>
+            )}
 
         {selectedType.fields.includes('password') && (
           <div>
