@@ -113,6 +113,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files for templates directory
+app.mount("/templates", StaticFiles(directory="/app/templates"), name="templates")
+
 # MongoDB Connection
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017/')
 client = MongoClient(MONGO_URL)
