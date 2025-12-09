@@ -5584,11 +5584,20 @@ class DatabaseOperationRequest(BaseModel):
 def _get_connector_class(db_type: str):
     """Get the appropriate connector class for database type"""
     connector_map = {
+        # SQL Databases
         'postgresql': PostgreSQLConnector,
         'mysql': MySQLConnector,
+        'mssql': MSSQLConnector,
+        'sqlserver': MSSQLConnector,  # Alias
+        'oracle': OracleConnector,
+        # NoSQL Databases
         'redis': RedisConnector,
         'mongodb': MongoDBConnector,
-        'dynamodb': DynamoDBConnector
+        'cassandra': CassandraConnector,
+        # Cloud Databases
+        'dynamodb': DynamoDBConnector,
+        'firestore': FirestoreConnector,
+        'cosmosdb': CosmosDBConnector
     }
     return connector_map.get(db_type.lower())
 
