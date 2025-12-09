@@ -1,0 +1,77 @@
+{
+  "id": "service-request",
+  "name": "IT Service Request Form",
+  "description": "General IT service requests for setup, configuration, and routine tasks",
+  "category": "it-support",
+  "icon": "Wrench",
+  "version": 1,
+  "tags": ["it", "service", "request", "setup"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "service_type",
+      "type": "select",
+      "label": "Service Type",
+      "required": true,
+      "options": ["New User Setup", "Equipment Setup", "Software Installation", "Email Configuration", "Printer Setup", "Phone Setup", "Data Transfer", "Training Request", "Other"]
+    },
+    {
+      "id": "priority",
+      "type": "radio",
+      "label": "Priority",
+      "required": true,
+      "options": ["High", "Medium", "Low"]
+    },
+    {
+      "id": "service_description",
+      "type": "textarea",
+      "label": "Service Description",
+      "required": true,
+      "placeholder": "Describe the service you need"
+    },
+    {
+      "id": "location",
+      "type": "text",
+      "label": "Location/Office",
+      "required": true,
+      "placeholder": "Where should the service be performed?"
+    },
+    {
+      "id": "requested_date",
+      "type": "date",
+      "label": "Requested Completion Date",
+      "required": true
+    },
+    {
+      "id": "preferred_time",
+      "type": "select",
+      "label": "Preferred Time",
+      "required": false,
+      "options": ["Morning (8am-12pm)", "Afternoon (12pm-5pm)", "Any Time"]
+    },
+    {
+      "id": "special_requirements",
+      "type": "textarea",
+      "label": "Special Requirements or Notes",
+      "required": false,
+      "placeholder": "Any special requirements or considerations?"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "id": "change-request",
+  "name": "IT Change Request Form",
+  "description": "Submit requests for IT infrastructure, system, or configuration changes",
+  "category": "it-support",
+  "icon": "Settings",
+  "version": 1,
+  "tags": ["it", "change", "infrastructure", "system"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "change_title",
+      "type": "text",
+      "label": "Change Title",
+      "required": true,
+      "placeholder": "Brief description of the change"
+    },
+    {
+      "id": "change_type",
+      "type": "select",
+      "label": "Type of Change",
+      "required": true,
+      "options": ["Standard", "Normal", "Emergency", "Major"]
+    },
+    {
+      "id": "category",
+      "type": "select",
+      "label": "Change Category",
+      "required": true,
+      "options": ["Hardware", "Software", "Network", "Database", "Security", "Application", "Infrastructure", "Other"]
+    },
+    {
+      "id": "affected_systems",
+      "type": "textarea",
+      "label": "Affected Systems/Services",
+      "required": true,
+      "placeholder": "List all systems that will be affected"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Detailed Description",
+      "required": true,
+      "placeholder": "Describe the change in detail"
+    },
+    {
+      "id": "justification",
+      "type": "textarea",
+      "label": "Business Justification",
+      "required": true,
+      "placeholder": "Why is this change necessary?"
+    },
+    {
+      "id": "risk_assessment",
+      "type": "radio",
+      "label": "Risk Level",
+      "required": true,
+      "options": ["Low", "Medium", "High", "Critical"]
+    },
+    {
+      "id": "impact_assessment",
+      "type": "textarea",
+      "label": "Impact Assessment",
+      "required": true,
+      "placeholder": "What is the potential impact on users and systems?"
+    },
+    {
+      "id": "rollback_plan",
+      "type": "textarea",
+      "label": "Rollback Plan",
+      "required": true,
+      "placeholder": "How will the change be reversed if issues occur?"
+    },
+    {
+      "id": "proposed_date",
+      "type": "date",
+      "label": "Proposed Implementation Date",
+      "required": true
+    },
+    {
+      "id": "proposed_time",
+      "type": "time",
+      "label": "Proposed Implementation Time",
+      "required": true
+    },
+    {
+      "id": "estimated_duration",
+      "type": "text",
+      "label": "Estimated Duration",
+      "required": true,
+      "placeholder": "e.g., 2 hours"
+    },
+    {
+      "id": "downtime_required",
+      "type": "radio",
+      "label": "Downtime Required?",
+      "required": true,
+      "options": ["Yes", "No"]
+    },
+    {
+      "id": "testing_completed",
+      "type": "radio",
+      "label": "Has this change been tested?",
+      "required": true,
+      "options": ["Yes", "No", "Not Applicable"]
+    }
+  ]
+}

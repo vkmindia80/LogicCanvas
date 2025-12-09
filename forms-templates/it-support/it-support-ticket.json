@@ -1,0 +1,97 @@
+{
+  "id": "it-support-ticket",
+  "name": "IT Support Ticket Form",
+  "description": "Submit IT support requests for technical issues and assistance",
+  "category": "it-support",
+  "icon": "Headphones",
+  "version": 1,
+  "tags": ["it", "support", "helpdesk", "ticket"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Your Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Your Email",
+      "required": true
+    },
+    {
+      "id": "requester_phone",
+      "type": "phone",
+      "label": "Your Phone Number",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "location",
+      "type": "text",
+      "label": "Location/Office",
+      "required": true
+    },
+    {
+      "id": "issue_type",
+      "type": "select",
+      "label": "Issue Type",
+      "required": true,
+      "options": ["Hardware", "Software", "Network", "Email", "Account Access", "Printer", "Phone", "Other"]
+    },
+    {
+      "id": "priority",
+      "type": "radio",
+      "label": "Priority",
+      "required": true,
+      "options": ["Critical - System Down", "High - Major Impact", "Medium - Moderate Impact", "Low - Minor Issue"]
+    },
+    {
+      "id": "subject",
+      "type": "text",
+      "label": "Issue Summary",
+      "required": true,
+      "placeholder": "Brief description of the issue"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Detailed Description",
+      "required": true,
+      "placeholder": "Provide detailed information about the issue"
+    },
+    {
+      "id": "error_message",
+      "type": "textarea",
+      "label": "Error Message (if any)",
+      "required": false,
+      "placeholder": "Copy and paste any error messages"
+    },
+    {
+      "id": "steps_to_reproduce",
+      "type": "textarea",
+      "label": "Steps to Reproduce",
+      "required": false,
+      "placeholder": "List the steps that lead to this issue"
+    },
+    {
+      "id": "troubleshooting_done",
+      "type": "textarea",
+      "label": "Troubleshooting Already Attempted",
+      "required": false,
+      "placeholder": "What have you already tried to fix this?"
+    },
+    {
+      "id": "affected_users",
+      "type": "radio",
+      "label": "Number of Affected Users",
+      "required": true,
+      "options": ["Just Me", "My Team (2-10)", "Department (11-50)", "Multiple Departments (50+)"]
+    }
+  ]
+}

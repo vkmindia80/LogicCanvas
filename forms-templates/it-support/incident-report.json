@@ -1,0 +1,111 @@
+{
+  "id": "incident-report",
+  "name": "IT Incident Report Form",
+  "description": "Report IT security incidents, system outages, or data breaches",
+  "category": "it-support",
+  "icon": "ShieldAlert",
+  "version": 1,
+  "tags": ["it", "incident", "security", "outage"],
+  "fields": [
+    {
+      "id": "reporter_name",
+      "type": "text",
+      "label": "Reporter Name",
+      "required": true
+    },
+    {
+      "id": "reporter_email",
+      "type": "email",
+      "label": "Reporter Email",
+      "required": true
+    },
+    {
+      "id": "reporter_phone",
+      "type": "phone",
+      "label": "Reporter Phone",
+      "required": true
+    },
+    {
+      "id": "incident_date",
+      "type": "date",
+      "label": "Incident Date",
+      "required": true
+    },
+    {
+      "id": "incident_time",
+      "type": "time",
+      "label": "Incident Time",
+      "required": true
+    },
+    {
+      "id": "incident_type",
+      "type": "select",
+      "label": "Incident Type",
+      "required": true,
+      "options": ["Security Breach", "System Outage", "Data Loss", "Malware/Virus", "Unauthorized Access", "Phishing Attempt", "Performance Issue", "Other"]
+    },
+    {
+      "id": "severity",
+      "type": "radio",
+      "label": "Severity Level",
+      "required": true,
+      "options": ["Critical - Complete Outage", "High - Major Impact", "Medium - Moderate Impact", "Low - Minor Impact"]
+    },
+    {
+      "id": "affected_systems",
+      "type": "textarea",
+      "label": "Affected Systems/Services",
+      "required": true,
+      "placeholder": "List all affected systems"
+    },
+    {
+      "id": "users_affected",
+      "type": "select",
+      "label": "Number of Users Affected",
+      "required": true,
+      "options": ["1-10", "11-50", "51-100", "100+", "All Users"]
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Incident Description",
+      "required": true,
+      "placeholder": "Provide detailed information about the incident"
+    },
+    {
+      "id": "symptoms",
+      "type": "textarea",
+      "label": "Symptoms/Error Messages",
+      "required": false,
+      "placeholder": "What symptoms or errors were observed?"
+    },
+    {
+      "id": "business_impact",
+      "type": "textarea",
+      "label": "Business Impact",
+      "required": true,
+      "placeholder": "How is this affecting business operations?"
+    },
+    {
+      "id": "immediate_actions",
+      "type": "textarea",
+      "label": "Immediate Actions Taken",
+      "required": false,
+      "placeholder": "What actions have been taken so far?"
+    },
+    {
+      "id": "data_compromised",
+      "type": "radio",
+      "label": "Was data potentially compromised?",
+      "required": true,
+      "options": ["Yes", "No", "Unknown"]
+    },
+    {
+      "id": "currently_ongoing",
+      "type": "radio",
+      "label": "Is the incident currently ongoing?",
+      "required": true,
+      "options": ["Yes", "No", "Partially Resolved"]
+    }
+  ]
+}

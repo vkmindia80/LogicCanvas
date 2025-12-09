@@ -1,0 +1,102 @@
+{
+  "id": "access-request",
+  "name": "System Access Request Form",
+  "description": "Request access to systems, applications, databases, or network resources",
+  "category": "it-support",
+  "icon": "Key",
+  "version": 1,
+  "tags": ["it", "access", "permissions", "security"],
+  "fields": [
+    {
+      "id": "requester_name",
+      "type": "text",
+      "label": "Requester Name",
+      "required": true
+    },
+    {
+      "id": "requester_email",
+      "type": "email",
+      "label": "Requester Email",
+      "required": true
+    },
+    {
+      "id": "user_name",
+      "type": "text",
+      "label": "Name of User Requiring Access",
+      "required": true,
+      "placeholder": "If different from requester"
+    },
+    {
+      "id": "user_email",
+      "type": "email",
+      "label": "User Email Address",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "access_type",
+      "type": "select",
+      "label": "Type of Access",
+      "required": true,
+      "options": ["Application/Software", "Database", "Network Share", "VPN", "Email Group", "Cloud Service", "Other"]
+    },
+    {
+      "id": "system_name",
+      "type": "text",
+      "label": "System/Application Name",
+      "required": true,
+      "placeholder": "e.g., Salesforce, AWS, SharePoint"
+    },
+    {
+      "id": "access_level",
+      "type": "radio",
+      "label": "Access Level Required",
+      "required": true,
+      "options": ["Read Only", "Read/Write", "Admin", "Full Access"]
+    },
+    {
+      "id": "justification",
+      "type": "textarea",
+      "label": "Business Justification",
+      "required": true,
+      "placeholder": "Explain why this access is needed"
+    },
+    {
+      "id": "duration",
+      "type": "radio",
+      "label": "Access Duration",
+      "required": true,
+      "options": ["Permanent", "Temporary"]
+    },
+    {
+      "id": "start_date",
+      "type": "date",
+      "label": "Access Start Date",
+      "required": true
+    },
+    {
+      "id": "end_date",
+      "type": "date",
+      "label": "Access End Date (if temporary)",
+      "required": false
+    },
+    {
+      "id": "manager_approval",
+      "type": "text",
+      "label": "Manager Name (for approval)",
+      "required": true
+    },
+    {
+      "id": "urgency",
+      "type": "radio",
+      "label": "Urgency",
+      "required": true,
+      "options": ["Urgent (Same Day)", "High (1-2 days)", "Normal (3-5 days)"]
+    }
+  ]
+}
