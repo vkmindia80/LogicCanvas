@@ -115,6 +115,7 @@ app.add_middleware(
 
 # Mount static files for templates directory
 app.mount("/templates", StaticFiles(directory="/app/templates"), name="templates")
+app.mount("/form-templates", StaticFiles(directory="/app/forms-templates"), name="form-templates")
 
 # MongoDB Connection
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017/')
@@ -1518,6 +1519,51 @@ async def get_workflow_template(template_id: str):
             return template_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading template: {str(e)}")
+
+
+# ========== FORM TEMPLATE LIBRARY ENDPOINTS ==========
+
+@app.get("/api/form-templates")
+async def get_form_templates(category: Optional[str] = None):
+    """Get all available form templates, optionally filtered by category"""
+    index_file = "/app/forms-templates/index.json"
+    
+    try:
+        with open(index_file, 'r') as f:
+            index_data = json.load(f)
+            templates = index_data.get("templates", [])
+            categories = index_data.get("categories", [])
+            
+            # Filter by category if specified
+            if category:
+                templates = [t for t in templates if t.get("category") == category]
+            
+            return {
+                "templates": templates,
+                "categories": categories,
+                "count": len(templates),
+                "total_count": index_data.get("total_templates", len(templates))
+            }
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Form templates index not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading form templates: {str(e)}")
+
+
+@app.get("/api/form-templates/{category}/{template_id}")
+async def get_form_template(category: str, template_id: str):
+    """Get a specific form template by category and ID"""
+    template_file = f"/app/forms-templates/{category}/{template_id}.json"
+    
+    if not os.path.exists(template_file):
+        raise HTTPException(status_code=404, detail="Form template not found")
+    
+    try:
+        with open(template_file, 'r') as f:
+            template_data = json.load(f)
+            return template_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading form template: {str(e)}")
 
 
 @app.post("/api/templates/{template_id}/create-workflow")
