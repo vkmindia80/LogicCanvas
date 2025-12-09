@@ -3,7 +3,6 @@ import {
   X, Plus, Trash2, Edit2, CheckCircle, XCircle, Database, 
   Zap, Cloud, Eye, EyeOff, RefreshCw, AlertCircle
 } from 'lucide-react';
-import { modalHeaderStyles, modalOverlayStyles, cardStyles, buttonStyles, inputStyles } from '../utils/designSystem';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
