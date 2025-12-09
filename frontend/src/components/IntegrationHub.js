@@ -61,7 +61,7 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
     } catch (error) {
       console.error('Failed to load database types:', error);
     }
-  };
+  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this integration?')) return;
