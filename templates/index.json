@@ -327,7 +327,7 @@
       "id": "customer-onboarding",
       "name": "Customer Onboarding Workflow",
       "description": "Complete customer onboarding process with welcome email, account setup, and first purchase incentive",
-      "category": "sales",
+      "category": "Sales",
       "tags": [
         "customer",
         "onboarding",
@@ -344,7 +344,7 @@
       "id": "data-migration",
       "name": "Data Migration Process",
       "description": "Systematic data migration with validation, backup, and rollback capabilities",
-      "category": "it",
+      "category": "IT",
       "tags": [
         "data",
         "migration",
@@ -393,7 +393,7 @@
       "id": "document-approval",
       "name": "Document Approval Workflow",
       "description": "Multi-level document review and approval process with version control",
-      "category": "general",
+      "category": "General",
       "tags": [
         "document",
         "approval",
@@ -494,7 +494,7 @@
       "id": "expense-reimbursement",
       "name": "Expense Reimbursement",
       "description": "Employee expense reimbursement with receipt upload, manager approval, and payment processing",
-      "category": "finance",
+      "category": "Finance",
       "tags": [
         "expense",
         "finance",
@@ -583,7 +583,7 @@
       "id": "incident-response",
       "name": "Incident Response",
       "description": "IT incident management with priority routing and resolution tracking",
-      "category": "it",
+      "category": "IT",
       "tags": [
         "incident",
         "it",
@@ -634,7 +634,7 @@
       "id": "leave-management",
       "name": "Leave Management",
       "description": "Employee leave request with manager approval and calendar sync",
-      "category": "hr",
+      "category": "Human Resources",
       "tags": [
         "leave",
         "hr",
@@ -699,7 +699,7 @@
       "id": "marketing-campaign",
       "name": "Marketing Campaign Launch",
       "description": "End-to-end marketing campaign with content approval and multi-channel distribution",
-      "category": "marketing",
+      "category": "Marketing",
       "tags": [
         "marketing",
         "campaign",
@@ -862,7 +862,7 @@
       "id": "patient-registration",
       "name": "Patient Registration",
       "description": "Healthcare patient registration with insurance verification and appointment scheduling",
-      "category": "healthcare",
+      "category": "Healthcare",
       "tags": [
         "healthcare",
         "patient",
@@ -1043,7 +1043,7 @@
       "id": "quality-assurance",
       "name": "Quality Assurance Review",
       "description": "Product quality assurance with multi-stage testing and defect tracking",
-      "category": "manufacturing",
+      "category": "Manufacturing",
       "tags": [
         "quality",
         "qa",
@@ -1328,7 +1328,7 @@
       "id": "vendor-onboarding",
       "name": "Vendor Onboarding",
       "description": "Complete vendor onboarding with compliance checks and contract setup",
-      "category": "procurement",
+      "category": "Procurement",
       "tags": [
         "vendor",
         "procurement",
