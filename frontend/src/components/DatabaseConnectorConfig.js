@@ -434,74 +434,58 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+        <div className="flex-1 overflow-y-auto p-6">
           {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-200 border-t-green-600"></div>
+            <div className="flex h-64 items-center justify-center">
+              <div className="text-center">
+                <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary-600"></div>
+                <p className="text-sm text-primary-600">Loading connections...</p>
+              </div>
             </div>
           ) : connections.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-center">
-              <div className="p-4 bg-green-100 rounded-2xl mb-4">
-                <Database className="h-16 w-16 text-green-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-800 mb-2">No Database Connections</h3>
-              <p className="text-slate-600 mb-6 max-w-md">
-                Connect to PostgreSQL, MySQL, Redis, MongoDB, DynamoDB and more to integrate databases into your workflows.
-              </p>
+            <div className="flex h-64 flex-col items-center justify-center">
+              <Database className="mb-4 h-16 w-16 text-green-300" />
+              <h3 className="mb-2 text-lg font-semibold text-primary-900">No Database Connections Yet</h3>
+              <p className="mb-4 text-sm text-primary-600">Connect to your first database</p>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="inline-flex items-center space-x-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all"
+                className="inline-flex items-center space-x-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-700"
               >
-                <Plus className="h-5 w-5" />
-                <span>Add Your First Connection</span>
+                <Plus className="h-4 w-4" />
+                <span>Add Database</span>
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {connections.map((connection) => (
                 <div
                   key={connection.id}
-                  className="bg-white rounded-xl border-2 border-green-200 shadow-lg p-5 group hover:shadow-xl hover:border-green-300 transition-all"
+                  className="group rounded-xl border-2 border-green-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-lg"
                 >
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="mb-4 flex items-start justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="rounded-xl bg-green-100 p-3 text-green-600">
+                      <div className="rounded-lg bg-primary-100 p-3 text-primary-600">
                         {getIconForDbType(connection.db_type)}
                       </div>
                       <div>
-                        <h3 className="font-bold text-slate-900 text-lg">{connection.name}</h3>
-                        <p className="text-sm text-slate-500 capitalize font-medium">{connection.db_type}</p>
+                        <h3 className="font-semibold text-primary-900">{connection.name}</h3>
+                        <p className="text-xs text-green-500 capitalize">{connection.db_type}</p>
                       </div>
                     </div>
                   </div>
 
                   {connection.description && (
-                    <p className="text-sm text-slate-600 mb-3">{connection.description}</p>
+                    <p className="mb-4 text-sm text-primary-600 line-clamp-2">{connection.description}</p>
                   )}
 
-                  <div className="space-y-2 mb-4 text-sm">
-                    {connection.host && (
-                      <div className="flex items-center text-slate-600">
-                        <span className="font-medium w-16">Host:</span>
-                        <span className="text-slate-800">{connection.host}:{connection.port}</span>
-                      </div>
-                    )}
-                    {connection.database && (
-                      <div className="flex items-center text-slate-600">
-                        <span className="font-medium w-16">DB:</span>
-                        <span className="text-slate-800">{connection.database}</span>
-                      </div>
-                    )}
-                    {connection.region && (
-                      <div className="flex items-center text-slate-600">
-                        <span className="font-medium w-16">Region:</span>
-                        <span className="text-slate-800">{connection.region}</span>
-                      </div>
-                    )}
+                  <div className="mb-4 space-y-1 text-xs text-green-500">
+                    {connection.host && <p>Host: {connection.host}:{connection.port}</p>}
+                    {connection.database && <p>Database: {connection.database}</p>}
+                    {connection.region && <p>Region: {connection.region}</p>}
                   </div>
 
                   {connection.status && (
-                    <div className="mb-3">
+                    <div className="mb-4">
                       <span className={`inline-flex items-center space-x-1 rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(connection.status)}`}>
                         {connection.status === 'connected' ? (
                           <CheckCircle className="h-3 w-3" />
@@ -515,34 +499,24 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                     </div>
                   )}
 
-                  <div className="flex items-center space-x-2 pt-4 border-t-2 border-green-100">
+                  <div className="flex items-center space-x-2">
                     <button
                       onClick={() => handleTest(connection.id)}
                       disabled={testingId === connection.id}
-                      className="flex-1 flex items-center justify-center space-x-2 rounded-xl bg-green-50 px-3 py-2.5 text-sm font-semibold text-green-700 hover:bg-green-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 rounded-lg border border-green-300 px-3 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-green-50 disabled:opacity-50"
                     >
-                      {testingId === connection.id ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 animate-spin" />
-                          <span>Testing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Zap className="h-4 w-4" />
-                          <span>Test</span>
-                        </>
-                      )}
+                      {testingId === connection.id ? 'Testing...' : 'Test'}
                     </button>
                     <button
                       onClick={() => handleEdit(connection)}
-                      className="rounded-xl bg-slate-100 p-2.5 text-slate-600 hover:bg-slate-200 transition-all"
+                      className="rounded-lg border border-green-300 p-2 text-primary-600 transition-colors hover:bg-green-50"
                       title="Edit"
                     >
                       <Edit2 className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(connection.id)}
-                      className="rounded-xl bg-red-50 p-2.5 text-red-600 hover:bg-red-100 transition-all"
+                      className="rounded-lg border border-gold-300 p-2 text-gold-600 transition-colors hover:bg-gold-50"
                       title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
