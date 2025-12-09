@@ -313,7 +313,7 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
         {selectedType.fields.includes('region') && (
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              AWS Region
+              AWS Region <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -326,35 +326,40 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
           </div>
         )}
 
-        {selectedType.fields.includes('access_key') && (
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Access Key
-            </label>
-            <input
-              type="text"
-              value={formData.access_key}
-              onChange={(e) => setFormData({ ...formData, access_key: e.target.value })}
-              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-              placeholder="AKIAIOSFODNN7EXAMPLE"
-              required={!editingConnection}
-            />
-          </div>
-        )}
+        {/* AWS Credentials in Grid */}
+        {(selectedType.fields.includes('access_key') || selectedType.fields.includes('secret_key')) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {selectedType.fields.includes('access_key') && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Access Key {!editingConnection && <span className="text-red-500">*</span>}
+                </label>
+                <input
+                  type="text"
+                  value={formData.access_key}
+                  onChange={(e) => setFormData({ ...formData, access_key: e.target.value })}
+                  className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                  placeholder="AKIAIOSFODNN7EXAMPLE"
+                  required={!editingConnection}
+                />
+              </div>
+            )}
 
-        {selectedType.fields.includes('secret_key') && (
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Secret Key
-            </label>
-            <input
-              type="password"
-              value={formData.secret_key}
-              onChange={(e) => setFormData({ ...formData, secret_key: e.target.value })}
-              className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-              placeholder={editingConnection ? 'Leave blank to keep unchanged' : '••••••••'}
-              required={!editingConnection}
-            />
+            {selectedType.fields.includes('secret_key') && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Secret Key {!editingConnection && <span className="text-red-500">*</span>}
+                </label>
+                <input
+                  type="password"
+                  value={formData.secret_key}
+                  onChange={(e) => setFormData({ ...formData, secret_key: e.target.value })}
+                  className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                  placeholder={editingConnection ? 'Leave blank to keep unchanged' : '••••••••'}
+                  required={!editingConnection}
+                />
+              </div>
+            )}
           </div>
         )}
 
