@@ -1,0 +1,33 @@
+{
+  "name": "Compliance Audit Process",
+  "description": "Systematic compliance audit with finding remediation",
+  "category": "Legal & Compliance",
+  "tags": ["compliance", "audit", "regulation", "complex"],
+  "complexity": "complex",
+  "estimatedSetupTime": "12 minutes",
+  "estimatedDuration": "6-10 weeks",
+  "icon": "shield-check",
+  "useCases": ["Regulatory audits", "Internal compliance", "SOX compliance"],
+  "prerequisites": ["Compliance framework", "Audit schedule"],
+  "integrationRequirements": ["Compliance Management System"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 400}},
+    {"id": "task-1", "type": "task", "position": {"x": 300, "y": 400}, "data": {"label": "Audit Planning", "assignee": "compliance@company.com"}},
+    {"id": "task-2", "type": "task", "position": {"x": 500, "y": 400}, "data": {"label": "Scope Definition"}},
+    {"id": "parallel-1", "type": "parallel", "position": {"x": 700, "y": 400}, "data": {"label": "Audit Execution"}},
+    {"id": "task-3", "type": "task", "position": {"x": 900, "y": 200}, "data": {"label": "Review Controls"}},
+    {"id": "task-4", "type": "task", "position": {"x": 900, "y": 350}, "data": {"label": "Test Procedures"}},
+    {"id": "task-5", "type": "task", "position": {"x": 900, "y": 500}, "data": {"label": "Interview Staff"}},
+    {"id": "task-6", "type": "task", "position": {"x": 900, "y": 650}, "data": {"label": "Review Documentation"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 1100, "y": 400}},
+    {"id": "task-7", "type": "task", "position": {"x": 1300, "y": 400}, "data": {"label": "Compile Findings"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 1500, "y": 400}, "data": {"label": "Issues Found?", "conditions": [{"condition": "${issues} > 0", "label": "Yes", "targetId": "task-8"}, {"condition": "${issues} == 0", "label": "No", "targetId": "task-11"}]}},
+    {"id": "task-8", "type": "task", "position": {"x": 1700, "y": 550}, "data": {"label": "Issue Findings", "description": "Notify responsible parties"}},
+    {"id": "task-9", "type": "task", "position": {"x": 1900, "y": 550}, "data": {"label": "Remediation Plans", "assignee": "${owners}"}},
+    {"id": "task-10", "type": "task", "position": {"x": 2100, "y": 550}, "data": {"label": "Track Remediation"}},
+    {"id": "task-11", "type": "task", "position": {"x": 1700, "y": 250}, "data": {"label": "Final Report"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 1900, "y": 250}, "data": {"label": "Management Sign-off"}},
+    {"id": "end-1", "type": "end", "position": {"x": 2300, "y": 400}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "task-1"}, {"id": "e2", "source": "task-1", "target": "task-2"}, {"id": "e3", "source": "task-2", "target": "parallel-1"}, {"id": "e4", "source": "parallel-1", "target": "task-3"}, {"id": "e5", "source": "parallel-1", "target": "task-4"}, {"id": "e6", "source": "parallel-1", "target": "task-5"}, {"id": "e7", "source": "parallel-1", "target": "task-6"}, {"id": "e8", "source": "task-3", "target": "merge-1"}, {"id": "e9", "source": "task-4", "target": "merge-1"}, {"id": "e10", "source": "task-5", "target": "merge-1"}, {"id": "e11", "source": "task-6", "target": "merge-1"}, {"id": "e12", "source": "merge-1", "target": "task-7"}, {"id": "e13", "source": "task-7", "target": "decision-1"}, {"id": "e14", "source": "decision-1", "target": "task-8"}, {"id": "e15", "source": "decision-1", "target": "task-11"}, {"id": "e16", "source": "task-8", "target": "task-9"}, {"id": "e17", "source": "task-9", "target": "task-10"}, {"id": "e18", "source": "task-10", "target": "task-11"}, {"id": "e19", "source": "task-11", "target": "approval-1"}, {"id": "e20", "source": "approval-1", "target": "end-1"}]
+}

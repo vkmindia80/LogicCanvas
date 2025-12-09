@@ -1,0 +1,32 @@
+{
+  "name": "Risk Assessment Workflow",
+  "description": "Comprehensive risk identification, analysis, and mitigation planning",
+  "category": "Legal & Compliance",
+  "tags": ["legal", "compliance", "risk", "complex"],
+  "complexity": "complex",
+  "estimatedSetupTime": "12 minutes",
+  "estimatedDuration": "3-4 weeks",
+  "icon": "alert-triangle",
+  "useCases": ["Enterprise risk", "Project risk", "Operational risk"],
+  "prerequisites": ["Risk framework", "Assessment criteria"],
+  "integrationRequirements": ["Risk Management System"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 300}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 300}, "data": {"label": "Identify Risk"}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 300}, "data": {"label": "Initial Assessment", "assignee": "risk-manager@company.com"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 700, "y": 300}, "data": {"label": "Severity?", "conditions": [{"condition": "${severity} == 'low'", "label": "Low", "targetId": "task-2"}, {"condition": "${severity} == 'medium'", "label": "Medium", "targetId": "task-3"}, {"condition": "${severity} == 'high'", "label": "High", "targetId": "task-4"}]}},
+    {"id": "task-2", "type": "task", "position": {"x": 900, "y": 150}, "data": {"label": "Document & Monitor"}},
+    {"id": "task-3", "type": "task", "position": {"x": 900, "y": 300}, "data": {"label": "Detailed Analysis", "assignee": "risk-team@company.com"}},
+    {"id": "task-4", "type": "task", "position": {"x": 900, "y": 450}, "data": {"label": "Executive Briefing", "assignee": "cro@company.com"}},
+    {"id": "parallel-1", "type": "parallel", "position": {"x": 1100, "y": 375}, "data": {"label": "Stakeholder Review"}},
+    {"id": "task-5", "type": "task", "position": {"x": 1300, "y": 300}, "data": {"label": "Legal Review", "assignee": "legal@company.com"}},
+    {"id": "task-6", "type": "task", "position": {"x": 1300, "y": 450}, "data": {"label": "Finance Impact", "assignee": "finance@company.com"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 1500, "y": 375}},
+    {"id": "task-7", "type": "task", "position": {"x": 1700, "y": 375}, "data": {"label": "Mitigation Plan", "assignee": "risk-manager@company.com"}},
+    {"id": "approval-1", "type": "approval", "position": {"x": 1900, "y": 375}, "data": {"label": "Executive Approval", "approvers": ["cro@company.com"]}},
+    {"id": "task-8", "type": "task", "position": {"x": 2100, "y": 375}, "data": {"label": "Implement Controls"}},
+    {"id": "end-1", "type": "end", "position": {"x": 2300, "y": 150}},
+    {"id": "end-2", "type": "end", "position": {"x": 2300, "y": 375}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "task-1"}, {"id": "e3", "source": "task-1", "target": "decision-1"}, {"id": "e4", "source": "decision-1", "target": "task-2"}, {"id": "e5", "source": "decision-1", "target": "task-3"}, {"id": "e6", "source": "decision-1", "target": "task-4"}, {"id": "e7", "source": "task-2", "target": "end-1"}, {"id": "e8", "source": "task-3", "target": "parallel-1"}, {"id": "e9", "source": "task-4", "target": "parallel-1"}, {"id": "e10", "source": "parallel-1", "target": "task-5"}, {"id": "e11", "source": "parallel-1", "target": "task-6"}, {"id": "e12", "source": "task-5", "target": "merge-1"}, {"id": "e13", "source": "task-6", "target": "merge-1"}, {"id": "e14", "source": "merge-1", "target": "task-7"}, {"id": "e15", "source": "task-7", "target": "approval-1"}, {"id": "e16", "source": "approval-1", "target": "task-8"}, {"id": "e17", "source": "task-8", "target": "end-2"}]
+}

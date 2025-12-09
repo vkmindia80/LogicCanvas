@@ -1,0 +1,32 @@
+{
+  "name": "Litigation Management",
+  "description": "Manage litigation cases from filing through resolution",
+  "category": "Legal & Compliance",
+  "tags": ["legal", "litigation", "lawsuit", "complex"],
+  "complexity": "complex",
+  "estimatedSetupTime": "15 minutes",
+  "estimatedDuration": "6-24 months",
+  "icon": "gavel",
+  "useCases": ["Lawsuits", "Legal disputes", "Claims management"],
+  "prerequisites": ["Legal counsel", "Insurance info"],
+  "integrationRequirements": ["Legal Management System", "Document Management"],
+  "nodes": [
+    {"id": "start-1", "type": "start", "position": {"x": 100, "y": 300}},
+    {"id": "form-1", "type": "form", "position": {"x": 300, "y": 300}, "data": {"label": "Case Intake"}},
+    {"id": "task-1", "type": "task", "position": {"x": 500, "y": 300}, "data": {"label": "Assign Counsel", "assignee": "legal-director@company.com"}},
+    {"id": "task-2", "type": "task", "position": {"x": 700, "y": 300}, "data": {"label": "Notify Insurance"}},
+    {"id": "parallel-1", "type": "parallel", "position": {"x": 900, "y": 300}, "data": {"label": "Initial Actions"}},
+    {"id": "task-3", "type": "task", "position": {"x": 1100, "y": 150}, "data": {"label": "Document Preservation"}},
+    {"id": "task-4", "type": "task", "position": {"x": 1100, "y": 300}, "data": {"label": "Conflict Check"}},
+    {"id": "task-5", "type": "task", "position": {"x": 1100, "y": 450}, "data": {"label": "Budget Estimate"}},
+    {"id": "merge-1", "type": "merge", "position": {"x": 1300, "y": 300}},
+    {"id": "task-6", "type": "task", "position": {"x": 1500, "y": 300}, "data": {"label": "Discovery Phase"}},
+    {"id": "task-7", "type": "task", "position": {"x": 1700, "y": 300}, "data": {"label": "Settlement Negotiation"}},
+    {"id": "decision-1", "type": "decision", "position": {"x": 1900, "y": 300}, "data": {"label": "Settled?", "conditions": [{"condition": "${settled} == true", "label": "Yes", "targetId": "task-9"}, {"condition": "${settled} == false", "label": "No", "targetId": "task-8"}]}},
+    {"id": "task-8", "type": "task", "position": {"x": 2100, "y": 450}, "data": {"label": "Trial Preparation"}},
+    {"id": "task-9", "type": "task", "position": {"x": 2100, "y": 150}, "data": {"label": "Execute Settlement"}},
+    {"id": "task-10", "type": "task", "position": {"x": 2300, "y": 300}, "data": {"label": "Case Close-out"}},
+    {"id": "end-1", "type": "end", "position": {"x": 2500, "y": 300}}
+  ],
+  "edges": [{"id": "e1", "source": "start-1", "target": "form-1"}, {"id": "e2", "source": "form-1", "target": "task-1"}, {"id": "e3", "source": "task-1", "target": "task-2"}, {"id": "e4", "source": "task-2", "target": "parallel-1"}, {"id": "e5", "source": "parallel-1", "target": "task-3"}, {"id": "e6", "source": "parallel-1", "target": "task-4"}, {"id": "e7", "source": "parallel-1", "target": "task-5"}, {"id": "e8", "source": "task-3", "target": "merge-1"}, {"id": "e9", "source": "task-4", "target": "merge-1"}, {"id": "e10", "source": "task-5", "target": "merge-1"}, {"id": "e11", "source": "merge-1", "target": "task-6"}, {"id": "e12", "source": "task-6", "target": "task-7"}, {"id": "e13", "source": "task-7", "target": "decision-1"}, {"id": "e14", "source": "decision-1", "target": "task-9"}, {"id": "e15", "source": "decision-1", "target": "task-8"}, {"id": "e16", "source": "task-8", "target": "task-10"}, {"id": "e17", "source": "task-9", "target": "task-10"}, {"id": "e18", "source": "task-10", "target": "end-1"}]
+}
