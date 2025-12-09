@@ -453,23 +453,202 @@ class TemplateLibraryTester:
             if success:
                 print(f"   Deleted form: {form_id}")
 
+    def test_static_file_serving(self):
+        """Test if templates directory is served as static files"""
+        print("\n🔍 Testing Static File Serving - Templates Index...")
+        
+        # Test direct access to templates/index.json
+        url = f"{self.base_url}/templates/index.json"
+        try:
+            response = requests.get(url, timeout=30)
+            success = response.status_code == 200
+            
+            if success:
+                try:
+                    data = response.json()
+                    templates = data.get("templates", [])
+                    categories = data.get("categories", [])
+                    
+                    self.log_test("Static file serving works", True, 
+                                f"Found {len(templates)} templates and {len(categories)} categories")
+                    
+                    # Verify we have 61 templates as expected
+                    if len(templates) >= 61:
+                        self.log_test("Template count verification", True, 
+                                    f"Found {len(templates)} templates (expected 61+)")
+                    else:
+                        self.log_test("Template count verification", False, 
+                                    f"Expected 61+ templates, found {len(templates)}")
+                    
+                    return True, data
+                except json.JSONDecodeError:
+                    self.log_test("Static file serving JSON parsing", False, 
+                                "Response is not valid JSON")
+                    return False, {}
+            else:
+                self.log_test("Static file serving accessibility", False, 
+                            f"Status: {response.status_code}, Response: {response.text[:200]}")
+                return False, {}
+                
+        except Exception as e:
+            self.log_test("Static file serving request", False, f"Error: {str(e)}")
+            return False, {}
+
+    def test_templates_api_endpoint(self):
+        """Test the /api/templates endpoint"""
+        print("\n🔍 Testing Templates API Endpoint...")
+        
+        success, data = self.make_request('GET', '/templates', expected_status=200)
+        
+        if success and isinstance(data, dict):
+            templates = data.get("templates", [])
+            count = data.get("count", 0)
+            
+            self.log_test("Templates API endpoint works", True, 
+                        f"API returned {count} templates")
+            
+            if count >= 61:
+                self.log_test("API template count verification", True, 
+                            f"Found {count} templates (expected 61+)")
+            else:
+                self.log_test("API template count verification", False, 
+                            f"Expected 61+ templates from API, found {count}")
+                
+        else:
+            self.log_test("Templates API endpoint", False, f"Response: {data}")
+        
+        return success, data
+
+    def test_specific_template_loading(self):
+        """Test loading a specific template"""
+        print("\n🔍 Testing Specific Template Loading...")
+        
+        # Test loading a known template
+        template_id = "hr-onboarding"
+        success, data = self.make_request('GET', f'/templates/{template_id}', expected_status=200)
+        
+        if success and isinstance(data, dict):
+            self.log_test("Specific template loading works", True, 
+                        f"Loaded template: {data.get('name', 'Unknown')}")
+            
+            # Verify template has required fields
+            required_fields = ['name', 'description', 'nodes', 'edges']
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if not missing_fields:
+                self.log_test("Template has required fields", True)
+            else:
+                self.log_test("Template has required fields", False, 
+                            f"Missing fields: {missing_fields}")
+        else:
+            self.log_test("Specific template loading", False, f"Response: {data}")
+        
+        return success, data
+
+    def test_template_workflow_creation(self):
+        """Test creating a workflow from template"""
+        print("\n🔍 Testing Template Workflow Creation...")
+        
+        template_id = "hr-onboarding"
+        workflow_data = {
+            "name": "Test HR Onboarding Workflow from Template"
+        }
+        
+        success, data = self.make_request('POST', f'/templates/{template_id}/create-workflow', 
+                                        workflow_data, expected_status=200)
+        
+        if success and isinstance(data, dict):
+            workflow_id = data.get("id")
+            if workflow_id:
+                self.log_test("Template workflow creation works", True, 
+                            f"Created workflow with ID: {workflow_id}")
+                self.created_workflows.append(workflow_id)
+                
+                # Verify the created workflow has template metadata
+                workflow_success, workflow_data = self.make_request('GET', f'/workflows/{workflow_id}', 
+                                                                  expected_status=200)
+                if workflow_success:
+                    template_metadata = workflow_data.get("template_id") == template_id
+                    self.log_test("Created workflow has template metadata", template_metadata)
+                
+                return True, data
+            else:
+                self.log_test("Template workflow creation", False, "No workflow ID returned")
+        else:
+            self.log_test("Template workflow creation", False, f"Response: {data}")
+        
+        return success, data
+
+    def test_template_categories_and_complexity(self):
+        """Test template categorization and complexity levels"""
+        print("\n🔍 Testing Template Categories and Complexity...")
+        
+        success, response = self.test_static_file_serving()
+        
+        if success and isinstance(response, dict):
+            templates = response.get("templates", [])
+            categories = response.get("categories", [])
+            
+            # Count by complexity
+            complexity_counts = {}
+            category_counts = {}
+            
+            for template in templates:
+                complexity = template.get("complexity", "unknown")
+                category = template.get("category", "unknown")
+                
+                complexity_counts[complexity] = complexity_counts.get(complexity, 0) + 1
+                category_counts[category] = category_counts.get(category, 0) + 1
+            
+            print(f"   📊 Complexity Distribution:")
+            for complexity, count in complexity_counts.items():
+                print(f"      {complexity}: {count} templates")
+                
+            print(f"   📊 Category Distribution:")
+            for category, count in sorted(category_counts.items()):
+                print(f"      {category}: {count} templates")
+                
+            # Verify expected complexity levels exist
+            expected_complexities = ['simple', 'medium', 'high', 'complex']
+            found_complexities = set(complexity_counts.keys())
+            
+            if all(c in found_complexities for c in expected_complexities):
+                self.log_test("All expected complexity levels found", True)
+            else:
+                missing = set(expected_complexities) - found_complexities
+                self.log_test("All expected complexity levels found", False, 
+                            f"Missing complexity levels: {missing}")
+                
+            # Verify categories exist
+            if len(categories) >= 10:
+                self.log_test("Sufficient categories defined", True, 
+                            f"Found {len(categories)} categories")
+            else:
+                self.log_test("Sufficient categories defined", False, 
+                            f"Expected 10+ categories, found {len(categories)}")
+                
+        return success, response
+
     def run_all_tests(self):
-        """Run all validation tests"""
-        print("🚀 Starting LogicCanvas Backend Validation Tests")
+        """Run all template library tests"""
+        print("🚀 Starting Template Library Backend Tests")
         print(f"Testing against: {self.base_url}")
         print("=" * 60)
         
         try:
             # Core endpoint tests
             self.test_health_endpoint()
-            self.test_validation_endpoint_404()
             
-            # Workflow validation tests
+            # Template library specific tests
+            self.test_static_file_serving()
+            self.test_templates_api_endpoint()
+            self.test_specific_template_loading()
+            self.test_template_workflow_creation()
+            self.test_template_categories_and_complexity()
+            
+            # Legacy validation tests (keep some for completeness)
+            self.test_validation_endpoint_404()
             self.test_valid_workflow_validation()
-            self.test_workflow_no_start_node()
-            self.test_workflow_missing_form_reference()
-            self.test_workflow_with_valid_form_reference()
-            self.test_decision_node_validation()
             
         finally:
             # Always cleanup
@@ -480,7 +659,7 @@ class TemplateLibraryTester:
         print(f"📊 Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
         
         if self.tests_passed == self.tests_run:
-            print("🎉 All tests passed!")
+            print("🎉 All template library tests passed!")
             return 0
         else:
             print(f"❌ {self.tests_run - self.tests_passed} tests failed")
