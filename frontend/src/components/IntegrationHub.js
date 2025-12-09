@@ -51,9 +51,9 @@ const IntegrationHub = ({ onClose, onOpenMobileSidebar, sidebarCollapsed = false
     } finally {
       setLoading(false);
     }
-  };
+  }, [dbCategoryFilter, dbTypes]);
 
-  const loadDatabaseTypes = async () => {
+  const loadDatabaseTypes = useCallback(async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/integrations/databases/types`);
       const data = await response.json();
