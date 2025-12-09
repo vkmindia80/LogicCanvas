@@ -1390,25 +1390,25 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
-            <label className="mb-2 block text-sm font-medium text-primary-700">Connection Name</label>
+            <label className="mb-2 block text-sm font-semibold text-primary-800">Connection Name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="My Database Connection"
-              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               required
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-primary-700">Database Type</label>
+            <label className="mb-2 block text-sm font-semibold text-primary-800">Database Type</label>
             <select
               value={formData.db_type}
               onChange={(e) => setFormData({ ...formData, db_type: e.target.value })}
-              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-green-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               disabled={!!database}
               required
             >
@@ -1418,12 +1418,14 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
                 </option>
               ))}
             </select>
-            {selectedDbType && (
-              <p className="mt-1 text-xs text-green-500">{selectedDbType.category} Database</p>
-            )}
           </div>
 
-          {renderDatabaseFields()}
+          <div className="border-t border-green-200 pt-6">
+            <h4 className="mb-4 text-sm font-semibold text-primary-800">Connection Details</h4>
+            <div className="space-y-5">
+              {renderDatabaseFields()}
+            </div>
+          </div>
 
           <div>
             <label className="mb-2 block text-sm font-medium text-primary-700">Description (Optional)</label>
