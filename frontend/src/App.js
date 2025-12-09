@@ -71,6 +71,7 @@ const AppShell = () => {
     return stored ? JSON.parse(stored) : null;
   });
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const [approvalCount, setApprovalCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
