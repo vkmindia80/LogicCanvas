@@ -1,11 +1,553 @@
 {
   "templates": [
     {
+      "id": "asset-maintenance",
+      "name": "Asset Maintenance Workflow",
+      "description": "Preventive maintenance scheduling with work order creation, technician assignment, and completion tracking",
+      "category": "General",
+      "tags": [
+        "maintenance",
+        "facilities",
+        "operations",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "asset-maintenance.json",
+      "nodeCount": 6,
+      "features": [
+        "Priority-based routing and assignment",
+        "Asset lookup and history tracking",
+        "Parts procurement subprocess integration",
+        "Manager sign-off and quality control"
+      ],
+      "useCases": [
+        "Facility maintenance management",
+        "Equipment preventive maintenance",
+        "Work order tracking and completion"
+      ]
+    },
+    {
+      "id": "audit-preparation",
+      "name": "Audit Preparation Workflow",
+      "description": "Comprehensive audit preparation with document collection and review",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "audit",
+        "compliance",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "search",
+      "file": "audit-preparation.json",
+      "nodeCount": 14,
+      "useCases": [
+        "Annual audit",
+        "Internal audit",
+        "Compliance audit"
+      ],
+      "estimatedDuration": "4-6 weeks",
+      "prerequisites": [
+        "Audit schedule",
+        "Document list"
+      ],
+      "integrationRequirements": [
+        "Document management",
+        "ERP"
+      ]
+    },
+    {
+      "id": "birthday-recognition",
+      "name": "Birthday/Anniversary Recognition",
+      "description": "Automated employee birthday and work anniversary celebration workflow",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "recognition",
+        "celebration",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "gift",
+      "file": "birthday-recognition.json",
+      "nodeCount": 8,
+      "useCases": [
+        "Employee birthdays",
+        "Work anniversaries",
+        "Milestone celebrations"
+      ],
+      "estimatedDuration": "15 minutes",
+      "prerequisites": [],
+      "integrationRequirements": [
+        "Email (SMTP)",
+        "Slack"
+      ]
+    },
+    {
+      "id": "budget-planning-complex",
+      "name": "Budget Planning & Allocation (Multi-Stage)",
+      "description": "Comprehensive annual budget planning with departmental requests and executive review",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "budget",
+        "planning",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "dollar-sign",
+      "file": "budget-planning-complex.json",
+      "nodeCount": 13,
+      "useCases": [
+        "Annual budgeting",
+        "Quarterly planning",
+        "Department budgets"
+      ],
+      "estimatedDuration": "8-12 weeks",
+      "prerequisites": [
+        "Previous year actuals",
+        "Strategic goals"
+      ],
+      "integrationRequirements": [
+        "Finance System",
+        "ERP"
+      ]
+    },
+    {
+      "id": "budget-request-simple",
+      "name": "Budget Request (Simple)",
+      "description": "Simple departmental budget request workflow",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "budget",
+        "request",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "dollar-sign",
+      "file": "budget-request-simple.json",
+      "nodeCount": 6,
+      "useCases": [
+        "Department budgets",
+        "Project funding",
+        "Resource allocation"
+      ],
+      "estimatedDuration": "3-5 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "capital-expenditure",
+      "name": "Capital Expenditure Approval",
+      "description": "Multi-level capital expenditure request with ROI analysis and board approval",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "capex",
+        "investment",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "trending-up",
+      "file": "capital-expenditure.json",
+      "nodeCount": 13,
+      "useCases": [
+        "Equipment purchases",
+        "Facility investments",
+        "Technology projects"
+      ],
+      "estimatedDuration": "4-8 weeks",
+      "prerequisites": [
+        "Budget availability",
+        "ROI templates"
+      ],
+      "integrationRequirements": [
+        "Finance System",
+        "Project Management"
+      ]
+    },
+    {
+      "id": "compensation-review",
+      "name": "Compensation Review Process",
+      "description": "Annual compensation review with market analysis and budget allocation",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "compensation",
+        "salary",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "dollar-sign",
+      "file": "compensation-review.json",
+      "nodeCount": 14,
+      "useCases": [
+        "Annual raises",
+        "Promotion salary adjustments",
+        "Market corrections"
+      ],
+      "estimatedDuration": "4-6 weeks",
+      "prerequisites": [
+        "Employee data",
+        "Budget allocation",
+        "Market data"
+      ],
+      "integrationRequirements": [
+        "HR System",
+        "Payroll System"
+      ]
+    },
+    {
+      "id": "compliance-audit",
+      "name": "Compliance Audit Process",
+      "description": "Systematic compliance audit with finding remediation",
+      "category": "Legal & Compliance",
+      "tags": [
+        "compliance",
+        "audit",
+        "regulation",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "shield-check",
+      "file": "compliance-audit.json",
+      "nodeCount": 17,
+      "useCases": [
+        "Regulatory audits",
+        "Internal compliance",
+        "SOX compliance"
+      ],
+      "estimatedDuration": "6-10 weeks",
+      "prerequisites": [
+        "Compliance framework",
+        "Audit schedule"
+      ],
+      "integrationRequirements": [
+        "Compliance Management System"
+      ]
+    },
+    {
+      "id": "content-review",
+      "name": "Content Review & Publishing",
+      "description": "Multi-stage content review with editorial approval, compliance check, and scheduled publishing",
+      "category": "General",
+      "tags": [
+        "content",
+        "publishing",
+        "marketing",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "content-review.json",
+      "nodeCount": 9,
+      "features": [
+        "Parallel editorial and compliance review",
+        "Scheduled content publishing",
+        "Revision workflow with feedback loop",
+        "Automated stakeholder notifications"
+      ],
+      "useCases": [
+        "Blog post publishing workflow",
+        "Social media content approval",
+        "Marketing collateral review process"
+      ]
+    },
+    {
+      "id": "contract-approval",
+      "name": "Contract Approval Workflow",
+      "description": "Parallel review by Legal and Finance teams with unanimous approval and e-signature integration",
+      "category": "Legal",
+      "tags": [
+        "legal",
+        "contract",
+        "approval",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "file-text",
+      "file": "contract-approval.json",
+      "nodeCount": 13
+    },
+    {
+      "id": "course-registration",
+      "name": "Course Registration Workflow",
+      "description": "Student course registration with prerequisite checks and capacity management",
+      "category": "Education",
+      "tags": [
+        "education",
+        "registration",
+        "courses",
+        "enrollment"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "course-registration.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "credit-card-application",
+      "name": "Credit Card Application",
+      "description": "Corporate credit card request and approval workflow",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "credit-card",
+        "application",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "4 minutes",
+      "icon": "credit-card",
+      "file": "credit-card-application.json",
+      "nodeCount": 6,
+      "useCases": [
+        "Corporate credit card",
+        "Business travel card",
+        "Department cards"
+      ],
+      "estimatedDuration": "3-5 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "customer-onboarding",
+      "name": "Customer Onboarding Workflow",
+      "description": "Complete customer onboarding process with welcome email, account setup, and first purchase incentive",
+      "category": "sales",
+      "tags": [
+        "customer",
+        "onboarding",
+        "sales",
+        "crm"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "customer-onboarding.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "data-migration",
+      "name": "Data Migration Process",
+      "description": "Systematic data migration with validation, backup, and rollback capabilities",
+      "category": "it",
+      "tags": [
+        "data",
+        "migration",
+        "backup",
+        "it"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "data-migration.json",
+      "nodeCount": 12
+    },
+    {
+      "id": "deal-desk-approval",
+      "name": "Deal Desk Approval (Complex Pricing)",
+      "description": "Complex deal approval with discount authorization and legal review",
+      "category": "Sales",
+      "tags": [
+        "sales",
+        "deal",
+        "pricing",
+        "approval",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "dollar-sign",
+      "file": "deal-desk-approval.json",
+      "nodeCount": 18,
+      "useCases": [
+        "Enterprise deals",
+        "Custom pricing",
+        "Large discounts"
+      ],
+      "estimatedDuration": "1-3 weeks",
+      "prerequisites": [
+        "Pricing guidelines",
+        "Discount matrix"
+      ],
+      "integrationRequirements": [
+        "CRM",
+        "CPQ System"
+      ]
+    },
+    {
+      "id": "document-approval",
+      "name": "Document Approval Workflow",
+      "description": "Multi-level document review and approval process with version control",
+      "category": "general",
+      "tags": [
+        "document",
+        "approval",
+        "review",
+        "compliance"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "document-approval.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "employee-offboarding",
+      "name": "Employee Offboarding",
+      "description": "Complete employee exit process with asset collection, access revocation, and exit interview",
+      "category": "General",
+      "tags": [
+        "hr",
+        "offboarding",
+        "exit",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "employee-offboarding.json",
+      "nodeCount": 9,
+      "features": [
+        "Automated IT access revocation",
+        "Asset collection and return tracking",
+        "Exit interview scheduling",
+        "Final payroll and benefits processing"
+      ],
+      "useCases": [
+        "Employee resignation workflow",
+        "Termination process automation",
+        "Contractor end of engagement"
+      ]
+    },
+    {
+      "id": "employee-relocation",
+      "name": "Employee Relocation Workflow",
+      "description": "Comprehensive employee relocation with vendor coordination and approvals",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "relocation",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "map-pin",
+      "file": "employee-relocation.json",
+      "nodeCount": 15,
+      "useCases": [
+        "Employee transfers",
+        "New hire relocations",
+        "International moves"
+      ],
+      "estimatedDuration": "6-8 weeks",
+      "prerequisites": [
+        "Relocation policy",
+        "Vendor partnerships"
+      ],
+      "integrationRequirements": [
+        "HR System",
+        "Travel vendors"
+      ]
+    },
+    {
+      "id": "equipment-request",
+      "name": "Equipment Request",
+      "description": "Simple workflow for requesting office equipment or supplies",
+      "category": "Operations",
+      "tags": [
+        "operations",
+        "equipment",
+        "request",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "package",
+      "file": "equipment-request.json",
+      "nodeCount": 8,
+      "useCases": [
+        "Laptop request",
+        "Office supplies",
+        "Monitor request",
+        "Keyboard/mouse"
+      ],
+      "estimatedDuration": "1-2 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "expense-reimbursement",
+      "name": "Expense Reimbursement",
+      "description": "Employee expense reimbursement with receipt upload, manager approval, and payment processing",
+      "category": "finance",
+      "tags": [
+        "expense",
+        "finance",
+        "approval",
+        "payment"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "expense-reimbursement.json",
+      "nodeCount": 9
+    },
+    {
+      "id": "financial-close",
+      "name": "Financial Close Process",
+      "description": "Month-end and quarter-end financial close with reconciliation and reporting",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "accounting",
+        "close",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "book-open",
+      "file": "financial-close.json",
+      "nodeCount": 15,
+      "useCases": [
+        "Month-end close",
+        "Quarter-end close",
+        "Year-end close"
+      ],
+      "estimatedDuration": "5-10 days",
+      "prerequisites": [
+        "GL accounts",
+        "Reconciliation templates"
+      ],
+      "integrationRequirements": [
+        "ERP",
+        "GL System"
+      ]
+    },
+    {
       "id": "hr-onboarding",
       "name": "HR Onboarding Workflow",
       "description": "Complete employee onboarding process with manager approval, IT setup, and HR paperwork",
       "category": "Human Resources",
-      "tags": ["hr", "onboarding", "template"],
+      "tags": [
+        "hr",
+        "onboarding",
+        "template"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "10 minutes",
       "icon": "users",
@@ -13,11 +555,58 @@
       "nodeCount": 12
     },
     {
+      "id": "id-badge-request",
+      "name": "ID Badge Request",
+      "description": "Request new or replacement employee ID badges",
+      "category": "Operations",
+      "tags": [
+        "operations",
+        "security",
+        "badge",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "badge",
+      "file": "id-badge-request.json",
+      "nodeCount": 5,
+      "useCases": [
+        "New employee badge",
+        "Lost badge replacement",
+        "Badge reprint"
+      ],
+      "estimatedDuration": "1-2 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "incident-response",
+      "name": "Incident Response",
+      "description": "IT incident management with priority routing and resolution tracking",
+      "category": "it",
+      "tags": [
+        "incident",
+        "it",
+        "support",
+        "priority"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "incident-response.json",
+      "nodeCount": 9
+    },
+    {
       "id": "invoice-approval",
       "name": "Invoice Approval Workflow",
       "description": "Multi-level invoice approval with conditional routing based on amount and sequential approvals",
       "category": "Finance",
-      "tags": ["finance", "invoice", "approval", "template"],
+      "tags": [
+        "finance",
+        "invoice",
+        "approval",
+        "template"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "8 minutes",
       "icon": "dollar-sign",
@@ -25,406 +614,840 @@
       "nodeCount": 11
     },
     {
-      "id": "purchase-request",
-      "name": "Purchase Request Workflow",
-      "description": "Comprehensive purchase request with budget check, approval, procurement, and vendor selection subprocess",
-      "category": "Procurement",
-      "tags": ["procurement", "purchase", "approval", "template"],
-      "complexity": "high",
-      "estimatedSetupTime": "12 minutes",
-      "icon": "shopping-cart",
-      "file": "purchase-request.json",
-      "nodeCount": 12
-    },
-    {
-      "id": "contract-approval",
-      "name": "Contract Approval Workflow",
-      "description": "Parallel review by Legal and Finance teams with unanimous approval and e-signature integration",
-      "category": "Legal",
-      "tags": ["legal", "contract", "approval", "template"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "file-text",
-      "file": "contract-approval.json",
-      "nodeCount": 12
-    },
-    {
       "id": "it-support-ticket",
       "name": "IT Support Ticket Workflow",
       "description": "IT support ticket with priority triage, SLA tracking, timer-based escalation, and closure approval",
       "category": "IT Support",
-      "tags": ["it", "support", "helpdesk", "template"],
+      "tags": [
+        "it",
+        "support",
+        "helpdesk",
+        "template"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "8 minutes",
       "icon": "headphones",
       "file": "it-support-ticket.json",
-      "nodeCount": 14
-    },
-    {
-      "id": "customer-onboarding",
-      "name": "Customer Onboarding Workflow",
-      "description": "Complete customer onboarding process with welcome email, account setup, and first purchase incentive",
-      "category": "Sales",
-      "tags": ["customer", "onboarding", "sales", "crm"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "user-plus",
-      "file": "customer-onboarding.json",
-      "nodeCount": 8
-    },
-    {
-      "id": "expense-reimbursement",
-      "name": "Expense Reimbursement",
-      "description": "Employee expense reimbursement with receipt upload, manager approval, and payment processing",
-      "category": "Finance",
-      "tags": ["expense", "finance", "approval", "payment"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "receipt",
-      "file": "expense-reimbursement.json",
-      "nodeCount": 9
-    },
-    {
-      "id": "document-approval",
-      "name": "Document Approval Workflow",
-      "description": "Multi-level document review and approval process with version control",
-      "category": "General",
-      "tags": ["document", "approval", "review", "compliance"],
-      "complexity": "simple",
-      "estimatedSetupTime": "5 minutes",
-      "icon": "file-check",
-      "file": "document-approval.json",
-      "nodeCount": 7
+      "nodeCount": 15
     },
     {
       "id": "leave-management",
       "name": "Leave Management",
       "description": "Employee leave request with manager approval and calendar sync",
-      "category": "Human Resources",
-      "tags": ["leave", "hr", "approval", "calendar"],
+      "category": "hr",
+      "tags": [
+        "leave",
+        "hr",
+        "approval",
+        "calendar"
+      ],
       "complexity": "simple",
-      "estimatedSetupTime": "5 minutes",
-      "icon": "calendar",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
       "file": "leave-management.json",
       "nodeCount": 8
     },
     {
-      "id": "vendor-onboarding",
-      "name": "Vendor Onboarding",
-      "description": "Complete vendor onboarding with compliance checks and contract setup",
-      "category": "Procurement",
-      "tags": ["vendor", "procurement", "compliance", "contract"],
+      "id": "litigation-management",
+      "name": "Litigation Management",
+      "description": "Manage litigation cases from filing through resolution",
+      "category": "Legal & Compliance",
+      "tags": [
+        "legal",
+        "litigation",
+        "lawsuit",
+        "complex"
+      ],
       "complexity": "complex",
       "estimatedSetupTime": "15 minutes",
-      "icon": "truck",
-      "file": "vendor-onboarding.json",
-      "nodeCount": 10
+      "icon": "gavel",
+      "file": "litigation-management.json",
+      "nodeCount": 16,
+      "useCases": [
+        "Lawsuits",
+        "Legal disputes",
+        "Claims management"
+      ],
+      "estimatedDuration": "6-24 months",
+      "prerequisites": [
+        "Legal counsel",
+        "Insurance info"
+      ],
+      "integrationRequirements": [
+        "Legal Management System",
+        "Document Management"
+      ]
     },
     {
-      "id": "incident-response",
-      "name": "Incident Response",
-      "description": "IT incident management with priority routing and resolution tracking",
-      "category": "IT Support",
-      "tags": ["incident", "it", "support", "priority"],
+      "id": "loan-application",
+      "name": "Loan Application Workflow",
+      "description": "Process loan applications from submission to approval or rejection",
+      "category": "Banking & Finance",
+      "tags": [
+        "banking",
+        "loan",
+        "credit",
+        "approval"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "10 minutes",
-      "icon": "alert-circle",
-      "file": "incident-response.json",
-      "nodeCount": 9
-    },
-    {
-      "id": "patient-registration",
-      "name": "Patient Registration",
-      "description": "Healthcare patient registration with insurance verification and appointment scheduling",
-      "category": "Healthcare",
-      "tags": ["healthcare", "patient", "registration", "medical"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "heart",
-      "file": "patient-registration.json",
-      "nodeCount": 9
-    },
-    {
-      "id": "quality-assurance",
-      "name": "Quality Assurance Review",
-      "description": "Product quality assurance with multi-stage testing and defect tracking",
-      "category": "Manufacturing",
-      "tags": ["quality", "qa", "testing", "manufacturing"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "check-circle",
-      "file": "quality-assurance.json",
-      "nodeCount": 10
+      "icon": "workflow",
+      "file": "loan-application.json",
+      "nodeCount": 8
     },
     {
       "id": "marketing-campaign",
       "name": "Marketing Campaign Launch",
       "description": "End-to-end marketing campaign with content approval and multi-channel distribution",
-      "category": "Marketing",
-      "tags": ["marketing", "campaign", "content", "social-media"],
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "campaign",
+        "content",
+        "social-media"
+      ],
       "complexity": "complex",
-      "estimatedSetupTime": "15 minutes",
-      "icon": "megaphone",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
       "file": "marketing-campaign.json",
       "nodeCount": 11
     },
     {
-      "id": "data-migration",
-      "name": "Data Migration Process",
-      "description": "Systematic data migration with validation, backup, and rollback capabilities",
-      "category": "IT",
-      "tags": ["data", "migration", "backup", "it"],
+      "id": "medical-records-request",
+      "name": "Medical Records Request",
+      "description": "Process patient or provider requests for medical records with HIPAA compliance",
+      "category": "Healthcare",
+      "tags": [
+        "healthcare",
+        "records",
+        "hipaa",
+        "privacy"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "medical-records-request.json",
+      "nodeCount": 8
+    },
+    {
+      "id": "meeting-room-booking",
+      "name": "Meeting Room Booking",
+      "description": "Reserve meeting rooms with automatic calendar sync",
+      "category": "Operations",
+      "tags": [
+        "operations",
+        "meeting",
+        "booking",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "calendar",
+      "file": "meeting-room-booking.json",
+      "nodeCount": 7,
+      "useCases": [
+        "Conference room booking",
+        "Meeting space reservation"
+      ],
+      "estimatedDuration": "5 minutes",
+      "prerequisites": [],
+      "integrationRequirements": [
+        "Google Calendar",
+        "Outlook Calendar"
+      ]
+    },
+    {
+      "id": "parking-permit",
+      "name": "Parking Permit Request",
+      "description": "Request and approve employee parking permits",
+      "category": "Operations",
+      "tags": [
+        "operations",
+        "parking",
+        "facilities",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "car",
+      "file": "parking-permit.json",
+      "nodeCount": 5,
+      "useCases": [
+        "Employee parking",
+        "Visitor parking",
+        "Temporary permits"
+      ],
+      "estimatedDuration": "1-2 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "partner-onboarding",
+      "name": "Partner Onboarding",
+      "description": "Comprehensive partner onboarding with training, certification, and enablement",
+      "category": "Sales",
+      "tags": [
+        "sales",
+        "partner",
+        "channel",
+        "onboarding",
+        "complex"
+      ],
       "complexity": "complex",
       "estimatedSetupTime": "15 minutes",
-      "icon": "database",
-      "file": "data-migration.json",
-      "nodeCount": 12
-    },
-    {
-      "id": "sales-opportunity",
-      "name": "Sales Opportunity Management",
-      "description": "Complete sales opportunity tracking with lead qualification, proposal generation, and deal closure",
-      "category": "Sales",
-      "tags": ["sales", "crm", "opportunity", "pipeline"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "trending-up",
-      "file": "sales-opportunity.json",
-      "nodeCount": 9,
-      "features": [
-        "Automated lead scoring",
-        "Proposal generation workflow",
-        "CRM integration",
-        "Deal closure tracking"
-      ],
+      "icon": "handshake",
+      "file": "partner-onboarding.json",
+      "nodeCount": 19,
       "useCases": [
-        "B2B sales pipeline",
-        "Enterprise deal tracking",
-        "Sales performance"
+        "Channel partners",
+        "Resellers",
+        "System integrators"
+      ],
+      "estimatedDuration": "6-8 weeks",
+      "prerequisites": [
+        "Partner agreement",
+        "Training materials"
+      ],
+      "integrationRequirements": [
+        "Partner Portal",
+        "LMS"
       ]
     },
     {
-      "id": "content-review",
-      "name": "Content Review & Publishing",
-      "description": "Multi-stage content review with editorial approval, compliance check, and scheduled publishing",
-      "category": "Marketing",
-      "tags": ["content", "publishing", "marketing", "approval"],
-      "complexity": "medium",
-      "estimatedSetupTime": "8 minutes",
-      "icon": "file-edit",
-      "file": "content-review.json",
-      "nodeCount": 9,
-      "features": [
-        "Parallel editorial review",
-        "Compliance checking",
-        "Scheduled publishing",
-        "Revision workflow"
+      "id": "password-reset",
+      "name": "Password Reset Request",
+      "description": "Simple password reset workflow with security verification",
+      "category": "IT Support",
+      "tags": [
+        "it",
+        "security",
+        "password",
+        "simple"
       ],
-      "useCases": [
-        "Blog post publishing",
-        "Social media content",
-        "Marketing collateral"
-      ]
-    },
-    {
-      "id": "asset-maintenance",
-      "name": "Asset Maintenance Workflow",
-      "description": "Preventive maintenance scheduling with work order creation, technician assignment, and completion tracking",
-      "category": "Operations",
-      "tags": ["maintenance", "facilities", "operations", "assets"],
       "complexity": "simple",
-      "estimatedSetupTime": "7 minutes",
-      "icon": "wrench",
-      "file": "asset-maintenance.json",
-      "nodeCount": 6,
-      "features": [
-        "Priority-based routing",
-        "Asset tracking",
-        "Work order management",
-        "Manager sign-off"
-      ],
-      "useCases": [
-        "Facility maintenance",
-        "Equipment preventive maintenance",
-        "Work order tracking"
-      ]
-    },
-    {
-      "id": "employee-offboarding",
-      "name": "Employee Offboarding",
-      "description": "Complete employee exit process with asset collection, access revocation, and exit interview",
-      "category": "Human Resources",
-      "tags": ["hr", "offboarding", "exit", "employee"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "user-minus",
-      "file": "employee-offboarding.json",
-      "nodeCount": 9,
-      "features": [
-        "Automated access revocation",
-        "Asset collection tracking",
-        "Exit interview scheduling",
-        "Parallel task execution"
-      ],
-      "useCases": [
-        "Employee resignation",
-        "Termination process",
-        "Contractor end of engagement"
-      ]
-    },
-    {
-      "id": "project-request",
-      "name": "Project Request & Approval",
-      "description": "New project initiation with business case review, budget approval, and resource allocation",
-      "category": "PMO",
-      "tags": ["project", "pmo", "approval", "budget"],
-      "complexity": "medium",
-      "estimatedSetupTime": "8 minutes",
-      "icon": "briefcase",
-      "file": "project-request.json",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "lock",
+      "file": "password-reset.json",
       "nodeCount": 8,
-      "features": [
-        "Business case submission",
-        "Multi-level budget approval",
-        "Resource allocation",
-        "Project kickoff automation"
-      ],
       "useCases": [
-        "IT project approval",
-        "Capital expenditure",
-        "New initiative evaluation"
-      ]
-    },
-    {
-      "id": "training-request",
-      "name": "Training Request & Enrollment",
-      "description": "Employee training request with manager approval, budget check, and automatic enrollment",
-      "category": "Human Resources",
-      "tags": ["training", "hr", "learning", "development"],
-      "complexity": "simple",
-      "estimatedSetupTime": "7 minutes",
-      "icon": "graduation-cap",
-      "file": "training-request.json",
-      "nodeCount": 11,
-      "features": [
-        "Manager approval workflow",
-        "Budget availability check",
-        "Automatic course enrollment",
-        "Calendar invitation"
+        "Forgotten password",
+        "Account lockout",
+        "Security reset"
       ],
-      "useCases": [
-        "Professional development",
-        "Compliance training",
-        "Skill development"
+      "estimatedDuration": "15-30 minutes",
+      "prerequisites": [],
+      "integrationRequirements": [
+        "Active Directory",
+        "Email"
       ]
     },
     {
       "id": "patient-discharge",
       "name": "Patient Discharge Workflow",
-      "description": "Streamlined patient discharge process with follow-up scheduling and care instructions",
+      "description": "Streamlined process for safely discharging patients from hospital or clinic with all necessary documentation and follow-up care instructions.",
       "category": "Healthcare",
-      "tags": ["healthcare", "patient-care", "discharge", "medical-records"],
+      "tags": [
+        "healthcare",
+        "patient-care",
+        "discharge",
+        "medical-records"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "10 minutes",
-      "icon": "heart",
+      "icon": "workflow",
       "file": "patient-discharge.json",
       "nodeCount": 8
     },
     {
-      "id": "student-enrollment",
-      "name": "Student Enrollment Workflow",
-      "description": "Complete student enrollment from application to class registration",
-      "category": "Education",
-      "tags": ["education", "enrollment", "registration"],
+      "id": "patient-registration",
+      "name": "Patient Registration",
+      "description": "Healthcare patient registration with insurance verification and appointment scheduling",
+      "category": "healthcare",
+      "tags": [
+        "healthcare",
+        "patient",
+        "registration",
+        "medical"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "10 minutes",
-      "icon": "graduation-cap",
-      "file": "student-enrollment.json",
-      "nodeCount": 7
+      "icon": "workflow",
+      "file": "patient-registration.json",
+      "nodeCount": 9
+    },
+    {
+      "id": "performance-review-360",
+      "name": "Performance Review Cycle (360-Degree)",
+      "description": "Comprehensive 360-degree performance review with multi-stakeholder feedback",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "performance",
+        "review",
+        "360",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "users",
+      "file": "performance-review-360.json",
+      "nodeCount": 14,
+      "useCases": [
+        "Annual reviews",
+        "Mid-year reviews",
+        "Promotion evaluations"
+      ],
+      "estimatedDuration": "3-4 weeks",
+      "prerequisites": [
+        "Employee database",
+        "Manager hierarchy"
+      ],
+      "integrationRequirements": [
+        "HR System",
+        "Email"
+      ]
+    },
+    {
+      "id": "petty-cash-request",
+      "name": "Petty Cash Request",
+      "description": "Request and track petty cash disbursements",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "cash",
+        "expense",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "dollar-sign",
+      "file": "petty-cash-request.json",
+      "nodeCount": 6,
+      "useCases": [
+        "Small cash expenses",
+        "Office supplies",
+        "Minor purchases"
+      ],
+      "estimatedDuration": "2-4 hours",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "policy-review-approval",
+      "name": "Policy Review & Approval",
+      "description": "Multi-stakeholder policy creation, review, and approval workflow",
+      "category": "Legal & Compliance",
+      "tags": [
+        "legal",
+        "policy",
+        "governance",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "file-text",
+      "file": "policy-review-approval.json",
+      "nodeCount": 14,
+      "useCases": [
+        "Corporate policies",
+        "Compliance policies",
+        "Department procedures"
+      ],
+      "estimatedDuration": "4-6 weeks",
+      "prerequisites": [
+        "Policy template",
+        "Review criteria"
+      ],
+      "integrationRequirements": [
+        "Document Management"
+      ]
     },
     {
       "id": "production-order",
       "name": "Production Order Workflow",
-      "description": "Manufacturing production order with resource allocation and quality checks",
+      "description": "Manufacturing production order from request to completion with quality checks",
       "category": "Manufacturing",
-      "tags": ["manufacturing", "production", "quality"],
+      "tags": [
+        "manufacturing",
+        "production",
+        "quality"
+      ],
       "complexity": "medium",
       "estimatedSetupTime": "10 minutes",
-      "icon": "settings",
+      "icon": "workflow",
       "file": "production-order.json",
       "nodeCount": 6
     },
     {
-      "id": "return-processing",
-      "name": "Product Return Processing",
-      "description": "Customer product returns with inspection, refund, and inventory updates",
-      "category": "Retail",
-      "tags": ["retail", "returns", "refund", "customer-service"],
-      "complexity": "simple",
-      "estimatedSetupTime": "7 minutes",
-      "icon": "shopping-cart",
-      "file": "return-processing.json",
-      "nodeCount": 7
+      "id": "project-request",
+      "name": "Project Request & Approval",
+      "description": "New project initiation with business case review, budget approval, and resource allocation",
+      "category": "General",
+      "tags": [
+        "project",
+        "pmo",
+        "approval",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "project-request.json",
+      "nodeCount": 8,
+      "features": [
+        "Business case submission and review",
+        "Multi-level budget approval routing",
+        "Resource availability check",
+        "Project kickoff automation"
+      ],
+      "useCases": [
+        "IT project approval process",
+        "Capital expenditure requests",
+        "New initiative evaluation"
+      ]
     },
     {
       "id": "property-showing",
       "name": "Property Showing Workflow",
-      "description": "Schedule and manage property showings for buyers or renters",
+      "description": "Schedule and manage property showings for potential buyers or renters",
       "category": "Real Estate",
-      "tags": ["real-estate", "showing", "scheduling"],
-      "complexity": "simple",
-      "estimatedSetupTime": "7 minutes",
-      "icon": "home",
+      "tags": [
+        "real-estate",
+        "showing",
+        "scheduling"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
       "file": "property-showing.json",
       "nodeCount": 7
+    },
+    {
+      "id": "purchase-request",
+      "name": "Purchase Request Workflow",
+      "description": "Comprehensive purchase request with budget check, approval, procurement, and vendor selection subprocess",
+      "category": "Procurement",
+      "tags": [
+        "procurement",
+        "purchase",
+        "approval",
+        "template"
+      ],
+      "complexity": "high",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "shopping-cart",
+      "file": "purchase-request.json",
+      "nodeCount": 11
+    },
+    {
+      "id": "quality-assurance",
+      "name": "Quality Assurance Review",
+      "description": "Product quality assurance with multi-stage testing and defect tracking",
+      "category": "manufacturing",
+      "tags": [
+        "quality",
+        "qa",
+        "testing",
+        "manufacturing"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "quality-assurance.json",
+      "nodeCount": 10
+    },
+    {
+      "id": "receipt-submission",
+      "name": "Receipt Submission",
+      "description": "Submit and track expense receipts for reimbursement",
+      "category": "Finance",
+      "tags": [
+        "finance",
+        "expense",
+        "receipt",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "receipt",
+      "file": "receipt-submission.json",
+      "nodeCount": 5,
+      "useCases": [
+        "Expense receipts",
+        "Travel expenses",
+        "Reimbursement"
+      ],
+      "estimatedDuration": "3-5 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "referral-submission",
+      "name": "Employee Referral Submission",
+      "description": "Submit and track employee referrals for open positions",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "recruitment",
+        "referral",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "4 minutes",
+      "icon": "users",
+      "file": "referral-submission.json",
+      "nodeCount": 8,
+      "useCases": [
+        "Employee referrals",
+        "Candidate recommendations",
+        "Referral bonus tracking"
+      ],
+      "estimatedDuration": "1-2 weeks",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "return-processing",
+      "name": "Product Return Processing",
+      "description": "Handle customer product returns with inspection, refund, and inventory updates",
+      "category": "Retail",
+      "tags": [
+        "retail",
+        "returns",
+        "refund",
+        "customer-service"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "return-processing.json",
+      "nodeCount": 7
+    },
+    {
+      "id": "rfp-response",
+      "name": "RFP Response Workflow",
+      "description": "Comprehensive RFP response process with team collaboration and executive review",
+      "category": "Sales",
+      "tags": [
+        "sales",
+        "rfp",
+        "proposal",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "15 minutes",
+      "icon": "file-text",
+      "file": "rfp-response.json",
+      "nodeCount": 19,
+      "useCases": [
+        "RFP responses",
+        "Proposal development",
+        "Bid management"
+      ],
+      "estimatedDuration": "3-6 weeks",
+      "prerequisites": [
+        "RFP document",
+        "Proposal templates"
+      ],
+      "integrationRequirements": [
+        "CRM",
+        "Document Management"
+      ]
+    },
+    {
+      "id": "risk-assessment",
+      "name": "Risk Assessment Workflow",
+      "description": "Comprehensive risk identification, analysis, and mitigation planning",
+      "category": "Legal & Compliance",
+      "tags": [
+        "legal",
+        "compliance",
+        "risk",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "alert-triangle",
+      "file": "risk-assessment.json",
+      "nodeCount": 16,
+      "useCases": [
+        "Enterprise risk",
+        "Project risk",
+        "Operational risk"
+      ],
+      "estimatedDuration": "3-4 weeks",
+      "prerequisites": [
+        "Risk framework",
+        "Assessment criteria"
+      ],
+      "integrationRequirements": [
+        "Risk Management System"
+      ]
+    },
+    {
+      "id": "sales-opportunity",
+      "name": "Sales Opportunity Management",
+      "description": "Complete sales opportunity tracking with lead qualification, proposal generation, and deal closure",
+      "category": "General",
+      "tags": [
+        "sales",
+        "crm",
+        "opportunity",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "sales-opportunity.json",
+      "nodeCount": 9,
+      "features": [
+        "Automated lead scoring and qualification",
+        "Proposal generation and approval workflow",
+        "Customer relationship tracking",
+        "Deal closure automation with CRM integration"
+      ],
+      "useCases": [
+        "B2B sales pipeline management",
+        "Enterprise deal tracking",
+        "Sales team performance optimization"
+      ]
     },
     {
       "id": "shipment-tracking",
       "name": "Shipment Tracking Workflow",
       "description": "Track shipments from pickup to delivery with real-time updates",
       "category": "Transportation & Logistics",
-      "tags": ["logistics", "shipping", "tracking", "delivery"],
-      "complexity": "simple",
-      "estimatedSetupTime": "7 minutes",
-      "icon": "truck",
+      "tags": [
+        "logistics",
+        "shipping",
+        "tracking",
+        "delivery"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
       "file": "shipment-tracking.json",
       "nodeCount": 7
     },
     {
-      "id": "loan-application",
-      "name": "Loan Application Workflow",
-      "description": "Process loan applications from submission to approval",
-      "category": "Banking & Finance",
-      "tags": ["banking", "loan", "credit", "approval"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "dollar-sign",
-      "file": "loan-application.json",
-      "nodeCount": 8
-    },
-    {
-      "id": "medical-records-request",
-      "name": "Medical Records Request",
-      "description": "Process medical records requests with HIPAA compliance",
-      "category": "Healthcare",
-      "tags": ["healthcare", "records", "hipaa", "privacy"],
-      "complexity": "medium",
-      "estimatedSetupTime": "10 minutes",
-      "icon": "heart",
-      "file": "medical-records-request.json",
-      "nodeCount": 8
-    },
-    {
-      "id": "course-registration",
-      "name": "Course Registration Workflow",
-      "description": "Student course registration with prerequisite checks and capacity management",
-      "category": "Education",
-      "tags": ["education", "registration", "courses", "enrollment"],
+      "id": "software-license-request",
+      "name": "Software License Request",
+      "description": "Request software licenses with budget approval",
+      "category": "IT Support",
+      "tags": [
+        "it",
+        "software",
+        "license",
+        "simple"
+      ],
       "complexity": "simple",
-      "estimatedSetupTime": "7 minutes",
-      "icon": "book",
-      "file": "course-registration.json",
+      "estimatedSetupTime": "4 minutes",
+      "icon": "package",
+      "file": "software-license-request.json",
+      "nodeCount": 6,
+      "useCases": [
+        "Software purchase",
+        "License renewal",
+        "Tool requests"
+      ],
+      "estimatedDuration": "2-3 days",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "student-enrollment",
+      "name": "Student Enrollment Workflow",
+      "description": "Complete student enrollment process from application to class registration",
+      "category": "Education",
+      "tags": [
+        "education",
+        "enrollment",
+        "registration"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "student-enrollment.json",
       "nodeCount": 7
+    },
+    {
+      "id": "time-off-basic",
+      "name": "Time-Off Request (Basic)",
+      "description": "Simple time-off request with direct manager approval",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "leave",
+        "time-off",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "calendar",
+      "file": "time-off-basic.json",
+      "nodeCount": 7,
+      "useCases": [
+        "Vacation request",
+        "Sick leave",
+        "Personal time off"
+      ],
+      "estimatedDuration": "2-4 hours",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "training-request",
+      "name": "Training Request & Enrollment",
+      "description": "Employee training request with manager approval, budget check, and automatic enrollment",
+      "category": "General",
+      "tags": [
+        "training",
+        "hr",
+        "learning",
+        "development",
+        "template"
+      ],
+      "complexity": "medium",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "training-request.json",
+      "nodeCount": 11,
+      "features": [
+        "Manager approval workflow",
+        "Budget availability check",
+        "Automatic course enrollment",
+        "Calendar invitation and reminders"
+      ],
+      "useCases": [
+        "Professional development requests",
+        "Mandatory compliance training",
+        "Skill development programs"
+      ]
+    },
+    {
+      "id": "vendor-onboarding",
+      "name": "Vendor Onboarding",
+      "description": "Complete vendor onboarding with compliance checks and contract setup",
+      "category": "procurement",
+      "tags": [
+        "vendor",
+        "procurement",
+        "compliance",
+        "contract"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "10 minutes",
+      "icon": "workflow",
+      "file": "vendor-onboarding.json",
+      "nodeCount": 10
+    },
+    {
+      "id": "visitor-registration",
+      "name": "Visitor Registration",
+      "description": "Register and track office visitors with host notification",
+      "category": "Operations",
+      "tags": [
+        "operations",
+        "security",
+        "visitor",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "user-check",
+      "file": "visitor-registration.json",
+      "nodeCount": 5,
+      "useCases": [
+        "Office visitors",
+        "Guest registration",
+        "Vendor visits"
+      ],
+      "estimatedDuration": "10 minutes",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "vpn-access-request",
+      "name": "VPN Access Request",
+      "description": "Request VPN access for remote work",
+      "category": "IT Support",
+      "tags": [
+        "it",
+        "vpn",
+        "access",
+        "remote",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "shield",
+      "file": "vpn-access-request.json",
+      "nodeCount": 7,
+      "useCases": [
+        "Remote access",
+        "Work from home",
+        "Contractor access"
+      ],
+      "estimatedDuration": "4-8 hours",
+      "prerequisites": [],
+      "integrationRequirements": []
+    },
+    {
+      "id": "workforce-planning",
+      "name": "Workforce Planning & Headcount Approval",
+      "description": "Strategic workforce planning with multi-level headcount approval",
+      "category": "Human Resources",
+      "tags": [
+        "hr",
+        "planning",
+        "headcount",
+        "complex"
+      ],
+      "complexity": "complex",
+      "estimatedSetupTime": "12 minutes",
+      "icon": "users",
+      "file": "workforce-planning.json",
+      "nodeCount": 11,
+      "useCases": [
+        "Headcount requests",
+        "Department expansion",
+        "Strategic hiring"
+      ],
+      "estimatedDuration": "3-4 weeks",
+      "prerequisites": [
+        "Budget data",
+        "Organizational structure"
+      ],
+      "integrationRequirements": [
+        "HR System",
+        "Finance System"
+      ]
+    },
+    {
+      "id": "workspace-booking",
+      "name": "Workspace Booking",
+      "description": "Book desk, meeting room, or workspace for hybrid work",
+      "category": "Operations",
+      "tags": [
+        "operations",
+        "booking",
+        "workspace",
+        "hybrid",
+        "simple"
+      ],
+      "complexity": "simple",
+      "estimatedSetupTime": "3 minutes",
+      "icon": "calendar",
+      "file": "workspace-booking.json",
+      "nodeCount": 7,
+      "useCases": [
+        "Desk booking",
+        "Meeting room booking",
+        "Hot desk reservation"
+      ],
+      "estimatedDuration": "5 minutes",
+      "prerequisites": [],
+      "integrationRequirements": []
     }
   ],
   "categories": [
