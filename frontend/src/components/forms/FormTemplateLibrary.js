@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   X, Search, Filter, FileText, Users, DollarSign, Headphones,
-  Package, Scale, TrendingUp, CheckCircle, Star, Eye
+  Package, Scale, TrendingUp, CheckCircle, Eye
 } from 'lucide-react';
 import { modalHeaderStyles, modalOverlayStyles } from '../../utils/designSystem';
 
@@ -25,13 +25,7 @@ const FormTemplateLibrary = ({ isOpen, onClose, onSelectTemplate, onNotify }) =>
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (isOpen) {
-      loadTemplates();
-    }
-  }, [isOpen]);
-
-  const loadTemplates = async () => {
+  const loadTemplates = useCallback(async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/form-templates`);
       const data = await response.json();
@@ -43,7 +37,13 @@ const FormTemplateLibrary = ({ isOpen, onClose, onSelectTemplate, onNotify }) =>
     } finally {
       setLoading(false);
     }
-  };
+  }, [onNotify]);
+
+  useEffect(() => {
+    if (isOpen) {
+      loadTemplates();
+    }
+  }, [isOpen, loadTemplates]);
 
   const filteredTemplates = templates.filter(template => {
     const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

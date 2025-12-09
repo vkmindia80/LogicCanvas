@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Search, FileText, Edit, Trash2, Copy, Tag, ClipboardList, Package } from 'lucide-react';
 import { useRole } from '../../contexts/RoleContext';
 import EmptyState from '../EmptyState';
-import Tooltip from '../Tooltip';
 import { SkeletonCard } from '../Skeleton';
 import FormTemplateLibrary from './FormTemplateLibrary';
 
@@ -17,7 +16,7 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
 
   const { can } = useRole();
 
-  const fetchForms = async () => {
+  const fetchForms = useCallback(async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/forms`);
       const data = await response.json();
@@ -28,11 +27,11 @@ const FormList = ({ onSelectForm, onCreateNew, onNotify }) => {
       onNotify?.('Failed to fetch forms', 'error');
       setLoading(false);
     }
-  };
+  }, [onNotify]);
 
   useEffect(() => {
     fetchForms();
-  }, []);
+  }, [fetchForms]);
 
   const handleDelete = async (formId, e) => {
     e.stopPropagation();
