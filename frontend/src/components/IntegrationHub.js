@@ -808,4 +808,649 @@ const IntegrationModal = ({ integration, onClose, onSave }) => {
   );
 };
 
+const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    name: database?.name || '',
+    description: database?.description || '',
+    db_type: database?.db_type || 'postgresql',
+    host: database?.host || 'localhost',
+    port: database?.port || 5432,
+    database: database?.database || '',
+    username: database?.username || '',
+    password: database?.password || '',
+    ssl: database?.ssl || false,
+    // Cloud DB fields
+    region: database?.region || 'us-east-1',
+    access_key: database?.access_key || '',
+    secret_key: database?.secret_key || '',
+    project_id: database?.project_id || '',
+    service_account_json: database?.service_account_json || '',
+    endpoint: database?.endpoint || '',
+    account_key: database?.account_key || '',
+    api_type: database?.api_type || 'sql',
+    // NoSQL fields
+    contact_points: database?.contact_points || [],
+    keyspace: database?.keyspace || '',
+    service_name: database?.service_name || '',
+    instance: database?.instance || '',
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (formData.db_type) {
+      const dbType = dbTypes.find(t => t.id === formData.db_type);
+      if (dbType && dbType.default_port) {
+        setFormData(prev => ({ ...prev, port: dbType.default_port }));
+      }
+    }
+  }, [formData.db_type, dbTypes]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+
+    try {
+      const method = database ? 'PUT' : 'POST';
+      const url = database
+        ? `${BACKEND_URL}/api/integrations/databases/${database.id}`
+        : `${BACKEND_URL}/api/integrations/databases`;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        onSave();
+      } else {
+        const error = await response.json();
+        alert(`Failed to save: ${error.detail || 'Unknown error'}`);
+      }
+    } catch (error) {
+      alert(`Failed to save: ${error.message}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const selectedDbType = dbTypes.find(t => t.id === formData.db_type);
+
+  const renderDatabaseFields = () => {
+    switch (formData.db_type) {
+      case 'postgresql':
+      case 'mysql':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <input
+                type="text"
+                value={formData.host}
+                onChange={(e) => setFormData({ ...formData, host: e.target.value })}
+                placeholder="localhost"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Port</label>
+              <input
+                type="number"
+                value={formData.port}
+                onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Database Name</label>
+              <input
+                type="text"
+                value={formData.database}
+                onChange={(e) => setFormData({ ...formData, database: e.target.value })}
+                placeholder="my_database"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Username</label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="ssl"
+                checked={formData.ssl}
+                onChange={(e) => setFormData({ ...formData, ssl: e.target.checked })}
+                className="mr-2 h-4 w-4 rounded border-green-300 text-primary-600 focus:ring-primary-500"
+              />
+              <label htmlFor="ssl" className="text-sm font-medium text-primary-700">Enable SSL</label>
+            </div>
+          </>
+        );
+
+      case 'mssql':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <input
+                type="text"
+                value={formData.host}
+                onChange={(e) => setFormData({ ...formData, host: e.target.value })}
+                placeholder="localhost"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Port</label>
+              <input
+                type="number"
+                value={formData.port}
+                onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Database Name</label>
+              <input
+                type="text"
+                value={formData.database}
+                onChange={(e) => setFormData({ ...formData, database: e.target.value })}
+                placeholder="my_database"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Instance (Optional)</label>
+              <input
+                type="text"
+                value={formData.instance}
+                onChange={(e) => setFormData({ ...formData, instance: e.target.value })}
+                placeholder="SQLEXPRESS"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Username</label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          </>
+        );
+
+      case 'oracle':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <input
+                type="text"
+                value={formData.host}
+                onChange={(e) => setFormData({ ...formData, host: e.target.value })}
+                placeholder="localhost"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Port</label>
+              <input
+                type="number"
+                value={formData.port}
+                onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Service Name</label>
+              <input
+                type="text"
+                value={formData.service_name}
+                onChange={(e) => setFormData({ ...formData, service_name: e.target.value })}
+                placeholder="ORCL"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Username</label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          </>
+        );
+
+      case 'mongodb':
+      case 'redis':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Host</label>
+              <input
+                type="text"
+                value={formData.host}
+                onChange={(e) => setFormData({ ...formData, host: e.target.value })}
+                placeholder="localhost"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Port</label>
+              <input
+                type="number"
+                value={formData.port}
+                onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            {formData.db_type === 'mongodb' && (
+              <div>
+                <label className="mb-2 block text-sm font-medium text-primary-700">Database Name</label>
+                <input
+                  type="text"
+                  value={formData.database}
+                  onChange={(e) => setFormData({ ...formData, database: e.target.value })}
+                  placeholder="my_database"
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                />
+              </div>
+            )}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Username (Optional)</label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Password (Optional)</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          </>
+        );
+
+      case 'cassandra':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Contact Points (comma-separated)</label>
+              <input
+                type="text"
+                value={Array.isArray(formData.contact_points) ? formData.contact_points.join(',') : formData.contact_points}
+                onChange={(e) => setFormData({ ...formData, contact_points: e.target.value.split(',').map(s => s.trim()) })}
+                placeholder="localhost,node2,node3"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Port</label>
+              <input
+                type="number"
+                value={formData.port}
+                onChange={(e) => setFormData({ ...formData, port: parseInt(e.target.value) })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Keyspace</label>
+              <input
+                type="text"
+                value={formData.keyspace}
+                onChange={(e) => setFormData({ ...formData, keyspace: e.target.value })}
+                placeholder="my_keyspace"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Username (Optional)</label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Password (Optional)</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          </>
+        );
+
+      case 'dynamodb':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">AWS Region</label>
+              <input
+                type="text"
+                value={formData.region}
+                onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                placeholder="us-east-1"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">AWS Access Key ID</label>
+              <input
+                type="text"
+                value={formData.access_key}
+                onChange={(e) => setFormData({ ...formData, access_key: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">AWS Secret Access Key</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.secret_key}
+                  onChange={(e) => setFormData({ ...formData, secret_key: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          </>
+        );
+
+      case 'firestore':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Google Cloud Project ID</label>
+              <input
+                type="text"
+                value={formData.project_id}
+                onChange={(e) => setFormData({ ...formData, project_id: e.target.value })}
+                placeholder="my-project-id"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Service Account JSON</label>
+              <textarea
+                value={formData.service_account_json}
+                onChange={(e) => setFormData({ ...formData, service_account_json: e.target.value })}
+                placeholder='{"type": "service_account", ...}'
+                rows={4}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-mono text-xs"
+                required
+              />
+              <p className="mt-1 text-xs text-green-500">Paste your service account JSON here</p>
+            </div>
+          </>
+        );
+
+      case 'cosmosdb':
+        return (
+          <>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Azure Cosmos DB Endpoint</label>
+              <input
+                type="url"
+                value={formData.endpoint}
+                onChange={(e) => setFormData({ ...formData, endpoint: e.target.value })}
+                placeholder="https://myaccount.documents.azure.com:443/"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Account Key</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.account_key}
+                  onChange={(e) => setFormData({ ...formData, account_key: e.target.value })}
+                  className="w-full rounded-lg border border-green-300 px-4 py-2 pr-10 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">Database Name</label>
+              <input
+                type="text"
+                value={formData.database}
+                onChange={(e) => setFormData({ ...formData, database: e.target.value })}
+                placeholder="my-database"
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-primary-700">API Type</label>
+              <select
+                value={formData.api_type}
+                onChange={(e) => setFormData({ ...formData, api_type: e.target.value })}
+                className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              >
+                <option value="sql">SQL API</option>
+                <option value="mongodb">MongoDB API</option>
+              </select>
+            </div>
+          </>
+        );
+
+      default:
+        return <p className="text-sm text-primary-600">Please select a database type</p>;
+    }
+  };
+
+  return (
+    <div className={modalOverlayStyles.base}>
+      <div className={`${modalOverlayStyles.content} max-w-2xl max-h-[90vh] overflow-y-auto`}>
+        <div className={modalHeaderStyles.base}>
+          <h2 className={modalHeaderStyles.title}>
+            {database ? 'Edit Database Connection' : 'Add Database Connection'}
+          </h2>
+          <button onClick={onClose} className="text-white hover:opacity-80">
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Connection Name</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="My Database Connection"
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Database Type</label>
+            <select
+              value={formData.db_type}
+              onChange={(e) => setFormData({ ...formData, db_type: e.target.value })}
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              disabled={!!database}
+              required
+            >
+              {dbTypes.map(type => (
+                <option key={type.id} value={type.id}>
+                  {type.name} ({type.category})
+                </option>
+              ))}
+            </select>
+            {selectedDbType && (
+              <p className="mt-1 text-xs text-green-500">{selectedDbType.category} Database</p>
+            )}
+          </div>
+
+          {renderDatabaseFields()}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-primary-700">Description (Optional)</label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Brief description of this connection..."
+              rows={2}
+              className="w-full rounded-lg border border-green-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+            />
+          </div>
+
+          <div className="flex justify-end space-x-3 pt-4 border-t border-green-200">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-green-300 px-6 py-2 text-sm font-semibold text-primary-700 transition-all hover:bg-green-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-700 disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : database ? 'Update Connection' : 'Create Connection'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 export default IntegrationHub;
