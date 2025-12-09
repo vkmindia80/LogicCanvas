@@ -621,20 +621,29 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                   </div>
                 )}
 
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (Optional)
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                    rows="3"
-                    placeholder="Add a description for this database connection..."
-                  />
+                {/* Additional Information Section */}
+                <div className="bg-white rounded-xl border-2 border-green-200 p-5 space-y-4">
+                  <h4 className="text-lg font-bold text-slate-800 flex items-center space-x-2 mb-4">
+                    <Edit2 className="h-5 w-5 text-green-600" />
+                    <span>Additional Information</span>
+                  </h4>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Description (Optional)
+                    </label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      className="w-full rounded-xl border-2 border-green-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                      rows="3"
+                      placeholder="Add a description for this database connection..."
+                    />
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-end space-x-3 pt-5 border-t-2 border-green-100">
+                {/* Action Buttons */}
+                <div className="flex items-center justify-end space-x-3 pt-2">
                   <button
                     type="button"
                     onClick={() => {
