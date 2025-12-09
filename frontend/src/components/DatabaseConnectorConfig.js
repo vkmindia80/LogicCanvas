@@ -362,7 +362,7 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
             </label>
           </div>
         )}
-      </>
+      </div>
     );
   };
 
