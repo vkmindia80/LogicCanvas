@@ -444,14 +444,14 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
                   key={connection.id}
                   className="bg-white rounded-xl border-2 border-green-200 shadow-lg p-5 group hover:shadow-xl hover:border-green-300 transition-all"
                 >
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className="rounded-lg bg-indigo-100 p-2 text-indigo-600">
+                      <div className="rounded-xl bg-green-100 p-3 text-green-600">
                         {getIconForDbType(connection.db_type)}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-slate-900">{connection.name}</h3>
-                        <p className="text-xs text-slate-500 capitalize">{connection.db_type}</p>
+                        <h3 className="font-bold text-slate-900 text-lg">{connection.name}</h3>
+                        <p className="text-sm text-slate-500 capitalize font-medium">{connection.db_type}</p>
                       </div>
                     </div>
                   </div>
