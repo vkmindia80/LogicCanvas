@@ -385,48 +385,51 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4" onClick={onClose}>
+    <div className={modalOverlayStyles.base} onClick={onClose}>
       <div 
         className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-green-600 text-white px-6 py-6 rounded-t-2xl flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-white/20 rounded-lg">
-              <Database className="h-6 w-6" />
+        <div className={modalHeaderStyles.base}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <Database className="h-7 w-7" />
+              </div>
+              <div>
+                <h2 className={modalHeaderStyles.title}>Database Connections</h2>
+                <p className={modalHeaderStyles.subtitle}>Manage your database integrations</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-2xl font-bold">Database Connections</h2>
-              <p className="text-green-100 text-sm mt-1">Manage your database integrations</p>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => {
+                  resetForm();
+                  setEditingConnection(null);
+                  setShowAddModal(true);
+                }}
+                className="inline-flex items-center space-x-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white/30"
+                data-testid="add-database-connection-btn"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add Connection</span>
+              </button>
+              <button
+                onClick={loadConnections}
+                className="rounded-lg bg-white/20 p-2 text-white hover:bg-white/30 transition-colors"
+                title="Refresh"
+              >
+                <RefreshCw className="h-5 w-5" />
+              </button>
+              <button
+                onClick={onClose}
+                className="rounded-lg bg-white/20 p-2 text-white hover:bg-white/30 transition-colors"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => {
-                resetForm();
-                setEditingConnection(null);
-                setShowAddModal(true);
-              }}
-              className="flex items-center space-x-2 rounded-xl bg-white/20 px-4 py-2.5 text-white hover:bg-white/30 transition-all font-semibold"
-              data-testid="add-database-connection-btn"
-            >
-              <Plus className="h-5 w-5" />
-              <span>Add Connection</span>
-            </button>
-            <button
-              onClick={loadConnections}
-              className="rounded-xl bg-white/20 p-2.5 text-white hover:bg-white/30 transition-all"
-              title="Refresh"
-            >
-              <RefreshCw className="h-5 w-5" />
-            </button>
-            <button
-              onClick={onClose}
-              className="rounded-xl bg-white/20 p-2.5 text-white hover:bg-white/30 transition-all"
-            >
-              <X className="h-5 w-5" />
-            </button>
           </div>
         </div>
 
