@@ -1,0 +1,78 @@
+{
+  "id": "expense-reimbursement",
+  "name": "Expense Reimbursement Form",
+  "description": "Submit business expenses for reimbursement with receipt documentation",
+  "category": "hr-people",
+  "icon": "Receipt",
+  "version": 1,
+  "tags": ["hr", "finance", "expense", "reimbursement"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "employee_id",
+      "type": "text",
+      "label": "Employee ID",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "expense_date",
+      "type": "date",
+      "label": "Expense Date",
+      "required": true
+    },
+    {
+      "id": "expense_category",
+      "type": "select",
+      "label": "Expense Category",
+      "required": true,
+      "options": ["Travel", "Meals & Entertainment", "Office Supplies", "Software/Subscriptions", "Training", "Client Meeting", "Transportation", "Other"]
+    },
+    {
+      "id": "amount",
+      "type": "number",
+      "label": "Amount (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "business_purpose",
+      "type": "textarea",
+      "label": "Business Purpose",
+      "required": true,
+      "placeholder": "Explain the business reason for this expense"
+    },
+    {
+      "id": "payment_method",
+      "type": "radio",
+      "label": "Payment Method",
+      "required": true,
+      "options": ["Personal Credit Card", "Cash", "Company Card"]
+    },
+    {
+      "id": "receipt_attached",
+      "type": "checkbox",
+      "label": "Receipt Attached",
+      "required": true,
+      "options": ["I confirm that I have attached the receipt"]
+    },
+    {
+      "id": "notes",
+      "type": "textarea",
+      "label": "Additional Notes",
+      "required": false
+    }
+  ]
+}

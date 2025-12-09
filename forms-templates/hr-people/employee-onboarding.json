@@ -1,0 +1,99 @@
+{
+  "id": "employee-onboarding",
+  "name": "Employee Onboarding Form",
+  "description": "Comprehensive form for collecting new employee information during onboarding process",
+  "category": "hr-people",
+  "icon": "UserPlus",
+  "version": 1,
+  "tags": ["hr", "onboarding", "employee", "hiring"],
+  "fields": [
+    {
+      "id": "full_name",
+      "type": "text",
+      "label": "Full Name",
+      "required": true,
+      "placeholder": "John Doe",
+      "validation": {
+        "minLength": 2,
+        "maxLength": 100
+      }
+    },
+    {
+      "id": "email",
+      "type": "email",
+      "label": "Work Email",
+      "required": true,
+      "placeholder": "john.doe@company.com",
+      "validation": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      }
+    },
+    {
+      "id": "phone",
+      "type": "phone",
+      "label": "Phone Number",
+      "required": true,
+      "placeholder": "+1 (555) 123-4567"
+    },
+    {
+      "id": "department",
+      "type": "select",
+      "label": "Department",
+      "required": true,
+      "options": ["Engineering", "Sales", "Marketing", "HR", "Finance", "Operations", "Customer Support", "Legal"]
+    },
+    {
+      "id": "job_title",
+      "type": "text",
+      "label": "Job Title",
+      "required": true,
+      "placeholder": "Software Engineer"
+    },
+    {
+      "id": "start_date",
+      "type": "date",
+      "label": "Start Date",
+      "required": true
+    },
+    {
+      "id": "employment_type",
+      "type": "radio",
+      "label": "Employment Type",
+      "required": true,
+      "options": ["Full-time", "Part-time", "Contract", "Intern"]
+    },
+    {
+      "id": "emergency_contact_name",
+      "type": "text",
+      "label": "Emergency Contact Name",
+      "required": true
+    },
+    {
+      "id": "emergency_contact_phone",
+      "type": "phone",
+      "label": "Emergency Contact Phone",
+      "required": true
+    },
+    {
+      "id": "address",
+      "type": "textarea",
+      "label": "Home Address",
+      "required": true,
+      "placeholder": "Street, City, State, ZIP"
+    },
+    {
+      "id": "t_shirt_size",
+      "type": "select",
+      "label": "T-Shirt Size",
+      "required": false,
+      "options": ["XS", "S", "M", "L", "XL", "XXL"]
+    },
+    {
+      "id": "dietary_restrictions",
+      "type": "textarea",
+      "label": "Dietary Restrictions/Allergies",
+      "required": false,
+      "placeholder": "List any dietary restrictions or allergies"
+    }
+  ]
+}

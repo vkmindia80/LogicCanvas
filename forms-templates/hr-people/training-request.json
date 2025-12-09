@@ -1,0 +1,78 @@
+{
+  "id": "training-request",
+  "name": "Training Request Form",
+  "description": "Request form for professional development, courses, conferences, and training programs",
+  "category": "hr-people",
+  "icon": "GraduationCap",
+  "version": 1,
+  "tags": ["hr", "training", "development", "learning"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "training_type",
+      "type": "select",
+      "label": "Type of Training",
+      "required": true,
+      "options": ["Online Course", "In-person Workshop", "Conference", "Certification Program", "Webinar", "Internal Training", "Other"]
+    },
+    {
+      "id": "training_name",
+      "type": "text",
+      "label": "Training/Course Name",
+      "required": true
+    },
+    {
+      "id": "provider",
+      "type": "text",
+      "label": "Training Provider/Institution",
+      "required": true
+    },
+    {
+      "id": "start_date",
+      "type": "date",
+      "label": "Start Date",
+      "required": true
+    },
+    {
+      "id": "duration",
+      "type": "text",
+      "label": "Duration",
+      "required": true,
+      "placeholder": "e.g., 2 days, 4 weeks, 3 months"
+    },
+    {
+      "id": "cost",
+      "type": "number",
+      "label": "Total Cost (USD)",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    {
+      "id": "business_justification",
+      "type": "textarea",
+      "label": "Business Justification",
+      "required": true,
+      "placeholder": "Explain how this training will benefit your role and the company"
+    },
+    {
+      "id": "expected_outcomes",
+      "type": "textarea",
+      "label": "Expected Learning Outcomes",
+      "required": true,
+      "placeholder": "What skills or knowledge will you gain?"
+    }
+  ]
+}

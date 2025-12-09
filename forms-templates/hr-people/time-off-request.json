@@ -1,0 +1,66 @@
+{
+  "id": "time-off-request",
+  "name": "Time-Off Request Form",
+  "description": "Simple form for employees to request vacation, sick leave, or personal time off",
+  "category": "hr-people",
+  "icon": "Calendar",
+  "version": 1,
+  "tags": ["hr", "leave", "vacation", "pto", "time-off"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "employee_email",
+      "type": "email",
+      "label": "Email Address",
+      "required": true
+    },
+    {
+      "id": "leave_type",
+      "type": "select",
+      "label": "Type of Leave",
+      "required": true,
+      "options": ["Vacation", "Sick Leave", "Personal Day", "Family Leave", "Bereavement", "Unpaid Leave"]
+    },
+    {
+      "id": "start_date",
+      "type": "date",
+      "label": "Start Date",
+      "required": true
+    },
+    {
+      "id": "end_date",
+      "type": "date",
+      "label": "End Date",
+      "required": true
+    },
+    {
+      "id": "total_days",
+      "type": "number",
+      "label": "Total Days Requested",
+      "required": true,
+      "validation": {
+        "min": 0.5,
+        "max": 365
+      }
+    },
+    {
+      "id": "reason",
+      "type": "textarea",
+      "label": "Reason for Leave (Optional)",
+      "required": false,
+      "placeholder": "Brief description if needed"
+    },
+    {
+      "id": "coverage_plan",
+      "type": "textarea",
+      "label": "Coverage Plan",
+      "required": false,
+      "placeholder": "Who will cover your responsibilities?"
+    }
+  ]
+}

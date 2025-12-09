@@ -1,0 +1,78 @@
+{
+  "id": "exit-interview",
+  "name": "Exit Interview Form",
+  "description": "Gather feedback from departing employees to improve workplace culture and retention",
+  "category": "hr-people",
+  "icon": "UserMinus",
+  "version": 1,
+  "tags": ["hr", "exit", "offboarding", "feedback"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "department",
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    {
+      "id": "last_day",
+      "type": "date",
+      "label": "Last Day of Work",
+      "required": true
+    },
+    {
+      "id": "reason_for_leaving",
+      "type": "select",
+      "label": "Primary Reason for Leaving",
+      "required": true,
+      "options": ["Better opportunity", "Career change", "Relocation", "Compensation", "Work-life balance", "Management issues", "Company culture", "Personal reasons", "Other"]
+    },
+    {
+      "id": "overall_satisfaction",
+      "type": "radio",
+      "label": "Overall Job Satisfaction",
+      "required": true,
+      "options": ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"]
+    },
+    {
+      "id": "manager_rating",
+      "type": "radio",
+      "label": "Rate Your Direct Manager",
+      "required": true,
+      "options": ["Excellent", "Good", "Fair", "Poor"]
+    },
+    {
+      "id": "work_environment",
+      "type": "radio",
+      "label": "Work Environment Rating",
+      "required": true,
+      "options": ["Excellent", "Good", "Fair", "Poor"]
+    },
+    {
+      "id": "recommend_company",
+      "type": "radio",
+      "label": "Would you recommend this company to others?",
+      "required": true,
+      "options": ["Yes", "Maybe", "No"]
+    },
+    {
+      "id": "feedback",
+      "type": "textarea",
+      "label": "Additional Feedback or Suggestions",
+      "required": false,
+      "placeholder": "Please share any feedback that could help us improve"
+    },
+    {
+      "id": "rehire_willingness",
+      "type": "radio",
+      "label": "Would you consider returning to this company in the future?",
+      "required": false,
+      "options": ["Yes", "Maybe", "No"]
+    }
+  ]
+}

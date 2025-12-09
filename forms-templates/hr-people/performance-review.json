@@ -1,0 +1,93 @@
+{
+  "id": "performance-review",
+  "name": "Performance Review Form",
+  "description": "Structured performance evaluation form with ratings and goal tracking",
+  "category": "hr-people",
+  "icon": "Award",
+  "version": 1,
+  "tags": ["hr", "performance", "review", "evaluation"],
+  "fields": [
+    {
+      "id": "employee_name",
+      "type": "text",
+      "label": "Employee Name",
+      "required": true
+    },
+    {
+      "id": "reviewer_name",
+      "type": "text",
+      "label": "Reviewer Name",
+      "required": true
+    },
+    {
+      "id": "review_period",
+      "type": "text",
+      "label": "Review Period",
+      "required": true,
+      "placeholder": "Q1 2024, Jan-Mar 2024, etc."
+    },
+    {
+      "id": "job_knowledge",
+      "type": "radio",
+      "label": "Job Knowledge & Skills",
+      "required": true,
+      "options": ["5 - Exceptional", "4 - Exceeds Expectations", "3 - Meets Expectations", "2 - Needs Improvement", "1 - Unsatisfactory"]
+    },
+    {
+      "id": "quality_of_work",
+      "type": "radio",
+      "label": "Quality of Work",
+      "required": true,
+      "options": ["5 - Exceptional", "4 - Exceeds Expectations", "3 - Meets Expectations", "2 - Needs Improvement", "1 - Unsatisfactory"]
+    },
+    {
+      "id": "communication",
+      "type": "radio",
+      "label": "Communication Skills",
+      "required": true,
+      "options": ["5 - Exceptional", "4 - Exceeds Expectations", "3 - Meets Expectations", "2 - Needs Improvement", "1 - Unsatisfactory"]
+    },
+    {
+      "id": "teamwork",
+      "type": "radio",
+      "label": "Teamwork & Collaboration",
+      "required": true,
+      "options": ["5 - Exceptional", "4 - Exceeds Expectations", "3 - Meets Expectations", "2 - Needs Improvement", "1 - Unsatisfactory"]
+    },
+    {
+      "id": "initiative",
+      "type": "radio",
+      "label": "Initiative & Problem Solving",
+      "required": true,
+      "options": ["5 - Exceptional", "4 - Exceeds Expectations", "3 - Meets Expectations", "2 - Needs Improvement", "1 - Unsatisfactory"]
+    },
+    {
+      "id": "achievements",
+      "type": "textarea",
+      "label": "Key Achievements",
+      "required": true,
+      "placeholder": "List major accomplishments during this review period"
+    },
+    {
+      "id": "areas_for_improvement",
+      "type": "textarea",
+      "label": "Areas for Improvement",
+      "required": true,
+      "placeholder": "Identify areas where development is needed"
+    },
+    {
+      "id": "goals_next_period",
+      "type": "textarea",
+      "label": "Goals for Next Review Period",
+      "required": true,
+      "placeholder": "Set 3-5 specific goals for the next period"
+    },
+    {
+      "id": "overall_rating",
+      "type": "radio",
+      "label": "Overall Performance Rating",
+      "required": true,
+      "options": ["Outstanding", "Exceeds Expectations", "Meets Expectations", "Needs Improvement", "Unsatisfactory"]
+    }
+  ]
+}
