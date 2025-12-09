@@ -1087,6 +1087,7 @@ const AppShell = () => {
         <IntegrationHub
           onClose={() => { setShowIntegrationHub(false); setActiveMenuItem(activeTab); }}
           onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
+          sidebarCollapsed={sidebarCollapsed}
         />
       )}
       {showConnectorLibrary && (
