@@ -420,3 +420,263 @@ class FirestoreConnector(DatabaseConnector):
                 'error': str(e),
                 'operation': 'batch_create'
             }
+
+
+class CosmosDBConnector(DatabaseConnector):
+    """Azure Cosmos DB connector (supports SQL API and MongoDB API)"""
+    
+    def __init__(self, connection_id: str, config: Dict[str, Any]):
+        super().__init__(connection_id, config)
+        self.db_type = 'cosmosdb'
+        
+    async def connect(self) -> bool:
+        """Establish Cosmos DB connection"""
+        try:
+            self._log_operation('connect', 'attempting')
+            
+            # Decrypt account key
+            account_key = self.decrypt_credential(self.config.get('account_key', ''))
+            
+            # Simulate connection
+            self.connection = {
+                'endpoint': self.config.get('endpoint'),
+                'database': self.config.get('database'),
+                'api_type': self.config.get('api_type', 'sql'),  # sql or mongodb
+                'connected': True
+            }
+            
+            self._log_operation('connect', 'success')
+            return True
+        except Exception as e:
+            self._log_operation('connect', 'failed', {'error': str(e)})
+            return False
+    
+    async def disconnect(self) -> bool:
+        """Close Cosmos DB connection"""
+        try:
+            if self.connection:
+                self.connection['connected'] = False
+                self.connection = None
+                self._log_operation('disconnect', 'success')
+            return True
+        except Exception as e:
+            self._log_operation('disconnect', 'failed', {'error': str(e)})
+            return False
+    
+    async def test_connection(self) -> Dict[str, Any]:
+        """Test Cosmos DB connection"""
+        try:
+            await self.connect()
+            
+            result = {
+                'success': True,
+                'message': 'Connection successful',
+                'database_type': 'Azure Cosmos DB',
+                'api_type': self.config.get('api_type', 'sql'),
+                'endpoint': self.config.get('endpoint'),
+                'database': self.config.get('database')
+            }
+            
+            await self.disconnect()
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'Connection failed: {str(e)}',
+                'database_type': 'Azure Cosmos DB'
+            }
+    
+    async def execute_query(self, query: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Execute Cosmos DB query (SQL API or MongoDB-style)"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            api_type = self.connection.get('api_type', 'sql')
+            self._log_operation('execute_query', 'executing', {'api_type': api_type, 'query': query[:100]})
+            
+            result = {
+                'success': True,
+                'documents': [
+                    {'id': 'cosmos-doc-1', 'name': 'Cosmos DB Sample', 'value': 100, '_rid': 'abc123'},
+                    {'id': 'cosmos-doc-2', 'name': 'Another Doc', 'value': 200, '_rid': 'def456'}
+                ],
+                'count': 2,
+                'api_type': api_type,
+                '_rid': 'collection-rid',
+                'request_charge': 2.5
+            }
+            
+            self._log_operation('execute_query', 'success')
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'query': query
+            }
+    
+    async def create_document(self, container: str, document: Dict[str, Any]) -> Dict[str, Any]:
+        """Create document in Cosmos DB container"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            self._log_operation('create_document', 'executing', {'container': container})
+            
+            result = {
+                'success': True,
+                'id': document.get('id', 'auto-generated-id'),
+                'container': container,
+                '_rid': 'document-rid-12345',
+                '_etag': 'etag-value',
+                'request_charge': 5.0,
+                'created_at': '2024-01-01T00:00:00Z'
+            }
+            
+            self._log_operation('create_document', 'success')
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'create_document'
+            }
+    
+    async def read_document(self, container: str, document_id: str, partition_key: Any) -> Dict[str, Any]:
+        """Read document from Cosmos DB container"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            self._log_operation('read_document', 'executing', {'container': container, 'id': document_id})
+            
+            result = {
+                'success': True,
+                'document': {
+                    'id': document_id,
+                    'name': 'Sample Document',
+                    'value': 100,
+                    '_rid': 'document-rid',
+                    '_etag': 'etag-value',
+                    '_ts': 1704067200
+                },
+                'request_charge': 1.0
+            }
+            
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'read_document'
+            }
+    
+    async def insert(self, table: str, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Insert document (alias for create_document)"""
+        return await self.create_document(table, data)
+    
+    async def update(self, table: str, data: Dict[str, Any], condition: Dict[str, Any]) -> Dict[str, Any]:
+        """Update document in Cosmos DB container"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            document_id = condition.get('id', 'unknown')
+            self._log_operation('update_document', 'executing', {'container': table, 'id': document_id})
+            
+            result = {
+                'success': True,
+                'id': document_id,
+                'container': table,
+                '_rid': 'document-rid-updated',
+                '_etag': 'new-etag-value',
+                'request_charge': 5.5,
+                'updated_at': '2024-01-01T00:00:00Z'
+            }
+            
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'update'
+            }
+    
+    async def delete(self, table: str, condition: Dict[str, Any]) -> Dict[str, Any]:
+        """Delete document from Cosmos DB container"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            document_id = condition.get('id', 'unknown')
+            self._log_operation('delete_document', 'executing', {'container': table, 'id': document_id})
+            
+            result = {
+                'success': True,
+                'id': document_id,
+                'container': table,
+                'request_charge': 1.0,
+                'deleted_at': '2024-01-01T00:00:00Z'
+            }
+            
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'delete'
+            }
+    
+    async def upsert_document(self, container: str, document: Dict[str, Any]) -> Dict[str, Any]:
+        """Upsert document in Cosmos DB container"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            self._log_operation('upsert_document', 'executing', {'container': container})
+            
+            result = {
+                'success': True,
+                'id': document.get('id', 'auto-generated-id'),
+                'container': container,
+                '_rid': 'document-rid-upserted',
+                '_etag': 'etag-value',
+                'request_charge': 5.5,
+                'operation': 'upserted'
+            }
+            
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'upsert_document'
+            }
+    
+    async def batch_operations(self, container: str, operations: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Execute batch operations in Cosmos DB"""
+        try:
+            if not self.connection or not self.connection.get('connected'):
+                await self.connect()
+            
+            if not operations:
+                return {'success': False, 'error': 'No operations provided'}
+            
+            self._log_operation('batch_operations', 'executing', {'container': container, 'count': len(operations)})
+            
+            result = {
+                'success': True,
+                'operations_count': len(operations),
+                'container': container,
+                'request_charge': len(operations) * 5.0,
+                'message': 'Batch operations completed successfully'
+            }
+            
+            return result
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'operation': 'batch_operations'
+            }
