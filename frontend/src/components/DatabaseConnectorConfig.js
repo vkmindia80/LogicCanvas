@@ -211,7 +211,7 @@ const DatabaseConnectorConfig = ({ isOpen, onClose, onSuccess }) => {
     if (!selectedType) return null;
 
     return (
-      <>
+      <div className="space-y-4">
         {selectedType.fields.includes('host') && (
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
