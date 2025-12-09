@@ -5601,6 +5601,95 @@ def _get_connector_class(db_type: str):
     }
     return connector_map.get(db_type.lower())
 
+@app.get("/api/integrations/databases/types")
+async def get_database_types():
+    """Get list of supported database types"""
+    database_types = [
+        {
+            "id": "postgresql",
+            "name": "PostgreSQL",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 5432,
+            "fields": ["host", "port", "database", "username", "password", "ssl"]
+        },
+        {
+            "id": "mysql",
+            "name": "MySQL / MariaDB",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 3306,
+            "fields": ["host", "port", "database", "username", "password", "ssl"]
+        },
+        {
+            "id": "mssql",
+            "name": "Microsoft SQL Server",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 1433,
+            "fields": ["host", "port", "database", "username", "password", "instance"]
+        },
+        {
+            "id": "oracle",
+            "name": "Oracle Database",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 1521,
+            "fields": ["host", "port", "service_name", "username", "password"]
+        },
+        {
+            "id": "mongodb",
+            "name": "MongoDB",
+            "category": "NoSQL",
+            "icon": "database",
+            "default_port": 27017,
+            "fields": ["host", "port", "database", "username", "password"]
+        },
+        {
+            "id": "redis",
+            "name": "Redis",
+            "category": "NoSQL",
+            "icon": "zap",
+            "default_port": 6379,
+            "fields": ["host", "port", "password", "database"]
+        },
+        {
+            "id": "cassandra",
+            "name": "Apache Cassandra",
+            "category": "NoSQL",
+            "icon": "database",
+            "default_port": 9042,
+            "fields": ["contact_points", "port", "keyspace", "username", "password"]
+        },
+        {
+            "id": "dynamodb",
+            "name": "AWS DynamoDB",
+            "category": "Cloud",
+            "icon": "cloud",
+            "fields": ["region", "access_key", "secret_key"]
+        },
+        {
+            "id": "firestore",
+            "name": "Google Cloud Firestore",
+            "category": "Cloud",
+            "icon": "cloud",
+            "fields": ["project_id", "service_account_json"]
+        },
+        {
+            "id": "cosmosdb",
+            "name": "Azure Cosmos DB",
+            "category": "Cloud",
+            "icon": "cloud",
+            "fields": ["endpoint", "account_key", "database", "api_type"]
+        }
+    ]
+    
+    return {
+        "types": database_types,
+        "count": len(database_types),
+        "categories": ["SQL", "NoSQL", "Cloud"]
+    }
+
 @app.get("/api/integrations/databases")
 async def get_database_connections():
     """Get all database connections"""
