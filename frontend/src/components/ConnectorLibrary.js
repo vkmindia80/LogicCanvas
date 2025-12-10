@@ -312,7 +312,7 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
                       </span>
                       <span className="truncate ml-2" title={item.config.url}>
                         <Globe size={12} className="inline mr-1" />
-                        {new URL(item.config.url.split('${')[0] + (item.config.url.includes('${') ? 'example' : '')).hostname}
+                        {getHostnameFromUrl(item.config.url)}
                       </span>
                     </div>
 
