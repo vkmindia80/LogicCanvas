@@ -2934,6 +2934,53 @@ async def get_execution_timeline(instance_id: str):
 
 # ========== PHASE 3: ENHANCED SUB-WORKFLOW & LOOPING ENDPOINTS ==========
 
+@app.post("/api/workflow-instances/{instance_id}/nodes/{node_id}/progress")
+async def update_node_progress(instance_id: str, node_id: str, data: Dict[str, Any]):
+    """PHASE 5: Update node execution progress for real-time tracking"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    # Update node progress data
+    progress_data = {
+        "progress": data.get("progress", 0),  # 0-100
+        "batchProgress": data.get("batchProgress", {"current": 0, "total": 0}),
+        "executionTime": data.get("executionTime", 0),
+        "retryAttempt": data.get("retryAttempt", 0),
+        "maxRetries": data.get("maxRetries", 3),
+        "startTime": data.get("startTime"),
+        "updated_at": datetime.utcnow().isoformat()
+    }
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {
+            "$set": {
+                f"node_progress.{node_id}": progress_data,
+                "updated_at": datetime.utcnow().isoformat()
+            }
+        }
+    )
+    
+    return {"message": "Progress updated", "node_id": node_id, "progress": progress_data}
+
+
+@app.get("/api/workflow-instances/{instance_id}/nodes/{node_id}/progress")
+async def get_node_progress(instance_id: str, node_id: str):
+    """PHASE 5: Get node execution progress"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    node_progress = instance.get("node_progress", {}).get(node_id, {})
+    
+    return {
+        "instance_id": instance_id,
+        "node_id": node_id,
+        "progress": node_progress
+    }
+
+
 @app.get("/api/workflow-instances/{instance_id}/children")
 async def get_child_instances(instance_id: str):
     """Get all child subprocess instances for a parent workflow instance"""
