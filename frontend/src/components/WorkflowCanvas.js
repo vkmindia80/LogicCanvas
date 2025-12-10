@@ -135,6 +135,12 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
   // Phase 2: Business User Experience Enhancements
   const [showValidationPanel, setShowValidationPanel] = useState(false);
 
+  // Phase 1 Enhancements: New Features State
+  const [showExecutionTimeline, setShowExecutionTimeline] = useState(false);
+  const [swimLanes, setSwimLanes] = useState([]);
+  const [contextMenu, setContextMenu] = useState(null);
+  const [executionPath, setExecutionPath] = useState([]);
+
   const reactFlowWrapper = useRef(null);
   const reactFlowInstance = useRef(null);
   const nodeIdCounter = useRef(1);
