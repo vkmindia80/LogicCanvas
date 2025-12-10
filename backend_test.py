@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 
 class TemplateLibraryTester:
-    def __init__(self, base_url: str = "https://url-bugfix-patch.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://workflow-viz-1.preview.emergentagent.com"):
         self.base_url = base_url.rstrip('/')
         self.tests_run = 0
         self.tests_passed = 0
