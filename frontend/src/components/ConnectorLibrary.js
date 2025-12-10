@@ -102,6 +102,26 @@ const ConnectorLibrary = ({ onClose, onSelect, onOpenMobileSidebar, sidebarColla
     }
   };
 
+  const getHostnameFromUrl = (urlString) => {
+    if (!urlString || typeof urlString !== 'string') {
+      return 'Invalid URL';
+    }
+
+    try {
+      // Handle template variables in URL by replacing them with placeholder
+      const cleanUrl = urlString.split('${')[0] + (urlString.includes('${') ? 'example' : '');
+      
+      // Check if URL has protocol, if not add https://
+      const urlWithProtocol = cleanUrl.match(/^https?:\/\//) ? cleanUrl : `https://${cleanUrl}`;
+      
+      const url = new URL(urlWithProtocol);
+      return url.hostname || 'Unknown host';
+    } catch (error) {
+      // If still invalid, return the original string truncated
+      return urlString.substring(0, 30) + (urlString.length > 30 ? '...' : '');
+    }
+  };
+
   return (
     <>
       <div className={`fixed inset-0 ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-72'} bg-white z-50 flex flex-col`}>
