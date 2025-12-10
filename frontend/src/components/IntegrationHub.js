@@ -882,8 +882,6 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
     }
   };
 
-  const selectedDbType = dbTypes.find(t => t.id === formData.db_type);
-
   const renderDatabaseFields = () => {
     switch (formData.db_type) {
       case 'postgresql':
