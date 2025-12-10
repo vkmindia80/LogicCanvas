@@ -1379,15 +1379,24 @@ const DatabaseModal = ({ database, dbTypes, onClose, onSave }) => {
   };
 
   return (
-    <div className={modalOverlayStyles.base}>
-      <div className={`${modalOverlayStyles.content} max-w-2xl max-h-[90vh] overflow-y-auto`}>
+    <div className={modalOverlayStyles.base} onClick={onClose}>
+      <div 
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={modalHeaderStyles.base}>
-          <h2 className={modalHeaderStyles.title}>
-            {database ? 'Edit Database Connection' : 'Add Database Connection'}
-          </h2>
-          <button onClick={onClose} className="text-white hover:opacity-80">
-            <X className="h-6 w-6" />
-          </button>
+          <div className="flex items-center justify-between">
+            <h2 className={modalHeaderStyles.title}>
+              {database ? 'Edit Database Connection' : 'Add Database Connection'}
+            </h2>
+            <button 
+              onClick={onClose} 
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              aria-label="Close"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
