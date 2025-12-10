@@ -2836,43 +2836,98 @@ async def cancel_execution_endpoint(instance_id: str):
 
 @app.get("/api/workflow-instances/{instance_id}/timeline")
 async def get_execution_timeline(instance_id: str):
-    """Get execution timeline for visual progress tracking"""
+    """PHASE 1 & 5: Enhanced execution timeline with progress tracking and branch paths"""
     instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
     if not instance:
         raise HTTPException(status_code=404, detail="Instance not found")
     
-    # Build timeline from execution_history
+    # Build enhanced timeline from execution_log (normalized format from Phase 5)
     timeline = []
+    execution_log = instance.get("execution_log", [])
     execution_history = instance.get("execution_history", [])
     node_states = instance.get("node_states", {})
     
-    for event in execution_history:
-        timeline.append({
-            "nodeId": event.get("node_id"),
-            "status": event.get("action", "completed"),
-            "timestamp": event.get("timestamp"),
-            "duration": event.get("duration_ms"),
-            "error": event.get("error")
-        })
+    # Use execution_log if available (Phase 5), fallback to execution_history
+    if execution_log:
+        for idx, event in enumerate(execution_log):
+            node_id = event.get("node_id")
+            started_at = event.get("started_at")
+            completed_at = event.get("completed_at")
+            
+            # Calculate duration
+            duration_ms = 0
+            if started_at and completed_at:
+                start_dt = datetime.fromisoformat(started_at)
+                end_dt = datetime.fromisoformat(completed_at)
+                duration_ms = int((end_dt - start_dt).total_seconds() * 1000)
+            
+            # Get retry count from result
+            result = execution_history[idx].get("result", {}) if idx < len(execution_history) else {}
+            retry_count = result.get("retry_count", 0)
+            
+            timeline.append({
+                "nodeId": node_id,
+                "status": event.get("status", "completed"),
+                "timestamp": completed_at or started_at,
+                "duration": duration_ms,
+                "error": event.get("error"),
+                "order": idx + 1,
+                "retryCount": retry_count,
+                "output": result.get("output")
+            })
+    else:
+        # Fallback to execution_history
+        for idx, event in enumerate(execution_history):
+            timeline.append({
+                "nodeId": event.get("node_id"),
+                "status": "completed",
+                "timestamp": event.get("timestamp"),
+                "duration": 0,
+                "error": None,
+                "order": idx + 1,
+                "retryCount": 0
+            })
     
-    # Calculate stats
+    # PHASE 1: Calculate enhanced stats
     completed_count = sum(1 for state in node_states.values() if state == "completed")
     failed_count = sum(1 for state in node_states.values() if state == "failed")
+    retried_count = sum(1 for event in timeline if event.get("retryCount", 0) > 0)
     
     start_time = datetime.fromisoformat(instance["started_at"]) if instance.get("started_at") else None
     current_time = datetime.utcnow()
     duration_ms = int((current_time - start_time).total_seconds() * 1000) if start_time else 0
     
+    # Calculate average node execution time
+    valid_durations = [e["duration"] for e in timeline if e.get("duration", 0) > 0]
+    avg_node_time = int(sum(valid_durations) / len(valid_durations)) if valid_durations else 0
+    
     stats = {
         "total": len(node_states),
         "completed": completed_count,
         "failed": failed_count,
-        "duration": duration_ms
+        "retried": retried_count,
+        "duration": duration_ms,
+        "avgNodeTime": avg_node_time
     }
+    
+    # PHASE 1: Extract branch paths taken (for decision/switch nodes)
+    branch_paths = []
+    for event in execution_history:
+        result = event.get("result", {})
+        route = result.get("route")
+        if route:
+            node_id = event.get("node_id")
+            branch_paths.append({
+                "nodeId": node_id,
+                "name": event.get("node_type", ""),
+                "branch": route,
+                "taken": True
+            })
     
     return {
         "timeline": timeline,
         "stats": stats,
+        "branchPaths": branch_paths,
         "status": instance.get("status")
     }
 
