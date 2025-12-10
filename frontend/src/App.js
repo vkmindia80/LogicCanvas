@@ -30,6 +30,7 @@ import SubworkflowPatternLibrary from './components/SubworkflowPatternLibrary';
 import TransformationPlayground from './components/TransformationPlayground';
 import ComponentLibrary from './components/ComponentLibrary';
 import SubprocessConfig from './components/SubprocessConfig';
+import DatabaseConnectorConfig from './components/DatabaseConnectorConfig';
 
 import { getRecruitingWorkflowTemplate } from './utils/sampleWorkflows';
 
