@@ -5354,1000 +5354,6 @@ async def get_api_connectors(is_template: Optional[bool] = None):
     connectors = list(api_connectors_collection.find(query, {"_id": 0}))
     return {"connectors": connectors, "count": len(connectors)}
 
-@app.get("/api/connectors/{connector_id}")
-async def get_api_connector(connector_id: str):
-    """Get a specific API connector"""
-    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
-    if not connector:
-        raise HTTPException(status_code=404, detail="API connector not found")
-    return connector
-
-@app.post("/api/connectors")
-async def create_api_connector(connector: APIConnectorConfig):
-    """Create a new API connector"""
-    connector_id = str(uuid.uuid4())
-    now = datetime.utcnow().isoformat()
-    
-    connector_dict = connector.dict()
-    connector_dict["id"] = connector_id
-    connector_dict["created_at"] = now
-    connector_dict["updated_at"] = now
-    
-    api_connectors_collection.insert_one(connector_dict)
-    
-    # Audit log
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "api_connector",
-        "entity_id": connector_id,
-        "action": "created",
-        "timestamp": now
-    })
-    
-    return {"message": "API connector created successfully", "id": connector_id}
-
-@app.put("/api/connectors/{connector_id}")
-async def update_api_connector(connector_id: str, connector: APIConnectorConfig):
-    """Update an existing API connector"""
-    existing = api_connectors_collection.find_one({"id": connector_id})
-    if not existing:
-        raise HTTPException(status_code=404, detail="API connector not found")
-    
-    now = datetime.utcnow().isoformat()
-    connector_dict = connector.dict()
-    connector_dict["id"] = connector_id
-    connector_dict["created_at"] = existing.get("created_at")
-    connector_dict["updated_at"] = now
-    
-    api_connectors_collection.replace_one({"id": connector_id}, connector_dict)
-    
-    # Audit log
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "api_connector",
-        "entity_id": connector_id,
-        "action": "updated",
-        "timestamp": now
-    })
-    
-    return {"message": "API connector updated successfully"}
-
-@app.delete("/api/connectors/{connector_id}")
-async def delete_api_connector(connector_id: str):
-    """Delete an API connector"""
-    result = api_connectors_collection.delete_one({"id": connector_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="API connector not found")
-    
-    # Audit log
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "api_connector",
-        "entity_id": connector_id,
-        "action": "deleted",
-        "timestamp": datetime.utcnow().isoformat()
-    })
-    
-    return {"message": "API connector deleted successfully"}
-
-@app.post("/api/connectors/test")
-async def test_api_connector(request: APITestRequest):
-    """Test an API call with the provided configuration"""
-    import httpx
-    
-    try:
-        # Prepare headers
-        headers = request.headers.copy() if request.headers else {}
-        
-        # Add authentication
-        if request.auth_type == "api_key":
-            key_name = request.auth_config.get("key_name", "X-API-Key")
-            key_value = request.auth_config.get("key_value", "")
-            headers[key_name] = key_value
-        elif request.auth_type == "bearer":
-            token = request.auth_config.get("token", "")
-            headers["Authorization"] = f"Bearer {token}"
-        elif request.auth_type == "basic":
-            import base64
-            username = request.auth_config.get("username", "")
-            password = request.auth_config.get("password", "")
-            credentials = base64.b64encode(f"{username}:{password}".encode()).decode()
-            headers["Authorization"] = f"Basic {credentials}"
-        
-        # Make request
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            if request.method.upper() == "GET":
-                response = await client.get(request.url, headers=headers)
-            elif request.method.upper() == "POST":
-                response = await client.post(request.url, headers=headers, json=request.body)
-            elif request.method.upper() == "PUT":
-                response = await client.put(request.url, headers=headers, json=request.body)
-            elif request.method.upper() == "DELETE":
-                response = await client.delete(request.url, headers=headers)
-            else:
-                raise HTTPException(status_code=400, detail=f"Unsupported HTTP method: {request.method}")
-        
-        # Parse response
-        try:
-            response_data = response.json()
-        except:
-            response_data = {"text": response.text}
-        
-        return {
-            "success": response.is_success,
-            "status_code": response.status_code,
-            "headers": dict(response.headers),
-            "data": response_data,
-            "elapsed_ms": response.elapsed.total_seconds() * 1000
-        }
-    
-    except httpx.TimeoutException:
-        return {
-            "success": False,
-            "error": "Request timeout after 30 seconds",
-            "status_code": 0
-        }
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "status_code": 0
-        }
-
-@app.get("/api/connectors/templates/library")
-async def get_connector_templates_library():
-    """Get pre-built API connector templates (legacy format)"""
-    templates = [
-        {
-            "id": "template-rest-api",
-            "name": "Generic REST API",
-            "description": "Standard REST API connector with JSON support",
-            "base_url": "https://api.example.com",
-            "auth_type": "api_key",
-            "auth_config": {"key_name": "X-API-Key", "key_value": ""},
-            "headers": {"Content-Type": "application/json"},
-            "endpoints": [
-                {"method": "GET", "path": "/resource", "description": "Get resource"},
-                {"method": "POST", "path": "/resource", "description": "Create resource"},
-            ],
-            "tags": ["template", "rest"]
-        },
-        {
-            "id": "template-webhook",
-            "name": "Webhook Receiver",
-            "description": "Configure webhook endpoints to receive data",
-            "base_url": "https://your-domain.com/webhooks",
-            "auth_type": "bearer",
-            "auth_config": {"token": ""},
-            "headers": {"Content-Type": "application/json"},
-            "endpoints": [
-                {"method": "POST", "path": "/receive", "description": "Receive webhook data"},
-            ],
-            "tags": ["template", "webhook"]
-        },
-        {
-            "id": "template-oauth",
-            "name": "OAuth 2.0 API",
-            "description": "API using OAuth 2.0 authentication",
-            "base_url": "https://api.oauth-service.com",
-            "auth_type": "oauth",
-            "auth_config": {
-                "client_id": "",
-                "client_secret": "",
-                "token_url": "https://api.oauth-service.com/oauth/token",
-                "scope": ""
-            },
-            "headers": {"Content-Type": "application/json"},
-            "endpoints": [
-                {"method": "GET", "path": "/user/profile", "description": "Get user profile"},
-            ],
-            "tags": ["template", "oauth"]
-        },
-        {
-            "id": "template-graphql",
-            "name": "GraphQL API",
-            "description": "GraphQL API connector",
-            "base_url": "https://api.example.com/graphql",
-            "auth_type": "bearer",
-            "auth_config": {"token": ""},
-            "headers": {"Content-Type": "application/json"},
-            "endpoints": [
-                {"method": "POST", "path": "", "description": "GraphQL query/mutation"},
-            ],
-            "tags": ["template", "graphql"]
-        },
-    ]
-    
-    return {"templates": templates, "count": len(templates)}
-
-
-
-
-# ========== PHASE 3: DATABASE INTEGRATION CONNECTORS ==========
-
-from integrations import (
-    # SQL Databases
-    PostgreSQLConnector,
-    MySQLConnector,
-    MSSQLConnector,
-    OracleConnector,
-    # NoSQL Databases
-    RedisConnector,
-    MongoDBConnector,
-    CassandraConnector,
-    # Cloud Databases
-    DynamoDBConnector,
-    FirestoreConnector,
-    CosmosDBConnector
-)
-
-# Store active database connections in memory
-_active_db_connections: Dict[str, Any] = {}
-
-class DatabaseConnectionConfig(BaseModel):
-    """Database connection configuration model"""
-    name: str
-    db_type: str  # postgresql, mysql, redis, mongodb, dynamodb, firestore
-    host: Optional[str] = None
-    port: Optional[int] = None
-    database: Optional[str] = None
-    username: Optional[str] = None
-    password: Optional[str] = None
-    # Cloud-specific fields
-    region: Optional[str] = None
-    access_key: Optional[str] = None
-    secret_key: Optional[str] = None
-    project_id: Optional[str] = None
-    service_account_json: Optional[Dict[str, Any]] = None
-    # Additional options
-    ssl: Optional[bool] = False
-    options: Optional[Dict[str, Any]] = {}
-    description: Optional[str] = None
-    tags: Optional[List[str]] = []
-
-class DatabaseQueryRequest(BaseModel):
-    """Database query execution request"""
-    query: str
-    params: Optional[Dict[str, Any]] = None
-    table: Optional[str] = None
-
-class DatabaseOperationRequest(BaseModel):
-    """Database CRUD operation request"""
-    table: str
-    data: Dict[str, Any]
-    condition: Optional[Dict[str, Any]] = None
-
-def _get_connector_class(db_type: str):
-    """Get the appropriate connector class for database type"""
-    connector_map = {
-        # SQL Databases
-        'postgresql': PostgreSQLConnector,
-        'mysql': MySQLConnector,
-        'mssql': MSSQLConnector,
-        'sqlserver': MSSQLConnector,  # Alias
-        'oracle': OracleConnector,
-        # NoSQL Databases
-        'redis': RedisConnector,
-        'mongodb': MongoDBConnector,
-        'cassandra': CassandraConnector,
-        # Cloud Databases
-        'dynamodb': DynamoDBConnector,
-        'firestore': FirestoreConnector,
-        'cosmosdb': CosmosDBConnector
-    }
-    return connector_map.get(db_type.lower())
-
-@app.get("/api/integrations/databases/types")
-async def get_database_types():
-    """Get list of supported database types"""
-    database_types = [
-        {
-            "id": "postgresql",
-            "name": "PostgreSQL",
-            "category": "SQL",
-            "icon": "database",
-            "default_port": 5432,
-            "fields": ["host", "port", "database", "username", "password", "ssl"]
-        },
-        {
-            "id": "mysql",
-            "name": "MySQL / MariaDB",
-            "category": "SQL",
-            "icon": "database",
-            "default_port": 3306,
-            "fields": ["host", "port", "database", "username", "password", "ssl"]
-        },
-        {
-            "id": "mssql",
-            "name": "Microsoft SQL Server",
-            "category": "SQL",
-            "icon": "database",
-            "default_port": 1433,
-            "fields": ["host", "port", "database", "username", "password", "instance"]
-        },
-        {
-            "id": "oracle",
-            "name": "Oracle Database",
-            "category": "SQL",
-            "icon": "database",
-            "default_port": 1521,
-            "fields": ["host", "port", "service_name", "username", "password"]
-        },
-        {
-            "id": "mongodb",
-            "name": "MongoDB",
-            "category": "NoSQL",
-            "icon": "database",
-            "default_port": 27017,
-            "fields": ["host", "port", "database", "username", "password"]
-        },
-        {
-            "id": "redis",
-            "name": "Redis",
-            "category": "NoSQL",
-            "icon": "zap",
-            "default_port": 6379,
-            "fields": ["host", "port", "password", "database"]
-        },
-        {
-            "id": "cassandra",
-            "name": "Apache Cassandra",
-            "category": "NoSQL",
-            "icon": "database",
-            "default_port": 9042,
-            "fields": ["contact_points", "port", "keyspace", "username", "password"]
-        },
-        {
-            "id": "dynamodb",
-            "name": "AWS DynamoDB",
-            "category": "Cloud",
-            "icon": "cloud",
-            "fields": ["region", "access_key", "secret_key"]
-        },
-        {
-            "id": "firestore",
-            "name": "Google Cloud Firestore",
-            "category": "Cloud",
-            "icon": "cloud",
-            "fields": ["project_id", "service_account_json"]
-        },
-        {
-            "id": "cosmosdb",
-            "name": "Azure Cosmos DB",
-            "category": "Cloud",
-            "icon": "cloud",
-            "fields": ["endpoint", "account_key", "database", "api_type"]
-        }
-    ]
-    
-    return {
-        "types": database_types,
-        "count": len(database_types),
-        "categories": ["SQL", "NoSQL", "Cloud"]
-    }
-
-@app.get("/api/integrations/databases")
-async def get_database_connections():
-    """Get all database connections"""
-    connections = list(database_connections_collection.find({}, {"_id": 0}))
-    
-    # Remove sensitive data
-    for conn in connections:
-        if 'password' in conn:
-            conn['password'] = '***REDACTED***'
-        if 'secret_key' in conn:
-            conn['secret_key'] = '***REDACTED***'
-        if 'access_key' in conn:
-            conn['access_key'] = '***REDACTED***'
-    
-    return {"connections": connections, "count": len(connections)}
-
-@app.get("/api/integrations/databases/{connection_id}")
-async def get_database_connection(connection_id: str):
-    """Get a specific database connection"""
-    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    # Remove sensitive data
-    if 'password' in connection:
-        connection['password'] = '***REDACTED***'
-    if 'secret_key' in connection:
-        connection['secret_key'] = '***REDACTED***'
-    if 'access_key' in connection:
-        connection['access_key'] = '***REDACTED***'
-    
-    return connection
-
-@app.post("/api/integrations/databases")
-async def create_database_connection(config: DatabaseConnectionConfig):
-    """Create a new database connection"""
-    connection_id = str(uuid.uuid4())
-    now = datetime.utcnow().isoformat()
-    
-    # Get connector class
-    connector_class = _get_connector_class(config.db_type)
-    if not connector_class:
-        raise HTTPException(status_code=400, detail=f"Unsupported database type: {config.db_type}")
-    
-    # Create connector instance to validate config
-    try:
-        connector = connector_class(connection_id, config.dict())
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid configuration: {str(e)}")
-    
-    connection_dict = config.dict()
-    connection_dict["id"] = connection_id
-    connection_dict["created_at"] = now
-    connection_dict["updated_at"] = now
-    connection_dict["status"] = "created"
-    
-    # Encrypt sensitive fields
-    if connection_dict.get('password'):
-        connection_dict['password'] = connector.encrypt_credential(connection_dict['password'])
-    if connection_dict.get('secret_key'):
-        connection_dict['secret_key'] = connector.encrypt_credential(connection_dict['secret_key'])
-    if connection_dict.get('access_key'):
-        connection_dict['access_key'] = connector.encrypt_credential(connection_dict['access_key'])
-    
-    database_connections_collection.insert_one(connection_dict)
-    
-    # Audit log
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "database_connection",
-        "entity_id": connection_id,
-        "action": "created",
-        "details": {"db_type": config.db_type, "name": config.name},
-        "timestamp": now
-    })
-    
-    return {"message": "Database connection created successfully", "id": connection_id}
-
-@app.put("/api/integrations/databases/{connection_id}")
-async def update_database_connection(connection_id: str, config: DatabaseConnectionConfig):
-    """Update an existing database connection"""
-    existing = database_connections_collection.find_one({"id": connection_id})
-    if not existing:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    now = datetime.utcnow().isoformat()
-    connection_dict = config.dict()
-    connection_dict["id"] = connection_id
-    connection_dict["created_at"] = existing.get("created_at")
-    connection_dict["updated_at"] = now
-    
-    # Get connector for encryption
-    connector_class = _get_connector_class(config.db_type)
-    if connector_class:
-        connector = connector_class(connection_id, config.dict())
-        
-        # Encrypt sensitive fields if they were updated
-        if connection_dict.get('password') and connection_dict['password'] != '***REDACTED***':
-            connection_dict['password'] = connector.encrypt_credential(connection_dict['password'])
-        elif connection_dict.get('password') == '***REDACTED***':
-            connection_dict['password'] = existing.get('password')
-            
-        if connection_dict.get('secret_key') and connection_dict['secret_key'] != '***REDACTED***':
-            connection_dict['secret_key'] = connector.encrypt_credential(connection_dict['secret_key'])
-        elif connection_dict.get('secret_key') == '***REDACTED***':
-            connection_dict['secret_key'] = existing.get('secret_key')
-    
-    database_connections_collection.replace_one({"id": connection_id}, connection_dict)
-    
-    # Clear cached connection if exists
-    if connection_id in _active_db_connections:
-        del _active_db_connections[connection_id]
-    
-    # Audit log
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "database_connection",
-        "entity_id": connection_id,
-        "action": "updated",
-        "timestamp": now
-    })
-    
-    return {"message": "Database connection updated successfully"}
-
-@app.delete("/api/integrations/databases/{connection_id}")
-async def delete_database_connection(connection_id: str):
-    """Delete a database connection"""
-    result = database_connections_collection.delete_one({"id": connection_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    # Clear cached connection if exists
-    if connection_id in _active_db_connections:
-        try:
-            await _active_db_connections[connection_id].disconnect()
-        except:
-            pass
-        del _active_db_connections[connection_id]
-    
-    # Audit log
-    audit_logs_collection.insert_one({
-        "id": str(uuid.uuid4()),
-        "entity_type": "database_connection",
-        "entity_id": connection_id,
-        "action": "deleted",
-        "timestamp": datetime.utcnow().isoformat()
-    })
-    
-    return {"message": "Database connection deleted successfully"}
-
-@app.post("/api/integrations/databases/{connection_id}/test")
-async def test_database_connection(connection_id: str):
-    """Test a database connection"""
-    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    connector_class = _get_connector_class(connection.get('db_type'))
-    if not connector_class:
-        raise HTTPException(status_code=400, detail="Unsupported database type")
-    
-    try:
-        connector = connector_class(connection_id, connection)
-        result = await connector.test_connection()
-        
-        # Update connection status in database
-        database_connections_collection.update_one(
-            {"id": connection_id},
-            {"$set": {
-                "status": "connected" if result.get('success') else "failed",
-                "last_tested": datetime.utcnow().isoformat(),
-                "last_test_result": result
-            }}
-        )
-        
-        return result
-    except Exception as e:
-        return {
-            "success": False,
-            "message": f"Connection test failed: {str(e)}",
-            "database_type": connection.get('db_type')
-        }
-
-@app.post("/api/integrations/databases/{connection_id}/query")
-async def execute_database_query(connection_id: str, request: DatabaseQueryRequest):
-    """Execute a query on a database connection"""
-    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    connector_class = _get_connector_class(connection.get('db_type'))
-    if not connector_class:
-        raise HTTPException(status_code=400, detail="Unsupported database type")
-    
-    try:
-        # Get or create connector
-        if connection_id not in _active_db_connections:
-            _active_db_connections[connection_id] = connector_class(connection_id, connection)
-        
-        connector = _active_db_connections[connection_id]
-        result = await connector.execute_query(request.query, request.params)
-        
-        # Audit log
-        audit_logs_collection.insert_one({
-            "id": str(uuid.uuid4()),
-            "entity_type": "database_query",
-            "entity_id": connection_id,
-            "action": "executed",
-            "details": {"query": request.query[:100]},  # First 100 chars only
-            "timestamp": datetime.utcnow().isoformat()
-        })
-        
-        return result
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "query": request.query
-        }
-
-@app.post("/api/integrations/databases/{connection_id}/insert")
-async def database_insert(connection_id: str, request: DatabaseOperationRequest):
-    """Insert data into database"""
-    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    connector_class = _get_connector_class(connection.get('db_type'))
-    if not connector_class:
-        raise HTTPException(status_code=400, detail="Unsupported database type")
-    
-    try:
-        if connection_id not in _active_db_connections:
-            _active_db_connections[connection_id] = connector_class(connection_id, connection)
-        
-        connector = _active_db_connections[connection_id]
-        result = await connector.insert(request.table, request.data)
-        
-        return result
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "operation": "insert"
-        }
-
-@app.post("/api/integrations/databases/{connection_id}/update")
-async def database_update(connection_id: str, request: DatabaseOperationRequest):
-    """Update data in database"""
-    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    connector_class = _get_connector_class(connection.get('db_type'))
-    if not connector_class:
-        raise HTTPException(status_code=400, detail="Unsupported database type")
-    
-    try:
-        if connection_id not in _active_db_connections:
-            _active_db_connections[connection_id] = connector_class(connection_id, connection)
-        
-        connector = _active_db_connections[connection_id]
-        result = await connector.update(request.table, request.data, request.condition or {})
-        
-        return result
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "operation": "update"
-        }
-
-@app.post("/api/integrations/databases/{connection_id}/delete")
-async def database_delete(connection_id: str, request: DatabaseOperationRequest):
-    """Delete data from database"""
-    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Database connection not found")
-    
-    connector_class = _get_connector_class(connection.get('db_type'))
-    if not connector_class:
-        raise HTTPException(status_code=400, detail="Unsupported database type")
-    
-    try:
-        if connection_id not in _active_db_connections:
-            _active_db_connections[connection_id] = connector_class(connection_id, connection)
-        
-        connector = _active_db_connections[connection_id]
-        result = await connector.delete(request.table, request.condition or {})
-        
-        return result
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "operation": "delete"
-        }
-
-@app.get("/api/integrations/databases/types")
-async def get_supported_database_types():
-    """Get list of supported database types"""
-    return {
-        "types": [
-            {
-                "id": "postgresql",
-                "name": "PostgreSQL",
-                "icon": "Database",
-                "category": "SQL",
-                "description": "Open-source relational database",
-                "fields": ["host", "port", "database", "username", "password", "ssl"]
-            },
-            {
-                "id": "mysql",
-                "name": "MySQL / MariaDB",
-                "icon": "Database",
-                "category": "SQL",
-                "description": "Popular open-source relational database",
-                "fields": ["host", "port", "database", "username", "password", "ssl"]
-            },
-            {
-                "id": "redis",
-                "name": "Redis",
-                "icon": "Zap",
-                "category": "NoSQL",
-                "description": "In-memory data structure store",
-                "fields": ["host", "port", "password", "database"]
-            },
-            {
-                "id": "mongodb",
-                "name": "MongoDB",
-                "icon": "Database",
-                "category": "NoSQL",
-                "description": "Document-oriented NoSQL database",
-                "fields": ["host", "port", "database", "username", "password"]
-            },
-            {
-                "id": "dynamodb",
-                "name": "AWS DynamoDB",
-                "icon": "Cloud",
-                "category": "Cloud",
-                "description": "Amazon's NoSQL database service",
-                "fields": ["region", "access_key", "secret_key"]
-            }
-        ]
-    }
-
-
-# ========== PHASE 8 SPRINT 4: ADVANCED DEBUGGING FEATURES ==========
-
-class BreakpointConfig(BaseModel):
-    """Breakpoint configuration"""
-    node_id: str
-    enabled: bool = True
-    condition: Optional[str] = None  # Optional condition expression
-
-class DebugStepRequest(BaseModel):
-    """Debug step execution request"""
-    mode: str = "step_over"  # step_over, step_into, continue
-
-@app.get("/api/instances/{instance_id}/debug/breakpoints")
-async def get_breakpoints(instance_id: str):
-    """Get all breakpoints for a workflow instance"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    breakpoints = instance.get("debug_breakpoints", [])
-    return {"instance_id": instance_id, "breakpoints": breakpoints, "count": len(breakpoints)}
-
-@app.post("/api/instances/{instance_id}/debug/breakpoint")
-async def add_breakpoint(instance_id: str, config: BreakpointConfig):
-    """Add a breakpoint to a workflow instance"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    breakpoints = instance.get("debug_breakpoints", [])
-    
-    # Check if breakpoint already exists
-    existing = next((bp for bp in breakpoints if bp.get("node_id") == config.node_id), None)
-    if existing:
-        # Update existing breakpoint
-        existing["enabled"] = config.enabled
-        existing["condition"] = config.condition
-    else:
-        # Add new breakpoint
-        breakpoints.append({
-            "node_id": config.node_id,
-            "enabled": config.enabled,
-            "condition": config.condition,
-            "added_at": datetime.utcnow().isoformat()
-        })
-    
-    workflow_instances_collection.update_one(
-        {"id": instance_id},
-        {"$set": {"debug_breakpoints": breakpoints}}
-    )
-    
-    return {"message": "Breakpoint added/updated successfully", "breakpoints": breakpoints}
-
-@app.delete("/api/instances/{instance_id}/debug/breakpoint/{node_id}")
-async def remove_breakpoint(instance_id: str, node_id: str):
-    """Remove a breakpoint from a workflow instance"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    breakpoints = instance.get("debug_breakpoints", [])
-    breakpoints = [bp for bp in breakpoints if bp.get("node_id") != node_id]
-    
-    workflow_instances_collection.update_one(
-        {"id": instance_id},
-        {"$set": {"debug_breakpoints": breakpoints}}
-    )
-    
-    return {"message": "Breakpoint removed successfully"}
-
-@app.post("/api/instances/{instance_id}/debug/step")
-async def debug_step_execution(instance_id: str, request: DebugStepRequest):
-    """Execute workflow in step-by-step debug mode"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    current_node = instance.get("current_node_id")
-    debug_mode = instance.get("debug_mode", False)
-    
-    if not debug_mode:
-        # Enable debug mode
-        workflow_instances_collection.update_one(
-            {"id": instance_id},
-            {"$set": {"debug_mode": True, "debug_step_mode": request.mode}}
-        )
-    
-    # Execute single step
-    try:
-        # Get workflow
-        workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0})
-        if not workflow:
-            raise HTTPException(status_code=404, detail="Workflow not found")
-        
-        # Execute one node
-        result = execution_engine.execute_single_node(instance_id, current_node, workflow)
-        
-        return {
-            "message": "Step executed successfully",
-            "current_node": current_node,
-            "next_node": result.get("next_node"),
-            "status": result.get("status"),
-            "variables": result.get("variables", {})
-        }
-    except Exception as e:
-        return {
-            "message": "Step execution failed",
-            "error": str(e)
-        }
-
-@app.get("/api/instances/{instance_id}/debug/logs")
-async def get_debug_logs(instance_id: str, limit: int = 100):
-    """Get detailed execution logs for debugging"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    # Get execution logs from audit logs
-    logs = list(
-        audit_logs_collection.find(
-            {"entity_id": instance_id, "entity_type": "workflow_instance"},
-            {"_id": 0}
-        )
-        .sort("timestamp", -1)
-        .limit(limit)
-    )
-    
-    # Get node execution details
-    execution_history = instance.get("execution_history", [])
-    
-    return {
-        "instance_id": instance_id,
-        "logs": logs,
-        "execution_history": execution_history,
-        "log_count": len(logs)
-    }
-
-@app.get("/api/instances/{instance_id}/debug/performance")
-async def get_performance_profile(instance_id: str):
-    """Get performance profiling data for workflow execution"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    execution_history = instance.get("execution_history", [])
-    
-    # Calculate node performance metrics
-    node_performance = {}
-    total_execution_time = 0
-    
-    for entry in execution_history:
-        node_id = entry.get("node_id")
-        started_at = entry.get("started_at")
-        completed_at = entry.get("completed_at")
-        
-        if started_at and completed_at:
-            try:
-                start = datetime.fromisoformat(started_at)
-                end = datetime.fromisoformat(completed_at)
-                duration = (end - start).total_seconds()
-                total_execution_time += duration
-                
-                if node_id not in node_performance:
-                    node_performance[node_id] = {
-                        "node_id": node_id,
-                        "executions": 0,
-                        "total_time": 0,
-                        "avg_time": 0,
-                        "min_time": float('inf'),
-                        "max_time": 0,
-                        "errors": 0
-                    }
-                
-                perf = node_performance[node_id]
-                perf["executions"] += 1
-                perf["total_time"] += duration
-                perf["min_time"] = min(perf["min_time"], duration)
-                perf["max_time"] = max(perf["max_time"], duration)
-                
-                if entry.get("status") == "failed":
-                    perf["errors"] += 1
-            except:
-                continue
-    
-    # Calculate averages and percentages
-    for node_id, perf in node_performance.items():
-        if perf["executions"] > 0:
-            perf["avg_time"] = round(perf["total_time"] / perf["executions"], 3)
-        if total_execution_time > 0:
-            perf["percentage"] = round((perf["total_time"] / total_execution_time) * 100, 2)
-        else:
-            perf["percentage"] = 0
-    
-    # Sort by total time descending (bottlenecks first)
-    performance_list = sorted(
-        node_performance.values(),
-        key=lambda x: x["total_time"],
-        reverse=True
-    )
-    
-    return {
-        "instance_id": instance_id,
-        "total_execution_time": round(total_execution_time, 3),
-        "node_performance": performance_list,
-        "bottlenecks": performance_list[:5],  # Top 5 slowest nodes
-        "total_nodes_executed": len(node_performance)
-    }
-
-@app.get("/api/instances/{instance_id}/debug/timeline")
-async def get_execution_timeline(instance_id: str):
-    """Get detailed execution timeline with node-by-node progression"""
-    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
-    if not instance:
-        raise HTTPException(status_code=404, detail="Workflow instance not found")
-    
-    execution_history = instance.get("execution_history", [])
-    workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0})
-    
-    # Build timeline with node details
-    timeline = []
-    for entry in execution_history:
-        node_id = entry.get("node_id")
-        
-        # Find node details
-        node = None
-        if workflow:
-            nodes = workflow.get("nodes", [])
-            node = next((n for n in nodes if n.get("id") == node_id), None)
-        
-        timeline_entry = {
-            "node_id": node_id,
-            "node_type": node.get("type") if node else "unknown",
-            "node_label": node.get("data", {}).get("label") if node else node_id,
-            "started_at": entry.get("started_at"),
-            "completed_at": entry.get("completed_at"),
-            "status": entry.get("status"),
-            "output": entry.get("output"),
-            "error": entry.get("error")
-        }
-        
-        # Calculate duration
-        if entry.get("started_at") and entry.get("completed_at"):
-            try:
-                start = datetime.fromisoformat(entry["started_at"])
-                end = datetime.fromisoformat(entry["completed_at"])
-                timeline_entry["duration_seconds"] = round((end - start).total_seconds(), 3)
-            except:
-                timeline_entry["duration_seconds"] = 0
-        
-        timeline.append(timeline_entry)
-    
-    return {
-        "instance_id": instance_id,
-        "timeline": timeline,
-        "total_steps": len(timeline),
-        "status": instance.get("status")
-    }
-
-
-# ============================================================================
-# SPRINT 4: API CONNECTOR BUILDER ENDPOINTS
-# ============================================================================
-
-@app.get("/api/connectors")
-async def get_connectors(category: Optional[str] = None, is_template: Optional[bool] = None):
-    """Get all API connectors with optional filtering"""
-    query = {}
-    if category:
-        query["category"] = category
-    if is_template is not None:
-        query["is_template"] = is_template
-    
-    connectors = list(api_connectors_collection.find(query, {"_id": 0}))
-    return {"connectors": connectors, "count": len(connectors)}
-
 
 @app.get("/api/connectors/templates")
 async def get_connector_templates():
@@ -8081,6 +7087,1002 @@ async def get_connector_templates():
         }
     ]
     return {"templates": templates, "count": len(templates)}
+
+@app.get("/api/connectors/{connector_id}")
+async def get_api_connector(connector_id: str):
+    """Get a specific API connector"""
+    connector = api_connectors_collection.find_one({"id": connector_id}, {"_id": 0})
+    if not connector:
+        raise HTTPException(status_code=404, detail="API connector not found")
+    return connector
+
+@app.post("/api/connectors")
+async def create_api_connector(connector: APIConnectorConfig):
+    """Create a new API connector"""
+    connector_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    connector_dict = connector.dict()
+    connector_dict["id"] = connector_id
+    connector_dict["created_at"] = now
+    connector_dict["updated_at"] = now
+    
+    api_connectors_collection.insert_one(connector_dict)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "api_connector",
+        "entity_id": connector_id,
+        "action": "created",
+        "timestamp": now
+    })
+    
+    return {"message": "API connector created successfully", "id": connector_id}
+
+@app.put("/api/connectors/{connector_id}")
+async def update_api_connector(connector_id: str, connector: APIConnectorConfig):
+    """Update an existing API connector"""
+    existing = api_connectors_collection.find_one({"id": connector_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="API connector not found")
+    
+    now = datetime.utcnow().isoformat()
+    connector_dict = connector.dict()
+    connector_dict["id"] = connector_id
+    connector_dict["created_at"] = existing.get("created_at")
+    connector_dict["updated_at"] = now
+    
+    api_connectors_collection.replace_one({"id": connector_id}, connector_dict)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "api_connector",
+        "entity_id": connector_id,
+        "action": "updated",
+        "timestamp": now
+    })
+    
+    return {"message": "API connector updated successfully"}
+
+@app.delete("/api/connectors/{connector_id}")
+async def delete_api_connector(connector_id: str):
+    """Delete an API connector"""
+    result = api_connectors_collection.delete_one({"id": connector_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="API connector not found")
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "api_connector",
+        "entity_id": connector_id,
+        "action": "deleted",
+        "timestamp": datetime.utcnow().isoformat()
+    })
+    
+    return {"message": "API connector deleted successfully"}
+
+@app.post("/api/connectors/test")
+async def test_api_connector(request: APITestRequest):
+    """Test an API call with the provided configuration"""
+    import httpx
+    
+    try:
+        # Prepare headers
+        headers = request.headers.copy() if request.headers else {}
+        
+        # Add authentication
+        if request.auth_type == "api_key":
+            key_name = request.auth_config.get("key_name", "X-API-Key")
+            key_value = request.auth_config.get("key_value", "")
+            headers[key_name] = key_value
+        elif request.auth_type == "bearer":
+            token = request.auth_config.get("token", "")
+            headers["Authorization"] = f"Bearer {token}"
+        elif request.auth_type == "basic":
+            import base64
+            username = request.auth_config.get("username", "")
+            password = request.auth_config.get("password", "")
+            credentials = base64.b64encode(f"{username}:{password}".encode()).decode()
+            headers["Authorization"] = f"Basic {credentials}"
+        
+        # Make request
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            if request.method.upper() == "GET":
+                response = await client.get(request.url, headers=headers)
+            elif request.method.upper() == "POST":
+                response = await client.post(request.url, headers=headers, json=request.body)
+            elif request.method.upper() == "PUT":
+                response = await client.put(request.url, headers=headers, json=request.body)
+            elif request.method.upper() == "DELETE":
+                response = await client.delete(request.url, headers=headers)
+            else:
+                raise HTTPException(status_code=400, detail=f"Unsupported HTTP method: {request.method}")
+        
+        # Parse response
+        try:
+            response_data = response.json()
+        except:
+            response_data = {"text": response.text}
+        
+        return {
+            "success": response.is_success,
+            "status_code": response.status_code,
+            "headers": dict(response.headers),
+            "data": response_data,
+            "elapsed_ms": response.elapsed.total_seconds() * 1000
+        }
+    
+    except httpx.TimeoutException:
+        return {
+            "success": False,
+            "error": "Request timeout after 30 seconds",
+            "status_code": 0
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "status_code": 0
+        }
+
+@app.get("/api/connectors/templates/library")
+async def get_connector_templates_library():
+    """Get pre-built API connector templates (legacy format)"""
+    templates = [
+        {
+            "id": "template-rest-api",
+            "name": "Generic REST API",
+            "description": "Standard REST API connector with JSON support",
+            "base_url": "https://api.example.com",
+            "auth_type": "api_key",
+            "auth_config": {"key_name": "X-API-Key", "key_value": ""},
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "GET", "path": "/resource", "description": "Get resource"},
+                {"method": "POST", "path": "/resource", "description": "Create resource"},
+            ],
+            "tags": ["template", "rest"]
+        },
+        {
+            "id": "template-webhook",
+            "name": "Webhook Receiver",
+            "description": "Configure webhook endpoints to receive data",
+            "base_url": "https://your-domain.com/webhooks",
+            "auth_type": "bearer",
+            "auth_config": {"token": ""},
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "POST", "path": "/receive", "description": "Receive webhook data"},
+            ],
+            "tags": ["template", "webhook"]
+        },
+        {
+            "id": "template-oauth",
+            "name": "OAuth 2.0 API",
+            "description": "API using OAuth 2.0 authentication",
+            "base_url": "https://api.oauth-service.com",
+            "auth_type": "oauth",
+            "auth_config": {
+                "client_id": "",
+                "client_secret": "",
+                "token_url": "https://api.oauth-service.com/oauth/token",
+                "scope": ""
+            },
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "GET", "path": "/user/profile", "description": "Get user profile"},
+            ],
+            "tags": ["template", "oauth"]
+        },
+        {
+            "id": "template-graphql",
+            "name": "GraphQL API",
+            "description": "GraphQL API connector",
+            "base_url": "https://api.example.com/graphql",
+            "auth_type": "bearer",
+            "auth_config": {"token": ""},
+            "headers": {"Content-Type": "application/json"},
+            "endpoints": [
+                {"method": "POST", "path": "", "description": "GraphQL query/mutation"},
+            ],
+            "tags": ["template", "graphql"]
+        },
+    ]
+    
+    return {"templates": templates, "count": len(templates)}
+
+
+
+
+# ========== PHASE 3: DATABASE INTEGRATION CONNECTORS ==========
+
+from integrations import (
+    # SQL Databases
+    PostgreSQLConnector,
+    MySQLConnector,
+    MSSQLConnector,
+    OracleConnector,
+    # NoSQL Databases
+    RedisConnector,
+    MongoDBConnector,
+    CassandraConnector,
+    # Cloud Databases
+    DynamoDBConnector,
+    FirestoreConnector,
+    CosmosDBConnector
+)
+
+# Store active database connections in memory
+_active_db_connections: Dict[str, Any] = {}
+
+class DatabaseConnectionConfig(BaseModel):
+    """Database connection configuration model"""
+    name: str
+    db_type: str  # postgresql, mysql, redis, mongodb, dynamodb, firestore
+    host: Optional[str] = None
+    port: Optional[int] = None
+    database: Optional[str] = None
+    username: Optional[str] = None
+    password: Optional[str] = None
+    # Cloud-specific fields
+    region: Optional[str] = None
+    access_key: Optional[str] = None
+    secret_key: Optional[str] = None
+    project_id: Optional[str] = None
+    service_account_json: Optional[Dict[str, Any]] = None
+    # Additional options
+    ssl: Optional[bool] = False
+    options: Optional[Dict[str, Any]] = {}
+    description: Optional[str] = None
+    tags: Optional[List[str]] = []
+
+class DatabaseQueryRequest(BaseModel):
+    """Database query execution request"""
+    query: str
+    params: Optional[Dict[str, Any]] = None
+    table: Optional[str] = None
+
+class DatabaseOperationRequest(BaseModel):
+    """Database CRUD operation request"""
+    table: str
+    data: Dict[str, Any]
+    condition: Optional[Dict[str, Any]] = None
+
+def _get_connector_class(db_type: str):
+    """Get the appropriate connector class for database type"""
+    connector_map = {
+        # SQL Databases
+        'postgresql': PostgreSQLConnector,
+        'mysql': MySQLConnector,
+        'mssql': MSSQLConnector,
+        'sqlserver': MSSQLConnector,  # Alias
+        'oracle': OracleConnector,
+        # NoSQL Databases
+        'redis': RedisConnector,
+        'mongodb': MongoDBConnector,
+        'cassandra': CassandraConnector,
+        # Cloud Databases
+        'dynamodb': DynamoDBConnector,
+        'firestore': FirestoreConnector,
+        'cosmosdb': CosmosDBConnector
+    }
+    return connector_map.get(db_type.lower())
+
+@app.get("/api/integrations/databases/types")
+async def get_database_types():
+    """Get list of supported database types"""
+    database_types = [
+        {
+            "id": "postgresql",
+            "name": "PostgreSQL",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 5432,
+            "fields": ["host", "port", "database", "username", "password", "ssl"]
+        },
+        {
+            "id": "mysql",
+            "name": "MySQL / MariaDB",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 3306,
+            "fields": ["host", "port", "database", "username", "password", "ssl"]
+        },
+        {
+            "id": "mssql",
+            "name": "Microsoft SQL Server",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 1433,
+            "fields": ["host", "port", "database", "username", "password", "instance"]
+        },
+        {
+            "id": "oracle",
+            "name": "Oracle Database",
+            "category": "SQL",
+            "icon": "database",
+            "default_port": 1521,
+            "fields": ["host", "port", "service_name", "username", "password"]
+        },
+        {
+            "id": "mongodb",
+            "name": "MongoDB",
+            "category": "NoSQL",
+            "icon": "database",
+            "default_port": 27017,
+            "fields": ["host", "port", "database", "username", "password"]
+        },
+        {
+            "id": "redis",
+            "name": "Redis",
+            "category": "NoSQL",
+            "icon": "zap",
+            "default_port": 6379,
+            "fields": ["host", "port", "password", "database"]
+        },
+        {
+            "id": "cassandra",
+            "name": "Apache Cassandra",
+            "category": "NoSQL",
+            "icon": "database",
+            "default_port": 9042,
+            "fields": ["contact_points", "port", "keyspace", "username", "password"]
+        },
+        {
+            "id": "dynamodb",
+            "name": "AWS DynamoDB",
+            "category": "Cloud",
+            "icon": "cloud",
+            "fields": ["region", "access_key", "secret_key"]
+        },
+        {
+            "id": "firestore",
+            "name": "Google Cloud Firestore",
+            "category": "Cloud",
+            "icon": "cloud",
+            "fields": ["project_id", "service_account_json"]
+        },
+        {
+            "id": "cosmosdb",
+            "name": "Azure Cosmos DB",
+            "category": "Cloud",
+            "icon": "cloud",
+            "fields": ["endpoint", "account_key", "database", "api_type"]
+        }
+    ]
+    
+    return {
+        "types": database_types,
+        "count": len(database_types),
+        "categories": ["SQL", "NoSQL", "Cloud"]
+    }
+
+@app.get("/api/integrations/databases")
+async def get_database_connections():
+    """Get all database connections"""
+    connections = list(database_connections_collection.find({}, {"_id": 0}))
+    
+    # Remove sensitive data
+    for conn in connections:
+        if 'password' in conn:
+            conn['password'] = '***REDACTED***'
+        if 'secret_key' in conn:
+            conn['secret_key'] = '***REDACTED***'
+        if 'access_key' in conn:
+            conn['access_key'] = '***REDACTED***'
+    
+    return {"connections": connections, "count": len(connections)}
+
+@app.get("/api/integrations/databases/{connection_id}")
+async def get_database_connection(connection_id: str):
+    """Get a specific database connection"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    # Remove sensitive data
+    if 'password' in connection:
+        connection['password'] = '***REDACTED***'
+    if 'secret_key' in connection:
+        connection['secret_key'] = '***REDACTED***'
+    if 'access_key' in connection:
+        connection['access_key'] = '***REDACTED***'
+    
+    return connection
+
+@app.post("/api/integrations/databases")
+async def create_database_connection(config: DatabaseConnectionConfig):
+    """Create a new database connection"""
+    connection_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat()
+    
+    # Get connector class
+    connector_class = _get_connector_class(config.db_type)
+    if not connector_class:
+        raise HTTPException(status_code=400, detail=f"Unsupported database type: {config.db_type}")
+    
+    # Create connector instance to validate config
+    try:
+        connector = connector_class(connection_id, config.dict())
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid configuration: {str(e)}")
+    
+    connection_dict = config.dict()
+    connection_dict["id"] = connection_id
+    connection_dict["created_at"] = now
+    connection_dict["updated_at"] = now
+    connection_dict["status"] = "created"
+    
+    # Encrypt sensitive fields
+    if connection_dict.get('password'):
+        connection_dict['password'] = connector.encrypt_credential(connection_dict['password'])
+    if connection_dict.get('secret_key'):
+        connection_dict['secret_key'] = connector.encrypt_credential(connection_dict['secret_key'])
+    if connection_dict.get('access_key'):
+        connection_dict['access_key'] = connector.encrypt_credential(connection_dict['access_key'])
+    
+    database_connections_collection.insert_one(connection_dict)
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "database_connection",
+        "entity_id": connection_id,
+        "action": "created",
+        "details": {"db_type": config.db_type, "name": config.name},
+        "timestamp": now
+    })
+    
+    return {"message": "Database connection created successfully", "id": connection_id}
+
+@app.put("/api/integrations/databases/{connection_id}")
+async def update_database_connection(connection_id: str, config: DatabaseConnectionConfig):
+    """Update an existing database connection"""
+    existing = database_connections_collection.find_one({"id": connection_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    now = datetime.utcnow().isoformat()
+    connection_dict = config.dict()
+    connection_dict["id"] = connection_id
+    connection_dict["created_at"] = existing.get("created_at")
+    connection_dict["updated_at"] = now
+    
+    # Get connector for encryption
+    connector_class = _get_connector_class(config.db_type)
+    if connector_class:
+        connector = connector_class(connection_id, config.dict())
+        
+        # Encrypt sensitive fields if they were updated
+        if connection_dict.get('password') and connection_dict['password'] != '***REDACTED***':
+            connection_dict['password'] = connector.encrypt_credential(connection_dict['password'])
+        elif connection_dict.get('password') == '***REDACTED***':
+            connection_dict['password'] = existing.get('password')
+            
+        if connection_dict.get('secret_key') and connection_dict['secret_key'] != '***REDACTED***':
+            connection_dict['secret_key'] = connector.encrypt_credential(connection_dict['secret_key'])
+        elif connection_dict.get('secret_key') == '***REDACTED***':
+            connection_dict['secret_key'] = existing.get('secret_key')
+    
+    database_connections_collection.replace_one({"id": connection_id}, connection_dict)
+    
+    # Clear cached connection if exists
+    if connection_id in _active_db_connections:
+        del _active_db_connections[connection_id]
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "database_connection",
+        "entity_id": connection_id,
+        "action": "updated",
+        "timestamp": now
+    })
+    
+    return {"message": "Database connection updated successfully"}
+
+@app.delete("/api/integrations/databases/{connection_id}")
+async def delete_database_connection(connection_id: str):
+    """Delete a database connection"""
+    result = database_connections_collection.delete_one({"id": connection_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    # Clear cached connection if exists
+    if connection_id in _active_db_connections:
+        try:
+            await _active_db_connections[connection_id].disconnect()
+        except:
+            pass
+        del _active_db_connections[connection_id]
+    
+    # Audit log
+    audit_logs_collection.insert_one({
+        "id": str(uuid.uuid4()),
+        "entity_type": "database_connection",
+        "entity_id": connection_id,
+        "action": "deleted",
+        "timestamp": datetime.utcnow().isoformat()
+    })
+    
+    return {"message": "Database connection deleted successfully"}
+
+@app.post("/api/integrations/databases/{connection_id}/test")
+async def test_database_connection(connection_id: str):
+    """Test a database connection"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        connector = connector_class(connection_id, connection)
+        result = await connector.test_connection()
+        
+        # Update connection status in database
+        database_connections_collection.update_one(
+            {"id": connection_id},
+            {"$set": {
+                "status": "connected" if result.get('success') else "failed",
+                "last_tested": datetime.utcnow().isoformat(),
+                "last_test_result": result
+            }}
+        )
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Connection test failed: {str(e)}",
+            "database_type": connection.get('db_type')
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/query")
+async def execute_database_query(connection_id: str, request: DatabaseQueryRequest):
+    """Execute a query on a database connection"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        # Get or create connector
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.execute_query(request.query, request.params)
+        
+        # Audit log
+        audit_logs_collection.insert_one({
+            "id": str(uuid.uuid4()),
+            "entity_type": "database_query",
+            "entity_id": connection_id,
+            "action": "executed",
+            "details": {"query": request.query[:100]},  # First 100 chars only
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "query": request.query
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/insert")
+async def database_insert(connection_id: str, request: DatabaseOperationRequest):
+    """Insert data into database"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.insert(request.table, request.data)
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "operation": "insert"
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/update")
+async def database_update(connection_id: str, request: DatabaseOperationRequest):
+    """Update data in database"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.update(request.table, request.data, request.condition or {})
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "operation": "update"
+        }
+
+@app.post("/api/integrations/databases/{connection_id}/delete")
+async def database_delete(connection_id: str, request: DatabaseOperationRequest):
+    """Delete data from database"""
+    connection = database_connections_collection.find_one({"id": connection_id}, {"_id": 0})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Database connection not found")
+    
+    connector_class = _get_connector_class(connection.get('db_type'))
+    if not connector_class:
+        raise HTTPException(status_code=400, detail="Unsupported database type")
+    
+    try:
+        if connection_id not in _active_db_connections:
+            _active_db_connections[connection_id] = connector_class(connection_id, connection)
+        
+        connector = _active_db_connections[connection_id]
+        result = await connector.delete(request.table, request.condition or {})
+        
+        return result
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "operation": "delete"
+        }
+
+@app.get("/api/integrations/databases/types")
+async def get_supported_database_types():
+    """Get list of supported database types"""
+    return {
+        "types": [
+            {
+                "id": "postgresql",
+                "name": "PostgreSQL",
+                "icon": "Database",
+                "category": "SQL",
+                "description": "Open-source relational database",
+                "fields": ["host", "port", "database", "username", "password", "ssl"]
+            },
+            {
+                "id": "mysql",
+                "name": "MySQL / MariaDB",
+                "icon": "Database",
+                "category": "SQL",
+                "description": "Popular open-source relational database",
+                "fields": ["host", "port", "database", "username", "password", "ssl"]
+            },
+            {
+                "id": "redis",
+                "name": "Redis",
+                "icon": "Zap",
+                "category": "NoSQL",
+                "description": "In-memory data structure store",
+                "fields": ["host", "port", "password", "database"]
+            },
+            {
+                "id": "mongodb",
+                "name": "MongoDB",
+                "icon": "Database",
+                "category": "NoSQL",
+                "description": "Document-oriented NoSQL database",
+                "fields": ["host", "port", "database", "username", "password"]
+            },
+            {
+                "id": "dynamodb",
+                "name": "AWS DynamoDB",
+                "icon": "Cloud",
+                "category": "Cloud",
+                "description": "Amazon's NoSQL database service",
+                "fields": ["region", "access_key", "secret_key"]
+            }
+        ]
+    }
+
+
+# ========== PHASE 8 SPRINT 4: ADVANCED DEBUGGING FEATURES ==========
+
+class BreakpointConfig(BaseModel):
+    """Breakpoint configuration"""
+    node_id: str
+    enabled: bool = True
+    condition: Optional[str] = None  # Optional condition expression
+
+class DebugStepRequest(BaseModel):
+    """Debug step execution request"""
+    mode: str = "step_over"  # step_over, step_into, continue
+
+@app.get("/api/instances/{instance_id}/debug/breakpoints")
+async def get_breakpoints(instance_id: str):
+    """Get all breakpoints for a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("debug_breakpoints", [])
+    return {"instance_id": instance_id, "breakpoints": breakpoints, "count": len(breakpoints)}
+
+@app.post("/api/instances/{instance_id}/debug/breakpoint")
+async def add_breakpoint(instance_id: str, config: BreakpointConfig):
+    """Add a breakpoint to a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("debug_breakpoints", [])
+    
+    # Check if breakpoint already exists
+    existing = next((bp for bp in breakpoints if bp.get("node_id") == config.node_id), None)
+    if existing:
+        # Update existing breakpoint
+        existing["enabled"] = config.enabled
+        existing["condition"] = config.condition
+    else:
+        # Add new breakpoint
+        breakpoints.append({
+            "node_id": config.node_id,
+            "enabled": config.enabled,
+            "condition": config.condition,
+            "added_at": datetime.utcnow().isoformat()
+        })
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint added/updated successfully", "breakpoints": breakpoints}
+
+@app.delete("/api/instances/{instance_id}/debug/breakpoint/{node_id}")
+async def remove_breakpoint(instance_id: str, node_id: str):
+    """Remove a breakpoint from a workflow instance"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    breakpoints = instance.get("debug_breakpoints", [])
+    breakpoints = [bp for bp in breakpoints if bp.get("node_id") != node_id]
+    
+    workflow_instances_collection.update_one(
+        {"id": instance_id},
+        {"$set": {"debug_breakpoints": breakpoints}}
+    )
+    
+    return {"message": "Breakpoint removed successfully"}
+
+@app.post("/api/instances/{instance_id}/debug/step")
+async def debug_step_execution(instance_id: str, request: DebugStepRequest):
+    """Execute workflow in step-by-step debug mode"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    current_node = instance.get("current_node_id")
+    debug_mode = instance.get("debug_mode", False)
+    
+    if not debug_mode:
+        # Enable debug mode
+        workflow_instances_collection.update_one(
+            {"id": instance_id},
+            {"$set": {"debug_mode": True, "debug_step_mode": request.mode}}
+        )
+    
+    # Execute single step
+    try:
+        # Get workflow
+        workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0})
+        if not workflow:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+        
+        # Execute one node
+        result = execution_engine.execute_single_node(instance_id, current_node, workflow)
+        
+        return {
+            "message": "Step executed successfully",
+            "current_node": current_node,
+            "next_node": result.get("next_node"),
+            "status": result.get("status"),
+            "variables": result.get("variables", {})
+        }
+    except Exception as e:
+        return {
+            "message": "Step execution failed",
+            "error": str(e)
+        }
+
+@app.get("/api/instances/{instance_id}/debug/logs")
+async def get_debug_logs(instance_id: str, limit: int = 100):
+    """Get detailed execution logs for debugging"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    # Get execution logs from audit logs
+    logs = list(
+        audit_logs_collection.find(
+            {"entity_id": instance_id, "entity_type": "workflow_instance"},
+            {"_id": 0}
+        )
+        .sort("timestamp", -1)
+        .limit(limit)
+    )
+    
+    # Get node execution details
+    execution_history = instance.get("execution_history", [])
+    
+    return {
+        "instance_id": instance_id,
+        "logs": logs,
+        "execution_history": execution_history,
+        "log_count": len(logs)
+    }
+
+@app.get("/api/instances/{instance_id}/debug/performance")
+async def get_performance_profile(instance_id: str):
+    """Get performance profiling data for workflow execution"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    execution_history = instance.get("execution_history", [])
+    
+    # Calculate node performance metrics
+    node_performance = {}
+    total_execution_time = 0
+    
+    for entry in execution_history:
+        node_id = entry.get("node_id")
+        started_at = entry.get("started_at")
+        completed_at = entry.get("completed_at")
+        
+        if started_at and completed_at:
+            try:
+                start = datetime.fromisoformat(started_at)
+                end = datetime.fromisoformat(completed_at)
+                duration = (end - start).total_seconds()
+                total_execution_time += duration
+                
+                if node_id not in node_performance:
+                    node_performance[node_id] = {
+                        "node_id": node_id,
+                        "executions": 0,
+                        "total_time": 0,
+                        "avg_time": 0,
+                        "min_time": float('inf'),
+                        "max_time": 0,
+                        "errors": 0
+                    }
+                
+                perf = node_performance[node_id]
+                perf["executions"] += 1
+                perf["total_time"] += duration
+                perf["min_time"] = min(perf["min_time"], duration)
+                perf["max_time"] = max(perf["max_time"], duration)
+                
+                if entry.get("status") == "failed":
+                    perf["errors"] += 1
+            except:
+                continue
+    
+    # Calculate averages and percentages
+    for node_id, perf in node_performance.items():
+        if perf["executions"] > 0:
+            perf["avg_time"] = round(perf["total_time"] / perf["executions"], 3)
+        if total_execution_time > 0:
+            perf["percentage"] = round((perf["total_time"] / total_execution_time) * 100, 2)
+        else:
+            perf["percentage"] = 0
+    
+    # Sort by total time descending (bottlenecks first)
+    performance_list = sorted(
+        node_performance.values(),
+        key=lambda x: x["total_time"],
+        reverse=True
+    )
+    
+    return {
+        "instance_id": instance_id,
+        "total_execution_time": round(total_execution_time, 3),
+        "node_performance": performance_list,
+        "bottlenecks": performance_list[:5],  # Top 5 slowest nodes
+        "total_nodes_executed": len(node_performance)
+    }
+
+@app.get("/api/instances/{instance_id}/debug/timeline")
+async def get_execution_timeline(instance_id: str):
+    """Get detailed execution timeline with node-by-node progression"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Workflow instance not found")
+    
+    execution_history = instance.get("execution_history", [])
+    workflow = workflows_collection.find_one({"id": instance["workflow_id"]}, {"_id": 0})
+    
+    # Build timeline with node details
+    timeline = []
+    for entry in execution_history:
+        node_id = entry.get("node_id")
+        
+        # Find node details
+        node = None
+        if workflow:
+            nodes = workflow.get("nodes", [])
+            node = next((n for n in nodes if n.get("id") == node_id), None)
+        
+        timeline_entry = {
+            "node_id": node_id,
+            "node_type": node.get("type") if node else "unknown",
+            "node_label": node.get("data", {}).get("label") if node else node_id,
+            "started_at": entry.get("started_at"),
+            "completed_at": entry.get("completed_at"),
+            "status": entry.get("status"),
+            "output": entry.get("output"),
+            "error": entry.get("error")
+        }
+        
+        # Calculate duration
+        if entry.get("started_at") and entry.get("completed_at"):
+            try:
+                start = datetime.fromisoformat(entry["started_at"])
+                end = datetime.fromisoformat(entry["completed_at"])
+                timeline_entry["duration_seconds"] = round((end - start).total_seconds(), 3)
+            except:
+                timeline_entry["duration_seconds"] = 0
+        
+        timeline.append(timeline_entry)
+    
+    return {
+        "instance_id": instance_id,
+        "timeline": timeline,
+        "total_steps": len(timeline),
+        "status": instance.get("status")
+    }
+
+
+# ============================================================================
+# SPRINT 4: API CONNECTOR BUILDER ENDPOINTS
+# ============================================================================
+
+@app.get("/api/connectors")
+async def get_connectors(category: Optional[str] = None, is_template: Optional[bool] = None):
+    """Get all API connectors with optional filtering"""
+    query = {}
+    if category:
+        query["category"] = category
+    if is_template is not None:
+        query["is_template"] = is_template
+    
+    connectors = list(api_connectors_collection.find(query, {"_id": 0}))
+    return {"connectors": connectors, "count": len(connectors)}
+
+
 
 
 # Note: Connector CRUD endpoints are defined earlier in the file (lines ~5165-5250)
