@@ -1058,6 +1058,19 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
                 <span>Designer Capabilities</span>
               </button>
               <button
+                onClick={() => setShowExecutionTimeline(!showExecutionTimeline)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all font-medium ${
+                  showExecutionTimeline
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                    : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:shadow-lg'
+                }`}
+                data-testid="execution-timeline-btn"
+                title="Toggle execution timeline"
+              >
+                <Activity className="w-4 h-4" />
+                <span>Timeline</span>
+              </button>
+              <button
                 onClick={() => {
                   if (activeInstance) {
                     setShowVariableManagement(!showVariableManagement);
