@@ -1401,6 +1401,38 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
         </div>
       )}
 
+      {/* Execution Timeline Panel */}
+      {showExecutionTimeline && activeInstance && (
+        <div className="fixed bottom-4 left-4 z-40">
+          <ExecutionTimeline
+            workflowId={workflow?.id}
+            instanceId={activeInstance}
+            nodes={nodes}
+            currentNodeId={nodes.find(n => n.data?.executionState === 'running')?.id}
+          />
+        </div>
+      )}
+
+      {/* Swim Lanes Panel */}
+      <SwimLanes
+        lanes={swimLanes}
+        onUpdateLanes={setSwimLanes}
+        nodes={nodes}
+        onUpdateNodeLane={updateNodeLane}
+      />
+
+      {/* Node Context Menu */}
+      {contextMenu && (
+        <NodeContextMenu
+          node={contextMenu.node}
+          position={contextMenu.position}
+          onClose={() => setContextMenu(null)}
+          onEdit={(node) => setSelectedNode(node)}
+          onDuplicate={duplicateNode}
+          onDelete={deleteNode}
+        />
+      )}
+
       {/* Designer Capabilities Panel */}
       {showCapabilitiesPanel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
