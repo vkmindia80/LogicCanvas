@@ -2834,6 +2834,48 @@ async def cancel_execution_endpoint(instance_id: str):
     execution_engine.cancel_execution(instance_id)
     return {"message": "Workflow execution cancelled"}
 
+@app.get("/api/workflow-instances/{instance_id}/timeline")
+async def get_execution_timeline(instance_id: str):
+    """Get execution timeline for visual progress tracking"""
+    instance = workflow_instances_collection.find_one({"id": instance_id}, {"_id": 0})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    # Build timeline from execution_history
+    timeline = []
+    execution_history = instance.get("execution_history", [])
+    node_states = instance.get("node_states", {})
+    
+    for event in execution_history:
+        timeline.append({
+            "nodeId": event.get("node_id"),
+            "status": event.get("action", "completed"),
+            "timestamp": event.get("timestamp"),
+            "duration": event.get("duration_ms"),
+            "error": event.get("error")
+        })
+    
+    # Calculate stats
+    completed_count = sum(1 for state in node_states.values() if state == "completed")
+    failed_count = sum(1 for state in node_states.values() if state == "failed")
+    
+    start_time = datetime.fromisoformat(instance["started_at"]) if instance.get("started_at") else None
+    current_time = datetime.utcnow()
+    duration_ms = int((current_time - start_time).total_seconds() * 1000) if start_time else 0
+    
+    stats = {
+        "total": len(node_states),
+        "completed": completed_count,
+        "failed": failed_count,
+        "duration": duration_ms
+    }
+    
+    return {
+        "timeline": timeline,
+        "stats": stats,
+        "status": instance.get("status")
+    }
+
 
 # ========== PHASE 3: ENHANCED SUB-WORKFLOW & LOOPING ENDPOINTS ==========
 
