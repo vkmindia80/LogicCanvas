@@ -54,7 +54,16 @@ export const NODE_TYPES = {
   // Advanced
   TIMER: 'timer',
   EVENT: 'event',
-  ERROR_HANDLER: 'error_handler'
+  ERROR_HANDLER: 'error_handler',
+  
+  // Phase 1 Enhancements: Error Handling & Retry Logic
+  TRY_CATCH: 'try_catch',
+  RETRY: 'retry',
+  BATCH_PROCESS: 'batch_process',
+  
+  // Phase 1 Enhancements: Annotations & Documentation
+  COMMENT: 'comment',
+  MILESTONE: 'milestone'
 };
 
 export const NODE_CONFIGS = {
