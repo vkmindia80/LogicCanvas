@@ -389,6 +389,56 @@ export const NODE_CONFIGS = {
     borderColor: 'border-gold-600',
     icon: 'alert-triangle',
     description: 'Handle errors and exceptions'
+  },
+  
+  // ========== PHASE 1 ENHANCEMENTS ==========
+  [NODE_TYPES.TRY_CATCH]: {
+    label: 'Try-Catch',
+    category: 'Error Handling',
+    color: 'bg-amber-500',
+    borderColor: 'border-amber-600',
+    icon: 'alert-triangle',
+    description: 'Execute with error handling fallback',
+    outputHandles: [
+      { id: 'success', label: 'Success' },
+      { id: 'error', label: 'Error' }
+    ]
+  },
+  [NODE_TYPES.RETRY]: {
+    label: 'Retry',
+    category: 'Error Handling',
+    color: 'bg-orange-500',
+    borderColor: 'border-orange-600',
+    icon: 'refresh-cw',
+    description: 'Retry failed operations with backoff',
+    outputHandles: [
+      { id: 'success', label: 'Success' },
+      { id: 'failed', label: 'All Attempts Failed' }
+    ]
+  },
+  [NODE_TYPES.BATCH_PROCESS]: {
+    label: 'Batch Process',
+    category: 'Data',
+    color: 'bg-indigo-500',
+    borderColor: 'border-indigo-600',
+    icon: 'list',
+    description: 'Process items in batches with progress tracking'
+  },
+  [NODE_TYPES.COMMENT]: {
+    label: 'Comment',
+    category: 'Documentation',
+    color: 'bg-gray-400',
+    borderColor: 'border-gray-500',
+    icon: 'file-text',
+    description: 'Add notes and documentation to workflow'
+  },
+  [NODE_TYPES.MILESTONE]: {
+    label: 'Milestone',
+    category: 'Flow Components',
+    color: 'bg-purple-500',
+    borderColor: 'border-purple-600',
+    icon: 'check-circle',
+    description: 'Mark important checkpoints in workflow'
   }
 };
 
