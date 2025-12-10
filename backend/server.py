@@ -8072,23 +8072,8 @@ async def get_execution_timeline(instance_id: str):
 # SPRINT 4: API CONNECTOR BUILDER ENDPOINTS
 # ============================================================================
 
-@app.get("/api/connectors")
-async def get_connectors(category: Optional[str] = None, is_template: Optional[bool] = None):
-    """Get all API connectors with optional filtering"""
-    query = {}
-    if category:
-        query["category"] = category
-    if is_template is not None:
-        query["is_template"] = is_template
-    
-    connectors = list(api_connectors_collection.find(query, {"_id": 0}))
-    return {"connectors": connectors, "count": len(connectors)}
-
-
-
-
-# Note: Connector CRUD endpoints are defined earlier in the file (lines ~5165-5250)
-# Duplicate endpoints removed to avoid routing conflicts
+# Note: Connector CRUD endpoints are defined earlier in the file
+# Main /api/connectors endpoints consolidated to avoid routing conflicts
 
 @app.post("/api/connectors/from-template")
 async def create_connector_from_template(data: Dict[str, Any]):
