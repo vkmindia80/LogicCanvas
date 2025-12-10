@@ -1031,6 +1031,126 @@ class NodeExecutor:
         except Exception as e:
             return {"status": "failed", "error": f"Calculation failed: {str(e)}"}
 
+    # PHASE 2: New Node Type Executors
+    
+    def execute_try_catch_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute try-catch error handling node"""
+        try_data = node.get("data", {})
+        
+        # Try-catch nodes wrap execution of downstream nodes
+        # The actual try-catch logic is handled at workflow level
+        # Here we just mark the entry point
+        
+        return {
+            "status": "completed",
+            "output": {
+                "try_catch_enabled": True,
+                "on_error_action": try_data.get("onErrorAction", "continue"),
+                "error_node_id": try_data.get("errorNodeId")
+            },
+            "route": "success"  # Default to success path
+        }
+    
+    def execute_retry_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute retry node with configurable attempts and backoff"""
+        retry_data = node.get("data", {})
+        max_attempts = retry_data.get("maxAttempts", 3)
+        retry_delay = retry_data.get("retryDelay", 1000)  # milliseconds
+        backoff_multiplier = retry_data.get("backoffMultiplier", 2.0)
+        retry_on = retry_data.get("retryOn", ["network_error", "timeout", "5xx"])
+        
+        # Get current retry attempt from node state
+        current_attempt = self.variables.get(f"_retry_{node['id']}_attempt", 0)
+        
+        return {
+            "status": "completed",
+            "output": {
+                "retry_enabled": True,
+                "max_attempts": max_attempts,
+                "current_attempt": current_attempt,
+                "retry_delay": retry_delay,
+                "backoff_multiplier": backoff_multiplier,
+                "retry_on": retry_on
+            },
+            "retry_config": {
+                "max_attempts": max_attempts,
+                "retry_delay": retry_delay,
+                "backoff_multiplier": backoff_multiplier
+            }
+        }
+    
+    def execute_batch_process_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute batch processing node with progress tracking"""
+        batch_data = node.get("data", {})
+        items = batch_data.get("items", [])
+        batch_size = batch_data.get("batchSize", 10)
+        concurrent_batches = batch_data.get("concurrentBatches", 1)
+        delay_between_batches = batch_data.get("delayBetweenBatches", 0)  # milliseconds
+        
+        # Evaluate items collection
+        if isinstance(items, str):
+            items = self.evaluator.evaluate(items, self.variables)
+        
+        if not isinstance(items, list):
+            return {"status": "failed", "error": "Items is not a list"}
+        
+        total_items = len(items)
+        total_batches = (total_items + batch_size - 1) // batch_size  # Ceiling division
+        
+        # Store batch progress in variables
+        batch_key = f"_batch_{node['id']}"
+        self.variables[f"{batch_key}_total"] = total_items
+        self.variables[f"{batch_key}_processed"] = 0
+        self.variables[f"{batch_key}_current_batch"] = 0
+        self.variables[f"{batch_key}_total_batches"] = total_batches
+        
+        return {
+            "status": "completed",
+            "output": {
+                "batch_processing": True,
+                "total_items": total_items,
+                "batch_size": batch_size,
+                "total_batches": total_batches,
+                "concurrent_batches": concurrent_batches,
+                "delay_between_batches": delay_between_batches,
+                "items": items
+            },
+            "batch": True,
+            "batch_config": {
+                "items": items,
+                "batch_size": batch_size,
+                "total_batches": total_batches
+            }
+        }
+    
+    def execute_comment_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute comment/annotation node - pass through"""
+        comment_data = node.get("data", {})
+        
+        return {
+            "status": "completed",
+            "output": {
+                "comment": comment_data.get("comment", ""),
+                "annotation_type": "comment"
+            }
+        }
+    
+    def execute_milestone_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute milestone node - marks important checkpoints"""
+        milestone_data = node.get("data", {})
+        
+        # Log milestone achievement
+        milestone_name = milestone_data.get("label", "Milestone")
+        
+        return {
+            "status": "completed",
+            "output": {
+                "milestone": milestone_name,
+                "achieved_at": datetime.utcnow().isoformat(),
+                "annotation_type": "milestone"
+            }
+        }
+
     def execute_node(self, node: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a node based on its type"""
         node_type = node.get("type", "")
@@ -1068,6 +1188,12 @@ class NodeExecutor:
             "sort": self.execute_sort_node,
             "aggregate": self.execute_aggregate_node,
             "calculate": self.execute_calculate_node,
+            # PHASE 2: New Component Types
+            "try_catch": self.execute_try_catch_node,
+            "retry": self.execute_retry_node,
+            "batch_process": self.execute_batch_process_node,
+            "comment": self.execute_comment_node,
+            "milestone": self.execute_milestone_node,
         }
 
         executor = executors.get(node_type)
