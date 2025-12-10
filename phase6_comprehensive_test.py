@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 
 class Phase6ComprehensiveTester:
-    def __init__(self, base_url: str = "https://better-database-ui.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://connector-debug.preview.emergentagent.com"):
         self.base_url = base_url.rstrip('/')
         self.tests_run = 0
         self.tests_passed = 0
@@ -444,7 +444,7 @@ def main():
     if len(sys.argv) > 1:
         base_url = sys.argv[1]
     else:
-        base_url = "https://better-database-ui.preview.emergentagent.com"
+        base_url = "https://connector-debug.preview.emergentagent.com"
     
     tester = Phase6ComprehensiveTester(base_url)
     success = tester.run_all_tests()
