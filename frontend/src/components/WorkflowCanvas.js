@@ -12,11 +12,16 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomNode from './nodes/CustomNode';
+import EnhancedCustomNode from './nodes/EnhancedCustomNode';
 import NodePaletteSalesforce from './NodePaletteSalesforce';
 import NodeEditor from './NodeEditor';
 import ExecutionPanel from './ExecutionPanel';
 import TriggerConfig from './TriggerConfig';
 import DeletableEdge from './edges/DeletableEdge';
+import AnimatedExecutionEdge from './edges/AnimatedExecutionEdge';
+import ExecutionTimeline from './ExecutionTimeline';
+import SwimLanes from './SwimLanes';
+import NodeContextMenu from './NodeContextMenu';
 import { createNodeData } from '../utils/nodeTypes';
 import { Save, Eye, Play, Layers, Zap, Sparkles, BookOpen, Activity, Undo2, Redo2, Variable, ZoomIn, ZoomOut, Maximize2, Download, Grid, GitBranch, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import VariablePanel from './VariablePanel';
