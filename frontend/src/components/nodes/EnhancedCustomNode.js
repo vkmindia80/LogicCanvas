@@ -5,7 +5,8 @@ import {
   Split, Merge, Zap, Clock, CheckCircle, AlertCircle, Workflow, Radio,
   Monitor, PauseCircle, List, Equal, Repeat, RefreshCw, Repeat1, PlusCircle,
   Edit, Trash2, Search, Database, FileSearch, Shuffle, Filter, ArrowUpDown,
-  BarChart2, Calculator, Cloud, Mail, AlertTriangle, Settings, Info, Loader
+  BarChart2, Calculator, Cloud, Mail, AlertTriangle, Settings, Info, Loader,
+  RotateCw, XCircle, Layers
 } from 'lucide-react';
 import { NODE_TYPES, NODE_CONFIGS } from '../../utils/nodeTypes';
 
@@ -19,19 +20,36 @@ const iconMap = {
   'database': Database, 'file-search': FileSearch, 'shuffle': Shuffle, 'filter': Filter,
   'arrow-up-down': ArrowUpDown, 'bar-chart-2': BarChart2, 'calculator': Calculator,
   'cloud': Cloud, 'mail': Mail, 'webhook': Mail, 'alert-triangle': AlertTriangle,
-  'check-circle': CheckCircle
+  'check-circle': CheckCircle, 'rotate-cw': RotateCw, 'x-circle': XCircle, 'layers': Layers
 };
 
 const EnhancedCustomNode = ({ data, selected }) => {
   const config = NODE_CONFIGS[data.type];
   const IconComponent = config ? iconMap[config.icon] : null;
   
-  // Enhanced execution states
+  // PHASE 1: Enhanced execution states with progress tracking
   const executionState = data.executionState;
   const progress = data.progress || 0; // 0-100
   const executionTime = data.executionTime || 0; // in seconds
   const retryCount = data.retryCount || 0;
+  const retryAttempt = data.retryAttempt || 0;
+  const maxRetries = data.maxRetries || 3;
   const batchProgress = data.batchProgress || { current: 0, total: 0 };
+  const startTime = data.startTime;
+  const annotations = data.annotations || [];
+  
+  // Time tracking
+  const [elapsedTime, setElapsedTime] = useState(0);
+  
+  useEffect(() => {
+    if (executionState === 'running' && startTime) {
+      const interval = setInterval(() => {
+        const elapsed = Date.now() - new Date(startTime).getTime();
+        setElapsedTime(Math.floor(elapsed / 1000));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [executionState, startTime]);
   
   // Visual states
   const isExecuting = executionState === 'running';
@@ -39,6 +57,7 @@ const EnhancedCustomNode = ({ data, selected }) => {
   const isWaiting = executionState === 'waiting';
   const isFailed = executionState === 'failed';
   const isPaused = executionState === 'paused';
+  const isRetrying = executionState === 'retrying';
   
   // Validation
   const validationStatus = data.validationStatus;
@@ -65,7 +84,7 @@ const EnhancedCustomNode = ({ data, selected }) => {
     let boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
 
     // State-based styling
-    if (isExecuting) {
+    if (isExecuting || isRetrying) {
       border = '3px solid';
       borderColor = '#3b82f6';
       boxShadow = '0 0 20px rgba(59, 130, 246, 0.5), 0 4px 12px rgba(0,0,0,0.15)';
@@ -103,9 +122,9 @@ const EnhancedCustomNode = ({ data, selected }) => {
     return { background, border, borderColor, boxShadow };
   };
 
-  const style = getNodeStyle();
+  const nodeStyle = getNodeStyle();
 
-  // Format execution time
+  // Format time display
   const formatTime = (seconds) => {
     if (seconds < 60) return `${seconds}s`;
     const mins = Math.floor(seconds / 60);
@@ -113,141 +132,204 @@ const EnhancedCustomNode = ({ data, selected }) => {
     return `${mins}m ${secs}s`;
   };
 
+  // Get status badge
+  const renderStatusBadge = () => {
+    if (!executionState) return null;
+
+    const badges = {
+      running: { bg: 'bg-blue-500', text: 'Running', icon: Loader, animate: 'animate-spin' },
+      completed: { bg: 'bg-green-500', text: 'Complete', icon: CheckCircle },
+      failed: { bg: 'bg-red-500', text: 'Failed', icon: XCircle },
+      waiting: { bg: 'bg-amber-500', text: 'Waiting', icon: Clock, animate: 'animate-pulse' },
+      paused: { bg: 'bg-gray-500', text: 'Paused', icon: PauseCircle },
+      retrying: { bg: 'bg-orange-500', text: `Retry ${retryAttempt}/${maxRetries}`, icon: RotateCw, animate: 'animate-spin' }
+    };
+
+    const badge = badges[executionState];
+    if (!badge) return null;
+
+    const BadgeIcon = badge.icon;
+
+    return (
+      <div className={`absolute -top-2 -right-2 ${badge.bg} text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 shadow-lg z-10`}>
+        <BadgeIcon className={`w-3 h-3 ${badge.animate || ''}`} />
+        <span className="font-semibold">{badge.text}</span>
+      </div>
+    );
+  };
+
+  // Render progress indicator
+  const renderProgressIndicator = () => {
+    if (!isExecuting && !isRetrying) return null;
+
+    // Batch progress
+    if (batchProgress.total > 0) {
+      const batchPercent = (batchProgress.current / batchProgress.total) * 100;
+      return (
+        <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
+            style={{ width: `${batchPercent}%` }}
+          />
+          <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white" style={{ fontSize: '8px', lineHeight: '1' }}>
+            {batchProgress.current}/{batchProgress.total}
+          </div>
+        </div>
+      );
+    }
+
+    // Regular progress
+    if (progress > 0) {
+      return (
+        <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      );
+    }
+
+    // Indeterminate progress
+    return (
+      <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-full w-1/3 bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse" style={{ animation: 'slide 1.5s ease-in-out infinite' }} />
+      </div>
+    );
+  };
+
+  // Render time tracker
+  const renderTimeTracker = () => {
+    if (!isExecuting || elapsedTime === 0) return null;
+
+    return (
+      <div className="absolute -top-2 -left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 shadow-lg z-10">
+        <Clock className="w-3 h-3" />
+        <span className="font-mono font-semibold">{formatTime(elapsedTime)}</span>
+      </div>
+    );
+  };
+
+  // Render retry counter
+  const renderRetryCounter = () => {
+    if (retryCount === 0) return null;
+
+    return (
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1 shadow-md z-10">
+        <RotateCw className="w-2.5 h-2.5" />
+        <span className="font-bold">{retryCount}</span>
+      </div>
+    );
+  };
+
+  // Render annotation indicator
+  const renderAnnotations = () => {
+    if (annotations.length === 0) return null;
+
+    return (
+      <div className="absolute -bottom-2 right-0 bg-yellow-400 text-yellow-900 text-xs px-1.5 py-0.5 rounded-full shadow-sm z-10" title={`${annotations.length} annotation(s)`}>
+        <FileText className="w-3 h-3" />
+      </div>
+    );
+  };
+
+  // Render swim lane indicator
+  const renderLaneIndicator = () => {
+    if (!data.laneId) return null;
+
+    return (
+      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white text-xs px-1.5 py-0.5 rounded-sm shadow-sm z-10">
+        <Layers className="w-2.5 h-2.5" />
+      </div>
+    );
+  };
+
   return (
     <div
-      className="rounded-xl min-w-[200px] max-w-[280px] transition-all duration-300"
+      className="relative"
       style={{
-        background: style.background,
-        border: style.border,
-        borderColor: style.borderColor,
-        boxShadow: style.boxShadow,
-        position: 'relative'
+        minWidth: '180px',
+        minHeight: '60px',
       }}
     >
-      {/* Execution State Badge */}
-      {executionState && (
-        <div className="absolute -top-2 -right-2 z-10">
-          {isExecuting && (
-            <div className="bg-blue-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1 animate-pulse">
-              <Loader className="w-3 h-3 animate-spin" />
-              Running
-            </div>
-          )}
-          {isCompleted && (
-            <div className="bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1">
-              <CheckCircle className="w-3 h-3" />
-              Done
-            </div>
-          )}
-          {isFailed && (
-            <div className="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
-              Failed
-            </div>
-          )}
-          {isWaiting && (
-            <div className="bg-amber-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              Waiting
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Retry Counter */}
-      {retryCount > 0 && (
-        <div className="absolute -top-2 -left-2 z-10 bg-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold">
-          Retry #{retryCount}
-        </div>
-      )}
-
       {/* Input Handle */}
       <Handle
         type="target"
         position={Position.Top}
-        className="w-3 h-3 !bg-blue-500 !border-2 !border-white"
+        style={{
+          background: '#6366f1',
+          width: 12,
+          height: 12,
+          border: '2px solid white',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+        }}
       />
 
-      {/* Node Content */}
-      <div className="p-3">
-        {/* Header */}
-        <div className="flex items-center gap-2 mb-2">
+      {/* Main Node */}
+      <div
+        className="px-4 py-3 rounded-xl transition-all duration-200 relative overflow-hidden"
+        style={{
+          background: nodeStyle.background,
+          border: nodeStyle.border,
+          borderColor: nodeStyle.borderColor,
+          boxShadow: nodeStyle.boxShadow,
+        }}
+      >
+        {/* Icon & Label */}
+        <div className="flex items-center space-x-2">
           {IconComponent && (
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-1.5">
-              <IconComponent className="w-5 h-5 text-white" />
+            <div className="flex-shrink-0 bg-white/20 rounded-lg p-1.5">
+              <IconComponent className="w-5 h-5 text-white" strokeWidth={2.5} />
             </div>
           )}
-          <div className="flex-1">
-            <div className="text-sm font-bold text-white leading-tight">
-              {data.label}
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold text-white truncate">
+              {data.label || config?.label || 'Node'}
             </div>
-            <div className="text-xs text-white/80">
-              {config?.label || data.type}
-            </div>
+            {data.description && (
+              <div className="text-xs text-white/80 truncate mt-0.5">
+                {data.description}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Progress Bar (for running nodes) */}
-        {isExecuting && progress > 0 && (
-          <div className="mb-2">
-            <div className="bg-white/20 rounded-full h-2 overflow-hidden">
-              <div
-                className="bg-white h-full transition-all duration-500 rounded-full"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <div className="text-xs text-white/90 mt-1 text-center">{progress}%</div>
-          </div>
-        )}
-
-        {/* Batch Progress */}
-        {data.type === NODE_TYPES.BATCH_PROCESS && batchProgress.total > 0 && (
-          <div className="mb-2 bg-white/10 rounded-lg p-2">
-            <div className="text-xs text-white/90 mb-1">
-              Processing: {batchProgress.current} / {batchProgress.total}
-            </div>
-            <div className="bg-white/20 rounded-full h-1.5 overflow-hidden">
-              <div
-                className="bg-blue-400 h-full transition-all duration-300"
-                style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Execution Time */}
-        {executionTime > 0 && (
-          <div className="text-xs text-white/80 flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {formatTime(executionTime)}
-          </div>
-        )}
-
-        {/* Validation Messages */}
-        {hasValidationError && (
-          <div className="mt-2 text-xs text-red-100 bg-red-500/30 rounded px-2 py-1">
-            ⚠️ Configuration needed
-          </div>
-        )}
-        {hasValidationWarning && !hasValidationError && (
-          <div className="mt-2 text-xs text-amber-100 bg-amber-500/30 rounded px-2 py-1">
-            ⚡ Incomplete setup
+        {/* Validation Indicator */}
+        {(hasValidationError || hasValidationWarning) && (
+          <div className="absolute top-1 right-1">
+            <AlertCircle 
+              className={`w-4 h-4 ${hasValidationError ? 'text-red-200' : 'text-yellow-200'}`}
+            />
           </div>
         )}
       </div>
 
+      {/* PHASE 1: Enhanced Visual Indicators */}
+      {renderStatusBadge()}
+      {renderTimeTracker()}
+      {renderProgressIndicator()}
+      {renderRetryCounter()}
+      {renderAnnotations()}
+      {renderLaneIndicator()}
+
       {/* Output Handles */}
       {config?.outputHandles ? (
-        config.outputHandles.map((handle, idx) => (
+        config.outputHandles.map((handle, index) => (
           <Handle
             key={handle.id}
             type="source"
             position={Position.Bottom}
             id={handle.id}
-            className="w-3 h-3 !bg-green-500 !border-2 !border-white"
-            style={{ left: `${(100 / (config.outputHandles.length + 1)) * (idx + 1)}%` }}
+            style={{
+              background: '#6366f1',
+              width: 12,
+              height: 12,
+              border: '2px solid white',
+              left: `${(index + 1) * (100 / (config.outputHandles.length + 1))}%`,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
           >
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 text-xs bg-white px-2 py-0.5 rounded shadow-lg whitespace-nowrap text-gray-700 font-medium">
+            <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-gray-700 whitespace-nowrap bg-white px-1.5 py-0.5 rounded shadow-sm">
               {handle.label}
             </div>
           </Handle>
@@ -256,9 +338,23 @@ const EnhancedCustomNode = ({ data, selected }) => {
         <Handle
           type="source"
           position={Position.Bottom}
-          className="w-3 h-3 !bg-green-500 !border-2 !border-white"
+          style={{
+            background: '#6366f1',
+            width: 12,
+            height: 12,
+            border: '2px solid white',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+          }}
         />
       )}
+
+      {/* Animation styles */}
+      <style jsx>{`
+        @keyframes slide {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(400%); }
+        }
+      `}</style>
     </div>
   );
 };
