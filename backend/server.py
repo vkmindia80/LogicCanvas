@@ -5345,9 +5345,11 @@ class APITestRequest(BaseModel):
     auth_config: Optional[Dict[str, Any]] = {}
 
 @app.get("/api/connectors")
-async def get_api_connectors(is_template: Optional[bool] = None):
-    """Get all API connectors, optionally filter by template status"""
+async def get_api_connectors(category: Optional[str] = None, is_template: Optional[bool] = None):
+    """Get all API connectors with optional filtering"""
     query = {}
+    if category:
+        query["category"] = category
     if is_template is not None:
         query["is_template"] = is_template
     
