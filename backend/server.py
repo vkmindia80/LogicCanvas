@@ -2528,9 +2528,43 @@ async def generate_sample_data():
 
     # ============ API CONNECTORS ============
     connectors = [
-        {"name": "Slack Webhook", "type": "webhook", "description": "Send notifications to Slack", "config": {"url": "https://hooks.slack.com/services/example"}},
-        {"name": "GitHub API", "type": "rest", "description": "Integrate with GitHub", "config": {"base_url": "https://api.github.com", "auth_type": "bearer"}},
-        {"name": "Salesforce CRM", "type": "rest", "description": "Connect to Salesforce", "config": {"base_url": "https://api.salesforce.com", "auth_type": "oauth2"}},
+        # Communication & Messaging
+        {"name": "Slack Webhook", "type": "webhook", "category": "communication", "description": "Send notifications to Slack channels", "config": {"url": "https://hooks.slack.com/services/YOUR_WEBHOOK_URL", "auth_type": "webhook"}},
+        {"name": "Telegram Bot API", "type": "rest", "category": "communication", "description": "Send messages via Telegram bot", "config": {"base_url": "https://api.telegram.org/bot", "auth_type": "token", "token": "YOUR_BOT_TOKEN"}},
+        {"name": "Discord Webhook", "type": "webhook", "category": "communication", "description": "Post messages to Discord channels", "config": {"url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL", "auth_type": "webhook"}},
+        {"name": "Twilio SMS", "type": "rest", "category": "communication", "description": "Send SMS and voice messages", "config": {"base_url": "https://api.twilio.com/2010-04-01", "auth_type": "basic", "account_sid": "YOUR_ACCOUNT_SID", "auth_token": "YOUR_AUTH_TOKEN"}},
+        {"name": "SendGrid Email", "type": "rest", "category": "communication", "description": "Send transactional emails", "config": {"base_url": "https://api.sendgrid.com/v3", "auth_type": "bearer", "api_key": "YOUR_API_KEY"}},
+        {"name": "Microsoft Teams Webhook", "type": "webhook", "category": "communication", "description": "Post messages to Microsoft Teams", "config": {"url": "https://outlook.office.com/webhook/YOUR_WEBHOOK_URL", "auth_type": "webhook"}},
+        
+        # CRM & Sales
+        {"name": "Salesforce CRM", "type": "rest", "category": "crm", "description": "Integrate with Salesforce CRM", "config": {"base_url": "https://YOUR_INSTANCE.salesforce.com/services/data/v58.0", "auth_type": "oauth2", "client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}},
+        {"name": "HubSpot CRM", "type": "rest", "category": "crm", "description": "Manage contacts and deals in HubSpot", "config": {"base_url": "https://api.hubapi.com", "auth_type": "bearer", "api_key": "YOUR_API_KEY"}},
+        {"name": "Pipedrive", "type": "rest", "category": "crm", "description": "Sales pipeline management", "config": {"base_url": "https://api.pipedrive.com/v1", "auth_type": "token", "api_token": "YOUR_API_TOKEN"}},
+        {"name": "Zoho CRM", "type": "rest", "category": "crm", "description": "Customer relationship management", "config": {"base_url": "https://www.zohoapis.com/crm/v3", "auth_type": "oauth2", "client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}},
+        
+        # Project Management
+        {"name": "Jira", "type": "rest", "category": "project_management", "description": "Issue and project tracking", "config": {"base_url": "https://YOUR_DOMAIN.atlassian.net/rest/api/3", "auth_type": "basic", "email": "YOUR_EMAIL", "api_token": "YOUR_API_TOKEN"}},
+        {"name": "Asana", "type": "rest", "category": "project_management", "description": "Team task management", "config": {"base_url": "https://app.asana.com/api/1.0", "auth_type": "bearer", "access_token": "YOUR_ACCESS_TOKEN"}},
+        {"name": "Trello", "type": "rest", "category": "project_management", "description": "Organize projects with boards", "config": {"base_url": "https://api.trello.com/1", "auth_type": "token", "api_key": "YOUR_API_KEY", "token": "YOUR_TOKEN"}},
+        {"name": "Monday.com", "type": "rest", "category": "project_management", "description": "Work operating system", "config": {"base_url": "https://api.monday.com/v2", "auth_type": "bearer", "api_token": "YOUR_API_TOKEN"}},
+        
+        # Cloud Storage
+        {"name": "Google Drive", "type": "rest", "category": "storage", "description": "File storage and sharing", "config": {"base_url": "https://www.googleapis.com/drive/v3", "auth_type": "oauth2", "client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}},
+        {"name": "Dropbox", "type": "rest", "category": "storage", "description": "Cloud file storage", "config": {"base_url": "https://api.dropboxapi.com/2", "auth_type": "bearer", "access_token": "YOUR_ACCESS_TOKEN"}},
+        {"name": "OneDrive", "type": "rest", "category": "storage", "description": "Microsoft cloud storage", "config": {"base_url": "https://graph.microsoft.com/v1.0/me/drive", "auth_type": "oauth2", "client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}},
+        
+        # Payments
+        {"name": "Stripe", "type": "rest", "category": "payment", "description": "Payment processing", "config": {"base_url": "https://api.stripe.com/v1", "auth_type": "bearer", "secret_key": "YOUR_SECRET_KEY"}},
+        {"name": "PayPal", "type": "rest", "category": "payment", "description": "Online payment platform", "config": {"base_url": "https://api.paypal.com/v2", "auth_type": "oauth2", "client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}},
+        
+        # Marketing & Analytics
+        {"name": "Mailchimp", "type": "rest", "category": "marketing", "description": "Email marketing platform", "config": {"base_url": "https://YOUR_DC.api.mailchimp.com/3.0", "auth_type": "basic", "api_key": "YOUR_API_KEY"}},
+        {"name": "Google Analytics", "type": "rest", "category": "analytics", "description": "Web analytics and reporting", "config": {"base_url": "https://analyticsreporting.googleapis.com/v4", "auth_type": "oauth2", "client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}},
+        
+        # Development Tools
+        {"name": "GitHub API", "type": "rest", "category": "development", "description": "Repository and code management", "config": {"base_url": "https://api.github.com", "auth_type": "bearer", "access_token": "YOUR_PERSONAL_ACCESS_TOKEN"}},
+        {"name": "GitLab", "type": "rest", "category": "development", "description": "DevOps platform", "config": {"base_url": "https://gitlab.com/api/v4", "auth_type": "bearer", "private_token": "YOUR_PRIVATE_TOKEN"}},
+        {"name": "Bitbucket", "type": "rest", "category": "development", "description": "Git repository hosting", "config": {"base_url": "https://api.bitbucket.org/2.0", "auth_type": "basic", "username": "YOUR_USERNAME", "app_password": "YOUR_APP_PASSWORD"}},
     ]
     
     for conn in connectors:
