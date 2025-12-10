@@ -335,7 +335,29 @@ const WorkflowCanvas = ({ workflow, onSave, showTemplates, showWizard }) => {
       }
     };
     setSelectedNode(normalizedNode);
+    setContextMenu(null); // Close context menu on node click
   }, []);
+
+  const onNodeContextMenu = useCallback((event, node) => {
+    event.preventDefault();
+    setContextMenu({
+      node,
+      position: { x: event.clientX, y: event.clientY }
+    });
+  }, []);
+
+  const updateNodeLane = useCallback((nodeId, laneId) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === nodeId
+          ? {
+              ...node,
+              data: { ...node.data, laneId }
+            }
+          : node
+      )
+    );
+  }, [setNodes]);
 
   const onPaneClick = useCallback(() => {
     setSelectedNode(null);
