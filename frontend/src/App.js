@@ -166,6 +166,7 @@ const AppShell = () => {
     setShowImportExport(false);
     setShowConnectorLibrary(false);
     setShowIntegrationHub(false);
+    setShowDatabaseConnector(false);
     setShowDebugPanel(false);
     setShowTransformationPlayground(false);
     setShowOnboarding(false);
